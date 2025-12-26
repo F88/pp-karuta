@@ -26,14 +26,14 @@ function App() {
 
   return (
     <div className="min-h-screen bg-gray-50 p-8">
-      <div className="max-w-4xl mx-auto">
-        <h1 className="text-4xl font-bold text-gray-900 mb-8">HELLO WORLD</h1>
+      <div className="mx-auto max-w-4xl">
+        <h1 className="mb-8 text-4xl font-bold text-gray-900">HELLO WORLD</h1>
 
         {loading && <div className="text-gray-600">Loading PROMIDAS...</div>}
 
         {error && (
           <div
-            className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded"
+            className="rounded border border-red-200 bg-red-50 px-4 py-3 text-red-700"
             role="alert"
           >
             <strong className="font-bold">Error:</strong>
@@ -42,8 +42,8 @@ function App() {
         )}
 
         {stats && (
-          <div className="bg-white shadow rounded-lg p-6">
-            <h2 className="text-2xl font-semibold text-gray-800 mb-4">
+          <div className="rounded-lg bg-white p-6 shadow">
+            <h2 className="mb-4 text-2xl font-semibold text-gray-800">
               PROMIDAS Stats
             </h2>
             <dl className="space-y-2">

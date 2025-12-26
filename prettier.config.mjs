@@ -9,6 +9,7 @@ const config = {
   semi: true,
   singleQuote: true,
   trailingComma: 'all',
+  plugins: ['prettier-plugin-tailwindcss'],
   overrides: [
     {
       files: '*.md',
