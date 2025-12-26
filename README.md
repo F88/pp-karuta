@@ -39,7 +39,6 @@ Utilities to assist development using PROMIDAS
 
 - **PROMIDAS** - ProtoPedia API data management library
 - **PROMIDAS Utilities** - Utilities to assist development using PROMIDAS
-- **ProtoPedia API v2 Client** - API client
 
 ### Testing and Documentation
 
