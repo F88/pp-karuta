@@ -22,5 +22,9 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@f88/promidas": "github:F88/promidas#v1.0.0",
+    "@f88/promidas-utils": "github:F88/promidas-utils#v0.2.0"
   }
 }
