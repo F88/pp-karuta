@@ -23,4 +23,5 @@ export default defineConfig([
       globals: globals.browser,
     },
   },
+  ...storybook.configs['flat/recommended'],
 ])
