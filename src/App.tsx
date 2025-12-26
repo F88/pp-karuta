@@ -1,35 +1,76 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useEffect, useState } from "react";
+import { getPromidasRepository } from "./lib/promidas";
+import type { PrototypeInMemoryStats } from "@f88/promidas";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [stats, setStats] = useState<PrototypeInMemoryStats | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const initPromidas = async () => {
+      try {
+        const repo = await getPromidasRepository();
+        const repoStats = repo.getStats();
+        setStats(repoStats);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Unknown error");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    initPromidas();
+  }, []);
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div className="min-h-screen bg-gray-50 p-8">
+      <div className="max-w-4xl mx-auto">
+        <h1 className="text-4xl font-bold text-gray-900 mb-8">HELLO WORLD</h1>
+
+        {loading && <div className="text-gray-600">Loading PROMIDAS...</div>}
+
+        {error && (
+          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
+            <strong className="font-bold">Error:</strong>
+            <span className="block sm:inline"> {error}</span>
+          </div>
+        )}
+
+        {stats && (
+          <div className="bg-white shadow rounded-lg p-6">
+            <h2 className="text-2xl font-semibold text-gray-800 mb-4">
+              PROMIDAS Stats
+            </h2>
+            <dl className="space-y-2">
+              <div>
+                <dt className="text-sm font-medium text-gray-500">
+                  Loaded prototypes:
+                </dt>
+                <dd className="text-lg text-gray-900">{stats.size}</dd>
+              </div>
+              <div>
+                <dt className="text-sm font-medium text-gray-500">
+                  Cached at:
+                </dt>
+                <dd className="text-lg text-gray-900">
+                  {new Date(stats.cachedAt).toLocaleString("ja-JP")}
+                </dd>
+              </div>
+              <div>
+                <dt className="text-sm font-medium text-gray-500">
+                  Is expired:
+                </dt>
+                <dd className="text-lg text-gray-900">
+                  {stats.isExpired ? "Yes" : "No"}
+                </dd>
+              </div>
+            </dl>
+          </div>
+        )}
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    </div>
+  );
 }
 
-export default App
+export default App;
