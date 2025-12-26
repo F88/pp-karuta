@@ -1,0 +1,32 @@
+# OS
+.DS_Store
+
+# IDE
+.vscode
+.idea
+
+# Build outputs
+.next/
+out/
+build/
+dist/
+coverage/
+
+# Dependencies
+node_modules/
+
+# Storybook build
+storybook-static/
+
+# Misc
+package-lock.json
+renovate.json
+tools/prompts/*
+
+
+# Logs
+*.log
+
+# Temporary ignore files
+# src/utils/__tests__/snapshot-error-utils.test.ts
+
