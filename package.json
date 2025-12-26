@@ -1,0 +1,26 @@
+{
+  "name": "pp-karuta",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "ppk",
+  "engines": {
+    "node": ">=22"
+  },
+  "keywords": [
+    "ProtoPedia",
+    "PROMIDAS"
+  ],
+  "author": "F88 <685250+F88@users.noreply.github.com>",
+  "license": "MIT",
+  "homepage": "https://github.com/F88/pp-karuta#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/F88/pp-karuta.git"
+  },
+  "bugs": {
+    "url": "https://github.com/F88/pp-karuta/issues"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
