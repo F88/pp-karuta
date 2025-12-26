@@ -32,7 +32,7 @@ Utilities to assist development using PROMIDAS
 ### UI
 
 - **Tailwind CSS 4.x** - Utility-first CSS framework
-- **shadcn/ui** - Component library built on Tailwind CSS
+- **shadcn/ui components** - Copy-paste component collection (Radix UI + CVA)
 - **lucide-react icons** - Icon library
 
 ### Data Management
