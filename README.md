@@ -1,5 +1,14 @@
 # pp-karuta
 
+[![CI](https://github.com/F88/pp-karuta/actions/workflows/ci.yml/badge.svg)](https://github.com/F88/pp-karuta/actions/workflows/ci.yml)
+
+![Release](https://img.shields.io/github/v/release/F88/pp-karuta?label=release)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+![Issues](https://img.shields.io/github/issues/F88/pp-karuta?label=issues)
+
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/F88/pp-karuta)
+[![View Code Wiki](https://www.gstatic.com/_/boq-sdlc-agents-ui/_/r/YUi5dj2UWvE.svg)](https://codewiki.google/github.com/f88/pp-karuta)
+
 ## PROMIDAS
 
 PROMIDAS is a library that simplifies data fetching and cache management using the ProtoPedia API v2.
