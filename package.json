@@ -1,0 +1,78 @@
+{
+  "name": "pp-karuta",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "ppk",
+  "engines": {
+    "node": ">=22"
+  },
+  "keywords": [
+    "ProtoPedia",
+    "PROMIDAS"
+  ],
+  "author": "F88 <685250+F88@users.noreply.github.com>",
+  "license": "MIT",
+  "homepage": "https://github.com/F88/pp-karuta#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/F88/pp-karuta.git"
+  },
+  "bugs": {
+    "url": "https://github.com/F88/pp-karuta/issues"
+  },
+  "scripts": {
+    "dev": "vite",
+    "typecheck": "tsc -b --noEmit",
+    "test": "vitest run",
+    "test:ui": "vitest --ui",
+    "build": "tsc -b && vite build",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "preview": "vite preview",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,css,md}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,css,md}\"",
+    "deploy": "npm run build && gh-pages -d dist"
+  },
+  "dependencies": {
+    "@f88/promidas": "github:F88/promidas#v1.0.0",
+    "@f88/promidas-utils": "github:F88/promidas-utils#v0.2.0",
+    "@radix-ui/react-slot": "^1.2.4",
+    "@tailwindcss/vite": "^4.1.18",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "lucide-react": "^0.562.0",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3",
+    "tailwind-merge": "^3.4.0",
+    "tailwindcss": "^4.1.18"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.2",
+    "@storybook/builder-vite": "^10.1.10",
+    "@storybook/react-vite": "^10.1.10",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.1",
+    "@testing-library/user-event": "^14.6.1",
+    "@types/node": "^24.10.1",
+    "@types/react": "^19.2.7",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^5.1.2",
+    "@vitest/ui": "^4.0.16",
+    "eslint": "^9.39.2",
+    "eslint-plugin-react-hooks": "^7.0.1",
+    "eslint-plugin-react-refresh": "^0.4.26",
+    "eslint-plugin-storybook": "^10.1.10",
+    "gh-pages": "^6.3.0",
+    "globals": "^16.5.0",
+    "jsdom": "^27.3.0",
+    "prettier": "^3.7.4",
+    "prettier-plugin-tailwindcss": "^0.7.2",
+    "storybook": "^10.1.10",
+    "typescript": "~5.9.3",
+    "typescript-eslint": "^8.50.1",
+    "vite": "^7.3.0",
+    "vitest": "^4.0.16"
+  }
+}
