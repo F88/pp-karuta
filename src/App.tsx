@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { getPromidasRepository } from "./lib/promidas";
 import type { PrototypeInMemoryStats } from "@f88/promidas";
+import "./App.css";
 
 function App() {
   const [stats, setStats] = useState<PrototypeInMemoryStats | null>(null);
