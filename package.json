@@ -21,13 +21,19 @@
     "url": "https://github.com/F88/pp-karuta/issues"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "vite",
+    "typecheck": "tsc -b --noEmit",
+    "test": "vitest run",
+    "test:ui": "vitest --ui",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
     "preview": "vite preview",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,css,md}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,css,md}\"",
+    "deploy": "npm run build && gh-pages -d dist"
   },
   "dependencies": {
     "@f88/promidas": "github:F88/promidas#v1.0.0",

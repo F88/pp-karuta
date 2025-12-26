@@ -12,7 +12,7 @@ export async function getPromidasRepository(): Promise<ProtopediaInMemoryReposit
 
   if (!token) {
     throw new Error(
-      "VITE_PROTOPEDIA_API_V2_TOKEN is not set in environment variables"
+      "VITE_PROTOPEDIA_API_V2_TOKEN is not set in environment variables",
     );
   }
 
