@@ -1,5 +1,5 @@
-import { createPromidasForLocal } from "@f88/promidas";
-import type { ProtopediaInMemoryRepository } from "@f88/promidas";
+import { createPromidasForLocal } from '@f88/promidas';
+import type { ProtopediaInMemoryRepository } from '@f88/promidas';
 
 let repository: ProtopediaInMemoryRepository | null = null;
 
@@ -12,7 +12,7 @@ export async function getPromidasRepository(): Promise<ProtopediaInMemoryReposit
 
   if (!token) {
     throw new Error(
-      "VITE_PROTOPEDIA_API_V2_TOKEN is not set in environment variables",
+      'VITE_PROTOPEDIA_API_V2_TOKEN is not set in environment variables',
     );
   }
 

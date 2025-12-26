@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
-import { getPromidasRepository } from "./lib/promidas";
-import type { PrototypeInMemoryStats } from "@f88/promidas";
-import "./App.css";
+import { useEffect, useState } from 'react';
+import { getPromidasRepository } from './lib/promidas';
+import type { PrototypeInMemoryStats } from '@f88/promidas';
+import './App.css';
 
 function App() {
   const [stats, setStats] = useState<PrototypeInMemoryStats | null>(null);
@@ -15,7 +15,7 @@ function App() {
         const repoStats = repo.getStats();
         setStats(repoStats);
       } catch (err) {
-        setError(err instanceof Error ? err.message : "Unknown error");
+        setError(err instanceof Error ? err.message : 'Unknown error');
       } finally {
         setLoading(false);
       }
@@ -56,8 +56,8 @@ function App() {
                 </dt>
                 <dd className="text-lg text-gray-900">
                   {stats.cachedAt
-                    ? new Date(stats.cachedAt).toLocaleString("ja-JP")
-                    : "N/A"}
+                    ? new Date(stats.cachedAt).toLocaleString('ja-JP')
+                    : 'N/A'}
                 </dd>
               </div>
               <div>
@@ -65,7 +65,7 @@ function App() {
                   Is expired:
                 </dt>
                 <dd className="text-lg text-gray-900">
-                  {stats.isExpired ? "Yes" : "No"}
+                  {stats.isExpired ? 'Yes' : 'No'}
                 </dd>
               </div>
             </dl>
