@@ -54,7 +54,9 @@ function App() {
                   Cached at:
                 </dt>
                 <dd className="text-lg text-gray-900">
-                  {new Date(stats.cachedAt).toLocaleString("ja-JP")}
+                  {stats.cachedAt
+                    ? new Date(stats.cachedAt).toLocaleString("ja-JP")
+                    : "N/A"}
                 </dd>
               </div>
               <div>
