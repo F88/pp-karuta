@@ -37,7 +37,7 @@
   },
   "dependencies": {
     "@f88/promidas": "github:F88/promidas#v1.0.0",
-    "@f88/promidas-utils": "github:F88/promidas-utils#v0.2.0",
+    "@f88/promidas-utils": "github:F88/promidas-utils#v0.3.0",
     "@radix-ui/react-slot": "^1.2.4",
     "@tailwindcss/vite": "^4.1.18",
     "class-variance-authority": "^0.7.1",
