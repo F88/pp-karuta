@@ -11,7 +11,7 @@ instructions-for-ais:
     - Prohibit updating title line (1st line) in this document.
 ---
 
-# 🎴 怖露徒頁帝亜 狩流多 弐拾六式 ~馬耳闘風編~
+# 🎴 怖露徒頁帝亜 狩流多 弐拾六式 馬耳闘風編
 
 ProtoPedia Karuta 26 - Bajitoufuu Edition
 
