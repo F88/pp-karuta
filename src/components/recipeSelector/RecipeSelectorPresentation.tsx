@@ -24,7 +24,13 @@ export function RecipeSelectorPresentation({
             </button>
           </div>
         )}
-
+        <div className="mb-8 flex justify-center">
+          <img
+            src={`${import.meta.env.BASE_URL}vite.svg`}
+            alt="Vite logo"
+            className="h-24 w-24"
+          />
+        </div>
         <h1 className="mb-12 text-center text-4xl font-bold text-gray-800">
           🎴 Select Deck Recipe
         </h1>
