@@ -3,10 +3,12 @@ import './App.css';
 import { RecipeSelectorContainer } from '@/components/recipeSelector/RecipeSelectorContainer';
 import { TatamiViewContainer } from '@/components/tatamiView/TatamiViewContainer';
 import { GameResultsContainer } from '@/components/gameResults/GameResultsContainer';
+import { IntroPage } from '@/components/intro/IntroPage';
 import { createInitialState } from '@/lib/karuta';
 import type { GameState } from '@/models/karuta';
 
 function App() {
+  const [showIntro, setShowIntro] = useState(false);
   const [gameState, setGameState] = useState<Omit<GameState, 'players'> | null>(
     null,
   );
@@ -50,6 +52,7 @@ function App() {
     setGameState(null);
     setScore(0);
     setMochiFuda([]);
+    setShowIntro(false);
   }, []);
 
   const handleReplay = useCallback(() => {
@@ -61,6 +64,19 @@ function App() {
     setScore(0);
     setMochiFuda([]);
   }, [gameState]);
+
+  const handleShowIntro = useCallback(() => {
+    setShowIntro(true);
+  }, []);
+
+  const handleHideIntro = useCallback(() => {
+    setShowIntro(false);
+  }, []);
+
+  // Show Intro page if requested
+  if (showIntro) {
+    return <IntroPage onBack={handleHideIntro} />;
+  }
 
   // Game is over when all cards are acquired
   // completedRaces = mochiFuda.length (single player)
@@ -90,7 +106,12 @@ function App() {
     );
   }
 
-  return <RecipeSelectorContainer onGameStateCreated={setGameState} />;
+  return (
+    <RecipeSelectorContainer
+      onGameStateCreated={setGameState}
+      onShowIntro={handleShowIntro}
+    />
+  );
 }
 
 export default App;

@@ -10,10 +10,12 @@ import { RecipeSelectorPresentation } from './RecipeSelectorPresentation';
 
 export type RecipeSelectorContainerProps = {
   onGameStateCreated: (gameState: Omit<GameState, 'players'>) => void;
+  onShowIntro?: () => void;
 };
 
 export function RecipeSelectorContainer({
   onGameStateCreated,
+  onShowIntro,
 }: RecipeSelectorContainerProps) {
   const handleSelectRecipe = useCallback(
     (recipe: DeckRecipe) => {
@@ -43,6 +45,7 @@ export function RecipeSelectorContainer({
     <RecipeSelectorPresentation
       recipes={DECK_RECIPES}
       onSelectRecipe={handleSelectRecipe}
+      onShowIntro={onShowIntro}
     />
   );
 }

@@ -12,7 +12,10 @@ export type Deck = Map<number, NormalizedPrototype>;
 export type DeckRecipe = {
   id: string;
   title: string;
+  description?: string; // Optional description
   deckSize: number; // Number of YomiFuda-ToriFuda pairs
+  difficulty: 'beginner' | 'intermediate' | 'advanced'; // Difficulty level
+  tags: string[]; // Tags for filtering (e.g., ['quick', 'practice'])
 };
 
 /**

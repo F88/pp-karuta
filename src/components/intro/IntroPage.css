@@ -1,0 +1,163 @@
+/* Page container */
+.intro-page {
+  min-height: 100vh;
+  background-color: #000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+}
+
+/* Base class */
+.protopedia-readme {
+  background-color: #000; /* 漆黒の闇 */
+  color: #0f0; /* マトリックス・グリーン */
+  font-family:
+    'Courier New', 'MS Gothic', monospace; /* 等幅フォントで無機質に */
+  padding: 2rem;
+  line-height: 1.8;
+  border: 2px solid #0f0;
+  box-shadow: 0 0 10px #0f0; /* 妖しく光らせる */
+  max-width: 900px;
+  margin-bottom: 2rem;
+}
+
+/* Headings (H1, H2) */
+.protopedia-readme h1,
+.protopedia-readme h2 {
+  color: #ff0055; /* 警告の赤ピンク */
+  text-shadow: 2px 2px 0px #fff; /* バグったような影 */
+  border-bottom: 1px dashed #ff0055;
+  padding-bottom: 0.5rem;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+.protopedia-readme h1 {
+  font-size: 2rem;
+}
+
+.protopedia-readme h2 {
+  font-size: 1.5rem;
+}
+
+.protopedia-readme h3 {
+  color: #0ff; /* シアン */
+  font-size: 1.2rem;
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+}
+
+/* Blockquote (警告文) */
+.protopedia-readme blockquote {
+  border-left: 5px solid #ff0000;
+  background-color: #1a0000;
+  color: #ffcccc;
+  padding: 1rem;
+  font-weight: bold;
+  margin: 1.5rem 0;
+}
+
+.protopedia-readme blockquote p {
+  margin: 0;
+}
+
+/* Strong (特定のキーワード強調) */
+.protopedia-readme strong {
+  color: #ffcc00; /* 黄金の輝き */
+  text-decoration: underline wavy #ffcc00; /* 波線で強調 */
+}
+
+/* Lists */
+.protopedia-readme ul,
+.protopedia-readme ol {
+  margin: 1rem 0;
+  padding-left: 2rem;
+}
+
+.protopedia-readme li {
+  margin: 0.5rem 0;
+}
+
+/* Tables */
+.protopedia-readme table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  color: #0f0;
+}
+
+.protopedia-readme th,
+.protopedia-readme td {
+  border: 1px solid #0f0;
+  padding: 0.75rem;
+  text-align: left;
+}
+
+.protopedia-readme th {
+  background-color: #003300;
+  color: #ffcc00;
+  font-weight: bold;
+}
+
+.protopedia-readme tr:nth-child(even) {
+  background-color: #001100;
+}
+
+/* Code blocks */
+.protopedia-readme code {
+  background-color: #111;
+  color: #0ff;
+  padding: 0.2rem 0.4rem;
+  border-radius: 3px;
+  font-family: 'Courier New', monospace;
+}
+
+.protopedia-readme pre {
+  background-color: #111;
+  border: 1px solid #0f0;
+  padding: 1rem;
+  overflow-x: auto;
+  margin: 1rem 0;
+}
+
+.protopedia-readme pre code {
+  background-color: transparent;
+  padding: 0;
+}
+
+/* Links */
+.protopedia-readme a {
+  color: #0ff;
+  text-decoration: underline;
+}
+
+.protopedia-readme a:hover {
+  color: #ff0055;
+  text-shadow: 0 0 5px #ff0055;
+}
+
+/* Back button */
+.back-button {
+  background-color: #000;
+  color: #0f0;
+  border: 2px solid #0f0;
+  padding: 1rem 2rem;
+  font-family: 'Courier New', 'MS Gothic', monospace;
+  font-size: 1.2rem;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 0 10px #0f0;
+  transition: all 0.3s ease;
+}
+
+.back-button:hover {
+  background-color: #0f0;
+  color: #000;
+  box-shadow: 0 0 20px #0f0;
+  transform: scale(1.05);
+}
+
+.back-button:active {
+  transform: scale(0.95);
+}
