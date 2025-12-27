@@ -29,7 +29,7 @@ function Index() {
   // In API mode, RecipeSelector is shown only when repository is valid
   const repoState = getRepositoryState();
   const canShowRecipeSelector =
-    useDummyData || (hasToken && repoState.state === 'valid');
+    useDummyData || (hasToken && repoState.type === 'created-token-valid');
 
   const [gameState, setGameState] = useState<Omit<GameState, 'players'> | null>(
     null,

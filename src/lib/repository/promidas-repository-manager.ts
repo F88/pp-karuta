@@ -41,21 +41,54 @@ export type RepositoryState =
  * - Validates tokens using setupSnapshot({ limit: 0 }) for minimal API verification
  */
 export class PromidasRepositoryManager {
+  private static instance: PromidasRepositoryManager | null = null;
+
   private repository: ProtopediaInMemoryRepository | null = null;
   private tokenStatus: 'not-validated' | 'valid' | 'invalid' = 'not-validated';
   private error: string | null = null;
   private initPromise: Promise<ProtopediaInMemoryRepository> | null = null;
   private storage: typeof defaultTokenStorage;
 
-  constructor(storage = defaultTokenStorage) {
+  /**
+   * Creates a new PromidasRepositoryManager instance
+   *
+   * @param storage - Token storage implementation for retrieving API tokens.
+   *                  Defaults to sessionStorage-based token storage.
+   *                  Can be injected for testing purposes.
+   */
+  private constructor(storage = defaultTokenStorage) {
     this.storage = storage;
+  }
+
+  /**
+   * Gets the singleton instance of PromidasRepositoryManager
+   *
+   * @param storage - Optional token storage implementation (only used on first call)
+   * @returns The singleton instance
+   */
+  static getInstance(
+    storage: typeof defaultTokenStorage = defaultTokenStorage,
+  ): PromidasRepositoryManager {
+    if (!PromidasRepositoryManager.instance) {
+      PromidasRepositoryManager.instance = new PromidasRepositoryManager(
+        storage,
+      );
+    }
+    return PromidasRepositoryManager.instance;
   }
 
   /**
    * Get the current repository state as a discriminated union
    *
+   * State transitions:
+   * - not-created: No repository exists or validation not started
+   * - created-token-valid: Repository created and token validated successfully
+   * - token-invalid: Token validation failed with error details
+   *
    * Note: Internal 'not-validated' state is not exposed externally.
    * Repository is only returned when token validation is complete and successful.
+   *
+   * @returns Current repository state (3 possible states)
    */
   getState(): RepositoryState {
     if (!this.repository) {
@@ -85,14 +118,21 @@ export class PromidasRepositoryManager {
 
   /**
    * Reset repository state to not-created
-   * Call this when token is removed or when forcing re-validation.
-   * This also clears any pending initialization promise.
+   *
+   * Clears the repository instance, validation state, error messages,
+   * and any pending initialization promises.
+   *
+   * Call this when:
+   * - Token is removed or changed
+   * - Forcing re-validation of the repository
+   * - Cleaning up the manager state
+   *
+   * Warning: If getRepository() is currently executing, results from that
+   * operation will be discarded by the finally block. Consider awaiting
+   * pending operations before calling reset() in production code.
    */
   reset(): void {
-    this.initPromise = null;
-    this.repository = null;
-    this.tokenStatus = 'not-validated';
-    this.error = null;
+    PromidasRepositoryManager.instance = null;
   }
 
   /**
@@ -128,14 +168,25 @@ export class PromidasRepositoryManager {
    * Returns a cached repository if already validated, otherwise retrieves token
    * from storage, creates repository, and validates it.
    *
-   * Handles concurrent calls by returning the same promise (request deduplication).
+   * Request deduplication: Concurrent calls to this method will receive the
+   * same Promise, preventing duplicate initialization and API calls.
+   *
+   * Validation process:
+   * 1. Check if repository is already valid (returns cached instance)
+   * 2. Check if initialization is in progress (returns existing promise)
+   * 3. Retrieve token from storage
+   * 4. Create repository instance
+   * 5. Validate token with minimal API call (setupSnapshot with limit: 0)
+   * 6. Update state and return repository
    *
    * Note: Token validation is done with setupSnapshot({ limit: 0 }), so the repository
    * is ready to use but contains no data. Callers should call setupSnapshot() with
    * appropriate limit when they need actual prototype data.
    *
    * @returns Validated Promidas repository instance ready for data loading
-   * @throws Error if token is missing or validation fails
+   * @throws Error if token is missing, empty, or validation fails
+   * @throws Error if repository creation fails
+   * @throws Error if API token is invalid or API is unreachable
    */
   async getRepository(): Promise<ProtopediaInMemoryRepository> {
     const state = this.getState();
@@ -206,4 +257,13 @@ export class PromidasRepositoryManager {
 
     return this.initPromise;
   }
+}
+
+/**
+ * Gets the singleton instance of PromidasRepositoryManager
+ *
+ * @returns The singleton manager instance
+ */
+export function getPromidasRepositoryManager(): PromidasRepositoryManager {
+  return PromidasRepositoryManager.getInstance();
 }

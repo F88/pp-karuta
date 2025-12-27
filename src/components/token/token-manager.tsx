@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { useToken } from '@/hooks/useToken';
 import { usePromidasStoreState } from '@/hooks/usePromidasStoreState';
 import {
-  validateAndCreateRepository,
   getRepositoryState,
   resetRepository,
   type RepositoryState,
@@ -23,8 +22,9 @@ export function TokenManager() {
   const [inputValue, setInputValue] = useState('');
   const [showToken, setShowToken] = useState(false);
   const [isValidating, setIsValidating] = useState(false);
-  const [repoState, setRepoState] =
-    useState<RepositoryState>('not-initialized');
+  const [repoState, setRepoState] = useState<RepositoryState>({
+    type: 'not-created',
+  });
   const [repoError, setRepoError] = useState<string | null>(null);
 
   const useDummyData = import.meta.env.VITE_USE_DUMMY_DATA === 'true';
@@ -32,22 +32,22 @@ export function TokenManager() {
   // Update repo state when token changes
   useEffect(() => {
     if (!hasToken) {
-      setRepoState('not-initialized');
+      setRepoState({ type: 'not-created' });
       setRepoError(null);
       return;
     }
 
     // Skip validation in dummy mode
     if (useDummyData) {
-      setRepoState('not-initialized');
+      setRepoState({ type: 'not-created' });
       setRepoError(null);
       return;
     }
 
     // Check current repo state
     const status = getRepositoryState();
-    setRepoState(status.state);
-    setRepoError(status.error);
+    setRepoState(status);
+    setRepoError(status.type === 'token-invalid' ? status.error : null);
   }, [hasToken, useDummyData]);
 
   const handleSave = async () => {
@@ -64,12 +64,16 @@ export function TokenManager() {
     // Validate token by creating repository
     setIsValidating(true);
     try {
-      const status = await validateAndCreateRepository(inputValue.trim());
-      setRepoState(status.state);
-      setRepoError(status.error);
+      const { getPromidasRepositoryManager } =
+        await import('@/lib/repository/promidas-repository-manager');
+      const manager = getPromidasRepositoryManager();
+      await manager.getRepository();
+      const status = getRepositoryState();
+      setRepoState(status);
+      setRepoError(status.type === 'token-invalid' ? status.error : null);
     } catch (err) {
       const message = err instanceof Error ? err.message : String(err);
-      setRepoState('invalid');
+      setRepoState({ type: 'token-invalid', error: message });
       setRepoError(message);
     } finally {
       setIsValidating(false);
@@ -80,7 +84,7 @@ export function TokenManager() {
     await removeToken();
     resetRepository();
     setInputValue('');
-    setRepoState('not-initialized');
+    setRepoState({ type: 'not-created' });
     setRepoError(null);
   };
 
@@ -93,7 +97,7 @@ export function TokenManager() {
       return <p className="text-muted-foreground text-xs">Tokenを確認中...</p>;
     }
 
-    if (repoState === 'valid') {
+    if (repoState.type === 'created-token-valid') {
       const storeInfo =
         storeState === 'stored' && stats
           ? ` (${stats.size}件のプロトタイプ)`
@@ -107,7 +111,7 @@ export function TokenManager() {
       );
     }
 
-    if (repoState === 'invalid') {
+    if (repoState.type === 'token-invalid') {
       return (
         <p className="text-destructive text-xs">
           Tokenが無効か、APIに接続できません

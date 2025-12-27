@@ -39,7 +39,7 @@ export function usePromidasStoreState(): UsePromidasStoreStateResult {
       const repoStatus = getRepositoryState();
 
       // Only fetch stats if repository is valid
-      if (repoStatus.state !== 'valid') {
+      if (repoStatus.type !== 'created-token-valid') {
         setStats(null);
         setStoreState('not-stored');
         return;

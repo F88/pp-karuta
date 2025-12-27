@@ -14,8 +14,9 @@ import {
 } from '@/components/ui/card';
 
 export function PromidasRepoDashboard() {
-  const [repoState, setRepoState] =
-    useState<RepositoryState>('not-initialized');
+  const [repoState, setRepoState] = useState<RepositoryState>({
+    type: 'not-created',
+  });
   const [repoError, setRepoError] = useState<string | null>(null);
   const { storeState, stats } = usePromidasStoreState();
 
@@ -24,8 +25,8 @@ export function PromidasRepoDashboard() {
   useEffect(() => {
     const updateRepoState = () => {
       const status = getRepositoryState();
-      setRepoState(status.state);
-      setRepoError(status.error);
+      setRepoState(status);
+      setRepoError(status.type === 'token-invalid' ? status.error : null);
     };
 
     updateRepoState();
@@ -36,23 +37,23 @@ export function PromidasRepoDashboard() {
   }, []);
 
   const getRepoStateLabel = (state: RepositoryState): string => {
-    switch (state) {
-      case 'not-initialized':
+    switch (state.type) {
+      case 'not-created':
         return '未初期化';
-      case 'invalid':
+      case 'token-invalid':
         return '無効';
-      case 'valid':
+      case 'created-token-valid':
         return '有効';
     }
   };
 
   const getRepoStateBadgeColor = (state: RepositoryState): string => {
-    switch (state) {
-      case 'not-initialized':
+    switch (state.type) {
+      case 'not-created':
         return 'bg-muted text-muted-foreground';
-      case 'invalid':
+      case 'token-invalid':
         return 'bg-destructive text-destructive-foreground';
-      case 'valid':
+      case 'created-token-valid':
         return 'bg-green-600 text-white dark:bg-green-700';
     }
   };
