@@ -12,7 +12,7 @@ instructions-for-ais:
 ---
 
 
-# 🎴 怖露徒頁帝亜 狩流多 弐拾六式 ~ 馬耳闘風 編 ~
+# 🎴 怖露徒頁帝亜 狩流多 弐拾六式 ~馬耳闘風編~
 
 ProtoPedia Karuta 26 - Bajitoufuu Edition
 
@@ -43,7 +43,7 @@ ProtoPedia Karuta 26 - Bajitoufuu Edition
 文字情報ﾅﾄﾞﾄｲｳ甘ｴﾊ排除ｼﾀ｡
 ｺﾚﾊ知識ﾃﾞﾊﾅｲ｡**愛ﾄ本能ﾉ闘争**ﾃﾞｱﾙ｡
 
-### 🐴 ~馬耳闘風(Bajitoufuu)ﾄﾊ~
+### 🐴 馬耳闘風 (Bajitoufuu)
 
 時ﾊ2026年､午年(Horse Year)
 
