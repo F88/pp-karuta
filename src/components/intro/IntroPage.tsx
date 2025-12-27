@@ -9,7 +9,7 @@ export function IntroPage({ onBack }: { onBack: () => void }) {
   useEffect(() => {
     // Use relative path from public directory
     const basePath = import.meta.env.BASE_URL || '/';
-    fetch(`${basePath}INTRO.md`)
+    fetch(`${basePath}INTRO.txt`)
       .then((response) => response.text())
       .then((text) => {
         // Remove front-matter (between --- and ---)
@@ -17,8 +17,8 @@ export function IntroPage({ onBack }: { onBack: () => void }) {
         setMarkdown(content);
       })
       .catch((error) => {
-        console.error('Failed to load INTRO.md:', error);
-        setMarkdown('# Error loading INTRO.md');
+        console.error('Failed to load INTRO.txt:', error);
+        setMarkdown('# Error loading INTRO.txt');
       });
   }, []);
 
