@@ -28,5 +28,4 @@ tools/prompts/*
 *.log
 
 # Temporary ignore files
-# src/utils/__tests__/snapshot-error-utils.test.ts
-
+src/App.tsx
