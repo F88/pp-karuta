@@ -1,11 +1,9 @@
 import { createPromidasForLocal } from '@f88/promidas';
 import type { ProtopediaInMemoryRepository } from '@f88/promidas';
 import type { LogLevel } from '@f88/promidas/logger';
+import { parseSnapshotOperationFailure } from '@f88/promidas-utils/repository';
 import { tokenStorage as defaultTokenStorage } from '@/lib/token-storage';
-import {
-  parsePromidasRepositoryInitError,
-  parseSnapshotFailure,
-} from './error-utils';
+import { parsePromidasRepositoryInitError } from './error-utils';
 
 /**
  * Repository state as a discriminated union
@@ -239,11 +237,13 @@ export class PromidasRepositoryManager {
         const result = await this.validateRepository(repo);
         if (!result.ok) {
           console.error('Token validation failed:', result);
-          const parsed = parseSnapshotFailure(result);
+          const parsed = parseSnapshotOperationFailure(result);
+          const errorMessage =
+            parsed?.localizedMessage || '不明なエラーが発生しました。';
           this.repository = null;
           this.tokenStatus = 'invalid';
-          this.error = parsed.message;
-          throw new Error(parsed.message);
+          this.error = errorMessage;
+          throw new Error(errorMessage);
         }
 
         // Token is valid

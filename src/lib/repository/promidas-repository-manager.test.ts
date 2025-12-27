@@ -13,17 +13,20 @@ vi.mock('@f88/promidas', () => ({
   createPromidasForLocal: vi.fn(),
 }));
 
+// Mock promidas-utils repository module
+vi.mock('@f88/promidas-utils/repository', () => ({
+  parseSnapshotOperationFailure: vi.fn((failure) => ({
+    ...failure,
+    localizedMessage: failure.message || 'スナップショット操作に失敗しました。',
+  })),
+}));
+
 // Mock error utils
 vi.mock('./error-utils', () => ({
   parsePromidasRepositoryInitError: vi.fn((err) => ({
     category: 'configuration',
     message: String(err),
     originalError: err,
-  })),
-  parseSnapshotFailure: vi.fn((failure) => ({
-    category: 'api',
-    message: failure.message || 'Snapshot failed',
-    originalError: failure,
   })),
 }));
 
