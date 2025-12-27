@@ -8,6 +8,21 @@
   padding: 2rem;
 }
 
+/*
+  Intro page has an intentionally isolated theme.
+  It must override the shared shadcn/ui theme and Tailwind base styles.
+*/
+body.pp-karuta-intro-theme {
+  color-scheme: dark;
+  background: #000 !important;
+  color: #0f0 !important;
+}
+
+body.pp-karuta-intro-theme .intro-page {
+  background-color: #000 !important;
+  color: #0f0 !important;
+}
+
 /* Base class */
 .protopedia-readme {
   background-color: #000; /* 漆黒の闇 */

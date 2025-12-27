@@ -1,8 +1,9 @@
 // Export types
 export type { DeckRecipe, Player, GameState } from '@/models/karuta';
 
-// Export dummy data generation
+// Export data generation
 export { generateDummyPrototypes } from './dummy-data';
+export { fetchPrototypesFromAPI } from './api-data';
 
 // Export recipe utilities
 export { DECK_RECIPES, findRecipeById, generateDeck } from './recipe';

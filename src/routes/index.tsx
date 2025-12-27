@@ -1,15 +1,36 @@
+/**
+ * Home route (`/`) for the main game flow.
+ *
+ * The shared shadcn/ui `ThemeProvider` is applied here so all main gameplay
+ * screens use the common theme, while `/intro` remains theme-isolated.
+ */
+import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { useState, useCallback } from 'react';
-import './App.css';
 import { ThemeProvider } from '@/components/theme-provider';
+import { TokenManager } from '@/components/token/token-manager';
+import { PromidasRepoDashboard } from '@/components/promidas/PromidRepoDashboard';
 import { RecipeSelectorContainer } from '@/components/recipe/RecipeSelectorContainer';
 import { TatamiViewContainer } from '@/components/tatami/TatamiViewContainer';
 import { GameResultsContainer } from '@/components/gameResults/GameResultsContainer';
-import { IntroPage } from '@/components/intro/IntroPage';
+import { useToken } from '@/hooks/useToken';
+import { getRepositoryState } from '@/lib/repository/promidas-repo';
 import { createInitialState } from '@/lib/karuta';
 import type { GameState } from '@/models/karuta';
 
-function App() {
-  const [showIntro, setShowIntro] = useState(false);
+export const Route = createFileRoute('/')({
+  component: Index,
+});
+
+function Index() {
+  const navigate = useNavigate();
+  const { hasToken } = useToken();
+  const useDummyData = import.meta.env.VITE_USE_DUMMY_DATA === 'true';
+
+  // In API mode, RecipeSelector is shown only when repository is valid
+  const repoState = getRepositoryState();
+  const canShowRecipeSelector =
+    useDummyData || (hasToken && repoState.state === 'valid');
+
   const [gameState, setGameState] = useState<Omit<GameState, 'players'> | null>(
     null,
   );
@@ -30,10 +51,11 @@ function App() {
       const newTatami = prev.tatami.filter((id) => id !== cardId);
       const newStack = [...prev.stack];
 
-      // If stack has cards, add one to tatami
-      if (newStack.length > 0) {
-        const nextCard = newStack.shift()!;
-        newTatami.push(nextCard);
+      if (newStack.length > 0 && newTatami.length < 5) {
+        const nextCard = newStack.shift();
+        if (nextCard !== undefined) {
+          newTatami.push(nextCard);
+        }
       }
 
       return {
@@ -45,42 +67,30 @@ function App() {
   }, []);
 
   const handleIncorrectAnswer = useCallback(() => {
-    // Subtract 1 point
-    setScore((prev) => prev - 1);
+    // Subtract 1 point (minimum 0)
+    setScore((prev) => Math.max(0, prev - 1));
   }, []);
 
   const handleBackToTop = useCallback(() => {
     setGameState(null);
     setScore(0);
     setMochiFuda([]);
-    setShowIntro(false);
   }, []);
 
   const handleReplay = useCallback(() => {
     if (!gameState) return;
 
-    // Regenerate stack and tatami from existing deck
-    const newState = createInitialState(gameState.deck);
-    setGameState(newState);
+    const newGameState = createInitialState(gameState.deck);
+    setGameState(newGameState);
     setScore(0);
     setMochiFuda([]);
   }, [gameState]);
 
-  const handleShowIntro = useCallback(() => {
-    setShowIntro(true);
-  }, []);
-
-  const handleHideIntro = useCallback(() => {
-    setShowIntro(false);
-  }, []);
-
-  // Show Intro page if requested
-  if (showIntro) {
-    return <IntroPage onBack={handleHideIntro} />;
-  }
+  const handleShowIntro = () => {
+    navigate({ to: '/intro' });
+  };
 
   // Game is over when all cards are acquired
-  // completedRaces = mochiFuda.length (single player)
   const isGameOver = gameState && mochiFuda.length >= gameState.deck.size;
 
   if (isGameOver && gameState) {
@@ -113,12 +123,16 @@ function App() {
 
   return (
     <ThemeProvider defaultTheme="system" storageKey="pp-karuta-theme">
-      <RecipeSelectorContainer
-        onGameStateCreated={setGameState}
-        onShowIntro={handleShowIntro}
-      />
+      <div className="mb-8 flex flex-col items-center gap-6">
+        <TokenManager />
+        <PromidasRepoDashboard />
+      </div>
+      {canShowRecipeSelector ? (
+        <RecipeSelectorContainer
+          onGameStateCreated={setGameState}
+          onShowIntro={handleShowIntro}
+        />
+      ) : null}
     </ThemeProvider>
   );
 }
-
-export default App;

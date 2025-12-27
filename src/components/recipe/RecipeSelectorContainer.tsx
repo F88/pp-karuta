@@ -3,6 +3,7 @@ import type { DeckRecipe, GameState } from '@/models/karuta';
 import {
   DECK_RECIPES,
   generateDummyPrototypes,
+  fetchPrototypesFromAPI,
   generateDeck,
   createInitialState,
 } from '@/lib/karuta';
@@ -18,12 +19,22 @@ export function RecipeSelectorContainer({
   onShowIntro,
 }: RecipeSelectorContainerProps) {
   const handleSelectRecipe = useCallback(
-    (recipe: DeckRecipe) => {
+    async (recipe: DeckRecipe) => {
       console.group(`🎴 Selected Recipe: ${recipe.title}`);
 
-      // Generate dummy prototypes
-      const allPrototypes = generateDummyPrototypes(30);
-      console.log(`Generated ${allPrototypes.length} dummy prototypes`);
+      // Check environment variable for dummy data usage
+      const useDummyData = import.meta.env.VITE_USE_DUMMY_DATA === 'true';
+
+      let allPrototypes;
+      if (useDummyData) {
+        console.log('📦 Using dummy data (faker)');
+        allPrototypes = generateDummyPrototypes(30);
+      } else {
+        console.log('🌐 Fetching from PROMIDAS API');
+        allPrototypes = await fetchPrototypesFromAPI();
+      }
+
+      console.log(`Generated/Fetched ${allPrototypes.length} prototypes`);
 
       // Generate deck from recipe
       const deck = generateDeck(recipe, allPrototypes);
