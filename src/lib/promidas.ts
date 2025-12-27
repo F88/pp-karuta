@@ -22,6 +22,7 @@ export async function getPromidasRepository(): Promise<ProtopediaInMemoryReposit
 
   // Initialize snapshot with 100 prototypes
   const result = await repository.setupSnapshot({ limit: 100 });
+  repository.getRandomPrototypeFromSnapshot(); // Warm up
 
   if (!result.ok) {
     throw new Error(`Failed to setup snapshot: ${result.message}`);
