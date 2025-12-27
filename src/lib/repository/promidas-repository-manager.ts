@@ -1,9 +1,10 @@
-import { createPromidasForLocal } from '@f88/promidas';
 import type { ProtopediaInMemoryRepository } from '@f88/promidas';
-import type { LogLevel } from '@f88/promidas/logger';
+import { createPromidasForLocal } from '@f88/promidas';
+import { toErrorMessage } from '@f88/promidas-utils/builder';
 import { parseSnapshotOperationFailure } from '@f88/promidas-utils/repository';
+import type { LogLevel } from '@f88/promidas/logger';
+
 import { tokenStorage as defaultTokenStorage } from '@/lib/token-storage';
-import { parsePromidasRepositoryInitError } from './error-utils';
 
 /**
  * Repository state as a discriminated union
@@ -226,11 +227,14 @@ export class PromidasRepositoryManager {
           this.error = null;
         } catch (err) {
           console.error('Failed to create Promidas repository:', err);
-          const parsed = parsePromidasRepositoryInitError(err);
+          const errorMessage =
+            err instanceof Error
+              ? toErrorMessage(err)
+              : '不明なエラーが発生しました。';
           this.repository = null;
           this.tokenStatus = 'invalid';
-          this.error = parsed.message;
-          throw new Error(parsed.message);
+          this.error = errorMessage;
+          throw new Error(errorMessage);
         }
 
         // Step 2: Validate token by testing API access

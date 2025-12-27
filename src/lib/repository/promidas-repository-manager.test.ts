@@ -21,13 +21,9 @@ vi.mock('@f88/promidas-utils/repository', () => ({
   })),
 }));
 
-// Mock error utils
-vi.mock('./error-utils', () => ({
-  parsePromidasRepositoryInitError: vi.fn((err) => ({
-    category: 'configuration',
-    message: String(err),
-    originalError: err,
-  })),
+// Mock promidas-utils builder module
+vi.mock('@f88/promidas-utils/builder', () => ({
+  toErrorMessage: vi.fn((err) => String(err)),
 }));
 
 const mockStats: PrototypeInMemoryStats = {
