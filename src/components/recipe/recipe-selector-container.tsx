@@ -26,22 +26,12 @@ export function RecipeSelectorContainer({
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [loadingRecipeId, setLoadingRecipeId] = useState<string | null>(null);
-  const [, setRepoCheckCounter] = useState(0);
 
   // Check repository availability
   const useDummyData = import.meta.env.VITE_USE_DUMMY_DATA === 'true';
   const repoState = getRepositoryState();
-  const isRepoValid = useDummyData || repoState.type === 'created-token-valid';
-
-  // Poll repository state when dialog is shown
-  useEffect(() => {
-    if (!isRepoValid) {
-      const intervalId = setInterval(() => {
-        setRepoCheckCounter((prev) => prev + 1);
-      }, 1000);
-      return () => clearInterval(intervalId);
-    }
-  }, [isRepoValid]);
+  const hasValidRepository =
+    useDummyData || repoState.type === 'created-token-valid';
 
   // Log playMode on mount
   useEffect(() => {
@@ -114,19 +104,21 @@ export function RecipeSelectorContainer({
     [onGameStateCreated],
   );
 
-  // If repository is not valid, show setup dialog
-  if (!isRepoValid) {
-    return <RepoSetupDialog open={true} onOpenChange={() => {}} />;
-  }
-
   return (
-    <RecipeSelectorPresentation
-      recipes={DECK_RECIPES}
-      onSelectRecipe={handleSelectRecipe}
-      onShowIntro={onShowIntro}
-      isLoading={isLoading}
-      error={error}
-      loadingRecipeId={loadingRecipeId}
-    />
+    <>
+      <RepoSetupDialog
+        open={!hasValidRepository}
+        onOpenChange={() => {}}
+        autoCloseOnValid={true}
+      />
+      <RecipeSelectorPresentation
+        recipes={DECK_RECIPES}
+        onSelectRecipe={handleSelectRecipe}
+        onShowIntro={onShowIntro}
+        isLoading={isLoading}
+        error={error}
+        loadingRecipeId={loadingRecipeId}
+      />
+    </>
   );
 }

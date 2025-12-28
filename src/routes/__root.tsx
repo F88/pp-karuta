@@ -48,6 +48,7 @@ function RootComponent() {
       <RepoSetupDialog
         open={isDialogOpen}
         onOpenChange={handleDialogOpenChange}
+        autoCloseOnValid={false}
       />
       <Outlet />
     </ThemeProvider>
