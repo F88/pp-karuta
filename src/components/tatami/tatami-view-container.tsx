@@ -2,7 +2,7 @@ import { useCallback } from 'react';
 import type { GameState } from '@/models/karuta';
 import { getPrototypesByIds } from '@/lib/karuta';
 import type { NormalizedPrototype } from '@f88/promidas/types';
-import { TatamiViewPresentation } from './TatamiViewPresentation';
+import { TatamiViewPresentation } from './tatami-view-presentation';
 
 export type TatamiViewContainerProps = {
   gameState: Omit<GameState, 'players'>;

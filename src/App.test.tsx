@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import type { PrototypeInMemoryStats } from '@f88/promidas';
-import { AppPresentation } from '@/components/app/AppPresentation';
+import { AppPresentation } from '@/components/app/app-presentation';
 
 describe('App', () => {
   it('renders loading state', () => {

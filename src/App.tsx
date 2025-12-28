@@ -1,10 +1,10 @@
 import { useState, useCallback } from 'react';
 import './App.css';
 import { ThemeProvider } from '@/components/theme-provider';
-import { RecipeSelectorContainer } from '@/components/recipe/RecipeSelectorContainer';
-import { TatamiViewContainer } from '@/components/tatami/TatamiViewContainer';
-import { GameResultsContainer } from '@/components/gameResults/GameResultsContainer';
-import { IntroPage } from '@/components/intro/IntroPage';
+import { RecipeSelectorContainer } from '@/components/recipe/recipe-selector-container';
+import { TatamiViewContainer } from '@/components/tatami/tatami-view-container';
+import { GameResultsContainer } from '@/components/gameResults/game-results-container';
+import { IntroPage } from '@/components/intro/intro-page';
 import { createInitialState } from '@/lib/karuta';
 import type { GameState } from '@/models/karuta';
 

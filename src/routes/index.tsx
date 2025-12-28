@@ -7,12 +7,12 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { useState, useCallback } from 'react';
 import { ThemeProvider } from '@/components/theme-provider';
-import { TokenManager } from '@/components/token/token-manager';
-import { PromidasRepoDashboard } from '@/components/promidas/PromidRepoDashboard';
-import { RecipeSelectorContainer } from '@/components/recipe/RecipeSelectorContainer';
-import { TatamiViewContainer } from '@/components/tatami/TatamiViewContainer';
-import { GameResultsContainer } from '@/components/gameResults/GameResultsContainer';
-import { useToken } from '@/hooks/useToken';
+import { PromidasRepoDashboard } from '@/components/promidas/promid-repo-dashboard';
+import { RecipeSelectorContainer } from '@/components/recipe/recipe-selector-container';
+import { TatamiViewContainer } from '@/components/tatami/tatami-view-container';
+import { GameResultsContainer } from '@/components/gameResults/game-results-container';
+import { TokenManagerContainer } from '@/components/token/token-manager-container';
+import { useToken } from '@/hooks/use-token';
 import { getRepositoryState } from '@/lib/repository/promidas-repo';
 import { createInitialState } from '@/lib/karuta';
 import type { GameState } from '@/models/karuta';
@@ -124,7 +124,7 @@ function Index() {
   return (
     <ThemeProvider defaultTheme="system" storageKey="pp-karuta-theme">
       <div className="mb-8 flex flex-col items-center gap-6">
-        <TokenManager />
+        <TokenManagerContainer />
         <PromidasRepoDashboard />
       </div>
       {canShowRecipeSelector ? (

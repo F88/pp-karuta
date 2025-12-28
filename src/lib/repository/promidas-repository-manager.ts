@@ -244,6 +244,7 @@ export class PromidasRepositoryManager {
           const parsed = parseSnapshotOperationFailure(result);
           const errorMessage =
             parsed?.localizedMessage || '不明なエラーが発生しました。';
+          console.info('Parsed token validation error:', errorMessage);
           this.repository = null;
           this.tokenStatus = 'invalid';
           this.error = errorMessage;

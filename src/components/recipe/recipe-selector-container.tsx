@@ -7,7 +7,7 @@ import {
   generateDeck,
   createInitialState,
 } from '@/lib/karuta';
-import { RecipeSelectorPresentation } from './RecipeSelectorPresentation';
+import { RecipeSelectorPresentation } from './recipe-selector-presentation';
 
 export type RecipeSelectorContainerProps = {
   onGameStateCreated: (gameState: Omit<GameState, 'players'>) => void;

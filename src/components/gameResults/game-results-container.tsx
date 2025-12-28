@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import type { NormalizedPrototype } from '@f88/promidas/types';
 import { getPrototypesByIds } from '@/lib/karuta';
-import { GameResultsPresentation } from './GameResultsPresentation';
+import { GameResultsPresentation } from './game-results-presentation';
 
 export type GameResultsContainerProps = {
   deck: Map<number, NormalizedPrototype>;

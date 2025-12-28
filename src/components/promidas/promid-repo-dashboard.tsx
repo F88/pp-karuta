@@ -3,7 +3,7 @@ import {
   getRepositoryState,
   type RepositoryState,
 } from '@/lib/repository/promidas-repo';
-import { usePromidasStoreState } from '@/hooks/usePromidasStoreState';
+import { usePromidasStoreState } from '@/hooks/use-promidas-store-state';
 import type { StoreState } from '@f88/promidas-utils/store';
 import {
   Card,

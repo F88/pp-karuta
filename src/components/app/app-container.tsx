@@ -1,5 +1,5 @@
-import { usePromidasRepository } from '@/hooks/usePromidasRepository';
-import { AppPresentation } from './AppPresentation';
+import { usePromidasRepository } from '@/hooks/use-promidas-repository';
+import { AppPresentation } from './app-presentation';
 
 export function AppContainer() {
   const { repository, loading, error } = usePromidasRepository();
