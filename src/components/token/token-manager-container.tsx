@@ -62,9 +62,11 @@ export function TokenManagerContainer() {
       const manager = getPromidasRepositoryManager();
       await manager.getRepository();
       const status = getRepositoryState();
+      console.log('[TokenManager] Repository state after validation:', status);
       setRepoState(status);
     } catch (err) {
       const message = err instanceof Error ? err.message : String(err);
+      console.error('[TokenManager] Validation failed:', message);
       setRepoState({ type: 'token-invalid', error: message });
     } finally {
       setIsValidating(false);

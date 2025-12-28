@@ -46,6 +46,7 @@ export class PromidasRepositoryManager {
   private tokenStatus: 'not-validated' | 'valid' | 'invalid' = 'not-validated';
   private error: string | null = null;
   private initPromise: Promise<ProtopediaInMemoryRepository> | null = null;
+  private initPromiseId = 0;
   private storage: typeof defaultTokenStorage;
 
   /**
@@ -131,6 +132,18 @@ export class PromidasRepositoryManager {
    * pending operations before calling reset() in production code.
    */
   reset(): void {
+    this.repository = null;
+    this.tokenStatus = 'not-validated';
+    this.error = null;
+    this.initPromise = null;
+    this.initPromiseId++;
+  }
+
+  /**
+   * Reset singleton instance (for testing only)
+   * @internal
+   */
+  static resetInstance(): void {
     PromidasRepositoryManager.instance = null;
   }
 
@@ -200,6 +213,7 @@ export class PromidasRepositoryManager {
       return this.initPromise;
     }
 
+    const promiseId = this.initPromiseId;
     this.initPromise = (async () => {
       try {
         // Retrieve token from storage
@@ -222,18 +236,23 @@ export class PromidasRepositoryManager {
         // Step 1: Create repository instance
         try {
           repo = this.createRepository(token);
-          this.repository = repo;
-          this.tokenStatus = 'not-validated';
-          this.error = null;
+          // Only update state if not reset during operation
+          if (this.initPromiseId === promiseId) {
+            this.repository = repo;
+            this.tokenStatus = 'not-validated';
+            this.error = null;
+          }
         } catch (err) {
           console.error('Failed to create Promidas repository:', err);
           const errorMessage =
             err instanceof Error
               ? toErrorMessage(err)
               : '不明なエラーが発生しました。';
-          this.repository = null;
-          this.tokenStatus = 'invalid';
-          this.error = errorMessage;
+          if (this.initPromiseId === promiseId) {
+            this.repository = null;
+            this.tokenStatus = 'invalid';
+            this.error = errorMessage;
+          }
           throw new Error(errorMessage);
         }
 
@@ -245,18 +264,25 @@ export class PromidasRepositoryManager {
           const errorMessage =
             parsed?.localizedMessage || '不明なエラーが発生しました。';
           console.info('Parsed token validation error:', errorMessage);
-          this.repository = null;
-          this.tokenStatus = 'invalid';
-          this.error = errorMessage;
+          if (this.initPromiseId === promiseId) {
+            this.repository = null;
+            this.tokenStatus = 'invalid';
+            this.error = errorMessage;
+          }
           throw new Error(errorMessage);
         }
 
-        // Token is valid
-        this.tokenStatus = 'valid';
-        this.error = null;
+        // Token is valid - only update state if not reset during operation
+        if (this.initPromiseId === promiseId) {
+          this.tokenStatus = 'valid';
+          this.error = null;
+        }
         return repo;
       } finally {
-        this.initPromise = null;
+        // Only clear initPromise if it's still the current one
+        if (this.initPromiseId === promiseId) {
+          this.initPromise = null;
+        }
       }
     })();
 

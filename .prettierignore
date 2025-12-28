@@ -30,3 +30,4 @@ tools/prompts/*
 # Temporary ignore files
 src/App.tsx
 src/components/recipeSelector/RecipeSelectorContainer.tsx
+src/lib/repository/promidas-repository-manager.test.ts

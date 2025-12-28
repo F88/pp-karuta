@@ -1,5 +1,4 @@
 import type { DeckRecipe } from '@/models/karuta';
-import { ModeToggle } from '@/components/mode-toggle';
 
 export type RecipeSelectorPresentationProps = {
   recipes: DeckRecipe[];
@@ -10,25 +9,10 @@ export type RecipeSelectorPresentationProps = {
 export function RecipeSelectorPresentation({
   recipes,
   onSelectRecipe,
-  onShowIntro,
 }: RecipeSelectorPresentationProps) {
   return (
     <div className="flex min-h-screen items-center justify-center bg-linear-to-br from-blue-50 to-indigo-100 p-8 dark:from-gray-900 dark:to-gray-800">
       <div className="w-full max-w-6xl">
-        <div className="mb-8 flex items-center justify-between">
-          <div className="flex-1">
-            {onShowIntro && (
-              <button
-                onClick={onShowIntro}
-                className="rounded-lg bg-gray-800 px-6 py-3 font-bold text-green-400 shadow-lg transition-all duration-300 hover:bg-gray-900 hover:text-green-300 hover:shadow-xl active:scale-95 dark:bg-gray-700 dark:hover:bg-gray-600"
-              >
-                📜 掟 (RULES)
-              </button>
-            )}
-          </div>
-          <ModeToggle />
-        </div>
-
         <h1 className="mb-12 text-center text-4xl font-bold text-gray-800">
           🎴 Select Deck Recipe
         </h1>

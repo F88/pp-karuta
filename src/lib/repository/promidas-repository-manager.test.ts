@@ -76,10 +76,8 @@ describe('PromidasRepositoryManager', () => {
       setupSnapshot: vi.fn(),
     } as unknown as ProtopediaInMemoryRepository;
 
-    manager = PromidasRepositoryManager.getInstance(
-      mockStorage as unknown as TokenStorage,
-    );
-    manager.reset();
+    // Reset singleton instance for testing
+    PromidasRepositoryManager.resetInstance();
     manager = PromidasRepositoryManager.getInstance(
       mockStorage as unknown as TokenStorage,
     );
@@ -125,10 +123,7 @@ describe('PromidasRepositoryManager', () => {
       expect(manager.getState().type).toBe('created-token-valid');
 
       manager.reset();
-      const newManager = PromidasRepositoryManager.getInstance(
-        mockStorage as unknown as TokenStorage,
-      );
-      expect(newManager.getState().type).toBe('not-created');
+      expect(manager.getState().type).toBe('not-created');
     });
   });
 
@@ -343,11 +338,8 @@ describe('PromidasRepositoryManager', () => {
       resolveSetup!({ ok: true, cachedAt: new Date() });
       await repoPromise;
 
-      // After reset, get new instance
-      const newManager = PromidasRepositoryManager.getInstance(
-        mockStorage as unknown as TokenStorage,
-      );
-      expect(newManager.getState().type).toBe('not-created');
+      // After reset, the singleton instance is the same, but state should be reset
+      expect(manager.getState().type).toBe('not-created');
     });
 
     it('allows new initialization after reset during ongoing operation', async () => {
