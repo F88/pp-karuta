@@ -54,6 +54,18 @@ export function RecipeSelectorContainer({
     console.log('[RecipeSelectorContainer] Use dummy data:', useDummyData);
   }, [playMode, repoState, useDummyData]);
 
+  /**
+   * Handle recipe selection and create initial game state.
+   *
+   * Data flow:
+   * 1. Fetch prototypes (from API or generate dummy data)
+   * 2. Generate deck by randomly selecting recipe.deckSize prototypes
+   * 3. Create initial game state with shuffled stack and first 5 cards on tatami
+   * 4. Notify parent component via onGameStateCreated callback
+   *
+   * @param recipe - Selected deck recipe containing deckSize and metadata
+   * @throws {Error} If not enough prototypes available or API fetch fails
+   */
   const handleSelectRecipe = useCallback(
     async (recipe: DeckRecipe) => {
       setIsLoading(true);
