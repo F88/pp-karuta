@@ -355,12 +355,75 @@ pp-karutaは、ProtoPediaのプロトタイプデータを活用したカルタ�
 
 ### Model Dependencies
 
-型の詳細(フィールド定義)はコードを参照し、DESIGN.mdでは「依存関係」だけを維持する。
+#### モデル概要
+
+- **DeckRecipe**: ゲームモードの設計図（プリセット定義）
+    - 役割: カード枚数・難易度などのパラメータ
+    - 主要: `deckSize` (カード枚数)
+    - メタデータ: `difficulty`, `tags` (UI表示用)
+    - 実装: `src/lib/karuta/recipe/definitions.ts`
+
+- **Deck**: 生成されたカードデータセット
+    - 構造: `Map<prototypeId, NormalizedPrototype>`
+    - 特性: ゲーム中不変、O(1)アクセス
+    - 生成: RecipeとPrototype配列から `generateDeck()` で生成
+    - 実装: `src/models/karuta/deck.ts`
+
+- **Stack**: 未出場カードの順序管理
+    - 構造: `number[]` (Deck の ID 配列)
+    - 関係: **Deck のキーを保持、`deck.get(id)` で参照**
+    - 特性: ゲーム進行で減少
+    - 実装: `src/models/karuta/stack.ts`
+
+- **Tatami**: 場に出ているカード
+    - 構造: `number[]` (Deck の ID 配列、最初は5枚)
+    - 関係: **Stack から取り出された ID**
+    - 初期: `Stack.slice(0, 5)`
+    - 更新: カード取得時、Stack から補充（Stack枯渇後は補充なし）
+    - 実装: `src/models/karuta/tatami.ts`
+
+- **GameState**: ゲーム全体の状態
+    - 所有: Deck, Stack, Tatami, Players
+    - 実装: `src/models/karuta/game.ts`
+
+#### データフロー
+
+```
+DeckRecipe (設計図: deckSize=10)
+  ↓ generateDeck(recipe, allPrototypes)
+Deck (Map<ID, Card>: 10枚のカードデータ)
+  ↓ createInitialState(deck)
+Stack (ID[]: シャッフル済みの全ID) + Tatami (ID[]: 最初の5枚)
+  ↓ ゲーム進行中
+deck.get(id) でカードデータを参照
+```
+
+#### 設計判断
+
+**Recipe と Deck の分離**
+
+- Recipe: 再利用可能な設計図（プリセット）
+- Deck: ランダム生成された実体
+- 理由: 同じ Recipe から異なる Deck を繰り返し生成可能
+
+**Deck と Stack の分離**
+
+- Deck: データ本体（不変、Map構造）
+- Stack: 順序管理（可変、ID配列のみ）
+- 理由: データと順序の関心分離、メモリ効率、操作の柔軟性
+
+**ID 配列の採用 (Stack/Tatami)**
+
+- Stack/Tatami は prototype ID のみ保持
+- Deck が唯一のデータソース
+- 理由: メモリ効率、データ整合性、配列操作の軽量化
+
+#### 依存関係図
 
 ```mermaid
 graph TD
     External[External: @f88/promidas NormalizedPrototype]
-
+    Recipe[DeckRecipe]
     Deck[Model: Deck]
     DeckMeta[Model: DeckMetaData]
     Player[Model: Player]
@@ -370,6 +433,9 @@ graph TD
     GameResult[Model: GameResult]
 
     External --> Deck
+    Recipe -.generates.-> Deck
+    Deck -.ID lookup.-> Stack
+    Deck -.ID lookup.-> Tatami
     Tatami --> Player
     Deck --> GameState
     Player --> GameState
@@ -379,13 +445,13 @@ graph TD
     DeckMeta --> GameResult
 ```
 
-ルール(メンテコストを増やさないための方針):
+**ルール（メンテコストを増やさないための方針）:**
 
-- DESIGN.mdは依存グラフと意図のみを書く(型の全文は書かない)
-- 依存グラフは概念的な依存(所有/参照/生成)を表す(必ずしもTSのimportに一致しない)
-- modelsはUIやrepositoryに依存しない(逆方向にしない)
+- DESIGN.mdは依存グラフと意図のみを書く（型の全文は書かない）
+- 依存グラフは概念的な依存（所有/参照/生成）を表す（必ずしもTSのimportに一致しない）
+- modelsはUIやrepositoryに依存しない（逆方向にしない）
 
-DESIGN.mdには「設計判断」「制約」「意図」だけを書く(実装の詳細は書かない)。
+DESIGN.mdには「設計判断」「制約」「意図」だけを書く（実装の詳細は書かない）。
 
 ## Component Architecture
 
