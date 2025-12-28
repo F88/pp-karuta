@@ -1,10 +1,6 @@
-import { useEffect, useState } from 'react';
-import {
-  getRepositoryState,
-  type RepositoryState,
-} from '@/lib/repository/promidas-repo';
-import { usePromidasStoreState } from '@/hooks/use-promidas-store-state';
+import type { RepositoryState } from '@/lib/repository/promidas-repo';
 import type { StoreState } from '@f88/promidas-utils/store';
+import type { PrototypeInMemoryStats } from '@f88/promidas';
 import {
   Card,
   CardContent,
@@ -13,29 +9,21 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 
-export function PromidasRepoDashboard() {
-  const [repoState, setRepoState] = useState<RepositoryState>({
-    type: 'not-created',
-  });
-  const [repoError, setRepoError] = useState<string | null>(null);
-  const { storeState, stats } = usePromidasStoreState();
+export interface PromidasRepoDashboardPresentationProps {
+  repoState: RepositoryState;
+  repoError: string | null;
+  storeState: StoreState;
+  storeStats: PrototypeInMemoryStats | null;
+  useDummyData: boolean;
+}
 
-  const useDummyData = import.meta.env.VITE_USE_DUMMY_DATA === 'true';
-
-  useEffect(() => {
-    const updateRepoState = () => {
-      const status = getRepositoryState();
-      setRepoState(status);
-      setRepoError(status.type === 'token-invalid' ? status.error : null);
-    };
-
-    updateRepoState();
-
-    // Poll every 5 seconds to sync with repo state changes
-    const interval = setInterval(updateRepoState, 5000);
-    return () => clearInterval(interval);
-  }, []);
-
+export function PromidasRepoDashboardPresentation({
+  repoState,
+  repoError,
+  storeState,
+  storeStats,
+  useDummyData,
+}: PromidasRepoDashboardPresentationProps) {
   const getRepoStateLabel = (state: RepositoryState): string => {
     switch (state.type) {
       case 'not-created':
@@ -144,17 +132,17 @@ export function PromidasRepoDashboard() {
           </div>
 
           {/* Store Stats Details */}
-          {stats && storeState !== 'not-stored' && (
+          {storeStats && storeState !== 'not-stored' && (
             <div className="text-muted-foreground space-y-1 text-xs">
               <div className="flex justify-between">
                 <span>プロトタイプ数:</span>
-                <span className="font-mono">{stats.size}件</span>
+                <span className="font-mono">{storeStats.size}件</span>
               </div>
-              {stats.cachedAt && (
+              {storeStats.cachedAt && (
                 <div className="flex justify-between">
                   <span>キャッシュ日時:</span>
                   <span className="font-mono">
-                    {new Date(stats.cachedAt).toLocaleTimeString('ja-JP')}
+                    {new Date(storeStats.cachedAt).toLocaleTimeString('ja-JP')}
                   </span>
                 </div>
               )}
@@ -162,14 +150,14 @@ export function PromidasRepoDashboard() {
                 <div className="flex justify-between">
                   <span>残り時間:</span>
                   <span className="font-mono">
-                    {formatTime(stats.remainingTtlMs)}
+                    {formatTime(storeStats.remainingTtlMs)}
                   </span>
                 </div>
               )}
               <div className="flex justify-between">
                 <span>データサイズ:</span>
                 <span className="font-mono">
-                  {(stats.dataSizeBytes / 1024).toFixed(1)} KB
+                  {(storeStats.dataSizeBytes / 1024).toFixed(1)} KB
                 </span>
               </div>
             </div>

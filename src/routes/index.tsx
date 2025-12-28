@@ -7,7 +7,7 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { useState, useCallback } from 'react';
 import { ThemeProvider } from '@/components/theme-provider';
-import { PromidasRepoDashboard } from '@/components/promidas/promid-repo-dashboard';
+import { PromidasRepoDashboard } from '@/components/promidas/promid-repo-dashboard-container';
 import { RecipeSelectorContainer } from '@/components/recipe/recipe-selector-container';
 import { TatamiViewContainer } from '@/components/tatami/tatami-view-container';
 import { GameResultsContainer } from '@/components/gameResults/game-results-container';

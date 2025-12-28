@@ -1,0 +1,41 @@
+import { useEffect, useState } from 'react';
+import {
+  getRepositoryState,
+  type RepositoryState,
+} from '@/lib/repository/promidas-repo';
+import { usePromidasStoreState } from '@/hooks/use-promidas-store-state';
+import { PromidasRepoDashboardPresentation } from './promid-repo-dashboard-presentation';
+
+export function PromidasRepoDashboard() {
+  const [repoState, setRepoState] = useState<RepositoryState>({
+    type: 'not-created',
+  });
+  const [repoError, setRepoError] = useState<string | null>(null);
+  const { storeState, stats } = usePromidasStoreState();
+
+  const useDummyData = import.meta.env.VITE_USE_DUMMY_DATA === 'true';
+
+  useEffect(() => {
+    const updateRepoState = () => {
+      const status = getRepositoryState();
+      setRepoState(status);
+      setRepoError(status.type === 'token-invalid' ? status.error : null);
+    };
+
+    updateRepoState();
+
+    // Poll every 5 seconds to sync with repo state changes
+    const interval = setInterval(updateRepoState, 5000);
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <PromidasRepoDashboardPresentation
+      repoState={repoState}
+      repoError={repoError}
+      storeState={storeState}
+      storeStats={stats}
+      useDummyData={useDummyData}
+    />
+  );
+}
