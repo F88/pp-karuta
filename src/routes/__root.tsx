@@ -6,7 +6,18 @@
  * own standalone theme.
  */
 import { createRootRoute, Outlet } from '@tanstack/react-router';
+import { ThemeProvider } from '@/components/theme-provider';
+import { AppHeader } from '@/components/layout/app-header';
 
 export const Route = createRootRoute({
-  component: () => <Outlet />,
+  component: RootComponent,
 });
+
+function RootComponent() {
+  return (
+    <ThemeProvider defaultTheme="system" storageKey="pp-karuta-theme">
+      <AppHeader />
+      <Outlet />
+    </ThemeProvider>
+  );
+}

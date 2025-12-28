@@ -4,16 +4,13 @@
  * The shared shadcn/ui `ThemeProvider` is applied here so all main gameplay
  * screens use the common theme, while `/intro` remains theme-isolated.
  */
-import { createFileRoute, useNavigate, Link } from '@tanstack/react-router';
+import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { useState, useCallback } from 'react';
-import { ThemeProvider } from '@/components/theme-provider';
-import { ModeToggle } from '@/components/mode-toggle';
+import { TokenManagerContainer } from '@/components/token/token-manager-container';
 import { PromidasRepoDashboard } from '@/components/promidas/promid-repo-dashboard-container';
 import { RecipeSelectorContainer } from '@/components/recipe/recipe-selector-container';
 import { TatamiViewContainer } from '@/components/tatami/tatami-view-container';
 import { GameResultsContainer } from '@/components/gameResults/game-results-container';
-import { TokenManagerContainer } from '@/components/token/token-manager-container';
-import { Button } from '@/components/ui/button';
 import { useToken } from '@/hooks/use-token';
 import { useRepositoryState } from '@/hooks/use-repository-state';
 import { createInitialState } from '@/lib/karuta';
@@ -97,44 +94,31 @@ function Index() {
 
   if (isGameOver && gameState) {
     return (
-      <ThemeProvider defaultTheme="system" storageKey="pp-karuta-theme">
-        <GameResultsContainer
-          deck={gameState.deck}
-          score={score}
-          mochiFuda={mochiFuda}
-          onBackToTop={handleBackToTop}
-          onReplay={handleReplay}
-        />
-      </ThemeProvider>
+      <GameResultsContainer
+        deck={gameState.deck}
+        score={score}
+        mochiFuda={mochiFuda}
+        onBackToTop={handleBackToTop}
+        onReplay={handleReplay}
+      />
     );
   }
 
   if (gameState) {
     return (
-      <ThemeProvider defaultTheme="system" storageKey="pp-karuta-theme">
-        <TatamiViewContainer
-          gameState={gameState}
-          score={score}
-          mochiFuda={mochiFuda}
-          onCorrectAnswer={handleCorrectAnswer}
-          onIncorrectAnswer={handleIncorrectAnswer}
-        />
-      </ThemeProvider>
+      <TatamiViewContainer
+        gameState={gameState}
+        score={score}
+        mochiFuda={mochiFuda}
+        onCorrectAnswer={handleCorrectAnswer}
+        onIncorrectAnswer={handleIncorrectAnswer}
+      />
     );
   }
 
   return (
-    <ThemeProvider defaultTheme="system" storageKey="pp-karuta-theme">
-      <div className="mb-4 flex items-center justify-between">
-        <div className="flex-1" />
-        <div className="flex items-center gap-2">
-          <Button variant="outline" asChild>
-            <Link to="/intro">📜 掟 (RULES)</Link>
-          </Button>
-          <ModeToggle />
-        </div>
-      </div>
-      <div className="mb-8 flex flex-col items-center gap-6">
+    <>
+      <div className="mb-8 grid gap-6 md:grid-cols-2">
         <TokenManagerContainer />
         <PromidasRepoDashboard />
       </div>
@@ -144,6 +128,6 @@ function Index() {
           onShowIntro={handleShowIntro}
         />
       ) : null}
-    </ThemeProvider>
+    </>
   );
 }
