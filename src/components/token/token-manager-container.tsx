@@ -47,7 +47,6 @@ export function TokenManagerContainer() {
 
     // Reset repository before validation
     resetRepository();
-    setRepoState({ type: 'not-created' });
 
     await saveToken(inputValue.trim());
 

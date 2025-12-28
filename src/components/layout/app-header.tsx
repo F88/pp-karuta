@@ -1,10 +1,16 @@
 import { Link } from '@tanstack/react-router';
-import { ThemeToggle } from '@/components/mode-toggle';
+import { ThemeIndicator } from '@/components/theme-indicator';
 import { Button } from '@/components/ui/button';
 import { RepoStateIndicator } from './repo-state-indicator';
 import { AppHeaderPresentation } from './app-header-presentation';
+import type { RepositoryState } from '@/lib/repository/promidas-repo';
 
-export function AppHeader() {
+interface AppHeaderProps {
+  repoState: RepositoryState;
+  onRepoIndicatorClick: () => void;
+}
+
+export function AppHeader({ repoState, onRepoIndicatorClick }: AppHeaderProps) {
   return (
     <AppHeaderPresentation
       homeButton={
@@ -17,8 +23,10 @@ export function AppHeader() {
           <Link to="/intro">📜 掟</Link>
         </Button>
       }
-      repoStateIndicator={<RepoStateIndicator />}
-      themeToggle={<ThemeToggle />}
+      repoStateIndicator={
+        <RepoStateIndicator state={repoState} onClick={onRepoIndicatorClick} />
+      }
+      themeToggle={<ThemeIndicator />}
     />
   );
 }

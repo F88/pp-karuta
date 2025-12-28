@@ -28,6 +28,8 @@ export function PromidasRepoDashboardPresentation({
     switch (state.type) {
       case 'not-created':
         return '未初期化';
+      case 'validating':
+        return '検証中';
       case 'token-invalid':
         return '無効';
       case 'created-token-valid':
@@ -39,6 +41,8 @@ export function PromidasRepoDashboardPresentation({
     switch (state.type) {
       case 'not-created':
         return 'bg-muted text-muted-foreground';
+      case 'validating':
+        return 'bg-blue-600 text-white dark:bg-blue-700';
       case 'token-invalid':
         return 'bg-destructive text-destructive-foreground';
       case 'created-token-valid':

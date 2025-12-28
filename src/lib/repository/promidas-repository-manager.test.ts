@@ -89,6 +89,40 @@ describe('PromidasRepositoryManager', () => {
       expect(state).toEqual({ type: 'not-created' });
     });
 
+    it('returns validating when repository exists but token not validated', async () => {
+      mockStorage.get.mockResolvedValue('valid-token');
+      const { createPromidasForLocal } = await import('@f88/promidas');
+      vi.mocked(createPromidasForLocal).mockReturnValue(mockRepository);
+
+      // Create a promise that we can control for validation
+      let resolveSetup: (value: unknown) => void;
+      const setupPromise = new Promise((resolve) => {
+        resolveSetup = resolve;
+      });
+      vi.mocked(mockRepository.setupSnapshot).mockReturnValue(
+        setupPromise as Promise<
+          Awaited<ReturnType<typeof mockRepository.setupSnapshot>>
+        >,
+      );
+
+      // Start getRepository and wait for repository instance to be created
+      const repoPromise = manager.getRepository();
+
+      // Wait a bit for createRepository to complete but setupSnapshot to still be pending
+      await new Promise(resolve => setTimeout(resolve, 10));
+
+      // Repository instance exists but validation is in progress
+      const state = manager.getState();
+      expect(state.type).toBe('validating');
+
+      // Complete the validation
+      resolveSetup!(mockSuccessResult);
+      await repoPromise;
+
+      // After completion, state should be valid
+      expect(manager.getState().type).toBe('created-token-valid');
+    });
+
     it('returns token-invalid when token validation fails', async () => {
       mockStorage.get.mockResolvedValue('invalid-token');
       const { createPromidasForLocal } = await import('@f88/promidas');
@@ -280,16 +314,35 @@ describe('PromidasRepositoryManager', () => {
       mockStorage.get.mockResolvedValue('valid-token');
       const { createPromidasForLocal } = await import('@f88/promidas');
       vi.mocked(createPromidasForLocal).mockReturnValue(mockRepository);
-      vi.mocked(mockRepository.setupSnapshot).mockResolvedValue(
-        mockSuccessResult,
+
+      // Create a promise that we can control for validation
+      let resolveSetup: (value: unknown) => void;
+      const setupPromise = new Promise((resolve) => {
+        resolveSetup = resolve;
+      });
+      vi.mocked(mockRepository.setupSnapshot).mockReturnValue(
+        setupPromise as Promise<
+          Awaited<ReturnType<typeof mockRepository.setupSnapshot>>
+        >,
       );
 
+      // Initial state
       expect(manager.getState().type).toBe('not-created');
 
+      // Start getRepository
       const repoPromise = manager.getRepository();
-      expect(manager.getState().type).toBe('not-created'); // Still not-created during validation
 
+      // Wait for repository instance to be created
+      await new Promise(resolve => setTimeout(resolve, 10));
+
+      // During validation
+      expect(manager.getState().type).toBe('validating');
+
+      // Complete validation
+      resolveSetup!(mockSuccessResult);
       await repoPromise;
+
+      // After successful validation
       expect(manager.getState().type).toBe('created-token-valid');
     });
 

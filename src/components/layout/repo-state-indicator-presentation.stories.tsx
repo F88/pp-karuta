@@ -22,6 +22,14 @@ export const NotCreated: Story = {
   },
 };
 
+export const Validating: Story = {
+  args: {
+    state: {
+      type: 'validating',
+    },
+  },
+};
+
 export const CreatedTokenValid: Story = {
   args: {
     state: {
@@ -44,11 +52,15 @@ export const AllStates = {
   render: () => (
     <div className="flex flex-col gap-4">
       <div className="flex items-center gap-4">
-        <span className="w-24 text-sm">No Token:</span>
+        <span className="w-24 text-sm">Not Created:</span>
         <RepoStateIndicatorPresentation state={{ type: 'not-created' }} />
       </div>
       <div className="flex items-center gap-4">
-        <span className="w-24 text-sm">Ready:</span>
+        <span className="w-24 text-sm">Validating:</span>
+        <RepoStateIndicatorPresentation state={{ type: 'validating' }} />
+      </div>
+      <div className="flex items-center gap-4">
+        <span className="w-24 text-sm">Valid:</span>
         <RepoStateIndicatorPresentation
           state={{
             type: 'created-token-valid',

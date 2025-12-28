@@ -6,13 +6,11 @@
  */
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { useState, useCallback } from 'react';
-import { TokenManagerContainer } from '@/components/token/token-manager-container';
-import { PromidasRepoDashboard } from '@/components/promidas/promid-repo-dashboard-container';
+import { PlayModeSelectorContainer } from '@/components/playMode/play-mode-selector-container';
+import type { PlayMode } from '@/components/playMode/play-mode-selector-presentation';
 import { RecipeSelectorContainer } from '@/components/recipe/recipe-selector-container';
 import { TatamiViewContainer } from '@/components/tatami/tatami-view-container';
 import { GameResultsContainer } from '@/components/gameResults/game-results-container';
-import { useToken } from '@/hooks/use-token';
-import { useRepositoryState } from '@/hooks/use-repository-state';
 import { createInitialState } from '@/lib/karuta';
 import type { GameState } from '@/models/karuta';
 
@@ -22,14 +20,8 @@ export const Route = createFileRoute('/')({
 
 function Index() {
   const navigate = useNavigate();
-  const { hasToken } = useToken();
-  const repoState = useRepositoryState();
-  const useDummyData = import.meta.env.VITE_USE_DUMMY_DATA === 'true';
 
-  // In API mode, RecipeSelector is shown only when repository is valid
-  const canShowRecipeSelector =
-    useDummyData || (hasToken && repoState.type === 'created-token-valid');
-
+  const [playMode, setPlayMode] = useState<PlayMode | null>(null);
   const [gameState, setGameState] = useState<Omit<GameState, 'players'> | null>(
     null,
   );
@@ -71,6 +63,7 @@ function Index() {
   }, []);
 
   const handleBackToTop = useCallback(() => {
+    setPlayMode(null);
     setGameState(null);
     setScore(0);
     setMochiFuda([]);
@@ -89,8 +82,23 @@ function Index() {
     navigate({ to: '/intro' });
   };
 
+  const handleModeSelected = useCallback((mode: PlayMode) => {
+    console.log('[Index] handleModeSelected called with mode:', mode);
+    setPlayMode(mode);
+  }, []);
+
   // Game is over when all cards are acquired
   const isGameOver = gameState && mochiFuda.length >= gameState.deck.size;
+
+  // Show PlayMode selector first
+  if (playMode == null) {
+    return (
+      <PlayModeSelectorContainer
+        onModeSelected={handleModeSelected}
+        requireRepository={false}
+      />
+    );
+  }
 
   if (isGameOver && gameState) {
     return (
@@ -107,6 +115,7 @@ function Index() {
   if (gameState) {
     return (
       <TatamiViewContainer
+        playMode={playMode}
         gameState={gameState}
         score={score}
         mochiFuda={mochiFuda}
@@ -117,17 +126,10 @@ function Index() {
   }
 
   return (
-    <>
-      <div className="mb-8 grid gap-6 md:grid-cols-2">
-        <TokenManagerContainer />
-        <PromidasRepoDashboard />
-      </div>
-      {canShowRecipeSelector ? (
-        <RecipeSelectorContainer
-          onGameStateCreated={setGameState}
-          onShowIntro={handleShowIntro}
-        />
-      ) : null}
-    </>
+    <RecipeSelectorContainer
+      playMode={playMode}
+      onGameStateCreated={setGameState}
+      onShowIntro={handleShowIntro}
+    />
   );
 }

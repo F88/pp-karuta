@@ -1,44 +1,52 @@
 import type { RepositoryState } from '@/lib/repository/promidas-repo';
+import { Button } from '@/components/ui/button';
+import { CloudCog, CloudSync, CloudCheck, CloudAlert } from 'lucide-react';
 
 interface RepoStateIndicatorPresentationProps {
   state: RepositoryState;
+  onClick?: () => void;
 }
 
 export function RepoStateIndicatorPresentation({
   state,
+  onClick,
 }: RepoStateIndicatorPresentationProps) {
   const getStateDisplay = () => {
     switch (state.type) {
       case 'not-created':
         return {
-          // label: 'No Token',
-          label: '',
-          color: 'bg-gray-400',
-          textColor: 'text-gray-700 dark:text-gray-300',
+          icon: CloudCog,
+          color: 'text-gray-400',
+        };
+      case 'validating':
+        return {
+          icon: CloudSync,
+          color: 'text-blue-500',
         };
       case 'created-token-valid':
         return {
-          // label: 'Ready',
-          label: '',
-          color: 'bg-green-500',
-          textColor: 'text-green-700 dark:text-green-300',
+          icon: CloudCheck,
+          color: 'text-green-500',
         };
       case 'token-invalid':
         return {
-          // label: 'Invalid',
-          label: '',
-          color: 'bg-red-500',
-          textColor: 'text-red-700 dark:text-red-300',
+          icon: CloudAlert,
+          color: 'text-red-500',
         };
     }
   };
 
-  const { label, color, textColor } = getStateDisplay();
+  const { icon: Icon, color } = getStateDisplay();
 
   return (
-    <div className="flex items-center gap-2">
-      <div className={`h-2 w-2 rounded-full ${color}`} />
-      <span className={`text-sm font-medium ${textColor}`}>{label}</span>
-    </div>
+    <Button
+      type="button"
+      onClick={onClick}
+      variant="ghost"
+      size="icon"
+      aria-label="Repository status"
+    >
+      <Icon className={`h-5 w-5 ${color}`} />
+    </Button>
   );
 }

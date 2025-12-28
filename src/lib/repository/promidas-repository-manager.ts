@@ -9,9 +9,16 @@ import { tokenStorage as defaultTokenStorage } from '@/lib/token-storage';
 /**
  * Repository state as a discriminated union
  * Represents the lifecycle of repository creation and token validation
+ *
+ * States:
+ * - `not-created`: No repository instance exists, token not validated yet
+ * - `validating`: Repository instance exists, token validation in progress
+ * - `created-token-valid`: Repository created and token validated successfully
+ * - `token-invalid`: Token validation failed with error details
  */
 export type RepositoryState =
   | { type: 'not-created' }
+  | { type: 'validating' }
   | { type: 'created-token-valid'; repository: ProtopediaInMemoryRepository }
   | { type: 'token-invalid'; error: string };
 
@@ -30,13 +37,13 @@ export type RepositoryState =
  * - Dependency injection support for token storage
  *
  * Public API:
- * - getState(): Get current repository state (3 states)
+ * - getState(): Get current repository state (4 states)
  * - reset(): Clear repository and reset state
  * - getRepository(): Get or create validated repository instance
  *
  * Internal Implementation:
  * - Uses 2-axis state model (repository existence + token validation status)
- * - Exposes 3-state discriminated union externally (not-created/created-token-valid/token-invalid)
+ * - Exposes 4-state discriminated union externally (not-created/validating/created-token-valid/token-invalid)
  * - Validates tokens using setupSnapshot({ limit: 0 }) for minimal API verification
  */
 export class PromidasRepositoryManager {
@@ -80,15 +87,15 @@ export class PromidasRepositoryManager {
   /**
    * Get the current repository state as a discriminated union
    *
-   * State transitions:
-   * - not-created: No repository exists or validation not started
-   * - created-token-valid: Repository created and token validated successfully
-   * - token-invalid: Token validation failed with error details
+   * State determination based on internal state:
+   * - `repository === null && tokenStatus === 'not-validated'` → `not-created`
+   * - `repository !== null && tokenStatus === 'not-validated'` → `validating`
+   * - `repository !== null && tokenStatus === 'valid'` → `created-token-valid`
+   * - `tokenStatus === 'invalid'` → `token-invalid`
    *
-   * Note: Internal 'not-validated' state is not exposed externally.
-   * Repository is only returned when token validation is complete and successful.
+   * Repository instance is only returned when token validation is complete and successful.
    *
-   * @returns Current repository state (3 possible states)
+   * @returns Current repository state (4 possible states)
    */
   getState(): RepositoryState {
     if (!this.repository) {
@@ -103,11 +110,13 @@ export class PromidasRepositoryManager {
 
     switch (this.tokenStatus) {
       case 'not-validated':
-        // Internal state - not exposed externally
-        // Token validation is in progress or not yet started
-        return { type: 'not-created' };
+        // Token validation is in progress
+        return { type: 'validating' };
       case 'valid':
-        return { type: 'created-token-valid', repository: this.repository };
+        return {
+          type: 'created-token-valid',
+          repository: this.repository,
+        };
       case 'invalid':
         return {
           type: 'token-invalid',
