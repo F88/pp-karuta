@@ -26,12 +26,26 @@ export function RecipeSelectorContainer({
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [loadingRecipeId, setLoadingRecipeId] = useState<string | null>(null);
+  const [repoCheckCounter, setRepoCheckCounter] = useState(0);
 
   // Check repository availability
   const useDummyData = import.meta.env.VITE_USE_DUMMY_DATA === 'true';
   const repoState = getRepositoryState();
   const hasValidRepository =
     useDummyData || repoState.type === 'created-token-valid';
+
+  // Poll repository state to trigger re-render when it becomes valid
+  useEffect(() => {
+    if (!hasValidRepository && !useDummyData) {
+      const intervalId = setInterval(() => {
+        setRepoCheckCounter((prev) => prev + 1);
+      }, 500);
+      return () => clearInterval(intervalId);
+    }
+  }, [hasValidRepository, useDummyData]);
+
+  // Avoid unused variable warning
+  void repoCheckCounter;
 
   // Log playMode on mount
   useEffect(() => {
@@ -108,8 +122,9 @@ export function RecipeSelectorContainer({
     <>
       <RepoSetupDialog
         open={!hasValidRepository}
-        onOpenChange={() => {}}
-        autoCloseOnValid={true}
+        onOpenChange={() => {
+          // Dialog cannot be manually closed - must setup repository
+        }}
       />
       <RecipeSelectorPresentation
         recipes={DECK_RECIPES}

@@ -21,7 +21,7 @@ function RootComponent() {
   const [repoState, setRepoState] = useState<RepositoryState>(() =>
     getRepositoryState(),
   );
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [openRepoSetupDialog, setOpenRepoSetupDialog] = useState(false);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -31,23 +31,23 @@ function RootComponent() {
     return () => clearInterval(interval);
   }, []);
 
-  const handleDialogOpenChange = (open: boolean) => {
-    setIsDialogOpen(open);
-  };
+  // const handleDialogOpenChange = (open: boolean) => {
+  //   setRepoSetupDialog(open);
+  // };
 
-  const handleRepoIndicatorClick = () => {
-    setIsDialogOpen(true);
-  };
+  // const handleRepoIndicatorClick = () => {
+  //   setRepoSetupDialog(true);
+  // };
 
   return (
     <ThemeProvider defaultTheme="system" storageKey="pp-karuta-theme">
       <AppHeader
         repoState={repoState}
-        onRepoIndicatorClick={handleRepoIndicatorClick}
+        onRepoIndicatorClick={() => setOpenRepoSetupDialog(true)}
       />
       <RepoSetupDialog
-        open={isDialogOpen}
-        onOpenChange={handleDialogOpenChange}
+        open={openRepoSetupDialog}
+        onOpenChange={() => setOpenRepoSetupDialog(false)}
         autoCloseOnValid={false}
       />
       <Outlet />

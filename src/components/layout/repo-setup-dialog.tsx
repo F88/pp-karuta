@@ -29,6 +29,7 @@ export function RepoSetupDialog({
 
     const intervalId = setInterval(() => {
       const repoState = getRepositoryState();
+      console.debug('[RepoSetupDialog] Checking repo state:', repoState);
       if (repoState.type === 'created-token-valid') {
         onOpenChange(false);
       }
