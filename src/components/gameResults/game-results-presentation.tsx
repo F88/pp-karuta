@@ -1,4 +1,5 @@
 import type { NormalizedPrototype } from '@f88/promidas/types';
+import { Button } from '@/components/ui/button';
 
 export type GameResultsPresentationProps = {
   score: number;
@@ -63,18 +64,22 @@ export function GameResultsPresentation({
 
         {/* Action Buttons */}
         <div className="flex flex-col justify-center gap-4 sm:flex-row">
-          <button
+          <Button
             onClick={onBackToTop}
-            className="rounded-lg bg-gray-600 px-8 py-4 font-semibold text-white shadow-lg transition-colors hover:bg-gray-700"
+            variant="secondary"
+            size="lg"
+            className="shadow-lg"
           >
             🏠 TOP
-          </button>
-          <button
+          </Button>
+          <Button
             onClick={onReplay}
-            className="rounded-lg bg-indigo-600 px-8 py-4 font-semibold text-white shadow-lg transition-colors hover:bg-indigo-700"
+            variant="default"
+            size="lg"
+            className="shadow-lg"
           >
             🔄 Replay
-          </button>
+          </Button>
         </div>
       </div>
     </div>

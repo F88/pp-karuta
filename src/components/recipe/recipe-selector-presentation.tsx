@@ -1,4 +1,5 @@
 import type { DeckRecipe } from '@/models/karuta';
+import { Button } from '@/components/ui/button';
 
 export type RecipeSelectorPresentationProps = {
   recipes: DeckRecipe[];
@@ -34,11 +35,12 @@ export function RecipeSelectorPresentation({
           {recipes.map((recipe) => {
             const isLoadingThisRecipe = loadingRecipeId === recipe.id;
             return (
-              <button
+              <Button
                 key={recipe.id}
                 onClick={() => onSelectRecipe(recipe)}
                 disabled={isLoading}
-                className="group relative overflow-hidden rounded-2xl bg-white p-8 shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-2xl active:scale-95 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:scale-100 dark:bg-gray-800"
+                variant="outline"
+                className="group relative h-auto overflow-hidden rounded-2xl bg-white p-8 shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-2xl active:scale-95 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:scale-100 dark:bg-gray-800"
               >
                 {isLoadingThisRecipe && (
                   <div className="bg-opacity-90 dark:bg-opacity-90 absolute inset-0 flex items-center justify-center bg-white dark:bg-gray-800">
@@ -99,7 +101,7 @@ export function RecipeSelectorPresentation({
                     </div>
                   )}
                 </div>
-              </button>
+              </Button>
             );
           })}
         </div>

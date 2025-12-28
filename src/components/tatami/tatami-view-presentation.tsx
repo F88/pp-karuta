@@ -1,4 +1,5 @@
 import type { NormalizedPrototype } from '@f88/promidas/types';
+import { Button } from '@/components/ui/button';
 
 export type TatamiViewPresentationProps = {
   yomiFuda: NormalizedPrototype;
@@ -83,10 +84,11 @@ export function TatamiViewPresentation({
         {/* Tatami Cards Grid */}
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
           {tatamiCards.map((card, index) => (
-            <button
+            <Button
               key={card.id}
               onClick={() => onSelectCard(card)}
-              className="group relative overflow-hidden rounded-xl bg-white p-6 shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-2xl active:scale-95"
+              variant="outline"
+              className="group relative h-auto overflow-hidden rounded-xl bg-white p-6 shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-2xl active:scale-95"
             >
               {/* Card Number Badge */}
               <div className="absolute top-2 right-2 flex h-8 w-8 items-center justify-center rounded-full bg-indigo-500 text-sm font-bold text-white">
@@ -118,7 +120,7 @@ export function TatamiViewPresentation({
 
               {/* ID Badge */}
               <div className="mt-3 text-xs text-gray-400">ID: {card.id}</div>
-            </button>
+            </Button>
           ))}
         </div>
 
