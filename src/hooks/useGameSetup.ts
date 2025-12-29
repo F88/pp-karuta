@@ -27,6 +27,7 @@ export type UseGameSetupReturn = {
   availablePlayers: Player[];
   selectedPlayerIds: string[];
   togglePlayer: (playerId: string) => void;
+  addPlayer: () => Promise<void>;
 
   // PlayMode state
   selectedPlayMode: PlayMode | null;
@@ -204,6 +205,22 @@ export function useGameSetup({
     setError(null);
   }, []);
 
+  // Add new player with random name
+  const addPlayer = useCallback(async () => {
+    const newPlayerNumber = availablePlayers.length + 1;
+    const newPlayer = PlayerManager.createPlayer(
+      `player-${Date.now()}`,
+      `Player ${newPlayerNumber}`,
+    );
+
+    const updatedPlayers = [...availablePlayers, newPlayer];
+    setAvailablePlayers(updatedPlayers);
+
+    // Save to storage
+    await PlayerManager.savePlayers(updatedPlayers);
+    setError(null);
+  }, [availablePlayers]);
+
   // Select PlayMode
   const selectPlayMode = useCallback((mode: PlayMode) => {
     setSelectedPlayMode(mode);
@@ -297,6 +314,7 @@ export function useGameSetup({
     availablePlayers,
     selectedPlayerIds,
     togglePlayer,
+    addPlayer,
     selectedPlayMode,
     selectPlayMode,
     canStartGame,

@@ -35,6 +35,7 @@ export type IntegratedSelectorPresentationProps = {
   availablePlayers: Player[];
   selectedPlayerIds: string[];
   onTogglePlayer: (playerId: string) => void;
+  onAddPlayer: () => void;
 
   // Start game
   onStartGame: () => void;
@@ -65,6 +66,7 @@ export function IntegratedSelectorPresentation({
   availablePlayers,
   selectedPlayerIds,
   onTogglePlayer,
+  onAddPlayer,
   onStartGame,
   canStartGame,
   isLoading,
@@ -126,6 +128,7 @@ export function IntegratedSelectorPresentation({
               availablePlayers={availablePlayers}
               selectedPlayerIds={selectedPlayerIds}
               onTogglePlayer={onTogglePlayer}
+              onAddPlayer={onAddPlayer}
               isLoading={isLoading}
             />
           </div>

@@ -45,6 +45,7 @@ export function IntegratedSelectorContainer({
       availablePlayers={setup.availablePlayers}
       selectedPlayerIds={setup.selectedPlayerIds}
       onTogglePlayer={setup.togglePlayer}
+      onAddPlayer={setup.addPlayer}
       onStartGame={setup.createGameState}
       canStartGame={setup.canStartGame}
       isLoading={setup.isCreatingGame || repoState.type === 'validating'}
