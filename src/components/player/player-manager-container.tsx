@@ -30,8 +30,8 @@ export function PlayerManagerContainer() {
   };
 
   const handleAddPlayer = useCallback(() => {
-    if (players.length >= 4) {
-      setError('Maximum 4 players allowed');
+    if (players.length >= PlayerManager.MAX_PLAYERS) {
+      setError(`Maximum ${PlayerManager.MAX_PLAYERS} players allowed`);
       return;
     }
 

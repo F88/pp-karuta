@@ -1,9 +1,9 @@
 import { useCallback } from 'react';
 import type { GameState } from '@/models/karuta';
-import { getPrototypesByIds } from '@/lib/karuta';
 import type { NormalizedPrototype } from '@f88/promidas/types';
 import type { PlayMode } from '@/components/playMode/play-mode-selector-presentation';
 import { TatamiViewPresentation } from './tatami-view-presentation';
+import { DeckManager } from '@/lib/karuta/deck/deck-manager';
 
 export type TatamiViewContainerProps = {
   playMode: PlayMode;
@@ -36,7 +36,7 @@ export function TatamiViewContainer({
     : null;
 
   // Get Tatami cards
-  const tatamiCards = getPrototypesByIds(gameState.deck, gameState.tatami);
+  const tatamiCards = DeckManager.getByIds(gameState.deck, gameState.tatami);
 
   const handleSelectCard = useCallback(
     (selectedCard: NormalizedPrototype) => {

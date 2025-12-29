@@ -1,7 +1,8 @@
-import { StackManager } from './stack-manager';
+import { StackRecipeManager } from './stack-recipe-manager';
 
 export { StackManager } from './stack-manager';
-export { STACK_RECIPES, findStackRecipeById } from './stack-recipe-definitions';
+export { StackRecipeManager } from './stack-recipe-manager';
 
 // Legacy exports for backward compatibility
-export const shuffle = StackManager.shuffle;
+export const STACK_RECIPES = StackRecipeManager.RECIPES;
+export const findStackRecipeById = StackRecipeManager.findById;

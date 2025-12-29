@@ -6,7 +6,6 @@ import {
   GameManager,
   PlayerManager,
   StackManager,
-  StackRecipeManager,
 } from '@/lib/karuta';
 import type { ProtopediaInMemoryRepository } from '@f88/promidas';
 
@@ -16,7 +15,6 @@ export type UseGameSetupReturn = {
   selectedDeckRecipe: DeckRecipe | null;
   selectDeckRecipe: (recipe: DeckRecipe) => Promise<void>;
   isDeckLoading: boolean;
-  loadingDeckRecipeId: string | null;
 
   // Stack state
   generatedStack: number[] | null;
@@ -55,18 +53,11 @@ export function useGameSetup({
   const [selectedDeckRecipe, setSelectedDeckRecipe] =
     useState<DeckRecipe | null>(null);
   const [isDeckLoading, setIsDeckLoading] = useState(false);
-  const [loadingDeckRecipeId, setLoadingDeckRecipeId] = useState<string | null>(
-    null,
-  );
 
   // Stack state - 生成済みStackを保持（正確な枚数表示のため）
   const [generatedStack, setGeneratedStack] = useState<number[] | null>(null);
   const [selectedStackRecipe, setSelectedStackRecipe] =
-    useState<StackRecipe | null>(() => {
-      // Default to 10 Cards recipe
-      const defaultRecipe = StackRecipeManager.findById('standard-10');
-      return defaultRecipe || null;
-    });
+    useState<StackRecipe | null>(null);
 
   // Player state
   const [availablePlayers, setAvailablePlayers] = useState<Player[]>([]);
@@ -74,7 +65,7 @@ export function useGameSetup({
 
   // PlayMode state
   const [selectedPlayMode, setSelectedPlayMode] = useState<PlayMode | null>(
-    'touch',
+    null,
   );
 
   // Error & loading state
@@ -87,10 +78,6 @@ export function useGameSetup({
       const players = await PlayerManager.loadPlayers();
       if (players) {
         setAvailablePlayers(players);
-        // If only one player, select it automatically
-        if (players.length === 1) {
-          setSelectedPlayerIds([players[0].id]);
-        }
       }
     };
     loadPlayers();
@@ -116,7 +103,6 @@ export function useGameSetup({
 
       console.log('🔨 Generating new Deck for recipe:', recipe.id);
       setIsDeckLoading(true);
-      setLoadingDeckRecipeId(recipe.id);
       setError(null);
 
       try {
@@ -139,7 +125,6 @@ export function useGameSetup({
       } finally {
         console.log('🔄 Setting isDeckLoading to false');
         setIsDeckLoading(false);
-        setLoadingDeckRecipeId(null);
         console.log('✔️ isDeckLoading set to false');
       }
     },
@@ -283,7 +268,6 @@ export function useGameSetup({
     selectedDeckRecipe,
     selectDeckRecipe,
     isDeckLoading,
-    loadingDeckRecipeId,
     generatedStack,
     selectedStackRecipe,
     selectStackRecipe,

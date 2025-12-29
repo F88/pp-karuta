@@ -12,13 +12,15 @@ import { GameResultsContainer } from '@/components/gameResults/game-results-cont
 import type { GameState } from '@/models/karuta';
 import type { PlayMode } from '@/lib/karuta';
 import { useGameSetup } from '@/hooks/useGameSetup';
-import { usePromidasRepository } from '@/hooks/use-promidas-repository';
+import { useRepositoryState } from '@/hooks/use-repository-state';
 
 export function GameFlow() {
   const navigate = useNavigate();
 
-  // Repository
-  const { repository } = usePromidasRepository();
+  // Repository state
+  const repoState = useRepositoryState();
+  const repository =
+    repoState.type === 'created-token-valid' ? repoState.repository : null;
 
   const [gameState, setGameState] = useState<GameState | null>(null);
   const [score, setScore] = useState(0);

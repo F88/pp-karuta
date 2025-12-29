@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import type { Player } from '@/models/karuta';
+import { PlayerManager } from '@/lib/karuta';
 
 interface PlayerManagerPresentationProps {
   players: Player[];
@@ -63,14 +64,14 @@ export function PlayerManagerPresentation({
           <div className="mt-4">
             <Button
               onClick={onAddPlayer}
-              disabled={players.length >= 4}
+              disabled={players.length >= PlayerManager.MAX_PLAYERS}
               className="w-full"
             >
               + プレイヤーを追加
             </Button>
-            {players.length >= 4 && (
+            {players.length >= PlayerManager.MAX_PLAYERS && (
               <p className="mt-2 text-center text-sm text-gray-500">
-                最大4人まで登録できます
+                最大{PlayerManager.MAX_PLAYERS}人まで登録できます
               </p>
             )}
           </div>

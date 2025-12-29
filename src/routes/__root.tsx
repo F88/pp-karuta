@@ -5,14 +5,15 @@
  * shadcn/ui theme provider is NOT applied here so that `/intro` can enforce its
  * own standalone theme.
  */
-import { createRootRoute, Outlet } from '@tanstack/react-router';
-import { useState, useEffect } from 'react';
-import { ThemeProvider } from '@/components/theme-provider';
 import { AppHeader } from '@/components/layout/app-header';
+import { RepoSetup } from '@/components/layout/repo-setup';
 import { RepoSetupDialog } from '@/components/layout/repo-setup-dialog';
-import { getRepositoryState } from '@/lib/repository/promidas-repo';
-import type { RepositoryState } from '@/lib/repository/promidas-repo';
+import { ThemeProvider } from '@/components/theme-provider';
 import { PlayerManager } from '@/lib/karuta';
+import type { RepositoryState } from '@/lib/repository/promidas-repo';
+import { getRepositoryState } from '@/lib/repository/promidas-repo';
+import { createRootRoute, Outlet } from '@tanstack/react-router';
+import { useEffect, useState } from 'react';
 
 export const Route = createRootRoute({
   component: RootComponent,
@@ -53,6 +54,13 @@ function RootComponent() {
         repoState={repoState}
         onRepoIndicatorClick={() => setOpenRepoSetupDialog(true)}
       />
+
+      {import.meta.env.VITE_DEBUG_MODE === 'true' && (
+        <div className="flex items-center justify-center p-4">
+          <RepoSetup />
+        </div>
+      )}
+
       <RepoSetupDialog
         open={openRepoSetupDialog}
         onOpenChange={() => setOpenRepoSetupDialog(false)}

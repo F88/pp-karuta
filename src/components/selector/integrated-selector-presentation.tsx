@@ -1,15 +1,20 @@
 import type { DeckRecipe, StackRecipe, Player, Deck } from '@/models/karuta';
 import type { PlayMode } from '@/lib/karuta';
 import { Button } from '@/components/ui/button';
-import { RecipeCard } from '@/components/recipe/recipe-card';
-import { StackRecipeCard } from '@/components/stackRecipe/stack-recipe-card';
-import { PlayerSelectionCard } from '@/components/player/player-selection-card';
-import { Keyboard, Smartphone } from 'lucide-react';
+import { GameSetupSummary } from './game-setup-summary';
+import { RepoSetup } from '@/components/layout/repo-setup';
+import { PlayModeSelector } from './play-mode-selector';
+import { PlayersSelector } from './players-selector';
+import { DeckRecipeSelector } from './deck-recipe-selector';
+import { StackRecipeSelector } from './stack-recipe-selector';
 
 export type IntegratedSelectorPresentationProps = {
   // PlayMode selection
   selectedPlayMode: PlayMode | null;
   onSelectPlayMode: (mode: PlayMode) => void;
+
+  // Repository state
+  isRepoReady: boolean;
 
   // DeckRecipe selection
   deckRecipes: DeckRecipe[];
@@ -45,6 +50,7 @@ export type IntegratedSelectorPresentationProps = {
 export function IntegratedSelectorPresentation({
   selectedPlayMode,
   onSelectPlayMode,
+  isRepoReady,
   deckRecipes,
   selectedDeckRecipe,
   onSelectDeckRecipe,
@@ -62,7 +68,7 @@ export function IntegratedSelectorPresentation({
   canStartGame,
   isLoading,
   error,
-  onShowIntro,
+  // onShowIntro,
 }: IntegratedSelectorPresentationProps) {
   // Calculate expected stack size (use actual if available)
   const stackSize = generatedStack
@@ -74,25 +80,16 @@ export function IntegratedSelectorPresentation({
       : null;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-purple-50 p-4 dark:from-gray-900 dark:to-gray-800">
+    <div className="min-h-screen bg-linear-to-br from-indigo-50 to-purple-50 p-4 dark:from-gray-900 dark:to-gray-800">
       <div className="mx-auto max-w-7xl">
         {/* Header */}
         <div className="mb-8 text-center">
           <h1 className="mb-2 text-4xl font-bold text-gray-800 dark:text-gray-100">
-            🎴 PP Karuta
+            🎴 PP Karuta 26
           </h1>
-          <p className="text-lg text-gray-600 dark:text-gray-400">
+          {/* <p className="text-lg text-gray-600 dark:text-gray-400">
             ゲーム設定を選択してください
-          </p>
-          {onShowIntro && (
-            <Button
-              onClick={onShowIntro}
-              variant="link"
-              className="mt-2 text-sm"
-            >
-              📖 INTRO を表示
-            </Button>
-          )}
+          </p> */}
         </div>
 
         {/* Error display */}
@@ -103,174 +100,84 @@ export function IntegratedSelectorPresentation({
           </div>
         )}
 
-        {/* Grid layout for all sections */}
-        <div className="grid gap-8 lg:grid-cols-2">
+        {/* Sections displayed sequentially */}
+        <div className="space-y-8">
           {/* Section 1: PlayMode */}
           <div className="space-y-4">
             <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100">
-              1. 入力方式
+              入力方式
             </h2>
-            <div className="grid gap-4 sm:grid-cols-2">
-              <Button
-                onClick={() => onSelectPlayMode('keyboard')}
-                disabled={isLoading}
-                variant={
-                  selectedPlayMode === 'keyboard' ? 'default' : 'outline'
-                }
-                className={`h-auto p-6 ${
-                  selectedPlayMode === 'keyboard'
-                    ? 'bg-indigo-600 text-white dark:bg-indigo-500'
-                    : ''
-                }`}
-              >
-                <div className="flex flex-col items-center gap-2">
-                  <Keyboard className="h-12 w-12" />
-                  <span className="text-lg font-semibold">Keyboard</span>
-                  <span className="text-xs">PC環境向け</span>
-                </div>
-              </Button>
-
-              <Button
-                onClick={() => onSelectPlayMode('touch')}
-                disabled={isLoading}
-                variant={selectedPlayMode === 'touch' ? 'default' : 'outline'}
-                className={`h-auto p-6 ${
-                  selectedPlayMode === 'touch'
-                    ? 'bg-indigo-600 text-white dark:bg-indigo-500'
-                    : ''
-                }`}
-              >
-                <div className="flex flex-col items-center gap-2">
-                  <Smartphone className="h-12 w-12" />
-                  <span className="text-lg font-semibold">Touch</span>
-                  <span className="text-xs">モバイル向け</span>
-                </div>
-              </Button>
-            </div>
+            <PlayModeSelector
+              selectedPlayMode={selectedPlayMode}
+              onSelectPlayMode={onSelectPlayMode}
+              isLoading={isLoading}
+            />
           </div>
 
-          {/* Section 2: DeckRecipe */}
+          {/* Section 2: Players */}
           <div className="space-y-4">
             <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100">
-              2. Deck Recipe
+              プレイヤー
             </h2>
-            <div className="grid gap-4 sm:grid-cols-2">
-              {deckRecipes.map((recipe) => (
-                <RecipeCard
-                  key={recipe.id}
-                  recipe={recipe}
-                  onSelect={onSelectDeckRecipe}
-                  isSelected={selectedDeckRecipe?.id === recipe.id}
-                  isLoading={isDeckLoading}
-                  isLoadingThisRecipe={loadingDeckRecipeId === recipe.id}
-                />
-              ))}
-            </div>
-            {generatedDeck && (
-              <div className="rounded-lg border border-green-200 bg-green-50 p-3 dark:border-green-800 dark:bg-green-950">
-                <p className="text-sm font-semibold text-green-800 dark:text-green-200">
-                  ✓ Deck生成完了: {generatedDeck.size}枚
-                </p>
+            <PlayersSelector
+              availablePlayers={availablePlayers}
+              selectedPlayerIds={selectedPlayerIds}
+              onTogglePlayer={onTogglePlayer}
+              isLoading={isLoading}
+            />
+          </div>
+
+          {/* Section 3: DeckRecipe */}
+          <div className="space-y-4">
+            <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100">
+              デッキ
+            </h2>
+
+            {!isRepoReady && (
+              <div className="flex justify-center py-8">
+                <RepoSetup />
               </div>
+            )}
+
+            {isRepoReady && (
+              <DeckRecipeSelector
+                deckRecipes={deckRecipes}
+                selectedDeckRecipe={selectedDeckRecipe}
+                onSelectDeckRecipe={onSelectDeckRecipe}
+                isDeckLoading={isDeckLoading}
+                loadingDeckRecipeId={loadingDeckRecipeId}
+                generatedDeck={generatedDeck}
+              />
             )}
           </div>
 
-          {/* Section 3: StackRecipe */}
-          <div className="space-y-4">
-            <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100">
-              3. Stack Recipe (枚数)
-            </h2>
-            <div className="grid gap-4 sm:grid-cols-2">
-              {stackRecipes.map((recipe) => (
-                <StackRecipeCard
-                  key={recipe.id}
-                  recipe={recipe}
-                  onSelect={onSelectStackRecipe}
-                  isSelected={selectedStackRecipe?.id === recipe.id}
-                  isLoading={isLoading}
-                />
-              ))}
+          {/* Section 4: StackRecipe */}
+          {isRepoReady && (
+            <div className="space-y-4">
+              <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100">
+                札数
+              </h2>
+              <StackRecipeSelector
+                stackRecipes={stackRecipes}
+                selectedStackRecipe={selectedStackRecipe}
+                onSelectStackRecipe={onSelectStackRecipe}
+                isLoading={isLoading}
+                generatedStack={generatedStack}
+                generatedDeck={generatedDeck}
+              />
             </div>
-            {generatedStack && (
-              <div className="rounded-lg border border-green-200 bg-green-50 p-3 dark:border-green-800 dark:bg-green-950">
-                <p className="text-sm font-semibold text-green-800 dark:text-green-200">
-                  ✓ Stack生成完了: {generatedStack.length}枚
-                </p>
-              </div>
-            )}
-          </div>
-
-          {/* Section 4: Players */}
-          <div className="space-y-4">
-            <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100">
-              4. プレイヤー選択
-            </h2>
-            <div className="grid gap-4 sm:grid-cols-2">
-              {availablePlayers.map((player) => (
-                <PlayerSelectionCard
-                  key={player.id}
-                  player={player}
-                  isSelected={selectedPlayerIds.includes(player.id)}
-                  onToggle={onTogglePlayer}
-                  isDisabled={isLoading}
-                />
-              ))}
-            </div>
-          </div>
+          )}
         </div>
 
         {/* Selection Summary */}
-        {canStartGame && (
-          <div className="mt-8 rounded-lg border-2 border-indigo-200 bg-indigo-50 p-6 dark:border-indigo-700 dark:bg-indigo-950">
-            <h3 className="mb-4 text-lg font-bold text-indigo-900 dark:text-indigo-100">
-              📋 選択内容
-            </h3>
-            <div className="grid gap-3 sm:grid-cols-2">
-              <div className="flex items-center gap-2">
-                <span className="text-sm font-semibold text-indigo-700 dark:text-indigo-300">
-                  入力方式:
-                </span>
-                <span className="text-sm text-indigo-900 dark:text-indigo-100">
-                  {selectedPlayMode === 'keyboard' ? '⌨️ Keyboard' : '📱 Touch'}
-                </span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="text-sm font-semibold text-indigo-700 dark:text-indigo-300">
-                  Deck Recipe:
-                </span>
-                <span className="text-sm text-indigo-900 dark:text-indigo-100">
-                  {selectedDeckRecipe?.title}
-                  {generatedDeck && (
-                    <span className="ml-1 text-xs text-indigo-600 dark:text-indigo-400">
-                      ({generatedDeck.size}枚)
-                    </span>
-                  )}
-                </span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="text-sm font-semibold text-indigo-700 dark:text-indigo-300">
-                  Stack Recipe:
-                </span>
-                <span className="text-sm text-indigo-900 dark:text-indigo-100">
-                  {selectedStackRecipe?.title}
-                  {stackSize !== null && (
-                    <span className="ml-1 text-xs text-indigo-600 dark:text-indigo-400">
-                      ({stackSize}枚)
-                    </span>
-                  )}
-                </span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="text-sm font-semibold text-indigo-700 dark:text-indigo-300">
-                  プレイヤー:
-                </span>
-                <span className="text-sm text-indigo-900 dark:text-indigo-100">
-                  {selectedPlayerIds.length}人
-                </span>
-              </div>
-            </div>
-          </div>
-        )}
+        <GameSetupSummary
+          selectedPlayMode={selectedPlayMode}
+          selectedDeckRecipe={selectedDeckRecipe}
+          generatedDeck={generatedDeck}
+          selectedStackRecipe={selectedStackRecipe}
+          stackSize={stackSize}
+          selectedPlayerCount={selectedPlayerIds.length}
+        />
 
         {/* Start Game Button */}
         <div className="mt-8 flex justify-center">

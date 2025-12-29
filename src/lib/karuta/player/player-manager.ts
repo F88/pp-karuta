@@ -11,6 +11,11 @@ export class PlayerManager {
   private static storage: ConfigStorage | null = null;
 
   /**
+   * Maximum number of players that can be managed
+   */
+  static readonly MAX_PLAYERS = 50;
+
+  /**
    * Get or create storage instance
    */
   private static getStorage(): ConfigStorage {
@@ -25,14 +30,14 @@ export class PlayerManager {
 
   /**
    * Create multiple players with default names
-   * @param count - Number of players to create (1-4)
+   * @param count - Number of players to create (1-50)
    * @returns Array of Player objects with default names
    * @throws {Error} If count is invalid
    */
   static createPlayers(count: number): Player[] {
     // Validation: count
-    if (typeof count !== 'number' || count < 1 || count > 4) {
-      throw new Error('Player count must be between 1 and 4');
+    if (typeof count !== 'number' || count < 1 || count > this.MAX_PLAYERS) {
+      throw new Error(`Player count must be between 1 and ${this.MAX_PLAYERS}`);
     }
 
     return Array.from({ length: count }, (_, i) =>
@@ -68,6 +73,47 @@ export class PlayerManager {
   // ========================================
 
   /**
+   * Validate player array for game (limited to game max players)
+   * @param players - Players array to validate for game
+   * @param maxPlayers - Maximum number of players allowed
+   * @throws {Error} If validation fails
+   */
+  static validatePlayersForGame(
+    players: unknown,
+    maxPlayers: number,
+  ): asserts players is Player[] {
+    if (!Array.isArray(players)) {
+      throw new Error('Players must be an array');
+    }
+
+    if (players.length === 0) {
+      throw new Error('Players array must not be empty');
+    }
+
+    if (players.length > maxPlayers) {
+      throw new Error(`Maximum ${maxPlayers} players allowed in a game`);
+    }
+
+    // Check for duplicate IDs
+    const ids = new Set<string>();
+    for (const player of players) {
+      if (!player || typeof player !== 'object') {
+        throw new Error('Each player must be an object');
+      }
+
+      if (!player.id || typeof player.id !== 'string') {
+        throw new Error('Each player must have a valid id');
+      }
+
+      if (ids.has(player.id)) {
+        throw new Error(`Duplicate player id: ${player.id}`);
+      }
+
+      ids.add(player.id);
+    }
+  }
+
+  /**
    * Validate player array
    * @param players - Players array to validate
    * @throws {Error} If validation fails
@@ -81,8 +127,8 @@ export class PlayerManager {
       throw new Error('Players array must not be empty');
     }
 
-    if (players.length > 4) {
-      throw new Error('Players array must not exceed 4 players');
+    if (players.length > this.MAX_PLAYERS) {
+      throw new Error(`Maximum ${this.MAX_PLAYERS} players allowed`);
     }
 
     // Check for duplicate IDs
