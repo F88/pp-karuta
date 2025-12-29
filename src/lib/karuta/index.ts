@@ -8,6 +8,9 @@ export type {
 } from '@/models/karuta';
 
 export type { PlayMode } from './playMode';
+export type { TatamiSize } from './tatami/tatami-size';
+export { TATAMI_SIZES, DEFAULT_TATAMI_SIZE } from './tatami/tatami-size';
+export type { TatamiSizeRecipe } from './tatami';
 
 // Export data generation
 export { generateDummyPrototypes } from '@/lib/repository/dummy-data';
@@ -17,6 +20,9 @@ export { DeckManager, DeckRecipeManager } from './deck';
 
 // === Stack Management ===
 export { StackManager, StackRecipeManager, STACK_RECIPES } from './stack';
+
+// === Tatami Management ===
+export { TatamiSizeManager, TATAMI_SIZE_RECIPES } from './tatami';
 
 // === Player Management ===
 export { PlayerManager } from './player';

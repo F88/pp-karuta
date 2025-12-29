@@ -16,8 +16,8 @@ export class StackRecipeManager {
   static readonly RECIPES: StackRecipe[] = [
     {
       id: 'standard-10',
-      title: '10 Cards',
-      description: 'Standard game with 10 cards',
+      title: '10 枚',
+      description: 'Standard game with 10 枚数',
       tags: ['standard', 'beginner'],
       difficulty: 'beginner',
       sortMethod: 'random',
@@ -25,8 +25,8 @@ export class StackRecipeManager {
     },
     {
       id: 'standard-20',
-      title: '20 Cards',
-      description: 'Standard game with 20 cards',
+      title: '20 枚',
+      description: 'Standard game with 20 枚',
       tags: ['standard', 'beginner'],
       difficulty: 'beginner',
       sortMethod: 'random',
@@ -34,8 +34,8 @@ export class StackRecipeManager {
     },
     {
       id: 'standard-30',
-      title: '30 Cards',
-      description: 'Standard game with 30 cards',
+      title: '30 枚',
+      description: 'Standard game with 30 枚',
       tags: ['standard', 'beginner'],
       difficulty: 'beginner',
       sortMethod: 'random',
@@ -43,7 +43,7 @@ export class StackRecipeManager {
     },
     {
       id: 'all-random',
-      title: 'All Cards (Random)',
+      title: 'ALL',
       description: 'Use entire deck with random order',
       tags: ['complete', 'advanced'],
       difficulty: 'advanced',

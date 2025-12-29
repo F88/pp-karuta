@@ -1,5 +1,6 @@
 import type { DeckRecipe, Deck } from '@/models/karuta';
 import { DeckRecipeCard } from '@/components/recipe/deck-recipe-card';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 
 export type DeckRecipeSelectorProps = {
   deckRecipes: DeckRecipe[];
@@ -33,11 +34,11 @@ export function DeckRecipeSelector({
         ))}
       </div>
       {generatedDeck && (
-        <div className="rounded-lg border border-green-200 bg-green-50 p-3 dark:border-green-800 dark:bg-green-950">
-          <p className="text-sm font-semibold text-green-800 dark:text-green-200">
+        <Alert className="border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-950">
+          <AlertDescription className="text-green-800 dark:text-green-200">
             ✓ Deck生成完了: {generatedDeck.size}枚
-          </p>
-        </div>
+          </AlertDescription>
+        </Alert>
       )}
     </>
   );

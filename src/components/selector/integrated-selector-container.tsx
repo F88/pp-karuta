@@ -45,6 +45,9 @@ export function IntegratedSelectorContainer({
       availablePlayers={setup.availablePlayers}
       selectedPlayerIds={setup.selectedPlayerIds}
       onTogglePlayer={setup.togglePlayer}
+      onAddPlayer={setup.addPlayer}
+      selectedTatamiSize={setup.selectedTatamiSize}
+      onSelectTatamiSize={setup.selectTatamiSize}
       onStartGame={setup.createGameState}
       canStartGame={setup.canStartGame}
       isLoading={setup.isCreatingGame || repoState.type === 'validating'}

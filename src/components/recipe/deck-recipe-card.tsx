@@ -1,5 +1,6 @@
 import type { DeckRecipe } from '@/models/karuta';
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 
 export type DeckRecipeCardProps = {
   recipe: DeckRecipe;
@@ -129,29 +130,26 @@ export function DeckRecipeCard({
           <span className={`text-xs font-semibold ${textClass.label}`}>
             Difficulty:
           </span>
-          <span
-            className={`rounded px-2 py-1 text-xs font-bold ${getDifficultyBadgeClass(
-              recipe.difficulty,
-              isSelected,
-            )}`}
+          <Badge
+            variant="outline"
+            className={getDifficultyBadgeClass(recipe.difficulty, isSelected)}
           >
             {recipe.difficulty}
-          </span>
+          </Badge>
         </div>
 
         {recipe.tags.length > 0 && (
           <div className="flex flex-wrap gap-1">
             {recipe.tags.map((tag) => (
-              <span
+              <Badge
                 key={tag}
-                className={`rounded-full px-2 py-1 text-xs ${
-                  isSelected
-                    ? 'bg-white/20 text-white'
-                    : 'bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300'
-                }`}
+                variant="secondary"
+                className={
+                  isSelected ? 'bg-white/20 text-white hover:bg-white/30' : ''
+                }
               >
                 #{tag}
-              </span>
+              </Badge>
             ))}
           </div>
         )}

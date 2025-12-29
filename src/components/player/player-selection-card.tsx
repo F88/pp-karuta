@@ -19,7 +19,7 @@ export function PlayerSelectionCard({
       onClick={() => onToggle(player.id)}
       disabled={isDisabled}
       variant={isSelected ? 'default' : 'outline'}
-      className={`group relative h-auto overflow-hidden rounded-xl p-4 shadow-md transition-all duration-300 hover:scale-105 hover:shadow-lg active:scale-95 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:scale-100 ${
+      className={`group relative h-auto w-full justify-start overflow-hidden rounded-xl p-4 shadow-md transition-all duration-300 hover:scale-105 hover:shadow-lg active:scale-95 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:scale-100 ${
         isSelected
           ? 'bg-indigo-600 text-white dark:bg-indigo-500'
           : 'bg-white dark:bg-gray-800'
@@ -30,9 +30,9 @@ export function PlayerSelectionCard({
           isSelected ? 'opacity-20' : ''
         }`}
       />
-      <div className="relative flex items-center gap-3">
+      <div className="relative flex items-center justify-start gap-3">
         <div
-          className={`flex h-12 w-12 items-center justify-center rounded-full text-2xl ${
+          className={`flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full text-2xl ${
             isSelected
               ? 'bg-white/20 text-white'
               : 'bg-indigo-100 dark:bg-indigo-900'
@@ -48,7 +48,7 @@ export function PlayerSelectionCard({
           >
             {player.name}
           </h3>
-          <p
+          {/* <p
             className={`text-xs ${
               isSelected
                 ? 'text-indigo-100'
@@ -56,7 +56,7 @@ export function PlayerSelectionCard({
             }`}
           >
             ID: {player.id}
-          </p>
+          </p> */}
         </div>
       </div>
     </Button>

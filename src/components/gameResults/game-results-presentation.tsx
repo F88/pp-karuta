@@ -1,19 +1,38 @@
 import type { NormalizedPrototype } from '@f88/promidas/types';
+import type { GamePlayerState, Deck } from '@/models/karuta';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { MochiFudaCard } from './mochi-fuda-card';
 
 export type GameResultsPresentationProps = {
-  score: number;
-  mochiFudaCards: NormalizedPrototype[];
+  playerStates: GamePlayerState[];
+  deck: Deck;
   onBackToTop: () => void;
   onReplay: () => void;
 };
 
 export function GameResultsPresentation({
-  score,
-  mochiFudaCards,
+  playerStates,
+  deck,
   onBackToTop,
   onReplay,
 }: GameResultsPresentationProps) {
+  // Sort players by score (descending)
+  const rankedPlayers = [...playerStates].sort((a, b) => b.score - a.score);
+
+  // Calculate ranks (same score = same rank)
+  const playerRanks: number[] = [];
+  rankedPlayers.forEach((ps, index) => {
+    if (index === 0) {
+      playerRanks.push(1);
+    } else if (ps.score === rankedPlayers[index - 1].score) {
+      playerRanks.push(playerRanks[index - 1]);
+    } else {
+      playerRanks.push(index + 1);
+    }
+  });
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-orange-50 p-8">
       <div className="mx-auto max-w-4xl">
@@ -25,42 +44,82 @@ export function GameResultsPresentation({
           <p className="text-xl text-gray-600">お疲れ様でした！</p>
         </div>
 
-        {/* Score */}
-        <div className="mb-6 rounded-lg bg-white p-6 shadow-lg">
-          <div className="text-center">
-            <p className="mb-2 text-lg text-gray-600">Final Score</p>
-            <p className="text-5xl font-bold text-indigo-600">{score}</p>
-          </div>
-        </div>
+        {/* Player Rankings */}
+        <Card className="mb-6">
+          <CardHeader>
+            <h2 className="text-2xl font-bold text-gray-800">
+              🏆 Player Rankings
+            </h2>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-3">
+              {rankedPlayers.map((ps, index) => (
+                <div
+                  key={ps.player.id}
+                  className="flex items-center justify-between rounded-lg border p-4"
+                >
+                  <div className="flex items-center gap-4">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-full bg-indigo-100 text-2xl font-bold text-indigo-600">
+                      #{playerRanks[index]}
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-bold text-gray-800">
+                        {ps.player.name}
+                      </h3>
+                      <p className="text-sm text-gray-600">
+                        {ps.mochiFuda.length} cards acquired
+                      </p>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <Badge
+                      variant="outline"
+                      className="bg-indigo-100 text-2xl font-bold text-indigo-700"
+                    >
+                      {ps.score} pts
+                    </Badge>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
 
-        {/* MochiFuda */}
-        <div className="mb-8 rounded-lg bg-white p-6 shadow-lg">
-          <h2 className="mb-4 text-2xl font-bold text-gray-800">
-            MochiFuda ({mochiFudaCards.length} cards)
-          </h2>
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {mochiFudaCards.map((card) => (
-              <div
-                key={card.id}
-                className="rounded-lg border p-4 transition-shadow hover:shadow-md"
-              >
-                {card.mainUrl && (
-                  <img
-                    src={card.mainUrl}
-                    alt={card.prototypeNm}
-                    className="mb-2 h-32 w-full rounded object-cover"
-                  />
+        {/* MochiFuda by Player */}
+        {rankedPlayers.map((ps, index) => {
+          const playerMochiFudaCards = ps.mochiFuda
+            .map((cardId) => deck.get(cardId))
+            .filter((card): card is NormalizedPrototype => card !== undefined);
+
+          return (
+            <Card key={ps.player.id} className="mb-6">
+              <CardHeader>
+                <div className="flex items-center gap-3">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-indigo-100 text-lg font-bold text-indigo-600">
+                    #{playerRanks[index]}
+                  </div>
+                  <h2 className="text-xl font-bold text-gray-800">
+                    {ps.player.name} の MochiFuda ({playerMochiFudaCards.length}{' '}
+                    cards)
+                  </h2>
+                </div>
+              </CardHeader>
+              <CardContent>
+                {playerMochiFudaCards.length === 0 ? (
+                  <p className="text-center text-gray-500">
+                    カードを取得できませんでした
+                  </p>
+                ) : (
+                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                    {playerMochiFudaCards.map((card) => (
+                      <MochiFudaCard key={card.id} card={card} />
+                    ))}
+                  </div>
                 )}
-                <h3 className="mb-1 text-sm font-semibold text-gray-800">
-                  {card.prototypeNm}
-                </h3>
-                <p className="line-clamp-2 text-xs text-gray-600">
-                  {card.summary}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
+              </CardContent>
+            </Card>
+          );
+        })}
 
         {/* Action Buttons */}
         <div className="flex flex-col justify-center gap-4 sm:flex-row">

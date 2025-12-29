@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { PromidasRepoDashboardPresentation } from './promid-repo-dashboard-presentation';
 
 const meta = {
-  title: 'Components/Promidas/PromidasRepoDashboardPresentation',
+  title: 'Promidas/PromidasRepoDashboardPresentation',
   component: PromidasRepoDashboardPresentation,
   parameters: {
     layout: 'centered',

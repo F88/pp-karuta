@@ -1,4 +1,5 @@
 import type { StackRecipe, Deck } from '@/models/karuta';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import { StackRecipeCard } from '@/components/recipe/stack-recipe-card';
 
 export type StackRecipeSelectorProps = {
@@ -44,11 +45,11 @@ export function StackRecipeSelector({
         ))}
       </div>
       {generatedStack && (
-        <div className="rounded-lg border border-green-200 bg-green-50 p-3 dark:border-green-800 dark:bg-green-950">
-          <p className="text-sm font-semibold text-green-800 dark:text-green-200">
+        <Alert className="border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-950">
+          <AlertDescription className="text-green-800 dark:text-green-200">
             ✓ Stack生成完了: {generatedStack.length}枚
-          </p>
-        </div>
+          </AlertDescription>
+        </Alert>
       )}
     </>
   );

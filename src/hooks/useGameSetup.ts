@@ -1,12 +1,13 @@
 import { useState, useCallback, useMemo, useEffect } from 'react';
 import type { Deck, DeckRecipe, StackRecipe, Player } from '@/models/karuta';
-import type { PlayMode } from '@/lib/karuta';
+import type { PlayMode, TatamiSize } from '@/lib/karuta';
 import {
   DeckManager,
   GameManager,
   PlayerManager,
   StackManager,
   StackRecipeManager,
+  DEFAULT_TATAMI_SIZE,
 } from '@/lib/karuta';
 import type { ProtopediaInMemoryRepository } from '@f88/promidas';
 
@@ -27,10 +28,15 @@ export type UseGameSetupReturn = {
   availablePlayers: Player[];
   selectedPlayerIds: string[];
   togglePlayer: (playerId: string) => void;
+  addPlayer: () => Promise<void>;
 
   // PlayMode state
   selectedPlayMode: PlayMode | null;
   selectPlayMode: (mode: PlayMode) => void;
+
+  // TatamiSize state
+  selectedTatamiSize: TatamiSize;
+  selectTatamiSize: (size: TatamiSize) => void;
 
   // Game creation
   canStartGame: boolean;
@@ -77,6 +83,10 @@ export function useGameSetup({
     'touch',
   );
 
+  // TatamiSize state
+  const [selectedTatamiSize, setSelectedTatamiSize] =
+    useState<TatamiSize>(DEFAULT_TATAMI_SIZE);
+
   // Error & loading state
   const [error, setError] = useState<string | null>(null);
   const [isCreatingGame, setIsCreatingGame] = useState(false);
@@ -85,12 +95,21 @@ export function useGameSetup({
   useEffect(() => {
     const loadPlayers = async () => {
       const players = await PlayerManager.loadPlayers();
-      if (players) {
+      if (players && players.length > 0) {
         setAvailablePlayers(players);
-        // If only one player, select it automatically
-        if (players.length === 1) {
-          setSelectedPlayerIds([players[0].id]);
-        }
+        // Auto-select first player if any players exist
+        setSelectedPlayerIds([players[0].id]);
+      } else {
+        // No players exist, create a default player
+        const defaultPlayer = PlayerManager.createPlayer(
+          `player-${Date.now()}`,
+          'Player 1',
+        );
+        const newPlayers = [defaultPlayer];
+        setAvailablePlayers(newPlayers);
+        setSelectedPlayerIds([defaultPlayer.id]);
+        // Save to storage
+        await PlayerManager.savePlayers(newPlayers);
       }
     };
     loadPlayers();
@@ -126,10 +145,14 @@ export function useGameSetup({
         console.log('✅ Deck generated successfully:', deck.size, 'cards');
 
         // If StackRecipe is already selected, regenerate Stack with new Deck
-        if (selectedStackRecipe) {
+        // Only generate stack if deck is not empty
+        if (selectedStackRecipe && deck.size > 0) {
           const stack = StackManager.generate(deck, selectedStackRecipe);
           setGeneratedStack(stack);
           console.log('✅ Stack regenerated:', stack.length, 'cards');
+        } else if (deck.size === 0) {
+          setGeneratedStack(null);
+          console.log('⚠️ Deck is empty, skipping Stack generation');
         }
       } catch (err) {
         const errorMessage =
@@ -171,13 +194,16 @@ export function useGameSetup({
       setSelectedStackRecipe(recipe);
       setError(null);
 
-      // Generate Stack if Deck is already available
-      if (generatedDeck) {
+      // Generate Stack if Deck is already available and not empty
+      if (generatedDeck && generatedDeck.size > 0) {
         const stack = StackManager.generate(generatedDeck, recipe);
         setGeneratedStack(stack);
         console.log('✅ Stack generated:', stack.length, 'cards');
       } else {
         setGeneratedStack(null);
+        if (generatedDeck && generatedDeck.size === 0) {
+          console.log('⚠️ Deck is empty, skipping Stack generation');
+        }
       }
     },
     // selectedStackRecipe is not used inside the callback, only the recipe parameter
@@ -197,9 +223,31 @@ export function useGameSetup({
     setError(null);
   }, []);
 
+  // Add new player with random name
+  const addPlayer = useCallback(async () => {
+    const newPlayerNumber = availablePlayers.length + 1;
+    const newPlayer = PlayerManager.createPlayer(
+      `player-${Date.now()}`,
+      `Player ${newPlayerNumber}`,
+    );
+
+    const updatedPlayers = [...availablePlayers, newPlayer];
+    setAvailablePlayers(updatedPlayers);
+
+    // Save to storage
+    await PlayerManager.savePlayers(updatedPlayers);
+    setError(null);
+  }, [availablePlayers]);
+
   // Select PlayMode
   const selectPlayMode = useCallback((mode: PlayMode) => {
     setSelectedPlayMode(mode);
+    setError(null);
+  }, []);
+
+  // Select TatamiSize
+  const selectTatamiSize = useCallback((size: TatamiSize) => {
+    setSelectedTatamiSize(size);
     setError(null);
   }, []);
 
@@ -255,7 +303,7 @@ export function useGameSetup({
         selectedPlayers,
         selectedPlayMode,
         selectedStackRecipe,
-        5, // initialTatamiSize
+        selectedTatamiSize, // Use selected tatami size
       );
 
       // Notify parent
@@ -273,6 +321,7 @@ export function useGameSetup({
     generatedDeck,
     selectedStackRecipe,
     selectedPlayMode,
+    selectedTatamiSize,
     availablePlayers,
     selectedPlayerIds,
     onGameStateCreated,
@@ -290,8 +339,11 @@ export function useGameSetup({
     availablePlayers,
     selectedPlayerIds,
     togglePlayer,
+    addPlayer,
     selectedPlayMode,
     selectPlayMode,
+    selectedTatamiSize,
+    selectTatamiSize,
     canStartGame,
     createGameState,
     error,

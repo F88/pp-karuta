@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { TokenManagerPresentation } from './token-manager-presentation';
 
 const meta = {
-  title: 'Components/Token/TokenManagerPresentation',
+  title: 'Token/TokenManagerPresentation',
   component: TokenManagerPresentation,
   parameters: {
     layout: 'centered',
