@@ -85,20 +85,11 @@ export function IntegratedSelectorPresentation({
         {/* Header */}
         <div className="mb-8 text-center">
           <h1 className="mb-2 text-4xl font-bold text-gray-800 dark:text-gray-100">
-            🎴 PP Karuta
+            🎴 PP Karuta 26
           </h1>
-          <p className="text-lg text-gray-600 dark:text-gray-400">
+          {/* <p className="text-lg text-gray-600 dark:text-gray-400">
             ゲーム設定を選択してください
-          </p>
-          {onShowIntro && (
-            <Button
-              onClick={onShowIntro}
-              variant="link"
-              className="mt-2 text-sm"
-            >
-              📖 INTRO を表示
-            </Button>
-          )}
+          </p> */}
         </div>
 
         {/* Error display */}
@@ -114,7 +105,7 @@ export function IntegratedSelectorPresentation({
           {/* Section 1: PlayMode */}
           <div className="space-y-4">
             <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100">
-              1. 入力方式
+              入力方式
             </h2>
             <PlayModeSelector
               selectedPlayMode={selectedPlayMode}
@@ -126,7 +117,7 @@ export function IntegratedSelectorPresentation({
           {/* Section 2: Players */}
           <div className="space-y-4">
             <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100">
-              2. プレイヤー選択
+              プレイヤー
             </h2>
             <PlayersSelector
               availablePlayers={availablePlayers}
@@ -139,7 +130,7 @@ export function IntegratedSelectorPresentation({
           {/* Section 3: DeckRecipe */}
           <div className="space-y-4">
             <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100">
-              3. Deck Recipe
+              デッキ
             </h2>
 
             {!isRepoReady && (
@@ -164,7 +155,7 @@ export function IntegratedSelectorPresentation({
           {isRepoReady && (
             <div className="space-y-4">
               <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100">
-                4. Stack Recipe (枚数)
+                札数
               </h2>
               <StackRecipeSelector
                 stackRecipes={stackRecipes}
