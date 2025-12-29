@@ -186,7 +186,7 @@ export function useGameSetup({
           console.log('⚠️ Deck is empty, skipping Stack generation');
         }
       }
-    };,
+    },
     // selectedStackRecipe is not used inside the callback, only the recipe parameter
 
     [generatedDeck],
