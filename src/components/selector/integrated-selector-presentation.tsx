@@ -1,16 +1,21 @@
 import type { DeckRecipe, StackRecipe, Player, Deck } from '@/models/karuta';
 import type { PlayMode } from '@/lib/karuta';
+import { GameManager } from '@/lib/karuta';
 import { Button } from '@/components/ui/button';
 import { DeckRecipeCard } from '@/components/recipe/deck-recipe-card';
 import { StackRecipeCard } from '@/components/recipe/stack-recipe-card';
 import { PlayerSelectionCard } from '@/components/player/player-selection-card';
 import { GameSetupSummary } from './game-setup-summary';
+import { RepoSetup } from '@/components/layout/repo-setup';
 import { Keyboard, Smartphone } from 'lucide-react';
 
 export type IntegratedSelectorPresentationProps = {
   // PlayMode selection
   selectedPlayMode: PlayMode | null;
   onSelectPlayMode: (mode: PlayMode) => void;
+
+  // Repository state
+  isRepoReady: boolean;
 
   // DeckRecipe selection
   deckRecipes: DeckRecipe[];
@@ -46,6 +51,7 @@ export type IntegratedSelectorPresentationProps = {
 export function IntegratedSelectorPresentation({
   selectedPlayMode,
   onSelectPlayMode,
+  isRepoReady,
   deckRecipes,
   selectedDeckRecipe,
   onSelectDeckRecipe,
@@ -153,37 +159,74 @@ export function IntegratedSelectorPresentation({
             </div>
           </div>
 
-          {/* Section 2: DeckRecipe */}
+          {/* Section 2: Players */}
           <div className="space-y-4">
             <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100">
-              2. Deck Recipe
+              2. プレイヤー選択
             </h2>
             <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
-              {deckRecipes.map((recipe) => (
-                <DeckRecipeCard
-                  key={recipe.id}
-                  recipe={recipe}
-                  onSelect={onSelectDeckRecipe}
-                  isSelected={selectedDeckRecipe?.id === recipe.id}
-                  isLoading={isDeckLoading}
-                  isLoadingThisRecipe={loadingDeckRecipeId === recipe.id}
-                />
-              ))}
+              {availablePlayers.map((player) => {
+                const isSelected = selectedPlayerIds.includes(player.id);
+                const maxPlayersReached =
+                  selectedPlayerIds.length >= GameManager.MAX_GAME_PLAYERS;
+                return (
+                  <PlayerSelectionCard
+                    key={player.id}
+                    player={player}
+                    isSelected={isSelected}
+                    onToggle={onTogglePlayer}
+                    isDisabled={isLoading || (!isSelected && maxPlayersReached)}
+                  />
+                );
+              })}
             </div>
-            {generatedDeck && (
-              <div className="rounded-lg border border-green-200 bg-green-50 p-3 dark:border-green-800 dark:bg-green-950">
-                <p className="text-sm font-semibold text-green-800 dark:text-green-200">
-                  ✓ Deck生成完了: {generatedDeck.size}枚
-                </p>
-              </div>
+            {selectedPlayerIds.length >= GameManager.MAX_GAME_PLAYERS && (
+              <p className="text-center text-sm text-gray-500 dark:text-gray-400">
+                最大{GameManager.MAX_GAME_PLAYERS}人まで選択できます
+              </p>
             )}
           </div>
 
-          {/* Section 3: StackRecipe - Hide when deck is empty */}
+          {/* Section 3: DeckRecipe */}
+          <div className="space-y-4">
+            <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100">
+              3. Deck Recipe
+            </h2>
+            {!isRepoReady && (
+              <div className="flex justify-center py-8">
+                <RepoSetup />
+              </div>
+            )}
+            {isRepoReady && (
+              <>
+                <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
+                  {deckRecipes.map((recipe) => (
+                    <DeckRecipeCard
+                      key={recipe.id}
+                      recipe={recipe}
+                      onSelect={onSelectDeckRecipe}
+                      isSelected={selectedDeckRecipe?.id === recipe.id}
+                      isLoading={isDeckLoading}
+                      isLoadingThisRecipe={loadingDeckRecipeId === recipe.id}
+                    />
+                  ))}
+                </div>
+                {generatedDeck && (
+                  <div className="rounded-lg border border-green-200 bg-green-50 p-3 dark:border-green-800 dark:bg-green-950">
+                    <p className="text-sm font-semibold text-green-800 dark:text-green-200">
+                      ✓ Deck生成完了: {generatedDeck.size}枚
+                    </p>
+                  </div>
+                )}
+              </>
+            )}
+          </div>
+
+          {/* Section 4: StackRecipe - Hide when deck is empty */}
           {!isDeckEmpty && (
             <div className="space-y-4">
               <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100">
-                3. Stack Recipe (枚数)
+                4. Stack Recipe (枚数)
               </h2>
               <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
                 {stackRecipes.map((recipe) => (
@@ -210,7 +253,7 @@ export function IntegratedSelectorPresentation({
           {isDeckEmpty && (
             <div className="space-y-4">
               <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100">
-                3. Stack Recipe (枚数)
+                4. Stack Recipe (枚数)
               </h2>
               <div className="rounded-lg border border-yellow-200 bg-yellow-50 p-4 dark:border-yellow-800 dark:bg-yellow-950">
                 <p className="text-sm font-semibold text-yellow-800 dark:text-yellow-200">
@@ -219,24 +262,6 @@ export function IntegratedSelectorPresentation({
               </div>
             </div>
           )}
-
-          {/* Section 4: Players */}
-          <div className="space-y-4">
-            <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100">
-              4. プレイヤー選択
-            </h2>
-            <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
-              {availablePlayers.map((player) => (
-                <PlayerSelectionCard
-                  key={player.id}
-                  player={player}
-                  isSelected={selectedPlayerIds.includes(player.id)}
-                  onToggle={onTogglePlayer}
-                  isDisabled={isLoading}
-                />
-              ))}
-            </div>
-          </div>
         </div>
 
         {/* Selection Summary */}

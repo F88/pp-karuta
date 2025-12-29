@@ -15,6 +15,11 @@ import { PlayModeManager } from '../playMode/play-mode-manager';
  * Handles GameState initialization and game-related operations
  */
 export class GameManager {
+  /**
+   * Maximum number of players that can play simultaneously in a game
+   */
+  static readonly MAX_GAME_PLAYERS = 4;
+
   // ========================================
   // Section 1: GameState Initialization
   // ========================================
@@ -42,8 +47,8 @@ export class GameManager {
       throw new Error('Deck must not be empty');
     }
 
-    // Validation: players
-    PlayerManager.validatePlayers(players);
+    // Validation: players for game
+    PlayerManager.validatePlayersForGame(players, this.MAX_GAME_PLAYERS);
 
     // Validation: playMode
     PlayModeManager.validatePlayMode(playMode);

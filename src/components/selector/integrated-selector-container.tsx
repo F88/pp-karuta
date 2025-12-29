@@ -1,5 +1,5 @@
 import { IntegratedSelectorPresentation } from './integrated-selector-presentation';
-import { usePromidasRepository } from '@/hooks/use-promidas-repository';
+import { useRepositoryState } from '@/hooks/use-repository-state';
 import type { UseGameSetupReturn } from '@/hooks/useGameSetup';
 import { STACK_RECIPES } from '@/lib/karuta';
 import { DeckRecipeManager } from '@/lib/karuta/deck';
@@ -14,27 +14,29 @@ export function IntegratedSelectorContainer({
   setup,
   onShowIntro,
 }: IntegratedSelectorContainerProps) {
-  // Repository
-  const { loading: isRepoLoading, error: repoError } = usePromidasRepository();
+  // Repository state
+  const repoState = useRepositoryState();
 
   // Show repository error
   useEffect(() => {
-    if (repoError) {
-      console.error('Repository error:', repoError);
+    if (repoState.type === 'token-invalid') {
+      console.error('Repository error:', repoState.error);
     }
-  }, [repoError]);
+  }, [repoState]);
+
+  const isRepoReady = repoState.type === 'created-token-valid';
+  const repoError = repoState.type === 'token-invalid' ? repoState.error : null;
 
   return (
     <IntegratedSelectorPresentation
       selectedPlayMode={setup.selectedPlayMode}
       onSelectPlayMode={setup.selectPlayMode}
+      isRepoReady={isRepoReady}
       deckRecipes={DeckRecipeManager.RECIPES}
       selectedDeckRecipe={setup.selectedDeckRecipe}
       onSelectDeckRecipe={setup.selectDeckRecipe}
       isDeckLoading={setup.isDeckLoading}
-      loadingDeckRecipeId={
-        setup.isDeckLoading ? (setup.selectedDeckRecipe?.id ?? null) : null
-      }
+      loadingDeckRecipeId={setup.loadingDeckRecipeId}
       generatedDeck={setup.generatedDeck}
       stackRecipes={STACK_RECIPES}
       selectedStackRecipe={setup.selectedStackRecipe}
@@ -45,7 +47,7 @@ export function IntegratedSelectorContainer({
       onTogglePlayer={setup.togglePlayer}
       onStartGame={setup.createGameState}
       canStartGame={setup.canStartGame}
-      isLoading={setup.isCreatingGame || isRepoLoading}
+      isLoading={setup.isCreatingGame || repoState.type === 'validating'}
       error={
         setup.error || (repoError ? `Repository error: ${repoError}` : null)
       }
