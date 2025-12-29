@@ -68,7 +68,9 @@ export function IntegratedSelectorPresentation({
   const stackSize = generatedStack
     ? generatedStack.length
     : generatedDeck && selectedStackRecipe
-      ? Math.min(selectedStackRecipe.maxSize, generatedDeck.size)
+      ? selectedStackRecipe.maxSize === 'all'
+        ? generatedDeck.size
+        : Math.min(selectedStackRecipe.maxSize, generatedDeck.size)
       : null;
 
   return (
