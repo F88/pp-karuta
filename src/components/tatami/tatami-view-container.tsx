@@ -7,44 +7,42 @@ import { DeckManager } from '@/lib/karuta/deck/deck-manager';
 
 export type TatamiViewContainerProps = {
   playMode: PlayMode;
-  gameState: Omit<GameState, 'players'>;
-  score: number;
-  mochiFuda: number[]; // Array of cardId (prototypeId)
-  onCorrectAnswer: (cardId: number) => void;
-  onIncorrectAnswer: () => void;
+  gameState: GameState;
+  onCorrectAnswer: (playerId: string, cardId: number) => void;
+  onIncorrectAnswer: (playerId: string) => void;
 };
 
 export function TatamiViewContainer({
-  playMode, // Reserved for future keyboard/touch mode differences
+  playMode,
   gameState,
-  score,
-  mochiFuda,
   onCorrectAnswer,
   onIncorrectAnswer,
 }: TatamiViewContainerProps) {
-  // playMode will be used for keyboard/touch mode differences in the future
-  void playMode;
-
-  // Calculate current race from completed races (mochiFuda count)
-  const completedRaces = mochiFuda.length;
+  // Calculate current race from first player's mochiFuda count
+  const completedRaces = gameState.playerStates[0]?.mochiFuda.length || 0;
   const currentRace = completedRaces + 1;
 
-  // Get current YomiFuda from reading order (handle out of bounds)
+  // Get current YomiFuda from reading order
   const currentYomiFudaId = gameState.readingOrder[completedRaces];
   const currentYomiFuda = currentYomiFudaId
     ? gameState.deck.get(currentYomiFudaId)
     : null;
 
-  // Get Tatami cards
-  const tatamiCards = DeckManager.getByIds(gameState.deck, gameState.tatami);
+  // Get Shared Tatami cards
+  const sharedTatamiCards = DeckManager.getByIds(
+    gameState.deck,
+    gameState.tatami,
+  );
 
-  const handleSelectCard = useCallback(
-    (selectedCard: NormalizedPrototype) => {
+  // Handle card selection from any player
+  const handlePlayerCardSelect = useCallback(
+    (playerId: string, selectedCard: NormalizedPrototype) => {
       if (!currentYomiFuda) return;
 
       const isCorrect = selectedCard.id === currentYomiFuda.id;
 
       console.group(isCorrect ? '✅ Correct!' : '❌ Incorrect!');
+      console.log('Player:', playerId);
       console.log(
         'Selected:',
         selectedCard.prototypeNm,
@@ -58,22 +56,21 @@ export function TatamiViewContainer({
       console.groupEnd();
 
       if (isCorrect) {
-        onCorrectAnswer(selectedCard.id);
+        onCorrectAnswer(playerId, selectedCard.id);
       } else {
-        onIncorrectAnswer();
+        onIncorrectAnswer(playerId);
       }
     },
     [currentYomiFuda, onCorrectAnswer, onIncorrectAnswer],
   );
 
-  // Check if game is complete (all cards acquired)
+  // Check if game is complete
   if (completedRaces >= gameState.readingOrder.length) {
     console.log('🎉 All cards acquired! Game complete.');
-    // Return empty div - GameFlow will handle transition to results
     return <div>Loading results...</div>;
   }
 
-  // Safety check: if currentYomiFuda is not found, use a placeholder
+  // Safety check
   if (!currentYomiFuda) {
     console.error(
       'Current YomiFuda not found in deck:',
@@ -81,20 +78,20 @@ export function TatamiViewContainer({
       'at index',
       completedRaces,
     );
-    // Return early or show error state
     return <div>Error: YomiFuda not found</div>;
   }
 
   return (
     <TatamiViewPresentation
+      playMode={playMode}
       yomiFuda={currentYomiFuda}
-      tatamiCards={tatamiCards}
+      sharedTatamiCards={sharedTatamiCards}
+      playerStates={gameState.playerStates}
+      deck={gameState.deck}
       currentRace={currentRace}
-      totalRaces={gameState.deck.size}
+      totalRaces={gameState.readingOrder.length}
       stackCount={gameState.stack.length}
-      score={score}
-      mochiFudaCount={mochiFuda.length}
-      onSelectCard={handleSelectCard}
+      onPlayerCardSelect={handlePlayerCardSelect}
     />
   );
 }
