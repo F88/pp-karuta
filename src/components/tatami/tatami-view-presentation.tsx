@@ -1,10 +1,12 @@
-import type { NormalizedPrototype } from '@f88/promidas/types';
-import type { Deck, GamePlayerState } from '@/models/karuta';
-import { GameHeader } from './game-header';
-import { YomiFudaDisplay } from './yomi-fuda-display';
-import { SharedTatami } from './shared-tatami';
-import { PlayerTatami } from './player-tatami';
 import { DeckManager } from '@/lib/karuta/deck/deck-manager';
+import type { Deck, GamePlayerState } from '@/models/karuta';
+import type { NormalizedPrototype } from '@f88/promidas/types';
+import { GameHeader } from './game-header';
+import { PlayerTatami } from './player-tatami';
+import { SharedTatami } from './shared-tatami';
+// import { YomiFudaCard } from './yomi-fuda-card';
+// import { YomiFudaMarquee } from './yomi-fuda-marquee';
+import { Yomite } from './yomite';
 
 export type TatamiViewPresentationProps = {
   yomiFuda: NormalizedPrototype;
@@ -35,8 +37,8 @@ export function TatamiViewPresentation({
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 to-teal-100 p-4">
-      <div className="mx-auto max-w-7xl">
+    <div className="flex h-screen flex-col bg-gradient-to-br from-green-50 to-teal-100 p-4">
+      <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col overflow-hidden">
         <GameHeader
           currentRace={currentRace}
           totalRaces={totalRaces}
@@ -46,33 +48,40 @@ export function TatamiViewPresentation({
           tatamiCount={sharedTatamiCards.length}
         />
 
-        <YomiFudaDisplay normalizedPrototype={yomiFuda} />
+        {/* Top section: Shared Tatami + YomiFuda (natural height) */}
+        <div className="my-8 flex-shrink-0 space-y-6">
+          <SharedTatami tatamiCards={sharedTatamiCards} />
+          {/* <YomiFudaCard normalizedPrototype={yomiFuda} /> */}
+          {/* <YomiFudaMarquee normalizedPrototype={yomiFuda} /> */}
+          <Yomite key={yomiFuda.id} normalizedPrototype={yomiFuda} />
+        </div>
 
-        <SharedTatami tatamiCards={sharedTatamiCards} />
-
-        <div className="space-y-4">
-          <h2 className="text-center text-2xl font-bold text-gray-800">
+        {/* Bottom section: Player Tatami Areas (takes remaining height) */}
+        <div className="flex flex-1 flex-col overflow-hidden border-t border-gray-300 bg-white/80 pt-4 backdrop-blur-sm">
+          <h2 className="mb-4 flex-shrink-0 text-center text-2xl font-bold text-gray-800">
             🎮 Player Tatami Areas
           </h2>
-          <div className="grid gap-4 lg:grid-cols-2">
-            {playerStates.map((playerState) => {
-              const playerTatamiCards = DeckManager.getByIds(
-                deck,
-                playerState.tatami,
-              );
-              return (
-                <PlayerTatami
-                  key={playerState.player.id}
-                  player={playerState.player}
-                  tatamiCards={playerTatamiCards}
-                  onCardClick={(card) =>
-                    onPlayerCardSelect(playerState.player.id, card)
-                  }
-                  mochiFudaCount={playerState.mochiFuda.length}
-                  score={playerState.score}
-                />
-              );
-            })}
+          <div className="flex-1 overflow-y-auto">
+            <div className="grid grid-cols-2 gap-4">
+              {playerStates.map((playerState) => {
+                const playerTatamiCards = DeckManager.getByIds(
+                  deck,
+                  playerState.tatami,
+                );
+                return (
+                  <PlayerTatami
+                    key={playerState.player.id}
+                    player={playerState.player}
+                    tatamiCards={playerTatamiCards}
+                    onCardClick={(card) =>
+                      onPlayerCardSelect(playerState.player.id, card)
+                    }
+                    mochiFudaCount={playerState.mochiFuda.length}
+                    score={playerState.score}
+                  />
+                );
+              })}
+            </div>
           </div>
         </div>
       </div>

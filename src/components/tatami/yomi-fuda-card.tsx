@@ -2,11 +2,11 @@ import type { NormalizedPrototype } from '@f88/promidas/types';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 
-export type YomiFudaDisplayProps = {
+export type YomiFudaCardProps = {
   normalizedPrototype: NormalizedPrototype;
 };
 
-export function YomiFudaDisplay({ normalizedPrototype }: YomiFudaDisplayProps) {
+export function YomiFudaCard({ normalizedPrototype }: YomiFudaCardProps) {
   return (
     <Card className="mb-8 shadow-xl">
       <CardHeader>

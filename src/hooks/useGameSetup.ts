@@ -1,12 +1,13 @@
 import { useState, useCallback, useMemo, useEffect } from 'react';
 import type { Deck, DeckRecipe, StackRecipe, Player } from '@/models/karuta';
-import type { PlayMode } from '@/lib/karuta';
+import type { PlayMode, TatamiSize } from '@/lib/karuta';
 import {
   DeckManager,
   GameManager,
   PlayerManager,
   StackManager,
   StackRecipeManager,
+  DEFAULT_TATAMI_SIZE,
 } from '@/lib/karuta';
 import type { ProtopediaInMemoryRepository } from '@f88/promidas';
 
@@ -32,6 +33,10 @@ export type UseGameSetupReturn = {
   // PlayMode state
   selectedPlayMode: PlayMode | null;
   selectPlayMode: (mode: PlayMode) => void;
+
+  // TatamiSize state
+  selectedTatamiSize: TatamiSize;
+  selectTatamiSize: (size: TatamiSize) => void;
 
   // Game creation
   canStartGame: boolean;
@@ -78,6 +83,10 @@ export function useGameSetup({
     'touch',
   );
 
+  // TatamiSize state
+  const [selectedTatamiSize, setSelectedTatamiSize] =
+    useState<TatamiSize>(DEFAULT_TATAMI_SIZE);
+
   // Error & loading state
   const [error, setError] = useState<string | null>(null);
   const [isCreatingGame, setIsCreatingGame] = useState(false);
@@ -86,12 +95,21 @@ export function useGameSetup({
   useEffect(() => {
     const loadPlayers = async () => {
       const players = await PlayerManager.loadPlayers();
-      if (players) {
+      if (players && players.length > 0) {
         setAvailablePlayers(players);
-        // If only one player, select it automatically
-        if (players.length === 1) {
-          setSelectedPlayerIds([players[0].id]);
-        }
+        // Auto-select first player if any players exist
+        setSelectedPlayerIds([players[0].id]);
+      } else {
+        // No players exist, create a default player
+        const defaultPlayer = PlayerManager.createPlayer(
+          `player-${Date.now()}`,
+          'Player 1',
+        );
+        const newPlayers = [defaultPlayer];
+        setAvailablePlayers(newPlayers);
+        setSelectedPlayerIds([defaultPlayer.id]);
+        // Save to storage
+        await PlayerManager.savePlayers(newPlayers);
       }
     };
     loadPlayers();
@@ -227,6 +245,12 @@ export function useGameSetup({
     setError(null);
   }, []);
 
+  // Select TatamiSize
+  const selectTatamiSize = useCallback((size: TatamiSize) => {
+    setSelectedTatamiSize(size);
+    setError(null);
+  }, []);
+
   // Can start game validation
   const canStartGame = useMemo(() => {
     return (
@@ -279,7 +303,7 @@ export function useGameSetup({
         selectedPlayers,
         selectedPlayMode,
         selectedStackRecipe,
-        5, // initialTatamiSize
+        selectedTatamiSize, // Use selected tatami size
       );
 
       // Notify parent
@@ -297,6 +321,7 @@ export function useGameSetup({
     generatedDeck,
     selectedStackRecipe,
     selectedPlayMode,
+    selectedTatamiSize,
     availablePlayers,
     selectedPlayerIds,
     onGameStateCreated,
@@ -317,6 +342,8 @@ export function useGameSetup({
     addPlayer,
     selectedPlayMode,
     selectPlayMode,
+    selectedTatamiSize,
+    selectTatamiSize,
     canStartGame,
     createGameState,
     error,

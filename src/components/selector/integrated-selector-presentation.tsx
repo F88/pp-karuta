@@ -1,5 +1,5 @@
 import type { DeckRecipe, StackRecipe, Player, Deck } from '@/models/karuta';
-import type { PlayMode } from '@/lib/karuta';
+import type { PlayMode, TatamiSize } from '@/lib/karuta';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { GameSetupSummary } from './game-setup-summary';
@@ -8,6 +8,7 @@ import { PlayModeSelector } from './play-mode-selector';
 import { PlayersSelector } from './players-selector';
 import { DeckRecipeSelector } from './deck-recipe-selector';
 import { StackRecipeSelector } from './stack-recipe-selector';
+import { TatamiSizeSelector } from './tatami-size-selector';
 
 export type IntegratedSelectorPresentationProps = {
   // PlayMode selection
@@ -36,6 +37,10 @@ export type IntegratedSelectorPresentationProps = {
   selectedPlayerIds: string[];
   onTogglePlayer: (playerId: string) => void;
   onAddPlayer: () => void;
+
+  // TatamiSize selection
+  selectedTatamiSize: TatamiSize;
+  onSelectTatamiSize: (size: TatamiSize) => void;
 
   // Start game
   onStartGame: () => void;
@@ -67,6 +72,8 @@ export function IntegratedSelectorPresentation({
   selectedPlayerIds,
   onTogglePlayer,
   onAddPlayer,
+  selectedTatamiSize,
+  onSelectTatamiSize,
   onStartGame,
   canStartGame,
   isLoading,
@@ -170,6 +177,20 @@ export function IntegratedSelectorPresentation({
                 isLoading={isLoading}
                 generatedStack={generatedStack}
                 generatedDeck={generatedDeck}
+              />
+            </div>
+          )}
+
+          {/* Section 5: TatamiSize */}
+          {isRepoReady && (
+            <div className="space-y-4">
+              <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100">
+                畳サイズ
+              </h2>
+              <TatamiSizeSelector
+                selectedTatamiSize={selectedTatamiSize}
+                onSelectTatamiSize={onSelectTatamiSize}
+                isLoading={isLoading}
               />
             </div>
           )}

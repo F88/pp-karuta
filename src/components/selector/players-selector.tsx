@@ -20,7 +20,7 @@ export function PlayersSelector({
 }: PlayersSelectorProps) {
   return (
     <>
-      <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
+      <div className="grid grid-cols-2 items-start gap-4 md:grid-cols-3 lg:grid-cols-4">
         {availablePlayers.map((player) => {
           const isSelected = selectedPlayerIds.includes(player.id);
           const maxPlayersReached =
@@ -47,9 +47,9 @@ export function PlayersSelector({
             <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gray-100 text-4xl text-gray-400 transition-colors group-hover:bg-indigo-100 group-hover:text-indigo-600 dark:bg-gray-700 dark:text-gray-500">
               +
             </div>
-            <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
+            {/* <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
               プレイヤー追加
-            </span>
+            </span> */}
           </div>
         </Button>
       </div>

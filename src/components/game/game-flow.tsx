@@ -46,21 +46,28 @@ export function GameFlow() {
 
       // Update player states
       const updatedPlayerStates = prev.playerStates.map((ps) => {
-        if (ps.player.id !== playerId) return ps;
-
-        // Remove card from player's tatami
+        // Remove card from ALL players' tatami
         const newPlayerTatami = ps.tatami.filter((id) => id !== cardId);
 
-        // Add next card from stack to player's tatami
+        // Add next card from stack to ALL players' tatami
         if (prev.stack.length > 0) {
           newPlayerTatami.push(prev.stack[0]);
         }
 
+        // Update mochiFuda and score only for the player who got it correct
+        if (ps.player.id === playerId) {
+          return {
+            ...ps,
+            tatami: newPlayerTatami,
+            mochiFuda: [...ps.mochiFuda, cardId],
+            score: ps.score + 1,
+          };
+        }
+
+        // For other players, only update tatami
         return {
           ...ps,
           tatami: newPlayerTatami,
-          mochiFuda: [...ps.mochiFuda, cardId],
-          score: ps.score + 1,
         };
       });
 

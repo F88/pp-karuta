@@ -15,8 +15,12 @@ export function TatamiViewContainer({
   onCorrectAnswer,
   onIncorrectAnswer,
 }: TatamiViewContainerProps) {
-  // Calculate current race from first player's mochiFuda count
-  const completedRaces = gameState.playerStates[0]?.mochiFuda.length || 0;
+  // Calculate current race from total mochiFuda count across all players
+  const totalMochiFuda = gameState.playerStates.reduce(
+    (sum, ps) => sum + ps.mochiFuda.length,
+    0,
+  );
+  const completedRaces = totalMochiFuda;
   const currentRace = completedRaces + 1;
 
   // Get current YomiFuda from reading order

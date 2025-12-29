@@ -27,8 +27,8 @@ function generateSequentialDecks(
     const rangeEnd = offset + limit;
 
     recipes.push({
-      id: `Deck-${i}`,
-      title: `${rangeStart.toLocaleString()} - ${rangeEnd.toLocaleString()}`,
+      id: `Deck-rande-${i}`,
+      title: `Deck-${i}`,
       description: `${rangeStart.toLocaleString()} - ${rangeEnd.toLocaleString()}`,
       apiParams: {
         offset,
@@ -58,6 +58,8 @@ export class DeckRecipeManager {
    * Uses apiParams to control setupSnapshot data acquisition
    */
   static readonly RECIPES: DeckRecipe[] = [
+    // Range-based recipes
+    ...this.rangeRecipes,
     // All-prototypes recipe
     {
       id: 'all-prototypes',
@@ -69,8 +71,6 @@ export class DeckRecipeManager {
       difficulty: 'beginner',
       tags: ['quick', 'practice'],
     },
-    // Range-based recipes
-    ...this.rangeRecipes,
   ];
 
   // ========================================

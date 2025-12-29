@@ -11,7 +11,7 @@ export function SharedTatami({ tatamiCards }: SharedTatamiProps) {
       <h2 className="mb-4 text-center text-xl font-bold text-gray-700">
         🎴 Shared Tatami (Reference Only)
       </h2>
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
+      <div className="grid grid-cols-4 gap-4">
         {tatamiCards.map((card, index) => (
           <ToriFudaCard
             key={card.id}
