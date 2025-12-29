@@ -8,6 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 
 export interface PromidasRepoDashboardPresentationProps {
   repoState: RepositoryState;
@@ -115,11 +116,12 @@ export function PromidasRepoDashboardPresentation({
         <div className="space-y-2">
           <div className="flex items-center justify-between">
             <span className="text-sm font-medium">Repository</span>
-            <span
-              className={`rounded-full px-2 py-0.5 text-xs font-semibold ${getRepoStateBadgeColor(repoState)}`}
+            <Badge
+              variant="outline"
+              className={getRepoStateBadgeColor(repoState)}
             >
               {getRepoStateLabel(repoState)}
-            </span>
+            </Badge>
           </div>
           {repoError && <p className="text-destructive text-xs">{repoError}</p>}
         </div>
@@ -128,11 +130,12 @@ export function PromidasRepoDashboardPresentation({
         <div className="space-y-2">
           <div className="flex items-center justify-between">
             <span className="text-sm font-medium">Store</span>
-            <span
-              className={`rounded-full px-2 py-0.5 text-xs font-semibold ${getStoreStateBadgeColor(storeState)}`}
+            <Badge
+              variant="outline"
+              className={getStoreStateBadgeColor(storeState)}
             >
               {getStoreStateLabel(storeState)}
-            </span>
+            </Badge>
           </div>
 
           {/* Store Stats Details */}

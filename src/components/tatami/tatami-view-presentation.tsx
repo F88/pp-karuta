@@ -1,6 +1,5 @@
 import type { NormalizedPrototype } from '@f88/promidas/types';
 import type { Deck, GamePlayerState } from '@/models/karuta';
-import type { PlayMode } from '@/components/playMode/play-mode-selector-presentation';
 import { GameHeader } from './game-header';
 import { YomiFudaDisplay } from './yomi-fuda-display';
 import { SharedTatami } from './shared-tatami';
@@ -8,7 +7,6 @@ import { PlayerTatami } from './player-tatami';
 import { DeckManager } from '@/lib/karuta/deck/deck-manager';
 
 export type TatamiViewPresentationProps = {
-  playMode: PlayMode;
   yomiFuda: NormalizedPrototype;
   sharedTatamiCards: NormalizedPrototype[];
   playerStates: GamePlayerState[];
@@ -20,7 +18,6 @@ export type TatamiViewPresentationProps = {
 };
 
 export function TatamiViewPresentation({
-  playMode,
   yomiFuda,
   sharedTatamiCards,
   playerStates,

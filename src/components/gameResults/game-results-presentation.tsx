@@ -1,4 +1,5 @@
 import type { NormalizedPrototype } from '@f88/promidas/types';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 
 export type GameResultsPresentationProps = {
@@ -26,41 +27,47 @@ export function GameResultsPresentation({
         </div>
 
         {/* Score */}
-        <div className="mb-6 rounded-lg bg-white p-6 shadow-lg">
-          <div className="text-center">
-            <p className="mb-2 text-lg text-gray-600">Final Score</p>
-            <p className="text-5xl font-bold text-indigo-600">{score}</p>
-          </div>
-        </div>
+        <Card className="mb-6">
+          <CardContent className="p-6">
+            <div className="text-center">
+              <p className="mb-2 text-lg text-gray-600">Final Score</p>
+              <p className="text-5xl font-bold text-indigo-600">{score}</p>
+            </div>
+          </CardContent>
+        </Card>
 
         {/* MochiFuda */}
-        <div className="mb-8 rounded-lg bg-white p-6 shadow-lg">
-          <h2 className="mb-4 text-2xl font-bold text-gray-800">
-            MochiFuda ({mochiFudaCards.length} cards)
-          </h2>
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {mochiFudaCards.map((card) => (
-              <div
-                key={card.id}
-                className="rounded-lg border p-4 transition-shadow hover:shadow-md"
-              >
-                {card.mainUrl && (
-                  <img
-                    src={card.mainUrl}
-                    alt={card.prototypeNm}
-                    className="mb-2 h-32 w-full rounded object-cover"
-                  />
-                )}
-                <h3 className="mb-1 text-sm font-semibold text-gray-800">
-                  {card.prototypeNm}
-                </h3>
-                <p className="line-clamp-2 text-xs text-gray-600">
-                  {card.summary}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
+        <Card className="mb-8">
+          <CardHeader>
+            <h2 className="text-2xl font-bold text-gray-800">
+              MochiFuda ({mochiFudaCards.length} cards)
+            </h2>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {mochiFudaCards.map((card) => (
+                <div
+                  key={card.id}
+                  className="rounded-lg border p-4 transition-shadow hover:shadow-md"
+                >
+                  {card.mainUrl && (
+                    <img
+                      src={card.mainUrl}
+                      alt={card.prototypeNm}
+                      className="mb-2 h-32 w-full rounded object-cover"
+                    />
+                  )}
+                  <h3 className="mb-1 text-sm font-semibold text-gray-800">
+                    {card.prototypeNm}
+                  </h3>
+                  <p className="line-clamp-2 text-xs text-gray-600">
+                    {card.summary}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
 
         {/* Action Buttons */}
         <div className="flex flex-col justify-center gap-4 sm:flex-row">

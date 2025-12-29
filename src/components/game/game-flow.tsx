@@ -42,8 +42,8 @@ export function GameFlow() {
     ? 'keyboard' // TODO: Store playMode in GameState
     : null;
 
-  const handleCorrectAnswer = useCallback((cardId: number) => {
-    console.log('🎯 handleCorrectAnswer called with cardId:', cardId);
+  const handleCorrectAnswer = useCallback((playerId: string, cardId: number) => {
+    console.log('🎯 handleCorrectAnswer called with playerId:', playerId, 'cardId:', cardId);
 
     // Add to mochiFuda
     setMochiFuda((prev) => {
@@ -143,10 +143,7 @@ export function GameFlow() {
   if (gameState && playMode) {
     return (
       <TatamiViewContainer
-        playMode={playMode}
         gameState={gameState}
-        score={score}
-        mochiFuda={mochiFuda}
         onCorrectAnswer={handleCorrectAnswer}
         onIncorrectAnswer={handleIncorrectAnswer}
       />

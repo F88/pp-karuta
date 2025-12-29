@@ -1,5 +1,6 @@
 import type { DeckRecipe, StackRecipe, Player, Deck } from '@/models/karuta';
 import type { PlayMode } from '@/lib/karuta';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { GameSetupSummary } from './game-setup-summary';
 import { RepoSetup } from '@/components/layout/repo-setup';
@@ -94,10 +95,12 @@ export function IntegratedSelectorPresentation({
 
         {/* Error display */}
         {error && (
-          <div className="mb-6 rounded-lg bg-red-100 p-4 text-red-800 dark:bg-red-900 dark:text-red-200">
-            <p className="font-semibold">エラーが発生しました:</p>
-            <p className="text-sm">{error}</p>
-          </div>
+          <Alert variant="destructive" className="mb-6">
+            <AlertDescription>
+              <p className="font-semibold">エラーが発生しました:</p>
+              <p className="text-sm">{error}</p>
+            </AlertDescription>
+          </Alert>
         )}
 
         {/* Sections displayed sequentially */}

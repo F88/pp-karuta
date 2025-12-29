@@ -1,19 +1,16 @@
 import { useCallback } from 'react';
 import type { GameState } from '@/models/karuta';
 import type { NormalizedPrototype } from '@f88/promidas/types';
-import type { PlayMode } from '@/components/playMode/play-mode-selector-presentation';
 import { TatamiViewPresentation } from './tatami-view-presentation';
 import { DeckManager } from '@/lib/karuta/deck/deck-manager';
 
 export type TatamiViewContainerProps = {
-  playMode: PlayMode;
   gameState: GameState;
   onCorrectAnswer: (playerId: string, cardId: number) => void;
   onIncorrectAnswer: (playerId: string) => void;
 };
 
 export function TatamiViewContainer({
-  playMode,
   gameState,
   onCorrectAnswer,
   onIncorrectAnswer,
@@ -83,7 +80,6 @@ export function TatamiViewContainer({
 
   return (
     <TatamiViewPresentation
-      playMode={playMode}
       yomiFuda={currentYomiFuda}
       sharedTatamiCards={sharedTatamiCards}
       playerStates={gameState.playerStates}
