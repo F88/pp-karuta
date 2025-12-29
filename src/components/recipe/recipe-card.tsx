@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 export type RecipeCardProps = {
   recipe: DeckRecipe;
   onSelect: (recipe: DeckRecipe) => void;
+  isSelected?: boolean;
   isLoading?: boolean;
   isLoadingThisRecipe?: boolean;
 };
@@ -11,6 +12,7 @@ export type RecipeCardProps = {
 export function RecipeCard({
   recipe,
   onSelect,
+  isSelected = false,
   isLoading = false,
   isLoadingThisRecipe = false,
 }: RecipeCardProps) {
@@ -18,8 +20,12 @@ export function RecipeCard({
     <Button
       onClick={() => onSelect(recipe)}
       disabled={isLoading}
-      variant="outline"
-      className="group relative h-auto overflow-hidden rounded-2xl bg-white p-8 shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-2xl active:scale-95 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:scale-100 dark:bg-gray-800"
+      variant={isSelected ? 'default' : 'outline'}
+      className={`group relative h-auto overflow-hidden rounded-2xl p-8 shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-2xl active:scale-95 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:scale-100 ${
+        isSelected
+          ? 'bg-indigo-600 text-white dark:bg-indigo-500'
+          : 'bg-white dark:bg-gray-800'
+      }`}
     >
       {isLoadingThisRecipe && (
         <div className="bg-opacity-90 dark:bg-opacity-90 absolute inset-0 flex items-center justify-center bg-white dark:bg-gray-800">
@@ -33,25 +39,92 @@ export function RecipeCard({
       )}
       <div className="absolute inset-0 bg-linear-to-br from-blue-400 to-indigo-500 opacity-0 transition-opacity group-hover:opacity-10" />
       <div className="relative">
-        <h2 className="mb-2 text-2xl font-bold text-gray-800 dark:text-gray-100">
+        <h2
+          className={`mb-2 text-2xl font-bold ${
+            isSelected
+              ? 'text-white dark:text-white'
+              : 'text-gray-800 dark:text-gray-100'
+          }`}
+        >
           {recipe.title}
         </h2>
 
         {recipe.description && (
-          <p className="mb-3 text-sm text-gray-600 dark:text-gray-400">
+          <p
+            className={`mb-3 text-sm ${
+              isSelected
+                ? 'text-white/90 dark:text-white/90'
+                : 'text-gray-600 dark:text-gray-400'
+            }`}
+          >
             {recipe.description}
           </p>
         )}
 
-        <div className="mb-3 flex items-center gap-2 text-lg text-gray-600 dark:text-gray-400">
-          <span className="text-3xl font-bold text-indigo-600 dark:text-indigo-400">
-            {recipe.deckSize}
-          </span>
-          <span>{recipe.deckSize === 1 ? 'Race' : 'Races'}</span>
+        <div className="mb-3 space-y-1">
+          <div
+            className={`text-xs font-semibold ${
+              isSelected
+                ? 'text-white/80 dark:text-white/80'
+                : 'text-gray-500 dark:text-gray-400'
+            }`}
+          >
+            API Parameters:
+          </div>
+          <div
+            className={`space-y-0.5 text-sm ${
+              isSelected
+                ? 'text-white/90 dark:text-white/90'
+                : 'text-gray-700 dark:text-gray-300'
+            }`}
+          >
+            {recipe.apiParams.limit && (
+              <div>
+                <span className="font-medium">Limit:</span>{' '}
+                {recipe.apiParams.limit}
+              </div>
+            )}
+            {recipe.apiParams.userNm && (
+              <div>
+                <span className="font-medium">User:</span>{' '}
+                {recipe.apiParams.userNm}
+              </div>
+            )}
+            {recipe.apiParams.materialNm && (
+              <div>
+                <span className="font-medium">Material:</span>{' '}
+                {recipe.apiParams.materialNm}
+              </div>
+            )}
+            {recipe.apiParams.tagNm && (
+              <div>
+                <span className="font-medium">Tag:</span>{' '}
+                {recipe.apiParams.tagNm}
+              </div>
+            )}
+            {recipe.apiParams.eventNm && (
+              <div>
+                <span className="font-medium">Event:</span>{' '}
+                {recipe.apiParams.eventNm}
+              </div>
+            )}
+            {recipe.apiParams.offset !== undefined && (
+              <div>
+                <span className="font-medium">Offset:</span>{' '}
+                {recipe.apiParams.offset}
+              </div>
+            )}
+          </div>
         </div>
 
         <div className="mb-2 flex items-center gap-2">
-          <span className="text-xs font-semibold text-gray-500 dark:text-gray-400">
+          <span
+            className={`text-xs font-semibold ${
+              isSelected
+                ? 'text-white/80 dark:text-white/80'
+                : 'text-gray-500 dark:text-gray-400'
+            }`}
+          >
             Difficulty:
           </span>
           <span

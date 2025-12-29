@@ -29,15 +29,19 @@ export function TatamiViewContainer({
   const completedRaces = mochiFuda.length;
   const currentRace = completedRaces + 1;
 
-  // Get current YomiFuda (0-indexed by completedRaces)
-  const deckArray = [...gameState.deck.values()];
-  const currentYomiFuda = deckArray[completedRaces];
+  // Get current YomiFuda from reading order (handle out of bounds)
+  const currentYomiFudaId = gameState.readingOrder[completedRaces];
+  const currentYomiFuda = currentYomiFudaId
+    ? gameState.deck.get(currentYomiFudaId)
+    : null;
 
   // Get Tatami cards
   const tatamiCards = getPrototypesByIds(gameState.deck, gameState.tatami);
 
   const handleSelectCard = useCallback(
     (selectedCard: NormalizedPrototype) => {
+      if (!currentYomiFuda) return;
+
       const isCorrect = selectedCard.id === currentYomiFuda.id;
 
       console.group(isCorrect ? '✅ Correct!' : '❌ Incorrect!');
@@ -61,6 +65,25 @@ export function TatamiViewContainer({
     },
     [currentYomiFuda, onCorrectAnswer, onIncorrectAnswer],
   );
+
+  // Check if game is complete (all cards acquired)
+  if (completedRaces >= gameState.readingOrder.length) {
+    console.log('🎉 All cards acquired! Game complete.');
+    // Return empty div - GameFlow will handle transition to results
+    return <div>Loading results...</div>;
+  }
+
+  // Safety check: if currentYomiFuda is not found, use a placeholder
+  if (!currentYomiFuda) {
+    console.error(
+      'Current YomiFuda not found in deck:',
+      currentYomiFudaId,
+      'at index',
+      completedRaces,
+    );
+    // Return early or show error state
+    return <div>Error: YomiFuda not found</div>;
+  }
 
   return (
     <TatamiViewPresentation

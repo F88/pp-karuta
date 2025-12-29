@@ -11,10 +11,15 @@ export type {
 export type { Player } from './player';
 
 // Stack types
-export type { Stack } from './stack';
+export type { Stack, StackRecipe } from './stack';
 
 // Tatami types
 export type { Tatami } from './tatami';
 
 // Game types
-export type { GameState, GameResult, GameHistory } from './game';
+export type {
+  GameState,
+  GamePlayerState,
+  GameResult,
+  GameHistory,
+} from './game';

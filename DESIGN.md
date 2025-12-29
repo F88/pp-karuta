@@ -205,8 +205,8 @@ pp-karutaは、ProtoPediaのプロトタイプデータを活用したカルタ�
 
 ### プレイヤー人数
 
-- **1人**: シングルプレイ (タイムアタック、完走モード)
-- **2-4人**: マルチプレイヤー (早い者勝ち)
+- **1人**: シングルプレイ
+- **2-4人**: マルチプレイヤー
 
 各プレイヤーは獲得したToriFudaを自分のMochiFudaに保持し、最終的に最も多くの札を獲得したプレイヤーが勝利。
 
@@ -357,22 +357,50 @@ pp-karutaは、ProtoPediaのプロトタイプデータを活用したカルタ�
 
 #### モデル概要
 
-- **DeckRecipe**: ゲームモードの設計図（プリセット定義）
-    - 役割: カード枚数・難易度などのパラメータ
-    - 主要: `deckSize` (カード枚数)
-    - メタデータ: `difficulty`, `tags` (UI表示用)
+- **DeckRecipe**: Deck 生成の設計図（プリセット定義）
+    - 役割:
+        1. `setupSnapshot` に対する `ListPrototypesParams` (既存の型) を規定
+        2. 必要に応じて `setupSnapshot` の結果に対する追加フィルタリング機能を提供
+    - 主要: `ListPrototypesParams` (データ取得条件), 追加フィルタ条件
+    - メタデータ: `title`, `description`, `difficulty`, `tags` (UI表示用)
     - 実装: `src/lib/karuta/recipe/definitions.ts`
 
-- **Deck**: 生成されたカードデータセット
+```typescript
+// 例1: 基本形 - offset と limit のみ指定
+ListPrototypesParams(offset: 0, limit: 10_000)
+// 追加フィルタ: なし
+
+// 例2: ID 配列による追加フィルタ
+ListPrototypesParams(offset: 0, limit: 10_000)
+// 追加フィルタ: ID の配列によるフィルタリングを行う
+// 用途: 特定のキュレーション済みプロトタイプセットを使用
+
+// 例3: タグ名によるAPI側フィルタ
+ListPrototypesParams(offset: 0, limit: 10_000, tagNm: tagName)
+// 追加フィルタ: なし
+// 用途: 特定タグのプロトタイプのみでゲームを構成
+```
+
+- **Deck**: Prototype データの大きなプール
     - 構造: `Map<prototypeId, NormalizedPrototype>`
-    - 特性: ゲーム中不変、O(1)アクセス
-    - 生成: RecipeとPrototype配列から `generateDeck()` で生成
+    - 特性: 不変、O(1)アクセス
+    - サイズ: `setupSnapshot` の結果とフィルタリング結果で決まる (例: 1000件)
+    - 生成: DeckRecipe と Prototype 配列から `generateDeck()` で生成
     - 実装: `src/models/karuta/deck.ts`
 
-- **Stack**: 未出場カードの順序管理
-    - 構造: `number[]` (Deck の ID 配列)
-    - 関係: **Deck のキーを保持、`deck.get(id)` で参照**
-    - 特性: ゲーム進行で減少
+- **StackRecipe**: Stack 生成の設計図
+    - 役割: Deck から何件のIDを抽出し、どのようにソートするかを規定
+    - 主要: `maxSize` (抽出件数、`"all"` または数値), `sortMethod` (ソート方法)
+    - メタデータ: `title`, `description`, `difficulty`, `tags` (UI表示用)
+    - プリセット: 5件、10件、30件、全件
+    - 実装: `src/lib/karuta/recipe/definitions.ts`
+
+- **Stack**: Deck から抽出されたデータのID配列
+    - 構造: `number[]` (Deck の ID の部分配列)
+    - 関係: StackRecipe に基づいて Deck から抽出し、ランダムにソート
+    - サイズ: StackRecipe の `maxSize` で指定 (例: 5, 10, 30 or "all")
+    - 例: Deck が 1000件 → Stack は 10件
+    - 特性: 不変 (ゲーム中の Stack は GameState.stack として別管理)
     - 実装: `src/models/karuta/stack.ts`
 
 - **Tatami**: 場に出ているカード
@@ -389,28 +417,47 @@ pp-karutaは、ProtoPediaのプロトタイプデータを活用したカルタ�
 #### データフロー
 
 ```
-DeckRecipe (設計図: deckSize=10)
-  ↓ generateDeck(recipe, allPrototypes)
-Deck (Map<ID, Card>: 10枚のカードデータ)
-  ↓ createInitialState(deck)
-Stack (ID[]: シャッフル済みの全ID) + Tatami (ID[]: 最初の5枚)
-  ↓ ゲーム進行中
-deck.get(id) でカードデータを参照
+DeckRecipe (ListPrototypesParams, filter?)
+  ↓ setupSnapshot(ListPrototypesParams)
+API取得結果 (NormalizedPrototype[])
+  ↓ filter? (必要に応じて追加フィルタリング)
+Prototype配列 (例: 1000件)
+  ↓ generateDeck(recipe, prototypes)
+Deck (Map<ID, NormalizedPrototype>: 大きなデータプール、例: 1000件)
+
+StackRecipe (maxSize, sortMethod)
+  ↓ generateStack(stackRecipe, deck)
+Stack (number[]: Deckから抽出されたID配列、例: 10件)
 ```
 
 #### 設計判断
 
-**Recipe と Deck の分離**
+**DeckRecipe と Deck の分離**
 
-- Recipe: 再利用可能な設計図（プリセット）
-- Deck: ランダム生成された実体
-- 理由: 同じ Recipe から異なる Deck を繰り返し生成可能
+- DeckRecipe: 再利用可能な設計図（データ取得条件を規定）
+- Deck: DeckRecipe から生成されたデータプール
+- 理由: 同じ DeckRecipe から異なる Deck を繰り返し生成可能
+
+**DeckRecipe がデータ取得条件を決定**
+
+- DeckRecipe は `ListPrototypesParams` (既存の型) と追加フィルタを規定
+- 理由: ゲームモードごとに異なるデータセットが必要（例: 特定タグのみ、キュレーション済みセット）
+- 利点: データ取得ロジックを DeckRecipe に集約し、ゲームモードの追加・変更が容易
+
+**StackRecipe と Stack の分離**
+
+- StackRecipe: Stack 生成の設計図（抽出件数とソート方法を規定）
+- Stack: StackRecipe に基づいて Deck から生成されたID配列
+- 理由: 同じ Deck から異なる StackRecipe で複数の Stack を生成可能
 
 **Deck と Stack の分離**
 
-- Deck: データ本体（不変、Map構造）
-- Stack: 順序管理（可変、ID配列のみ）
-- 理由: データと順序の関心分離、メモリ効率、操作の柔軟性
+- Deck: 大きなデータプール（不変、Map構造、例: 1000件）
+- Stack: Deck から抽出されたID配列（不変、例: 5~30件）
+- 理由:
+    - Deck を大きく保つことで、同じ Deck から異なるサイズの Stack を複数生成可能
+    - データ本体 (Deck) と順序管理 (Stack) の関心分離、メモリ効率
+    - プレイヤーは stackSize のプリセット (5, 10, 30) または任意件数を選択可能
 
 **ID 配列の採用 (Stack/Tatami)**
 

@@ -35,6 +35,9 @@ export const LongId: Story = {
 };
 
 export const MultipleCards: Story = {
+  args: {
+    player: { id: '1', name: 'Player 1' },
+  },
   render: () => (
     <div className="flex flex-col gap-3" style={{ width: '300px' }}>
       <PlayerCard player={{ id: '1', name: 'プレイヤー1' }} />

@@ -28,6 +28,6 @@ tools/prompts/*
 *.log
 
 # Temporary ignore files
-src/App.tsx
-src/components/recipeSelector/RecipeSelectorContainer.tsx
-src/lib/repository/promidas-repository-manager.test.ts
+# src/App.tsx
+# src/lib/repository/promidas-repository-manager.test.ts
+src/components/game/game-flow.tsx

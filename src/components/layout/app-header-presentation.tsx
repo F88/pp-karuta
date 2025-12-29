@@ -1,6 +1,7 @@
 interface AppHeaderPresentationProps {
   homeButton: React.ReactNode;
   rulesButton: React.ReactNode;
+  playerButton: React.ReactNode;
   repoStateIndicator: React.ReactNode;
   themeToggle: React.ReactNode;
 }
@@ -8,6 +9,7 @@ interface AppHeaderPresentationProps {
 export function AppHeaderPresentation({
   homeButton,
   rulesButton,
+  playerButton,
   repoStateIndicator,
   themeToggle,
 }: AppHeaderPresentationProps) {
@@ -16,6 +18,7 @@ export function AppHeaderPresentation({
       <div className="flex items-center gap-4">
         {homeButton}
         {rulesButton}
+        {playerButton}
       </div>
       <div className="flex items-center gap-2">
         {repoStateIndicator}

@@ -23,6 +23,11 @@ export function AppHeader({ repoState, onRepoIndicatorClick }: AppHeaderProps) {
           <Link to="/intro">📜 掟</Link>
         </Button>
       }
+      playerButton={
+        <Button variant="ghost" asChild>
+          <Link to="/player">👥 プレイヤー</Link>
+        </Button>
+      }
       repoStateIndicator={
         <RepoStateIndicator state={repoState} onClick={onRepoIndicatorClick} />
       }

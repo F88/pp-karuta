@@ -6,44 +6,82 @@
  */
 import { useState, useCallback } from 'react';
 import { useNavigate } from '@tanstack/react-router';
-import { PlayModeSelectorContainer } from '@/components/playMode/play-mode-selector-container';
-import type { PlayMode } from '@/components/playMode/play-mode-selector-presentation';
-import { RecipeSelectorContainer } from '@/components/recipe/recipe-selector-container';
+import { IntegratedSelectorContainer } from '@/components/selector/integrated-selector-container';
 import { TatamiViewContainer } from '@/components/tatami/tatami-view-container';
 import { GameResultsContainer } from '@/components/gameResults/game-results-container';
-import { createInitialState } from '@/lib/karuta';
 import type { GameState } from '@/models/karuta';
+import type { PlayMode } from '@/lib/karuta';
+import { useGameSetup } from '@/hooks/useGameSetup';
+import { usePromidasRepository } from '@/hooks/use-promidas-repository';
 
 export function GameFlow() {
   const navigate = useNavigate();
 
-  const [playMode, setPlayMode] = useState<PlayMode | null>(null);
-  const [gameState, setGameState] = useState<Omit<GameState, 'players'> | null>(
-    null,
-  );
+  // Repository
+  const { repository } = usePromidasRepository();
+
+  const [gameState, setGameState] = useState<GameState | null>(null);
   const [score, setScore] = useState(0);
   const [mochiFuda, setMochiFuda] = useState<number[]>([]);
 
+  // Game setup (persisted across Top/Replay)
+  const setup = useGameSetup({
+    repository,
+    onGameStateCreated: (newGameState: GameState) => {
+      console.log('🎮 Game started');
+      setGameState(newGameState);
+      setScore(0);
+      setMochiFuda([]);
+    },
+  });
+
+  // Extract playMode from first playerState (all players share same mode)
+  const playMode: PlayMode | null = gameState?.playerStates[0]
+    ? 'keyboard' // TODO: Store playMode in GameState
+    : null;
+
   const handleCorrectAnswer = useCallback((cardId: number) => {
+    console.log('🎯 handleCorrectAnswer called with cardId:', cardId);
+
     // Add to mochiFuda
-    setMochiFuda((prev) => [...prev, cardId]);
+    setMochiFuda((prev) => {
+      const newMochiFuda = [...prev, cardId];
+      console.log('📝 Updated mochiFuda:', newMochiFuda);
+      return newMochiFuda;
+    });
 
     // Add 1 point
-    setScore((prev) => prev + 1);
+    setScore((prev) => {
+      const newScore = prev + 1;
+      console.log('📊 Updated score:', newScore);
+      return newScore;
+    });
 
     // Update Tatami: remove the card and add from stack if available
     setGameState((prev) => {
       if (!prev) return prev;
 
+      console.log(
+        '🎴 Before update - Tatami:',
+        prev.tatami,
+        'Stack:',
+        prev.stack,
+      );
+
+      // Remove the selected card from Tatami
       const newTatami = prev.tatami.filter((id) => id !== cardId);
       const newStack = [...prev.stack];
 
-      if (newStack.length > 0 && newTatami.length < 5) {
+      // If stack has cards, add one to Tatami
+      if (newStack.length > 0) {
         const nextCard = newStack.shift();
         if (nextCard !== undefined) {
           newTatami.push(nextCard);
+          console.log('➕ Added card from stack to Tatami:', nextCard);
         }
       }
+
+      console.log('🎴 After update - Tatami:', newTatami, 'Stack:', newStack);
 
       return {
         ...prev,
@@ -59,43 +97,34 @@ export function GameFlow() {
   }, []);
 
   const handleBackToTop = useCallback(() => {
-    setPlayMode(null);
+    // Return to selector (keep setup state)
     setGameState(null);
     setScore(0);
     setMochiFuda([]);
   }, []);
 
-  const handleReplay = useCallback(() => {
-    if (!gameState) return;
-
-    const newGameState = createInitialState(gameState.deck);
-    setGameState(newGameState);
+  const handleReplay = useCallback(async () => {
+    // Replay with same settings (no selector)
+    console.log('🔄 Replaying game with same settings');
     setScore(0);
     setMochiFuda([]);
-  }, [gameState]);
+    await setup.createGameState();
+  }, [setup]);
 
-  const handleShowIntro = () => {
+  const handleShowIntro = useCallback(() => {
     navigate({ to: '/intro' });
-  };
-
-  const handleModeSelected = useCallback((mode: PlayMode) => {
-    console.log('[GameFlow] handleModeSelected called with mode:', mode);
-    setPlayMode(mode);
-  }, []);
+  }, [navigate]);
 
   // Game is over when all cards are acquired
-  const isGameOver = gameState && mochiFuda.length >= gameState.deck.size;
+  const isGameOver = gameState && mochiFuda.length >= gameState.readingOrder.length;
 
-  // Show PlayMode selector first
-  if (playMode == null) {
-    return (
-      <PlayModeSelectorContainer
-        onModeSelected={handleModeSelected}
-        requireRepository={false}
-      />
-    );
-  }
+  console.log('📊 Game status:', {
+    mochiFudaCount: mochiFuda.length,
+    readingOrderLength: gameState?.readingOrder.length,
+    isGameOver,
+  });
 
+  // Show results if game is over
   if (isGameOver && gameState) {
     return (
       <GameResultsContainer
@@ -108,7 +137,8 @@ export function GameFlow() {
     );
   }
 
-  if (gameState) {
+  // Show game view if gameState exists
+  if (gameState && playMode) {
     return (
       <TatamiViewContainer
         playMode={playMode}
@@ -121,10 +151,10 @@ export function GameFlow() {
     );
   }
 
+  // Show integrated selector (default view)
   return (
-    <RecipeSelectorContainer
-      playMode={playMode}
-      onGameStateCreated={setGameState}
+    <IntegratedSelectorContainer
+      setup={setup}
       onShowIntro={handleShowIntro}
     />
   );

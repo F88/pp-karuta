@@ -26,6 +26,7 @@ export const Default: Story = {
   args: {
     homeButton: <Button variant="ghost">🎴</Button>,
     rulesButton: <Button variant="ghost">📜 掟</Button>,
+    playerButton: <Button variant="ghost">👥 プレイヤー</Button>,
     repoStateIndicator: (
       <RepoStateIndicatorPresentation state={{ type: 'not-created' }} />
     ),
@@ -41,6 +42,7 @@ export const WithValidToken: Story = {
   args: {
     homeButton: <Button variant="ghost">🎴</Button>,
     rulesButton: <Button variant="ghost">📜 掟</Button>,
+    playerButton: <Button variant="ghost">👥 プレイヤー</Button>,
     repoStateIndicator: (
       <RepoStateIndicatorPresentation
         state={{ type: 'created-token-valid', repository: {} as never }}
@@ -57,6 +59,7 @@ export const WithValidToken: Story = {
 export const WithInvalidToken: Story = {
   args: {
     homeButton: <Button variant="ghost">🎴</Button>,
+    playerButton: <Button variant="ghost">👥 プレイヤー</Button>,
     rulesButton: <Button variant="ghost">📜 掟</Button>,
     repoStateIndicator: (
       <RepoStateIndicatorPresentation
@@ -79,6 +82,7 @@ export const AllStates = {
         <AppHeaderPresentation
           homeButton={<Button variant="ghost">🎴</Button>}
           rulesButton={<Button variant="ghost">📜 掟</Button>}
+          playerButton={<Button variant="ghost">👥 プレイヤー</Button>}
           repoStateIndicator={
             <RepoStateIndicatorPresentation state={{ type: 'not-created' }} />
           }
@@ -94,6 +98,7 @@ export const AllStates = {
         <AppHeaderPresentation
           homeButton={<Button variant="ghost">🎴</Button>}
           rulesButton={<Button variant="ghost">📜 掟</Button>}
+          playerButton={<Button variant="ghost">👥 プレイヤー</Button>}
           repoStateIndicator={
             <RepoStateIndicatorPresentation
               state={{ type: 'created-token-valid', repository: {} as never }}
@@ -111,6 +116,7 @@ export const AllStates = {
         <AppHeaderPresentation
           homeButton={<Button variant="ghost">🎴</Button>}
           rulesButton={<Button variant="ghost">📜 掟</Button>}
+          playerButton={<Button variant="ghost">👥 プレイヤー</Button>}
           repoStateIndicator={
             <RepoStateIndicatorPresentation
               state={{ type: 'token-invalid', error: 'Invalid token' }}

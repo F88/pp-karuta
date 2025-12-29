@@ -33,6 +33,9 @@ export const LongName: Story = {
 };
 
 export const MultipleBadges: Story = {
+  args: {
+    player: { id: '1', name: 'Player 1' },
+  },
   render: () => (
     <div className="flex flex-wrap gap-2">
       <PlayerBadge player={{ id: '1', name: 'プレイヤー1' }} />
@@ -44,6 +47,9 @@ export const MultipleBadges: Story = {
 };
 
 export const CompactMultiple: Story = {
+  args: {
+    player: { id: '1', name: 'Player 1' },
+  },
   render: () => (
     <div className="flex flex-wrap gap-2">
       <PlayerBadge

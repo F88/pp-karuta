@@ -12,6 +12,7 @@ import { AppHeader } from '@/components/layout/app-header';
 import { RepoSetupDialog } from '@/components/layout/repo-setup-dialog';
 import { getRepositoryState } from '@/lib/repository/promidas-repo';
 import type { RepositoryState } from '@/lib/repository/promidas-repo';
+import { PlayerManager } from '@/lib/karuta';
 
 export const Route = createRootRoute({
   component: RootComponent,
@@ -29,6 +30,13 @@ function RootComponent() {
     }, 1000);
 
     return () => clearInterval(interval);
+  }, []);
+
+  // Initialize players on app startup
+  useEffect(() => {
+    PlayerManager.initialize().catch((error) => {
+      console.error('Failed to initialize players:', error);
+    });
   }, []);
 
   // const handleDialogOpenChange = (open: boolean) => {

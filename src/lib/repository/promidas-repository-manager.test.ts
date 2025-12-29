@@ -109,7 +109,7 @@ describe('PromidasRepositoryManager', () => {
       const repoPromise = manager.getRepository();
 
       // Wait a bit for createRepository to complete but setupSnapshot to still be pending
-      await new Promise(resolve => setTimeout(resolve, 10));
+      await new Promise((resolve) => setTimeout(resolve, 10));
 
       // Repository instance exists but validation is in progress
       const state = manager.getState();
@@ -333,7 +333,7 @@ describe('PromidasRepositoryManager', () => {
       const repoPromise = manager.getRepository();
 
       // Wait for repository instance to be created
-      await new Promise(resolve => setTimeout(resolve, 10));
+      await new Promise((resolve) => setTimeout(resolve, 10));
 
       // During validation
       expect(manager.getState().type).toBe('validating');

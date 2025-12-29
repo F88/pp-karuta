@@ -1,4 +1,5 @@
 import type { NormalizedPrototype } from '@f88/promidas/types';
+import type { ListPrototypesParams } from 'protopedia-api-v2-client';
 
 /**
  * Deck type - Map of prototype ID to prototype
@@ -8,12 +9,14 @@ export type Deck = Map<number, NormalizedPrototype>;
 
 /**
  * DeckRecipe - Deck generation rule definition
+ * Specifies data acquisition parameters for setupSnapshot
  */
 export type DeckRecipe = {
   id: string;
   title: string;
   description?: string; // Optional description
-  deckSize: number; // Number of YomiFuda-ToriFuda pairs
+  apiParams: ListPrototypesParams; // Parameters for setupSnapshot
+  idFilter?: number[]; // Optional ID filter for subset selection
   difficulty: 'beginner' | 'intermediate' | 'advanced'; // Difficulty level
   tags: string[]; // Tags for filtering (e.g., ['quick', 'practice'])
 };
