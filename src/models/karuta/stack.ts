@@ -12,8 +12,8 @@ export type StackRecipe = {
   id: string;
   title: string;
   description?: string;
-  maxSize: number | 'all';
-  sortMethod: 'random' | 'sequential';
-  difficulty: 'beginner' | 'intermediate' | 'advanced';
   tags: string[];
+  difficulty: 'beginner' | 'intermediate' | 'advanced';
+  sortMethod: 'random' | 'id-asc' | 'id-desc';
+  maxSize: number | 'all';
 };

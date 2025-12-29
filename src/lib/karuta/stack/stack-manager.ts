@@ -25,9 +25,21 @@ export class StackManager {
     // Get all IDs from Deck
     const allIds = Array.from(deck.keys());
 
-    // Shuffle if requested
-    const shuffle = recipe.sortMethod !== 'sequential';
-    const ids = shuffle ? this.shuffle(allIds) : allIds;
+    // Sort based on sortMethod
+    let ids: number[];
+    switch (recipe.sortMethod) {
+      case 'random':
+        ids = this.shuffle(allIds);
+        break;
+      case 'id-asc':
+        ids = [...allIds].sort((a, b) => a - b);
+        break;
+      case 'id-desc':
+        ids = [...allIds].sort((a, b) => b - a);
+        break;
+      default:
+        throw new Error(`Unknown sortMethod: ${recipe.sortMethod}`);
+    }
 
     // Extract subset or use all
     if (recipe.maxSize === 'all') {
