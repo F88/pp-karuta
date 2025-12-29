@@ -1,25 +1,26 @@
 import { useCallback } from 'react';
 import type { NormalizedPrototype } from '@f88/promidas/types';
-// import { getPrototypesByIds } from '@/lib/karuta';
+import type { GamePlayerState } from '@/models/karuta';
 import { GameResultsPresentation } from './game-results-presentation';
 import { DeckManager } from '@/lib/karuta';
 
 export type GameResultsContainerProps = {
   deck: Map<number, NormalizedPrototype>;
-  score: number;
-  mochiFuda: number[];
+  playerStates: GamePlayerState[];
   onBackToTop: () => void;
   onReplay: () => void;
 };
 
 export function GameResultsContainer({
   deck,
-  score,
-  mochiFuda,
+  playerStates,
   onBackToTop,
   onReplay,
 }: GameResultsContainerProps) {
-  const mochiFudaCards = DeckManager.getByIds(deck, mochiFuda);
+  // Calculate total score and mochiFuda from all players
+  const totalScore = playerStates.reduce((sum, ps) => sum + ps.score, 0);
+  const allMochiFudaIds = playerStates.flatMap((ps) => ps.mochiFuda);
+  const mochiFudaCards = DeckManager.getByIds(deck, allMochiFudaIds);
 
   const handleBackToTop = useCallback(() => {
     console.log('🏠 Back to TOP');
@@ -33,7 +34,8 @@ export function GameResultsContainer({
 
   return (
     <GameResultsPresentation
-      score={score}
+      playerStates={playerStates}
+      totalScore={totalScore}
       mochiFudaCards={mochiFudaCards}
       onBackToTop={handleBackToTop}
       onReplay={handleReplay}

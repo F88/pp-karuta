@@ -2,21 +2,24 @@ import type { NormalizedPrototype } from '@f88/promidas/types';
 import { Button } from '@/components/ui/button';
 
 export type TatamiGridProps = {
-  tatamiCards: NormalizedPrototype[];
+  normalizedPrototypes: NormalizedPrototype[];
   onCardClick: (card: NormalizedPrototype) => void;
 };
 
-export function TatamiGrid({ tatamiCards, onCardClick }: TatamiGridProps) {
+export function TatamiGrid({
+  normalizedPrototypes,
+  onCardClick,
+}: TatamiGridProps) {
   return (
     <div>
       <h2 className="mb-4 text-center text-2xl font-bold text-gray-800">
         🃏 ToriFuda - Select the correct card!
       </h2>
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
-        {tatamiCards.map((card, index) => (
+        {normalizedPrototypes.map((normalizedPrototype, index) => (
           <Button
-            key={card.id}
-            onClick={() => onCardClick(card)}
+            key={normalizedPrototype.id}
+            onClick={() => onCardClick(normalizedPrototype)}
             variant="outline"
             className="group relative h-auto overflow-hidden rounded-xl bg-white p-6 shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-2xl active:scale-95"
           >
@@ -25,8 +28,8 @@ export function TatamiGrid({ tatamiCards, onCardClick }: TatamiGridProps) {
             </div>
             <div className="mb-4 aspect-video overflow-hidden rounded-lg bg-gray-200">
               <img
-                src={card.mainUrl}
-                alt={card.prototypeNm}
+                src={normalizedPrototype.mainUrl}
+                alt={normalizedPrototype.prototypeNm}
                 className="h-full w-full object-cover"
                 onError={(e) => {
                   e.currentTarget.src =
@@ -35,16 +38,18 @@ export function TatamiGrid({ tatamiCards, onCardClick }: TatamiGridProps) {
               />
             </div>
             <h3 className="mb-2 line-clamp-2 text-lg font-semibold text-gray-800">
-              {card.prototypeNm}
+              {normalizedPrototype.prototypeNm}
             </h3>
             <p className="line-clamp-3 text-sm text-gray-600">
-              {card.summary || 'No summary available'}
+              {normalizedPrototype.summary || 'No summary available'}
             </p>
-            <div className="mt-3 text-xs text-gray-400">ID: {card.id}</div>
+            <div className="mt-3 text-xs text-gray-400">
+              ID: {normalizedPrototype.id}
+            </div>
           </Button>
         ))}
       </div>
-      {tatamiCards.length === 0 && (
+      {normalizedPrototypes.length === 0 && (
         <div className="py-20 text-center text-gray-500">
           <p className="text-xl">No cards on Tatami</p>
         </div>

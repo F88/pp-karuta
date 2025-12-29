@@ -23,8 +23,6 @@ export function GameFlow() {
     repoState.type === 'created-token-valid' ? repoState.repository : null;
 
   const [gameState, setGameState] = useState<GameState | null>(null);
-  const [score, setScore] = useState(0);
-  const [mochiFuda, setMochiFuda] = useState<number[]>([]);
 
   // Game setup (persisted across Top/Replay)
   const setup = useGameSetup({
@@ -32,8 +30,6 @@ export function GameFlow() {
     onGameStateCreated: (newGameState: GameState) => {
       console.log('🎮 Game started');
       setGameState(newGameState);
-      setScore(0);
-      setMochiFuda([]);
     },
   });
 
@@ -45,71 +41,80 @@ export function GameFlow() {
   const handleCorrectAnswer = useCallback((playerId: string, cardId: number) => {
     console.log('🎯 handleCorrectAnswer called with playerId:', playerId, 'cardId:', cardId);
 
-    // Add to mochiFuda
-    setMochiFuda((prev) => {
-      const newMochiFuda = [...prev, cardId];
-      console.log('📝 Updated mochiFuda:', newMochiFuda);
-      return newMochiFuda;
-    });
-
-    // Add 1 point
-    setScore((prev) => {
-      const newScore = prev + 1;
-      console.log('📊 Updated score:', newScore);
-      return newScore;
-    });
-
-    // Update Tatami: remove the card and add from stack if available
     setGameState((prev) => {
       if (!prev) return prev;
 
-      console.log(
-        '🎴 Before update - Tatami:',
-        prev.tatami,
-        'Stack:',
-        prev.stack,
-      );
+      // Update player states
+      const updatedPlayerStates = prev.playerStates.map((ps) => {
+        if (ps.player.id !== playerId) return ps;
 
-      // Remove the selected card from Tatami
-      const newTatami = prev.tatami.filter((id) => id !== cardId);
+        // Remove card from player's tatami
+        const newPlayerTatami = ps.tatami.filter((id) => id !== cardId);
+
+        // Add next card from stack to player's tatami
+        if (prev.stack.length > 0) {
+          newPlayerTatami.push(prev.stack[0]);
+        }
+
+        return {
+          ...ps,
+          tatami: newPlayerTatami,
+          mochiFuda: [...ps.mochiFuda, cardId],
+          score: ps.score + 1,
+        };
+      });
+
+      // Update shared tatami
+      const newSharedTatami = prev.tatami.filter((id) => id !== cardId);
       const newStack = [...prev.stack];
 
-      // If stack has cards, add one to Tatami
+      // Add next card from stack to shared tatami
       if (newStack.length > 0) {
         const nextCard = newStack.shift();
         if (nextCard !== undefined) {
-          newTatami.push(nextCard);
-          console.log('➕ Added card from stack to Tatami:', nextCard);
+          newSharedTatami.push(nextCard);
         }
       }
 
-      console.log('🎴 After update - Tatami:', newTatami, 'Stack:', newStack);
+      console.log('🎴 Updated - SharedTatami:', newSharedTatami, 'Stack:', newStack);
 
       return {
         ...prev,
-        tatami: newTatami,
+        tatami: newSharedTatami,
         stack: newStack,
+        playerStates: updatedPlayerStates,
       };
     });
   }, []);
 
-  const handleIncorrectAnswer = useCallback(() => {
-    // Subtract 1 point (minimum 0)
-    setScore((prev) => Math.max(0, prev - 1));
+  const handleIncorrectAnswer = useCallback((playerId: string) => {
+    setGameState((prev) => {
+      if (!prev) return prev;
+
+      const updatedPlayerStates = prev.playerStates.map((ps) => {
+        if (ps.player.id !== playerId) return ps;
+
+        return {
+          ...ps,
+          score: Math.max(0, ps.score - 1),
+        };
+      });
+
+      return {
+        ...prev,
+        playerStates: updatedPlayerStates,
+      };
+    });
   }, []);
 
   const handleBackToTop = useCallback(() => {
     // Return to selector (keep setup state)
     setGameState(null);
-    setScore(0);
-    setMochiFuda([]);
   }, []);
 
   const handleReplay = useCallback(async () => {
     // Replay with same settings (no selector)
     console.log('🔄 Replaying game with same settings');
-    setScore(0);
-    setMochiFuda([]);
     await setup.createGameState();
   }, [setup]);
 
@@ -118,10 +123,14 @@ export function GameFlow() {
   }, [navigate]);
 
   // Game is over when all cards are acquired
-  const isGameOver = gameState && mochiFuda.length >= gameState.readingOrder.length;
+  const totalMochiFuda = gameState?.playerStates.reduce(
+    (sum, ps) => sum + ps.mochiFuda.length,
+    0,
+  ) || 0;
+  const isGameOver = gameState && totalMochiFuda >= gameState.readingOrder.length;
 
   console.log('📊 Game status:', {
-    mochiFudaCount: mochiFuda.length,
+    totalMochiFuda,
     readingOrderLength: gameState?.readingOrder.length,
     isGameOver,
   });
@@ -131,8 +140,7 @@ export function GameFlow() {
     return (
       <GameResultsContainer
         deck={gameState.deck}
-        score={score}
-        mochiFuda={mochiFuda}
+        playerStates={gameState.playerStates}
         onBackToTop={handleBackToTop}
         onReplay={handleReplay}
       />

@@ -1,20 +1,26 @@
 import type { NormalizedPrototype } from '@f88/promidas/types';
+import type { GamePlayerState } from '@/models/karuta';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 
 export type GameResultsPresentationProps = {
-  score: number;
+  playerStates: GamePlayerState[];
+  totalScore: number;
   mochiFudaCards: NormalizedPrototype[];
   onBackToTop: () => void;
   onReplay: () => void;
 };
 
 export function GameResultsPresentation({
-  score,
+  playerStates,
+  totalScore,
   mochiFudaCards,
   onBackToTop,
   onReplay,
 }: GameResultsPresentationProps) {
+  // Sort players by score (descending)
+  const rankedPlayers = [...playerStates].sort((a, b) => b.score - a.score);
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-orange-50 p-8">
       <div className="mx-auto max-w-4xl">
@@ -30,8 +36,49 @@ export function GameResultsPresentation({
         <Card className="mb-6">
           <CardContent className="p-6">
             <div className="text-center">
-              <p className="mb-2 text-lg text-gray-600">Final Score</p>
-              <p className="text-5xl font-bold text-indigo-600">{score}</p>
+              <p className="mb-2 text-lg text-gray-600">Total Score</p>
+              <p className="text-5xl font-bold text-indigo-600">{totalScore}</p>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Player Rankings */}
+        <Card className="mb-6">
+          <CardHeader>
+            <h2 className="text-2xl font-bold text-gray-800">
+              🏆 Player Rankings
+            </h2>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-3">
+              {rankedPlayers.map((ps, index) => (
+                <div
+                  key={ps.player.id}
+                  className="flex items-center justify-between rounded-lg border p-4"
+                >
+                  <div className="flex items-center gap-4">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-full bg-indigo-100 text-2xl font-bold text-indigo-600">
+                      #{index + 1}
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-bold text-gray-800">
+                        {ps.player.name}
+                      </h3>
+                      <p className="text-sm text-gray-600">
+                        {ps.mochiFuda.length} cards acquired
+                      </p>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <Badge
+                      variant="outline"
+                      className="bg-indigo-100 text-2xl font-bold text-indigo-700"
+                    >
+                      {ps.score} pts
+                    </Badge>
+                  </div>
+                </div>
+              ))}
             </div>
           </CardContent>
         </Card>

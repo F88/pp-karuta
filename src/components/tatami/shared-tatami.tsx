@@ -15,7 +15,7 @@ export function SharedTatami({ tatamiCards }: SharedTatamiProps) {
         {tatamiCards.map((card, index) => (
           <ToriFudaCard
             key={card.id}
-            card={card}
+            normalizedPrototype={card}
             index={index}
             isClickable={false}
           />

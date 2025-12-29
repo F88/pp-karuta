@@ -46,7 +46,7 @@ export function TatamiViewPresentation({
           tatamiCount={sharedTatamiCards.length}
         />
 
-        <YomiFudaDisplay yomiFuda={yomiFuda} />
+        <YomiFudaDisplay normalizedPrototype={yomiFuda} />
 
         <SharedTatami tatamiCards={sharedTatamiCards} />
 

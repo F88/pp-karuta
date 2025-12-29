@@ -2,14 +2,14 @@ import type { NormalizedPrototype } from '@f88/promidas/types';
 import { Card, CardContent } from '@/components/ui/card';
 
 export type ToriFudaCardProps = {
-  card: NormalizedPrototype;
+  normalizedPrototype: NormalizedPrototype;
   index: number;
   isClickable?: boolean;
   onClick?: (card: NormalizedPrototype) => void;
 };
 
 export function ToriFudaCard({
-  card,
+  normalizedPrototype: card,
   index,
   isClickable = false,
   onClick,
@@ -38,13 +38,17 @@ export function ToriFudaCard({
             }}
           />
         </div>
-        <h3 className="mb-1 line-clamp-2 text-sm font-semibold text-gray-800">
-          {card.prototypeNm}
-        </h3>
-        <p className="line-clamp-2 text-xs text-gray-600">
-          {card.summary || 'No summary available'}
-        </p>
-        <div className="mt-2 text-xs text-gray-400">ID: {card.id}</div>
+        {import.meta.env.VITE_DEBUG_MODE === 'true' && (
+          <>
+            <h3 className="mb-1 line-clamp-2 text-sm font-semibold text-gray-800">
+              {card.prototypeNm}
+            </h3>
+            <p className="line-clamp-2 text-xs text-gray-600">
+              {card.summary || 'No summary available'}
+            </p>
+            <div className="mt-2 text-xs text-gray-400">ID: {card.id}</div>
+          </>
+        )}
       </CardContent>
     </Card>
   );

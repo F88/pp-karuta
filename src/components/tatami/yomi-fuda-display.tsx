@@ -3,10 +3,12 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 
 export type YomiFudaDisplayProps = {
-  yomiFuda: NormalizedPrototype;
+  normalizedPrototype: NormalizedPrototype;
 };
 
-export function YomiFudaDisplay({ yomiFuda }: YomiFudaDisplayProps) {
+export function YomiFudaDisplay({
+  normalizedPrototype: yomiFuda,
+}: YomiFudaDisplayProps) {
   return (
     <Card className="mb-8 shadow-xl">
       <CardHeader>

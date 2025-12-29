@@ -42,7 +42,7 @@ export function PlayerTatami({
           {tatamiCards.map((card, index) => (
             <ToriFudaCard
               key={card.id}
-              card={card}
+              normalizedPrototype={card}
               index={index}
               isClickable={true}
               onClick={onCardClick}
