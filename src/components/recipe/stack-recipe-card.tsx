@@ -80,32 +80,35 @@ export function StackRecipeCard({
           </p>
         )}
 
-        <div className="mb-2 space-y-1">
-          <div className={`text-sm ${textClass.content}`}>
-            <span className="font-medium">Size:</span>{' '}
-            {recipe.maxSize === 'all' ? 'All cards' : `${recipe.maxSize} cards`}
-          </div>
-          <div className={`text-sm ${textClass.content}`}>
-            <span className="font-medium">Order:</span>{' '}
-            {getSortMethodLabel(recipe.sortMethod)}
-          </div>
-        </div>
-
         {import.meta.env.VITE_DEBUG_MODE === 'true' && (
-          <div className="mb-2 flex items-center gap-2">
-            <span className={`text-xs font-semibold ${textClass.label}`}>
-              Difficulty:
-            </span>
-            <span
-              className={`rounded px-2 py-1 text-xs font-bold ${getDifficultyBadgeClass(
-                recipe.difficulty,
-                isSelected,
-              )}`}
-            >
-              {recipe.difficulty}
-            </span>
+          <div className="mb-2 space-y-1">
+            <div className={`text-sm ${textClass.content}`}>
+              <span className="font-medium">Size:</span>{' '}
+              {recipe.maxSize === 'all'
+                ? 'All cards'
+                : `${recipe.maxSize} cards`}
+            </div>
+            <div className={`text-sm ${textClass.content}`}>
+              <span className="font-medium">Order:</span>{' '}
+              {getSortMethodLabel(recipe.sortMethod)}
+            </div>
           </div>
         )}
+
+        <div className="mb-2 flex items-center gap-2">
+          <span className={`text-xs font-semibold ${textClass.label}`}>
+            Difficulty:
+          </span>
+          <span
+            className={`rounded px-2 py-1 text-xs font-bold ${getDifficultyBadgeClass(
+              recipe.difficulty,
+              isSelected,
+            )}`}
+          >
+            {recipe.difficulty}
+          </span>
+        </div>
+
         {import.meta.env.VITE_DEBUG_MODE === 'true' ||
           (recipe.tags.length > 0 && (
             <div className="flex flex-wrap gap-1">

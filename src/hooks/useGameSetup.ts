@@ -6,6 +6,7 @@ import {
   GameManager,
   PlayerManager,
   StackManager,
+  StackRecipeManager,
 } from '@/lib/karuta';
 import type { ProtopediaInMemoryRepository } from '@f88/promidas';
 
@@ -61,7 +62,11 @@ export function useGameSetup({
   // Stack state - 生成済みStackを保持（正確な枚数表示のため）
   const [generatedStack, setGeneratedStack] = useState<number[] | null>(null);
   const [selectedStackRecipe, setSelectedStackRecipe] =
-    useState<StackRecipe | null>(null);
+    useState<StackRecipe | null>(() => {
+      // Default to 10 Cards recipe
+      const defaultRecipe = StackRecipeManager.findById('standard-10');
+      return defaultRecipe || null;
+    });
 
   // Player state
   const [availablePlayers, setAvailablePlayers] = useState<Player[]>([]);

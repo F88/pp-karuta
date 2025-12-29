@@ -1,13 +1,12 @@
 import type { DeckRecipe, StackRecipe, Player, Deck } from '@/models/karuta';
 import type { PlayMode } from '@/lib/karuta';
-import { GameManager } from '@/lib/karuta';
 import { Button } from '@/components/ui/button';
-import { DeckRecipeCard } from '@/components/recipe/deck-recipe-card';
-import { StackRecipeCard } from '@/components/recipe/stack-recipe-card';
-import { PlayerSelectionCard } from '@/components/player/player-selection-card';
 import { GameSetupSummary } from './game-setup-summary';
 import { RepoSetup } from '@/components/layout/repo-setup';
-import { Keyboard, Smartphone } from 'lucide-react';
+import { PlayModeSelector } from './play-mode-selector';
+import { PlayersSelector } from './players-selector';
+import { DeckRecipeSelector } from './deck-recipe-selector';
+import { StackRecipeSelector } from './stack-recipe-selector';
 
 export type IntegratedSelectorPresentationProps = {
   // PlayMode selection
@@ -71,9 +70,6 @@ export function IntegratedSelectorPresentation({
   error,
   onShowIntro,
 }: IntegratedSelectorPresentationProps) {
-  // Check if deck is empty (0 cards)
-  const isDeckEmpty = generatedDeck !== null && generatedDeck.size === 0;
-
   // Calculate expected stack size (use actual if available)
   const stackSize = generatedStack
     ? generatedStack.length
@@ -120,43 +116,11 @@ export function IntegratedSelectorPresentation({
             <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100">
               1. 入力方式
             </h2>
-            <div className="grid grid-cols-2 gap-4">
-              <Button
-                onClick={() => onSelectPlayMode('keyboard')}
-                disabled={isLoading}
-                variant={
-                  selectedPlayMode === 'keyboard' ? 'default' : 'outline'
-                }
-                className={`h-auto p-6 ${
-                  selectedPlayMode === 'keyboard'
-                    ? 'bg-indigo-600 text-white dark:bg-indigo-500'
-                    : ''
-                }`}
-              >
-                <div className="flex flex-col items-center gap-2">
-                  <Keyboard className="h-12 w-12" />
-                  <span className="text-lg font-semibold">Keyboard</span>
-                  <span className="text-xs">PC環境向け</span>
-                </div>
-              </Button>
-
-              <Button
-                onClick={() => onSelectPlayMode('touch')}
-                disabled={isLoading}
-                variant={selectedPlayMode === 'touch' ? 'default' : 'outline'}
-                className={`h-auto p-6 ${
-                  selectedPlayMode === 'touch'
-                    ? 'bg-indigo-600 text-white dark:bg-indigo-500'
-                    : ''
-                }`}
-              >
-                <div className="flex flex-col items-center gap-2">
-                  <Smartphone className="h-12 w-12" />
-                  <span className="text-lg font-semibold">Touch</span>
-                  <span className="text-xs">モバイル向け</span>
-                </div>
-              </Button>
-            </div>
+            <PlayModeSelector
+              selectedPlayMode={selectedPlayMode}
+              onSelectPlayMode={onSelectPlayMode}
+              isLoading={isLoading}
+            />
           </div>
 
           {/* Section 2: Players */}
@@ -164,27 +128,12 @@ export function IntegratedSelectorPresentation({
             <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100">
               2. プレイヤー選択
             </h2>
-            <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
-              {availablePlayers.map((player) => {
-                const isSelected = selectedPlayerIds.includes(player.id);
-                const maxPlayersReached =
-                  selectedPlayerIds.length >= GameManager.MAX_GAME_PLAYERS;
-                return (
-                  <PlayerSelectionCard
-                    key={player.id}
-                    player={player}
-                    isSelected={isSelected}
-                    onToggle={onTogglePlayer}
-                    isDisabled={isLoading || (!isSelected && maxPlayersReached)}
-                  />
-                );
-              })}
-            </div>
-            {selectedPlayerIds.length >= GameManager.MAX_GAME_PLAYERS && (
-              <p className="text-center text-sm text-gray-500 dark:text-gray-400">
-                最大{GameManager.MAX_GAME_PLAYERS}人まで選択できます
-              </p>
-            )}
+            <PlayersSelector
+              availablePlayers={availablePlayers}
+              selectedPlayerIds={selectedPlayerIds}
+              onTogglePlayer={onTogglePlayer}
+              isLoading={isLoading}
+            />
           </div>
 
           {/* Section 3: DeckRecipe */}
@@ -192,74 +141,39 @@ export function IntegratedSelectorPresentation({
             <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100">
               3. Deck Recipe
             </h2>
+
             {!isRepoReady && (
               <div className="flex justify-center py-8">
                 <RepoSetup />
               </div>
             )}
+
             {isRepoReady && (
-              <>
-                <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
-                  {deckRecipes.map((recipe) => (
-                    <DeckRecipeCard
-                      key={recipe.id}
-                      recipe={recipe}
-                      onSelect={onSelectDeckRecipe}
-                      isSelected={selectedDeckRecipe?.id === recipe.id}
-                      isLoading={isDeckLoading}
-                      isLoadingThisRecipe={loadingDeckRecipeId === recipe.id}
-                    />
-                  ))}
-                </div>
-                {generatedDeck && (
-                  <div className="rounded-lg border border-green-200 bg-green-50 p-3 dark:border-green-800 dark:bg-green-950">
-                    <p className="text-sm font-semibold text-green-800 dark:text-green-200">
-                      ✓ Deck生成完了: {generatedDeck.size}枚
-                    </p>
-                  </div>
-                )}
-              </>
+              <DeckRecipeSelector
+                deckRecipes={deckRecipes}
+                selectedDeckRecipe={selectedDeckRecipe}
+                onSelectDeckRecipe={onSelectDeckRecipe}
+                isDeckLoading={isDeckLoading}
+                loadingDeckRecipeId={loadingDeckRecipeId}
+                generatedDeck={generatedDeck}
+              />
             )}
           </div>
 
-          {/* Section 4: StackRecipe - Hide when deck is empty */}
-          {!isDeckEmpty && (
+          {/* Section 4: StackRecipe */}
+          {isRepoReady && (
             <div className="space-y-4">
               <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100">
                 4. Stack Recipe (枚数)
               </h2>
-              <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
-                {stackRecipes.map((recipe) => (
-                  <StackRecipeCard
-                    key={recipe.id}
-                    recipe={recipe}
-                    onSelect={onSelectStackRecipe}
-                    isSelected={selectedStackRecipe?.id === recipe.id}
-                    isLoading={isLoading}
-                  />
-                ))}
-              </div>
-              {generatedStack && (
-                <div className="rounded-lg border border-green-200 bg-green-50 p-3 dark:border-green-800 dark:bg-green-950">
-                  <p className="text-sm font-semibold text-green-800 dark:text-green-200">
-                    ✓ Stack生成完了: {generatedStack.length}枚
-                  </p>
-                </div>
-              )}
-            </div>
-          )}
-
-          {/* Warning message when deck is empty */}
-          {isDeckEmpty && (
-            <div className="space-y-4">
-              <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100">
-                4. Stack Recipe (枚数)
-              </h2>
-              <div className="rounded-lg border border-yellow-200 bg-yellow-50 p-4 dark:border-yellow-800 dark:bg-yellow-950">
-                <p className="text-sm font-semibold text-yellow-800 dark:text-yellow-200">
-                  ⚠️ Deckが空のため、Stackを生成できません
-                </p>
-              </div>
+              <StackRecipeSelector
+                stackRecipes={stackRecipes}
+                selectedStackRecipe={selectedStackRecipe}
+                onSelectStackRecipe={onSelectStackRecipe}
+                isLoading={isLoading}
+                generatedStack={generatedStack}
+                generatedDeck={generatedDeck}
+              />
             </div>
           )}
         </div>
@@ -278,7 +192,7 @@ export function IntegratedSelectorPresentation({
         <div className="mt-8 flex justify-center">
           <Button
             onClick={onStartGame}
-            disabled={!canStartGame || isLoading || isDeckEmpty}
+            disabled={!canStartGame || isLoading}
             size="lg"
             className="h-16 px-12 text-xl font-bold"
           >
@@ -293,14 +207,9 @@ export function IntegratedSelectorPresentation({
           </Button>
         </div>
 
-        {!canStartGame && !isDeckEmpty && (
+        {!canStartGame && (
           <p className="mt-4 text-center text-sm text-gray-500 dark:text-gray-400">
             全ての項目を選択してください
-          </p>
-        )}
-        {isDeckEmpty && (
-          <p className="mt-4 text-center text-sm text-red-600 dark:text-red-400">
-            Deckが空のため、ゲームを開始できません
           </p>
         )}
       </div>
