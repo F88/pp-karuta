@@ -4,6 +4,12 @@
 
 pp-karutaは、ProtoPediaのプロトタイプデータを活用したカルタゲームアプリケーションです。
 
+## STYLING
+
+- Shared theme: Use shadcn/ui + Tailwind CSS variables (defined in src/index.css) for all pages by default.
+- Intro page theme: /intro is intentionally isolated and must use its own Matrix-style theme from src/components/intro/IntroPage.css.
+- Rule: Do not “normalize” /intro to the shared theme. The Intro route should avoid the shared ThemeProvider and should enforce its theme via a dedicated body class.
+
 ## Data Source
 
 ### ProtoPedia API v2 and PROMIDAS
@@ -47,20 +53,20 @@ pp-karutaは、ProtoPediaのプロトタイプデータを活用したカルタ�
 
 #### 札の構成
 
-**YomiFuda(読み札・文字札)**
+##### YomiFuda(読み札・文字札)
 
 - ProtoPedia API から取得したプロトタイプの説明文(description)または概要
 - 画面上部に表示される
 - 1枚ずつ順番に表示
 
-**ToriFuda(取り札・絵札)**
+##### ToriFuda(取り札・絵札)
 
 - ProtoPedia API から取得したプロトタイプの画像(サムネイル)
 - プロトタイプのタイトル
 - `prototypeId` を持ち、YomiFuda との対応関係を判定できる
 - 複数枚が「Tatami(畳)」エリアに配置される
 
-**札の枚数**
+##### 札の枚数
 
 - 伝統的なかるたの46枚制限はなし
 - ProtoPedia API から取得できる範囲で任意の枚数を使用可能
@@ -69,7 +75,7 @@ pp-karutaは、ProtoPediaのプロトタイプデータを活用したカルタ�
 
 ##### Phase 0: 入力方式選択 (タイトル画面)
 
-**入力方式選択**
+###### 入力方式選択
 
 - **Keyboard**: ショートカットキーで操作 (PC環境)
     - 共通のTatamiエリアを使用
@@ -83,11 +89,11 @@ pp-karutaは、ProtoPediaのプロトタイプデータを活用したカルタ�
     - プレイヤーは自分のエリアのみタップ可能
     - 画面レイアウトはプレイヤー数に応じて分割
 
-**この選択により後続の画面レイアウトが確定する**
+この選択により後続の画面レイアウトが確定する
 
 ##### Phase 1: プレイヤー人数選択
 
-**プレイヤー人数選択**
+###### プレイヤー人数選択
 
 - 1人〜4人から選択
 - Touchモードの場合、選択した人数により画面分割が決定
@@ -97,7 +103,7 @@ pp-karutaは、ProtoPediaのプロトタイプデータを活用したカルタ�
 
 ##### Phase 2: BOX選択
 
-**BOX一覧表示**
+###### BOX一覧表示
 
 - 利用可能なBOXを表示
 - 各BOXには以下の仕様が定義されている:
@@ -106,14 +112,14 @@ pp-karutaは、ProtoPediaのプロトタイプデータを活用したカルタ�
     - 難易度設定
     - タイムリミット (オプション)
 
-**BOX選択**
+###### BOX選択
 
 - プレイヤーが任意のBOXを選択
 - 選択されたBOX仕様に基づいてYomiFuda/ToriFudaを生成
 
 ##### Phase 3: ゲーム初期化
 
-**データ準備**
+###### データ準備
 
 1. PROMIDASから選択されたBOX仕様に合致するPrototypeDataを取得
 2. PrototypeDataからYomiFuda と ToriFudaを生成
@@ -125,7 +131,7 @@ pp-karutaは、ProtoPediaのプロトタイプデータを活用したカルタ�
 5. **初期Tatami配置**
     - Stackから最初の5枚をpopしてTatamiに配置
 
-**ゲーム状態初期化**
+###### ゲーム状態初期化
 
 - 現在のRace = 1
 - 総Race数 = YomiFudaの枚数
@@ -136,11 +142,13 @@ pp-karutaは、ProtoPediaのプロトタイプデータを活用したカルタ�
 
 ##### Phase 4: ゲームプレイ (Race進行)
 
-\*_1 Game = (YomiFuda 数 = ToriFuda 数) _ Race
+`1 Game = (YomiFuda数 = ToriFuda数) x Race`
 
-**1 Race = YomiFudaが表示されてから対応するToriFudaが取られるまで**
+###### 1 Raceの定義
 
-**Race開始**
+1 Race = YomiFudaが表示されてから対応するToriFudaが取られるまで
+
+###### Race開始
 
 1. 現在のYomiFudaを表示
 2. Tatamiには既に配置済みのToriFudaが表示されている
@@ -148,7 +156,7 @@ pp-karutaは、ProtoPediaのプロトタイプデータを活用したカルタ�
     - 正解が含まれない場合: 現在のYomiFudaはスキップ (該当札なし)
     - 各ToriFudaに番号を表示 (1-5, またはTatami上の枚数に応じて)
 
-**プレイヤーアクション (早い者勝ち)**
+###### プレイヤーアクション(早い者勝ち)
 
 - 全プレイヤーが同時に入力可能
 - Keyboard入力:
@@ -157,7 +165,7 @@ pp-karutaは、ProtoPediaのプロトタイプデータを活用したカルタ�
     - 各プレイヤー専用のTatamiエリア (同じToriFudaを表示)
     - 自分のエリアをタップして選択
 
-**判定**
+###### 判定
 
 - 最初に正解のToriFudaを選択したプレイヤーが獲得
 - **正解時**:
@@ -172,11 +180,11 @@ pp-karutaは、ProtoPediaのプロトタイプデータを活用したカルタ�
     2. そのプレイヤーは引き続き選択可能
     3. 誰かが正解するまで継続
 
-**Race終了条件**
+###### Race終了条件
 
 - いずれかのプレイヤーが正解のToriFudaを取得
 
-**ゲーム終盤の挙動**
+###### ゲーム終盤の挙動
 
 - Stackが空になった後もゲームは継続
 - Tatami上の札は取られるたびに減っていく
@@ -184,12 +192,12 @@ pp-karutaは、ProtoPediaのプロトタイプデータを活用したカルタ�
 
 ##### Phase 5: ゲーム終了
 
-**終了条件**
+###### 終了条件
 
 - すべてのYomiFuda/ToriFudaペアがなくなる
 - または制限時間終了 (BOX仕様による)
 
-**結果表示**
+###### 結果表示
 
 - 各プレイヤーの獲得枚数
 - スコア
@@ -197,8 +205,8 @@ pp-karutaは、ProtoPediaのプロトタイプデータを活用したカルタ�
 
 ### プレイヤー人数
 
-- **1人**: シングルプレイ (タイムアタック、完走モード)
-- **2-4人**: マルチプレイヤー (早い者勝ち)
+- **1人**: シングルプレイ
+- **2-4人**: マルチプレイヤー
 
 各プレイヤーは獲得したToriFudaを自分のMochiFudaに保持し、最終的に最も多くの札を獲得したプレイヤーが勝利。
 
@@ -214,7 +222,7 @@ pp-karutaは、ProtoPediaのプロトタイプデータを活用したカルタ�
 
 ### 画面遷移フロー
 
-```
+```text
 1. タイトル画面
    - アプリタイトル
    - 入力方式選択 (Keyboard / Touch)
@@ -257,24 +265,24 @@ pp-karutaは、ProtoPediaのプロトタイプデータを活用したカルタ�
 - ルール説明へのリンク
 - PROMIDAS統計情報(オプション)
 
-**この画面で入力方式を決定することで、以降の画面レイアウトが確定する**
+この画面で入力方式を決定することで、以降の画面レイアウトが確定する
 
 ### 2. プレイヤー人数選択画面
 
-**プレイヤー人数選択**
+#### プレイヤー人数選択(UI)
 
 - [1人] [2人] [3人] [4人] ボタン
 
-**Touch モードの場合**
+#### Touchモードの場合
 
 - 選択した人数に応じた画面分割プレビューを表示
 - 例: 2人選択時 → 上下分割のプレビュー
 
-**次へボタン**
+#### 次へボタン
 
 ### 3. BOX選択画面
 
-**BOX一覧**
+#### BOX一覧
 
 - 利用可能なBOXをカード形式で表示
 - 各BOXに表示する情報:
@@ -284,7 +292,7 @@ pp-karutaは、ProtoPediaのプロトタイプデータを活用したカルタ�
     - 難易度
     - タイムリミット (あれば)
 
-**BOX選択**
+#### BOX選択(UI)
 
 - クリック/タップでBOXを選択
 - ゲーム開始ボタン
@@ -293,7 +301,7 @@ pp-karutaは、ProtoPediaのプロトタイプデータを活用したカルタ�
 
 **Keyboardモードのレイアウト:**
 
-```
+```text
 ┌─────────────────────────────────────┐
 │  YomiFuda表示エリア (共通)        │
 │  「このプロトタイプは...」            │
@@ -310,7 +318,7 @@ pp-karutaは、ProtoPediaのプロトタイプデータを活用したカルタ�
 
 **Touchモードのレイアウト (2人の例):**
 
-```
+```text
 ┌─────────────────────────────────────┐
 │  YomiFuda表示エリア (共通)        │
 ├───────────────────┬──────────────────┤
@@ -339,135 +347,158 @@ pp-karutaは、ProtoPediaのプロトタイプデータを活用したカルタ�
 
 ## Data Model
 
-### BOX Configuration
+このプロジェクトでは、型定義や実データ構造は実装が正です(= DESIGN.mdに重複定義しない)。
 
-BOXはゲームの仕様を定義する設定オブジェクト:
+- Karuta domain models: src/models/karuta/
+- Deck/recipe generation: src/lib/karuta/
+- ProtoPedia API integration: src/lib/repository/ と src/lib/karuta/api-data.ts
 
-```typescript
-type BoxConfig = {
-    id: string;
-    name: string;
-    description: string;
+### Model Dependencies
 
-    // データフィルタ条件
-    filter: {
-        tags?: string[]; // 特定のタグを持つプロトタイプ
-        year?: number; // 特定年のプロトタイプ
-        author?: string; // 特定の作者
-        hasImage?: boolean; // 画像有無
-    };
+#### モデル概要
 
-    // ゲーム設定
-    cardCount: number; // 使用する札の枚数
-    difficulty: 'easy' | 'normal' | 'hard'; // 難易度
-    timeLimit?: number; // 制限時間 (ミリ秒、なければ無制限)
-};
-```
-
-### Game Configuration
-
-ゲーム開始時に決定される設定:
+- **DeckRecipe**: Deck 生成の設計図（プリセット定義）
+    - 役割:
+        1. `setupSnapshot` に対する `ListPrototypesParams` (既存の型) を規定
+        2. 必要に応じて `setupSnapshot` の結果に対する追加フィルタリング機能を提供
+    - 主要: `ListPrototypesParams` (データ取得条件), 追加フィルタ条件
+    - メタデータ: `title`, `description`, `difficulty`, `tags` (UI表示用)
+    - 実装: `src/lib/karuta/recipe/definitions.ts`
 
 ```typescript
-type GameConfig = {
-    playerCount: number; // 1-4
-    inputMode: 'keyboard' | 'touch';
-    selectedBox: BoxConfig;
-};
+// 例1: 基本形 - offset と limit のみ指定
+ListPrototypesParams(offset: 0, limit: 10_000)
+// 追加フィルタ: なし
+
+// 例2: ID 配列による追加フィルタ
+ListPrototypesParams(offset: 0, limit: 10_000)
+// 追加フィルタ: ID の配列によるフィルタリングを行う
+// 用途: 特定のキュレーション済みプロトタイプセットを使用
+
+// 例3: タグ名によるAPI側フィルタ
+ListPrototypesParams(offset: 0, limit: 10_000, tagNm: tagName)
+// 追加フィルタ: なし
+// 用途: 特定タグのプロトタイプのみでゲームを構成
 ```
 
-### Player Data
+- **Deck**: Prototype データの大きなプール
+    - 構造: `Map<prototypeId, NormalizedPrototype>`
+    - 特性: 不変、O(1)アクセス
+    - サイズ: `setupSnapshot` の結果とフィルタリング結果で決まる (例: 1000件)
+    - 生成: DeckRecipe と Prototype 配列から `generateDeck()` で生成
+    - 実装: `src/models/karuta/deck.ts`
 
-各プレイヤーの状態:
+- **StackRecipe**: Stack 生成の設計図
+    - 役割: Deck から何件のIDを抽出し、どのようにソートするかを規定
+    - 主要: `maxSize` (抽出件数、`"all"` または数値), `sortMethod` (ソート方法)
+    - メタデータ: `title`, `description`, `difficulty`, `tags` (UI表示用)
+    - プリセット: 5件、10件、30件、全件
+    - 実装: `src/lib/karuta/recipe/definitions.ts`
 
-```typescript
-type Player = {
-    id: string;
-    name: string; // "Player 1", "Player 2", etc.
-    mochiFuda: ToriFuda[]; // 獲得した札
-    score: number;
-    correctCount: number; // 正解数
-    wrongCount: number; // 不正解数
+- **Stack**: Deck から抽出されたデータのID配列
+    - 構造: `number[]` (Deck の ID の部分配列)
+    - 関係: StackRecipe に基づいて Deck から抽出し、ランダムにソート
+    - サイズ: StackRecipe の `maxSize` で指定 (例: 5, 10, 30 or "all")
+    - 例: Deck が 1000件 → Stack は 10件
+    - 特性: 不変 (ゲーム中の Stack は GameState.stack として別管理)
+    - 実装: `src/models/karuta/stack.ts`
 
-    // Keyboardモードの場合
-    keyBindings?: string[]; // [‘1’, ‘2’, ‘3’, ‘4’, ‘5’]
-};
+- **Tatami**: 場に出ているカード
+    - 構造: `number[]` (Deck の ID 配列、最初は5枚)
+    - 関係: **Stack から取り出された ID**
+    - 初期: `Stack.slice(0, 5)`
+    - 更新: カード取得時、Stack から補充（Stack枯渇後は補充なし）
+    - 実装: `src/models/karuta/tatami.ts`
+
+- **GameState**: ゲーム全体の状態
+    - 所有: Deck, Stack, Tatami, Players
+    - 実装: `src/models/karuta/game.ts`
+
+#### データフロー
+
+```
+DeckRecipe (ListPrototypesParams, filter?)
+  ↓ setupSnapshot(ListPrototypesParams)
+API取得結果 (NormalizedPrototype[])
+  ↓ filter? (必要に応じて追加フィルタリング)
+Prototype配列 (例: 1000件)
+  ↓ generateDeck(recipe, prototypes)
+Deck (Map<ID, NormalizedPrototype>: 大きなデータプール、例: 1000件)
+
+StackRecipe (maxSize, sortMethod)
+  ↓ generateStack(stackRecipe, deck)
+Stack (number[]: Deckから抽出されたID配列、例: 10件)
 ```
 
-### Fuda (札) Data Models
+#### 設計判断
 
-ProtoPediaのプロトタイプデータから YomiFuda と ToriFuda を生成:
+**DeckRecipe と Deck の分離**
 
-```typescript
-// 元データ(ProtoPediaのプロトタイプ)
-type PrototypeData = {
-    id: string;
-    title: string;
-    description: string;
-    thumbnailUrl?: string;
-    author: string;
-    tags: string[];
-    // その他のフィールド
-};
+- DeckRecipe: 再利用可能な設計図（データ取得条件を規定）
+- Deck: DeckRecipe から生成されたデータプール
+- 理由: 同じ DeckRecipe から異なる Deck を繰り返し生成可能
 
-// 読み札
-type YomiFuda = {
-    id: string;
-    prototypeId: string; // 対応する PrototypeData の id
-    text: string; // description から生成
-};
+**DeckRecipe がデータ取得条件を決定**
 
-// 取り札
-type ToriFuda = {
-    id: string;
-    prototypeId: string; // 対応する PrototypeData の id
-    title: string;
-    thumbnailUrl?: string;
-    isAcquired: boolean; // 獲得済みかどうか
-};
+- DeckRecipe は `ListPrototypesParams` (既存の型) と追加フィルタを規定
+- 理由: ゲームモードごとに異なるデータセットが必要（例: 特定タグのみ、キュレーション済みセット）
+- 利点: データ取得ロジックを DeckRecipe に集約し、ゲームモードの追加・変更が容易
 
-// YomiFuda と ToriFuda の対応関係は prototypeId で判定する
+**StackRecipe と Stack の分離**
+
+- StackRecipe: Stack 生成の設計図（抽出件数とソート方法を規定）
+- Stack: StackRecipe に基づいて Deck から生成されたID配列
+- 理由: 同じ Deck から異なる StackRecipe で複数の Stack を生成可能
+
+**Deck と Stack の分離**
+
+- Deck: 大きなデータプール（不変、Map構造、例: 1000件）
+- Stack: Deck から抽出されたID配列（不変、例: 5~30件）
+- 理由:
+    - Deck を大きく保つことで、同じ Deck から異なるサイズの Stack を複数生成可能
+    - データ本体 (Deck) と順序管理 (Stack) の関心分離、メモリ効率
+    - プレイヤーは stackSize のプリセット (5, 10, 30) または任意件数を選択可能
+
+**ID 配列の採用 (Stack/Tatami)**
+
+- Stack/Tatami は prototype ID のみ保持
+- Deck が唯一のデータソース
+- 理由: メモリ効率、データ整合性、配列操作の軽量化
+
+#### 依存関係図
+
+```mermaid
+graph TD
+    External[External: @f88/promidas NormalizedPrototype]
+    Recipe[DeckRecipe]
+    Deck[Model: Deck]
+    DeckMeta[Model: DeckMetaData]
+    Player[Model: Player]
+    Stack[Model: Stack]
+    Tatami[Model: Tatami]
+    GameState[Model: GameState]
+    GameResult[Model: GameResult]
+
+    External --> Deck
+    Recipe -.generates.-> Deck
+    Deck -.ID lookup.-> Stack
+    Deck -.ID lookup.-> Tatami
+    Tatami --> Player
+    Deck --> GameState
+    Player --> GameState
+    Stack --> GameState
+    Tatami --> GameState
+
+    DeckMeta --> GameResult
 ```
 
-### Game State
+**ルール（メンテコストを増やさないための方針）:**
 
-```typescript
-type GameState = {
-    status: 'idle' | 'setup' | 'boxSelection' | 'playing' | 'finished';
+- DESIGN.mdは依存グラフと意図のみを書く（型の全文は書かない）
+- 依存グラフは概念的な依存（所有/参照/生成）を表す（必ずしもTSのimportに一致しない）
+- modelsはUIやrepositoryに依存しない（逆方向にしない）
 
-    // ゲーム設定
-    config: GameConfig;
-
-    // プレイヤー情報
-    players: Player[]; // 1-4人
-
-    // 札の状態
-    allYomiFuda: YomiFuda[]; // ゲームで使用するすべての読み札
-    allToriFuda: ToriFuda[]; // ゲームで使用するすべての取り札
-    currentYomiFuda: YomiFuda | null; // 現在表示中の読み札
-    currentTatamiToriFuda: ToriFuda[]; // 現在Tatamiに表示されている5枚
-
-    // 進行状況
-    currentRace: number; // 現在のRace (1から開始)
-    totalRaces: number; // 全体のRace数 (= allYomiFuda.length)
-
-    // 時間管理
-    startTime: number | null;
-    endTime: number | null;
-    elapsedTime: number; // 経過時間 (ミリ秒)
-};
-```
-
-### Game Settings
-
-```typescript
-type GameSettings = {
-    mode: 'single' | 'vsCpu' | 'practice';
-    difficulty: 'easy' | 'normal' | 'hard';
-    numberOfCards: number; // 10, 20, 50, 100
-    timeLimit?: number; // ミリ秒、練習モードではnull
-};
-```
+DESIGN.mdには「設計判断」「制約」「意図」だけを書く（実装の詳細は書かない）。
 
 ## Component Architecture
 
@@ -478,141 +509,14 @@ type GameSettings = {
 - **Container**: データ取得、状態管理、ビジネスロジック
 - **Presentational**: UIレンダリング、propsを受け取って表示のみ
 
-### 主要コンポーネント
+### Routing
 
-```
-src/
-  components/
-    app/
-      AppContainer.tsx          # アプリケーション全体のコンテナ
-      AppPresentation.tsx       # アプリケーション全体のレイアウト
+- TanStack Routerを使用し、URLでの直接アクセス(例: /intro)を可能にする
+- GitHub Pages配下(/pp-karuta)で動くようにbasepathを設定する(src/main.tsx)
 
-    title/
-      TitleContainer.tsx        # タイトル画面のロジック
-      TitlePresentation.tsx     # タイトル画面のUI
+### Notes
 
-    game/
-      GameContainer.tsx         # ゲームロジック、状態管理
-      GamePresentation.tsx      # ゲーム画面全体のUI
-      YomiFuda.tsx              # 読み札コンポーネント(Presentational)
-      ToriFuda.tsx              # 取り札コンポーネント(Presentational)
-      Tatami.tsx                # 畳エリア(複数のToriFudaを配置)
-      MochiFuda.tsx             # 持ち札エリア(獲得した札を表示)
-      ScoreBoard.tsx            # スコアボード
-      Timer.tsx                 # タイマー
-
-    result/
-      ResultContainer.tsx       # 結果画面のロジック
-      ResultPresentation.tsx    # 結果画面のUI
-
-    common/
-      Button.tsx                # 共通ボタン
-      Card.tsx                  # 共通カードUI
-      Modal.tsx                 # モーダル
-```
-
-### State Management
-
-- Reactの`useState`と`useReducer`を使用
-- グローバル状態が必要な場合はContext APIを検討
-- ゲーム状態は`GameContainer`で管理
-
-### Routing (TODO: 決定が必要)
-
-- React Router導入の必要性を検討
-- または、状態ベースのシンプルな画面切り替え
-
-## Technical Specifications
-
-### Tech Stack
-
-- **TypeScript 5.9**: 型安全性
-- **React 19**: UIライブラリ
-- **Vite 7**: ビルドツール
-- **Tailwind CSS 4.x**: スタイリング
-- **PROMIDAS**: データ管理
-- **Vitest 4**: テストフレームワーク
-- **Testing Library**: コンポーネントテスト
-
-### Browser Support
-
-- モダンブラウザ(Chrome, Firefox, Safari, Edge)の最新バージョン
-- ES2022+対応ブラウザ
-
-### Performance Goals
-
-- 初回ロード: 3秒以内
-- ゲーム操作のレスポンス: 100ms以内
-- PROMIDASキャッシュ活用により、ゲーム中のAPI呼び出しを最小化
-
-## Testing Strategy
-
-### Unit Tests
-
-- すべてのPresentationalコンポーネントに対してレンダリングテスト
-- ゲームロジックの単体テスト
-- データ変換ロジックのテスト
-
-### Component Tests
-
-- Testing Libraryを使用したインタラクションテスト
-- ユーザーイベントのシミュレーション
-
-### E2E Tests (TODO)
-
-- 必要に応じてPlaywrightなどを導入
-
-## Development Roadmap
-
-### Phase 1: 基本実装 (Current)
-
-- [x] プロジェクトセットアップ
-- [x] PROMIDAS統合
-- [x] Container/Presentational基本構造
-- [ ] タイトル画面
-- [ ] 基本的なゲームロジック
-- [ ] シンプルなゲーム画面
-
-### Phase 2: コア機能
-
-- [ ] ゲーム設定画面
-- [ ] スコアリングシステム
-- [ ] タイマー機能
-- [ ] 結果画面
-
-### Phase 3: 拡張機能
-
-- [ ] 難易度調整
-- [ ] ゲームモード追加
-- [ ] アニメーション
-- [ ] サウンドエフェクト(オプション)
-
-### Phase 4: 最適化
-
-- [ ] パフォーマンス改善
-- [ ] アクセシビリティ対応
-- [ ] レスポンシブデザイン
-
-## Open Questions & Decisions Needed
-
-1. **ゲームルールの最終決定**
-    - どのマッチング方式を採用するか?
-    - 複数モードを実装するか?
-
-2. **UI/UXデザイン**
-    - 和風デザインにするか?
-    - アニメーションの範囲は?
-
-3. **データの使い方**
-    - プロトタイプのどのフィールドを主に使用するか?
-    - 画像がないプロトタイプの扱いは?
-
-4. **スコアリング**
-    - 正解数のみ? タイムボーナスは?
-    - ランキング機能の必要性は?
-
-5. **ルーティング**
-    - React Router導入? それとも状態管理のみ?
+- Tech StackはREADME.mdのTech Stackを正とする
 
 ## References
 

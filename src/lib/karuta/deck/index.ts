@@ -1,14 +1,2 @@
-export {
-  createDeckIdsHash,
-  createDeckIdentifier,
-  createDeckMetaData,
-} from './hash';
-export { getPrototypeById, getPrototypesByIds } from './accessor';
-export {
-  createDeck,
-  getDeckIds,
-  getDeckPrototypes,
-  getDeckSize,
-  hasDeckPrototype,
-  recreateDeck,
-} from './utils';
+// Export DeckManager as the primary interface
+export { DeckManager } from './deck-manager';

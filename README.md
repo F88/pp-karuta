@@ -37,17 +37,32 @@ Utilities to assist development using PROMIDAS
 ### Frontend
 
 - **React 19** - UI library
+- **TanStack Router** - File-based routing
+
+### Content
+
+- **react-markdown + remark-gfm** - Render INTRO content
 
 ### UI
 
 - **Tailwind CSS 4.x** - Utility-first CSS framework
 - **shadcn/ui components** - Copy-paste component collection (Radix UI + CVA)
+- **Radix UI** - Headless UI primitives (used via shadcn/ui)
+- **class-variance-authority (CVA)** - Variant-driven component styling
+- **tailwind-merge / clsx** - Utility class composition
+- **tailwindcss-animate** - Animation utilities
 - **lucide-react icons** - Icon library
 
 ### Data Management
 
+- **ProtoPedia API v2** - Prototype data source
 - **PROMIDAS** - ProtoPedia API data management library
 - **PROMIDAS Utilities** - Utilities to assist development using PROMIDAS
+
+### Deployment
+
+- **GitHub Pages** - Static hosting
+- **gh-pages** - Deploy `dist/` to GitHub Pages
 
 ### Testing and Documentation
 

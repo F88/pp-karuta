@@ -1,26 +1,54 @@
 // Export types
-export type { DeckRecipe, Player, GameState } from '@/models/karuta';
+export type {
+  DeckRecipe,
+  StackRecipe,
+  Player,
+  GameState,
+  GamePlayerState,
+} from '@/models/karuta';
 
-// Export dummy data generation
-export { generateDummyPrototypes } from './dummy-data';
+export type { PlayMode } from './playMode';
 
-// Export recipe utilities
-export { DECK_RECIPES, findRecipeById, generateDeck } from './recipe';
+// Export data generation
+export { generateDummyPrototypes } from '@/lib/repository/dummy-data';
+export { fetchPrototypesFromAPI } from '@/lib/repository/api-data';
 
-// Export deck utilities
-export {
-  createDeckIdsHash,
-  createDeckIdentifier,
-  createDeckMetaData,
-  getPrototypeById,
-  getPrototypesByIds,
-  createDeck,
-  getDeckIds,
-  getDeckPrototypes,
-  getDeckSize,
-  hasDeckPrototype,
-  recreateDeck,
-} from './deck';
+// === Recipe Management ===
+export { RecipeManager } from './recipe';
 
-// Export stack utilities
-export { shuffle, createInitialState } from './stack';
+// Legacy exports for backward compatibility
+export { DECK_RECIPES, findRecipeById } from './recipe';
+
+// === Deck Management ===
+export { DeckManager } from './deck';
+
+// Legacy function exports for backward compatibility
+import { DeckManager } from './deck';
+
+/**
+ * @deprecated Use DeckManager.getByIds() instead
+ */
+export function getPrototypesByIds(
+  deck: Map<number, import('@f88/promidas/types').NormalizedPrototype>,
+  ids: number[],
+): import('@f88/promidas/types').NormalizedPrototype[] {
+  return DeckManager.getByIds(deck, ids);
+}
+
+// === Stack Management ===
+export { StackManager, STACK_RECIPES, findStackRecipeById } from './stack';
+
+// Legacy exports for backward compatibility
+export { shuffle } from './stack';
+
+// === Player Management ===
+export { PlayerManager } from './player';
+
+// === PlayMode Management ===
+export { PlayModeManager } from './playMode';
+
+// === Game Management ===
+export { GameManager } from './game';
+
+// Legacy exports for backward compatibility
+export { createInitialState } from './game';
