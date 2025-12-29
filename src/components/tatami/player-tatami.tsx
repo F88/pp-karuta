@@ -38,16 +38,17 @@ export function PlayerTatami({
         </div>
       </CardHeader>
       <CardContent>
-      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
-        {tatamiCards.map((card, index) => (
-          <ToriFudaCard
-            key={card.id}
-            card={card}
-            index={index}
-            isClickable={true}
-            onClick={onCardClick}
-          />
-        ))}
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
+          {tatamiCards.map((card, index) => (
+            <ToriFudaCard
+              key={card.id}
+              card={card}
+              index={index}
+              isClickable={true}
+              onClick={onCardClick}
+            />
+          ))}
+        </div>
       </CardContent>
     </Card>
   );
