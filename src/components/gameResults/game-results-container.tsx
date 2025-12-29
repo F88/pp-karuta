@@ -1,7 +1,8 @@
 import { useCallback } from 'react';
 import type { NormalizedPrototype } from '@f88/promidas/types';
-import { getPrototypesByIds } from '@/lib/karuta';
+// import { getPrototypesByIds } from '@/lib/karuta';
 import { GameResultsPresentation } from './game-results-presentation';
+import { DeckManager } from '@/lib/karuta';
 
 export type GameResultsContainerProps = {
   deck: Map<number, NormalizedPrototype>;
@@ -18,7 +19,7 @@ export function GameResultsContainer({
   onBackToTop,
   onReplay,
 }: GameResultsContainerProps) {
-  const mochiFudaCards = getPrototypesByIds(deck, mochiFuda);
+  const mochiFudaCards = DeckManager.getByIds(deck, mochiFuda);
 
   const handleBackToTop = useCallback(() => {
     console.log('🏠 Back to TOP');

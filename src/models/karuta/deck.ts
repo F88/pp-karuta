@@ -15,10 +15,10 @@ export type DeckRecipe = {
   id: string;
   title: string;
   description?: string; // Optional description
-  apiParams: ListPrototypesParams; // Parameters for setupSnapshot
-  idFilter?: number[]; // Optional ID filter for subset selection
-  difficulty: 'beginner' | 'intermediate' | 'advanced'; // Difficulty level
   tags: string[]; // Tags for filtering (e.g., ['quick', 'practice'])
+  difficulty: 'beginner' | 'intermediate' | 'advanced'; // Difficulty level
+  apiParams: ListPrototypesParams; // Parameters for setupSnapshot
+  filter?: (prototypes: NormalizedPrototype[]) => NormalizedPrototype[];
 };
 
 /**

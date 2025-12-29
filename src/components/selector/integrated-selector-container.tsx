@@ -1,7 +1,8 @@
-import { DECK_RECIPES, STACK_RECIPES } from '@/lib/karuta';
 import { IntegratedSelectorPresentation } from './integrated-selector-presentation';
 import { usePromidasRepository } from '@/hooks/use-promidas-repository';
 import type { UseGameSetupReturn } from '@/hooks/useGameSetup';
+import { STACK_RECIPES } from '@/lib/karuta';
+import { DeckRecipeManager } from '@/lib/karuta/deck';
 import { useEffect } from 'react';
 
 export type IntegratedSelectorContainerProps = {
@@ -27,7 +28,7 @@ export function IntegratedSelectorContainer({
     <IntegratedSelectorPresentation
       selectedPlayMode={setup.selectedPlayMode}
       onSelectPlayMode={setup.selectPlayMode}
-      deckRecipes={DECK_RECIPES}
+      deckRecipes={DeckRecipeManager.RECIPES}
       selectedDeckRecipe={setup.selectedDeckRecipe}
       onSelectDeckRecipe={setup.selectDeckRecipe}
       isDeckLoading={setup.isDeckLoading}

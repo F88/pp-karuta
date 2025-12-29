@@ -111,17 +111,7 @@ export class DeckManager {
     }
 
     // Apply ID filter if specified in recipe
-    let filteredPrototypes = allPrototypes;
-    if (recipe.idFilter && Array.isArray(recipe.idFilter)) {
-      const idSet = new Set(recipe.idFilter);
-      filteredPrototypes = allPrototypes.filter((p) => idSet.has(p.id));
-
-      if (filteredPrototypes.length === 0) {
-        throw new Error(
-          `No prototypes match the idFilter. Filter has ${recipe.idFilter.length} IDs, but none found in fetched data.`,
-        );
-      }
-    }
+    const filteredPrototypes = allPrototypes;
 
     // Validation: All prototypes have valid IDs
     const invalidPrototype = filteredPrototypes.find(

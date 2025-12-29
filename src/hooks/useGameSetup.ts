@@ -128,7 +128,7 @@ export function useGameSetup({
         console.log('✔️ isDeckLoading set to false');
       }
     },
-    [repository, selectedDeckRecipe?.id, generatedDeck],
+    [generatedDeck, repository, selectedDeckRecipe?.id, selectedStackRecipe],
   );
 
   // Select StackRecipe and generate Stack if Deck exists
@@ -146,6 +146,8 @@ export function useGameSetup({
         setGeneratedStack(null);
       }
     },
+    // selectedStackRecipe is not used inside the callback, only the recipe parameter
+
     [generatedDeck],
   );
 

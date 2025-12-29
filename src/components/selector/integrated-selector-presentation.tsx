@@ -103,14 +103,14 @@ export function IntegratedSelectorPresentation({
           </div>
         )}
 
-        {/* Grid layout for all sections */}
-        <div className="grid gap-8 lg:grid-cols-2">
+        {/* Sections displayed sequentially */}
+        <div className="space-y-8">
           {/* Section 1: PlayMode */}
           <div className="space-y-4">
             <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100">
               1. 入力方式
             </h2>
-            <div className="grid gap-4 sm:grid-cols-2">
+            <div className="grid grid-cols-2 gap-4">
               <Button
                 onClick={() => onSelectPlayMode('keyboard')}
                 disabled={isLoading}
@@ -154,7 +154,7 @@ export function IntegratedSelectorPresentation({
             <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100">
               2. Deck Recipe
             </h2>
-            <div className="grid gap-4 sm:grid-cols-2">
+            <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
               {deckRecipes.map((recipe) => (
                 <RecipeCard
                   key={recipe.id}
@@ -180,7 +180,7 @@ export function IntegratedSelectorPresentation({
             <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100">
               3. Stack Recipe (枚数)
             </h2>
-            <div className="grid gap-4 sm:grid-cols-2">
+            <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
               {stackRecipes.map((recipe) => (
                 <StackRecipeCard
                   key={recipe.id}
@@ -205,7 +205,7 @@ export function IntegratedSelectorPresentation({
             <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100">
               4. プレイヤー選択
             </h2>
-            <div className="grid gap-4 sm:grid-cols-2">
+            <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
               {availablePlayers.map((player) => (
                 <PlayerSelectionCard
                   key={player.id}
