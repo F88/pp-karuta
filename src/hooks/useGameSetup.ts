@@ -126,10 +126,14 @@ export function useGameSetup({
         console.log('✅ Deck generated successfully:', deck.size, 'cards');
 
         // If StackRecipe is already selected, regenerate Stack with new Deck
-        if (selectedStackRecipe) {
+        // Only generate stack if deck is not empty
+        if (selectedStackRecipe && deck.size > 0) {
           const stack = StackManager.generate(deck, selectedStackRecipe);
           setGeneratedStack(stack);
           console.log('✅ Stack regenerated:', stack.length, 'cards');
+        } else if (deck.size === 0) {
+          setGeneratedStack(null);
+          console.log('⚠️ Deck is empty, skipping Stack generation');
         }
       } catch (err) {
         const errorMessage =
@@ -171,15 +175,18 @@ export function useGameSetup({
       setSelectedStackRecipe(recipe);
       setError(null);
 
-      // Generate Stack if Deck is already available
-      if (generatedDeck) {
+      // Generate Stack if Deck is already available and not empty
+      if (generatedDeck && generatedDeck.size > 0) {
         const stack = StackManager.generate(generatedDeck, recipe);
         setGeneratedStack(stack);
         console.log('✅ Stack generated:', stack.length, 'cards');
       } else {
         setGeneratedStack(null);
+        if (generatedDeck && generatedDeck.size === 0) {
+          console.log('⚠️ Deck is empty, skipping Stack generation');
+        }
       }
-    },
+    };,
     // selectedStackRecipe is not used inside the callback, only the recipe parameter
 
     [generatedDeck],

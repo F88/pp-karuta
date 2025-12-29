@@ -14,14 +14,8 @@ export class StackManager {
    * @param deck - Source Deck
    * @param recipe - StackRecipe defining generation rules
    * @returns Stack (array of prototype IDs)
-   * @throws {Error} If validation fails
    */
   static generate(deck: Deck, recipe: StackRecipe): Stack {
-    // Validation: Deck
-    if (deck.size === 0) {
-      throw new Error('Deck must not be empty');
-    }
-
     // Get all IDs from Deck
     const allIds = Array.from(deck.keys());
 
