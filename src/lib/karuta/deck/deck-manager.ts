@@ -25,11 +25,6 @@ export class DeckManager {
       throw new Error(`Invalid input: prototypes must be an array`);
     }
 
-    // Validation: Empty array check
-    if (prototypes.length === 0) {
-      throw new Error(`Invalid input: prototypes array cannot be empty`);
-    }
-
     const deckMap = new Map<number, NormalizedPrototype>();
     const seenIds = new Set<number>();
 
@@ -68,6 +63,8 @@ export class DeckManager {
       throw new Error(`Invalid recipe: apiParams is required`);
     }
 
+    console.debug(`[INFO] API Params:`, recipe.apiParams);
+
     // Fetch data using recipe's apiParams
     const result = await repository.setupSnapshot(recipe.apiParams);
 
@@ -78,40 +75,16 @@ export class DeckManager {
     }
 
     // Get all prototypes from snapshot
-    const allPrototypes: NormalizedPrototype[] = [];
-    const seenIds = new Set<number>();
+    const allPrototypes = await repository.getAllFromSnapshot();
 
-    // Fetch all available prototypes from snapshot
-    // Use a reasonable limit to avoid infinite loops
-    const maxAttempts = 10_000;
-    let attempts = 0;
+    console.log(
+      `[INFO] Retrieved ${allPrototypes.length} prototypes from snapshot`,
+    );
 
-    while (attempts < maxAttempts) {
-      attempts += 1;
-      const prototype = await repository.getRandomPrototypeFromSnapshot();
-
-      if (!prototype) {
-        // No more prototypes available
-        break;
-      }
-
-      if (!seenIds.has(prototype.id)) {
-        allPrototypes.push(prototype);
-        seenIds.add(prototype.id);
-      }
-
-      // If we haven't found new prototypes in the last 100 attempts, stop
-      if (attempts > allPrototypes.length + 100) {
-        break;
-      }
-    }
-
-    if (allPrototypes.length === 0) {
-      throw new Error('No prototypes fetched from repository');
-    }
-
-    // Apply ID filter if specified in recipe
-    const filteredPrototypes = allPrototypes;
+    // Apply filter if specified in recipe
+    const filteredPrototypes = recipe.filter
+      ? recipe.filter([...allPrototypes])
+      : [...allPrototypes];
 
     // Validation: All prototypes have valid IDs
     const invalidPrototype = filteredPrototypes.find(

@@ -1,9 +1,10 @@
 import type { DeckRecipe, StackRecipe, Player, Deck } from '@/models/karuta';
 import type { PlayMode } from '@/lib/karuta';
 import { Button } from '@/components/ui/button';
-import { RecipeCard } from '@/components/recipe/recipe-card';
-import { StackRecipeCard } from '@/components/stackRecipe/stack-recipe-card';
+import { DeckRecipeCard } from '@/components/recipe/deck-recipe-card';
+import { StackRecipeCard } from '@/components/recipe/stack-recipe-card';
 import { PlayerSelectionCard } from '@/components/player/player-selection-card';
+import { GameSetupSummary } from './game-setup-summary';
 import { Keyboard, Smartphone } from 'lucide-react';
 
 export type IntegratedSelectorPresentationProps = {
@@ -64,6 +65,9 @@ export function IntegratedSelectorPresentation({
   error,
   onShowIntro,
 }: IntegratedSelectorPresentationProps) {
+  // Check if deck is empty (0 cards)
+  const isDeckEmpty = generatedDeck !== null && generatedDeck.size === 0;
+
   // Calculate expected stack size (use actual if available)
   const stackSize = generatedStack
     ? generatedStack.length
@@ -74,7 +78,7 @@ export function IntegratedSelectorPresentation({
       : null;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-purple-50 p-4 dark:from-gray-900 dark:to-gray-800">
+    <div className="min-h-screen bg-linear-to-br from-indigo-50 to-purple-50 p-4 dark:from-gray-900 dark:to-gray-800">
       <div className="mx-auto max-w-7xl">
         {/* Header */}
         <div className="mb-8 text-center">
@@ -156,7 +160,7 @@ export function IntegratedSelectorPresentation({
             </h2>
             <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
               {deckRecipes.map((recipe) => (
-                <RecipeCard
+                <DeckRecipeCard
                   key={recipe.id}
                   recipe={recipe}
                   onSelect={onSelectDeckRecipe}
@@ -175,30 +179,46 @@ export function IntegratedSelectorPresentation({
             )}
           </div>
 
-          {/* Section 3: StackRecipe */}
-          <div className="space-y-4">
-            <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100">
-              3. Stack Recipe (枚数)
-            </h2>
-            <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
-              {stackRecipes.map((recipe) => (
-                <StackRecipeCard
-                  key={recipe.id}
-                  recipe={recipe}
-                  onSelect={onSelectStackRecipe}
-                  isSelected={selectedStackRecipe?.id === recipe.id}
-                  isLoading={isLoading}
-                />
-              ))}
+          {/* Section 3: StackRecipe - Hide when deck is empty */}
+          {!isDeckEmpty && (
+            <div className="space-y-4">
+              <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100">
+                3. Stack Recipe (枚数)
+              </h2>
+              <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
+                {stackRecipes.map((recipe) => (
+                  <StackRecipeCard
+                    key={recipe.id}
+                    recipe={recipe}
+                    onSelect={onSelectStackRecipe}
+                    isSelected={selectedStackRecipe?.id === recipe.id}
+                    isLoading={isLoading}
+                  />
+                ))}
+              </div>
+              {generatedStack && (
+                <div className="rounded-lg border border-green-200 bg-green-50 p-3 dark:border-green-800 dark:bg-green-950">
+                  <p className="text-sm font-semibold text-green-800 dark:text-green-200">
+                    ✓ Stack生成完了: {generatedStack.length}枚
+                  </p>
+                </div>
+              )}
             </div>
-            {generatedStack && (
-              <div className="rounded-lg border border-green-200 bg-green-50 p-3 dark:border-green-800 dark:bg-green-950">
-                <p className="text-sm font-semibold text-green-800 dark:text-green-200">
-                  ✓ Stack生成完了: {generatedStack.length}枚
+          )}
+
+          {/* Warning message when deck is empty */}
+          {isDeckEmpty && (
+            <div className="space-y-4">
+              <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100">
+                3. Stack Recipe (枚数)
+              </h2>
+              <div className="rounded-lg border border-yellow-200 bg-yellow-50 p-4 dark:border-yellow-800 dark:bg-yellow-950">
+                <p className="text-sm font-semibold text-yellow-800 dark:text-yellow-200">
+                  ⚠️ Deckが空のため、Stackを生成できません
                 </p>
               </div>
-            )}
-          </div>
+            </div>
+          )}
 
           {/* Section 4: Players */}
           <div className="space-y-4">
@@ -220,63 +240,20 @@ export function IntegratedSelectorPresentation({
         </div>
 
         {/* Selection Summary */}
-        {canStartGame && (
-          <div className="mt-8 rounded-lg border-2 border-indigo-200 bg-indigo-50 p-6 dark:border-indigo-700 dark:bg-indigo-950">
-            <h3 className="mb-4 text-lg font-bold text-indigo-900 dark:text-indigo-100">
-              📋 選択内容
-            </h3>
-            <div className="grid gap-3 sm:grid-cols-2">
-              <div className="flex items-center gap-2">
-                <span className="text-sm font-semibold text-indigo-700 dark:text-indigo-300">
-                  入力方式:
-                </span>
-                <span className="text-sm text-indigo-900 dark:text-indigo-100">
-                  {selectedPlayMode === 'keyboard' ? '⌨️ Keyboard' : '📱 Touch'}
-                </span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="text-sm font-semibold text-indigo-700 dark:text-indigo-300">
-                  Deck Recipe:
-                </span>
-                <span className="text-sm text-indigo-900 dark:text-indigo-100">
-                  {selectedDeckRecipe?.title}
-                  {generatedDeck && (
-                    <span className="ml-1 text-xs text-indigo-600 dark:text-indigo-400">
-                      ({generatedDeck.size}枚)
-                    </span>
-                  )}
-                </span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="text-sm font-semibold text-indigo-700 dark:text-indigo-300">
-                  Stack Recipe:
-                </span>
-                <span className="text-sm text-indigo-900 dark:text-indigo-100">
-                  {selectedStackRecipe?.title}
-                  {stackSize !== null && (
-                    <span className="ml-1 text-xs text-indigo-600 dark:text-indigo-400">
-                      ({stackSize}枚)
-                    </span>
-                  )}
-                </span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="text-sm font-semibold text-indigo-700 dark:text-indigo-300">
-                  プレイヤー:
-                </span>
-                <span className="text-sm text-indigo-900 dark:text-indigo-100">
-                  {selectedPlayerIds.length}人
-                </span>
-              </div>
-            </div>
-          </div>
-        )}
+        <GameSetupSummary
+          selectedPlayMode={selectedPlayMode}
+          selectedDeckRecipe={selectedDeckRecipe}
+          generatedDeck={generatedDeck}
+          selectedStackRecipe={selectedStackRecipe}
+          stackSize={stackSize}
+          selectedPlayerCount={selectedPlayerIds.length}
+        />
 
         {/* Start Game Button */}
         <div className="mt-8 flex justify-center">
           <Button
             onClick={onStartGame}
-            disabled={!canStartGame || isLoading}
+            disabled={!canStartGame || isLoading || isDeckEmpty}
             size="lg"
             className="h-16 px-12 text-xl font-bold"
           >
@@ -291,9 +268,14 @@ export function IntegratedSelectorPresentation({
           </Button>
         </div>
 
-        {!canStartGame && (
+        {!canStartGame && !isDeckEmpty && (
           <p className="mt-4 text-center text-sm text-gray-500 dark:text-gray-400">
             全ての項目を選択してください
+          </p>
+        )}
+        {isDeckEmpty && (
+          <p className="mt-4 text-center text-sm text-red-600 dark:text-red-400">
+            Deckが空のため、ゲームを開始できません
           </p>
         )}
       </div>

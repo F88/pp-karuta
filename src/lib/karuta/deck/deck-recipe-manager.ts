@@ -51,7 +51,7 @@ export class DeckRecipeManager {
   // Section 1: Recipe Definitions
   // ========================================
 
-  private static rangeRecipes: DeckRecipe[] = generateSequentialDecks(10);
+  private static rangeRecipes: DeckRecipe[] = generateSequentialDecks(7);
 
   /**
    * Available DeckRecipes for selection

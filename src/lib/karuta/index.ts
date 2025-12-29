@@ -11,13 +11,12 @@ export type { PlayMode } from './playMode';
 
 // Export data generation
 export { generateDummyPrototypes } from '@/lib/repository/dummy-data';
-export { fetchPrototypesFromAPI } from '@/lib/repository/api-data';
 
 // === Deck Management ===
 export { DeckManager, DeckRecipeManager } from './deck';
 
 // === Stack Management ===
-export { StackManager, STACK_RECIPES } from './stack';
+export { StackManager, StackRecipeManager, STACK_RECIPES } from './stack';
 
 // === Player Management ===
 export { PlayerManager } from './player';
