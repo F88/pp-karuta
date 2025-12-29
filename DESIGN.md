@@ -42,8 +42,8 @@ pp-karutaは、ProtoPediaのプロトタイプデータを活用したカルタ�
 ### PROMIDAS Integration
 
 - [PROMIDAS](https://github.com/F88/promidas)を使用してProtoPedia API v2からプロトタイプデータを取得
+- `ProtopediaInMemoryRepository`でsnapshotとしてデータをキャッシュ
 - 取得したプロトタイプを「札(カード)」として使用
-- 100件のプロトタイプをキャッシュし、ゲーム中に利用
 
 ## Game Rules
 
