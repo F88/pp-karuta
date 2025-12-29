@@ -68,7 +68,7 @@ export function IntegratedSelectorPresentation({
   canStartGame,
   isLoading,
   error,
-  onShowIntro,
+  // onShowIntro,
 }: IntegratedSelectorPresentationProps) {
   // Calculate expected stack size (use actual if available)
   const stackSize = generatedStack
