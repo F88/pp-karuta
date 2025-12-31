@@ -39,6 +39,38 @@ export function TatamiViewPresentation({
     0,
   );
 
+  // Determine grid layout based on player count and screen size
+  const playerCount = playerStates.length;
+  const getPlayerGridCols = () => {
+    if (screenSize) {
+      // Fixed screen size mode
+      if (screenSize === 'smartphone') {
+        return 'grid-cols-1';
+      }
+      if (screenSize === 'tablet') {
+        return playerCount <= 2 ? 'grid-cols-1' : 'grid-cols-2';
+      }
+      // PC
+      if (playerCount === 1) return 'grid-cols-1';
+      if (playerCount === 2) return 'grid-cols-2';
+      if (playerCount === 3) return 'grid-cols-3';
+      return 'grid-cols-2'; // 4+ players: 2x2 grid
+    }
+
+    // Responsive mode
+    if (playerCount === 1) {
+      return 'grid-cols-1';
+    }
+    if (playerCount === 2) {
+      return 'grid-cols-1 md:grid-cols-2';
+    }
+    if (playerCount === 3) {
+      return 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3';
+    }
+    // 4+ players
+    return 'grid-cols-1 md:grid-cols-2';
+  };
+
   return (
     <div className="flex h-screen flex-col bg-gradient-to-br from-green-50 to-teal-100 p-4 dark:from-gray-900 dark:to-gray-800">
       <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col overflow-hidden">
@@ -73,7 +105,7 @@ export function TatamiViewPresentation({
             🎮 Player Tatami Areas
           </h2>
           <div className="flex-1 overflow-y-auto">
-            <div className="grid grid-cols-2 gap-4">
+            <div className={`grid gap-4 ${getPlayerGridCols()}`}>
               {playerStates.map((playerState) => {
                 const playerTatamiCards = DeckManager.getByIds(
                   deck,
