@@ -5,6 +5,7 @@ import type {
 } from '@f88/promidas';
 import type { NormalizedPrototype } from '@f88/promidas/types';
 import type { ListPrototypesParams } from 'protopedia-api-v2-client';
+import { EventEmitter } from 'events';
 import type {
   SnapshotOperationSuccess,
   SnapshotOperationFailure,
@@ -29,6 +30,7 @@ type SnapshotOperationResult =
 export class DummyRepository implements ProtopediaInMemoryRepository {
   private allPrototypes: readonly NormalizedPrototype[];
   private filteredPrototypes: readonly NormalizedPrototype[];
+  readonly events = new EventEmitter();
 
   constructor() {
     const startTime = performance.now();
@@ -42,9 +44,6 @@ export class DummyRepository implements ProtopediaInMemoryRepository {
     );
     console.info('[DummyRepository] Initialized with 10000 dummy prototypes');
   }
-
-  // Events are not implemented in dummy repository
-  readonly events = undefined;
 
   getConfig(): Omit<Required<PrototypeInMemoryStoreConfig>, 'logger'> {
     return {
@@ -69,6 +68,8 @@ export class DummyRepository implements ProtopediaInMemoryRepository {
     params: ListPrototypesParams,
   ): Promise<SnapshotOperationResult> {
     console.info('[DummyRepository] setupSnapshot called with params:', params);
+
+    this.events.emit('snapshotStarted', 'setup');
 
     const startTime = performance.now();
 
@@ -118,17 +119,26 @@ export class DummyRepository implements ProtopediaInMemoryRepository {
       `[DummyRepository] Filtered ${this.allPrototypes.length} -> ${filtered.length} -> ${paginated.length} prototypes`,
     );
 
+    const stats = this.getStats();
+    this.events.emit('snapshotCompleted', stats);
+
     return {
       ok: true,
-      stats: this.getStats(),
+      stats,
     };
   }
 
   async refreshSnapshot(): Promise<SnapshotOperationResult> {
     console.info('[DummyRepository] refreshSnapshot called (no-op)');
+
+    this.events.emit('snapshotStarted', 'refresh');
+
+    const stats = this.getStats();
+    this.events.emit('snapshotCompleted', stats);
+
     return {
       ok: true,
-      stats: this.getStats(),
+      stats,
     };
   }
 
