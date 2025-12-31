@@ -1,12 +1,14 @@
 import type { NormalizedPrototype } from '@f88/promidas/types';
 import type { PlayMode } from '@/lib/karuta';
 import { Card, CardContent } from '@/components/ui/card';
+import { Kbd } from '@/components/ui/kbd';
 
 export type ToriFudaCardProps = {
   normalizedPrototype: NormalizedPrototype;
   index: number;
   isClickable?: boolean;
   playMode?: PlayMode;
+  keyboardKey?: string;
   onClick?: (card: NormalizedPrototype) => void;
 };
 
@@ -15,6 +17,7 @@ export function ToriFudaCard({
   index,
   isClickable = false,
   playMode,
+  keyboardKey,
   onClick,
 }: ToriFudaCardProps) {
   const showImage = playMode !== 'keyboard';
@@ -29,10 +32,27 @@ export function ToriFudaCard({
       onClick={isClickable && onClick ? () => onClick(card) : undefined}
     >
       <CardContent className="relative p-4">
-        {/* Index */}
+        {/* Index  */}
         {import.meta.env.VITE_DEBUG_MODE === 'true' && (
-          <div className="absolute top-2 right-2 flex h-6 w-6 items-center justify-center rounded-full bg-indigo-500 text-xs font-bold text-white">
+          <div
+            className={`flex items-center justify-center rounded-full text-xs font-bold text-white ${
+              playMode === 'keyboard'
+                ? 'h-8 w-8 bg-indigo-600 text-base shadow-md'
+                : 'h-6 w-6 bg-indigo-500'
+            }`}
+          >
             {index + 1}
+          </div>
+        )}
+
+        {/* Keyboard Key Indicator */}
+        {playMode === 'keyboard' && (
+          <div className="absolute top-2 right-2">
+            {keyboardKey && (
+              <Kbd className="text-sm font-bold shadow-md">
+                {keyboardKey.toUpperCase()}
+              </Kbd>
+            )}
           </div>
         )}
 
@@ -50,6 +70,7 @@ export function ToriFudaCard({
             />
           </div>
         )}
+
         {import.meta.env.VITE_DEBUG_MODE === 'true' && (
           <>
             <h3 className="mb-1 line-clamp-2 text-sm font-semibold text-gray-800">

@@ -5,6 +5,7 @@ import type { NormalizedPrototype } from '@f88/promidas/types';
 import type { ScreenSize } from '@/types/screen-size';
 import { TatamiViewPresentation } from './tatami-view-presentation';
 import { DeckManager } from '@/lib/karuta/deck/deck-manager';
+import { useKeyboardCardSelection } from '@/hooks/use-keyboard-card-selection';
 
 export type TatamiViewContainerProps = {
   gameState: GameState;
@@ -70,6 +71,14 @@ export function TatamiViewContainer({
     },
     [currentYomiFuda, onCorrectAnswer, onIncorrectAnswer],
   );
+
+  // Enable keyboard card selection for keyboard mode only
+  useKeyboardCardSelection({
+    enabled: playMode === 'keyboard',
+    playerStates: gameState.playerStates,
+    deck: gameState.deck,
+    onCardSelect: handlePlayerCardSelect,
+  });
 
   // Check if game is complete
   if (completedRaces >= gameState.readingOrder.length) {
