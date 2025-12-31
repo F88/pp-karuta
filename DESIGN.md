@@ -10,6 +10,16 @@ pp-karutaは、ProtoPediaのプロトタイプデータを活用したカルタ�
 - Intro page theme: /intro is intentionally isolated and must use its own Matrix-style theme from src/components/intro/IntroPage.css.
 - Rule: Do not “normalize” /intro to the shared theme. The Intro route should avoid the shared ThemeProvider and should enforce its theme via a dedicated body class.
 
+### Responsive Design
+
+UIは以下の3つの画面サイズを意識したレスポンシブデザインを採用:
+
+- **Smartphone** (base, ~767px): モバイル端末向け、コンパクトな表示
+- **Tablet** (md, 768px~1023px): タブレット端末向け、中サイズの表示
+- **PC** (lg, 1024px~): デスクトップ向け、大きな表示
+
+実装ではTailwind CSSのブレークポイント(`md:`, `lg:`)を使用し、padding、テキストサイズ、アイコンサイズなどを段階的に調整する。
+
 ## Data Source
 
 ### ProtoPedia API v2 and PROMIDAS
