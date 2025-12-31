@@ -13,7 +13,6 @@ const meta = {
     showToken: { control: 'boolean' },
     hasToken: { control: 'boolean' },
     isValidating: { control: 'boolean' },
-    useDummyData: { control: 'boolean' },
     repoState: {
       control: 'select',
       options: [
@@ -50,7 +49,6 @@ export const Default: Story = {
     showToken: false,
     hasToken: false,
     isValidating: false,
-    useDummyData: false,
     repoState: { type: 'not-created' },
   },
 };
@@ -61,7 +59,6 @@ export const NoToken: Story = {
     showToken: false,
     hasToken: false,
     isValidating: false,
-    useDummyData: false,
     repoState: { type: 'not-created' },
   },
 };
@@ -72,7 +69,6 @@ export const TokenInputInProgress: Story = {
     showToken: false,
     hasToken: false,
     isValidating: false,
-    useDummyData: false,
     repoState: { type: 'not-created' },
   },
 };
@@ -83,7 +79,6 @@ export const TokenVisible: Story = {
     showToken: true,
     hasToken: true,
     isValidating: false,
-    useDummyData: false,
     repoState: { type: 'not-created' },
   },
 };
@@ -94,7 +89,6 @@ export const TokenHidden: Story = {
     showToken: false,
     hasToken: true,
     isValidating: false,
-    useDummyData: false,
     repoState: { type: 'not-created' },
   },
 };
@@ -105,7 +99,6 @@ export const Validating: Story = {
     showToken: false,
     hasToken: true,
     isValidating: true,
-    useDummyData: false,
     repoState: { type: 'not-created' },
   },
 };
@@ -116,7 +109,6 @@ export const ValidToken: Story = {
     showToken: false,
     hasToken: true,
     isValidating: false,
-    useDummyData: false,
     repoState: { type: 'not-created' },
   },
 };
@@ -127,7 +119,6 @@ export const InvalidToken: Story = {
     showToken: false,
     hasToken: true,
     isValidating: false,
-    useDummyData: false,
     repoState: { type: 'token-invalid', error: 'Invalid token' },
   },
 };
@@ -138,7 +129,6 @@ export const DummyMode: Story = {
     showToken: false,
     hasToken: false,
     isValidating: false,
-    useDummyData: true,
     repoState: { type: 'not-created' },
   },
 };
@@ -149,7 +139,6 @@ export const DummyModeWithToken: Story = {
     showToken: false,
     hasToken: true,
     isValidating: false,
-    useDummyData: true,
     repoState: { type: 'not-created' },
   },
 };
