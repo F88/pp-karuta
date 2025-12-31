@@ -114,7 +114,7 @@ export function IntegratedSelectorPresentation({
 
         {/* Sections displayed sequentially */}
         <div className="space-y-8">
-          {/* Section 1: PlayMode */}
+          {/* Section: PlayMode */}
           <div className="space-y-4">
             <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100">
               入力方式
@@ -126,7 +126,7 @@ export function IntegratedSelectorPresentation({
             />
           </div>
 
-          {/* Section 2: Players */}
+          {/* Section: Players */}
           <div className="space-y-4">
             <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100">
               プレイヤー
@@ -140,7 +140,19 @@ export function IntegratedSelectorPresentation({
             />
           </div>
 
-          {/* Section 3: DeckRecipe */}
+          {/* Section: TatamiSize */}
+          <div className="space-y-4">
+            <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100">
+              畳サイズ
+            </h2>
+            <TatamiSizeSelector
+              selectedTatamiSize={selectedTatamiSize}
+              onSelectTatamiSize={onSelectTatamiSize}
+              isLoading={isLoading}
+            />
+          </div>
+
+          {/* Section: DeckRecipe */}
           <div className="space-y-4">
             <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100">
               デッキ
@@ -164,7 +176,7 @@ export function IntegratedSelectorPresentation({
             )}
           </div>
 
-          {/* Section 4: StackRecipe */}
+          {/* Section: StackRecipe */}
           {isRepoReady && (
             <div className="space-y-4">
               <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100">
@@ -177,20 +189,6 @@ export function IntegratedSelectorPresentation({
                 isLoading={isLoading}
                 generatedStack={generatedStack}
                 generatedDeck={generatedDeck}
-              />
-            </div>
-          )}
-
-          {/* Section 5: TatamiSize */}
-          {isRepoReady && (
-            <div className="space-y-4">
-              <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100">
-                畳サイズ
-              </h2>
-              <TatamiSizeSelector
-                selectedTatamiSize={selectedTatamiSize}
-                onSelectTatamiSize={onSelectTatamiSize}
-                isLoading={isLoading}
               />
             </div>
           )}
