@@ -35,10 +35,8 @@ export function GameFlow() {
     },
   });
 
-  // Extract playMode from first playerState (all players share same mode)
-  const playMode: PlayMode | null = gameState?.playerStates[0]
-    ? 'keyboard' // TODO: Store playMode in GameState
-    : null;
+  // Use the selected play mode from setup
+  const playMode: PlayMode | null = setup.selectedPlayMode;
 
   const handleCorrectAnswer = useCallback((playerId: string, cardId: number) => {
     console.log('🎯 handleCorrectAnswer called with playerId:', playerId, 'cardId:', cardId);
@@ -161,6 +159,7 @@ export function GameFlow() {
     return (
       <TatamiViewContainer
         gameState={gameState}
+        playMode={playMode}
         onCorrectAnswer={handleCorrectAnswer}
         onIncorrectAnswer={handleIncorrectAnswer}
         screenSize={screenSize}

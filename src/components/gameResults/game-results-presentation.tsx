@@ -34,20 +34,22 @@ export function GameResultsPresentation({
   });
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-orange-50 p-8">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-orange-50 p-8 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
       <div className="mx-auto max-w-4xl">
         {/* Header */}
         <div className="mb-8 text-center">
-          <h1 className="mb-2 text-4xl font-bold text-gray-800">
+          {/* <h1 className="mb-2 text-4xl font-bold text-gray-800 dark:text-gray-100">
             🎉 Game Complete!
-          </h1>
-          <p className="text-xl text-gray-600">お疲れ様でした！</p>
+          </h1> */}
+          {/* <p className="text-xl text-gray-600 dark:text-gray-300">
+            お疲れ様でした！
+          </p> */}
         </div>
 
         {/* Player Rankings */}
         <Card className="mb-6">
           <CardHeader>
-            <h2 className="text-2xl font-bold text-gray-800">
+            <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100">
               🏆 Player Rankings
             </h2>
           </CardHeader>
@@ -56,17 +58,17 @@ export function GameResultsPresentation({
               {rankedPlayers.map((ps, index) => (
                 <div
                   key={ps.player.id}
-                  className="flex items-center justify-between rounded-lg border p-4"
+                  className="flex items-center justify-between rounded-lg border p-4 dark:border-gray-700 dark:bg-gray-800"
                 >
                   <div className="flex items-center gap-4">
-                    <div className="flex h-12 w-12 items-center justify-center rounded-full bg-indigo-100 text-2xl font-bold text-indigo-600">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-full bg-indigo-100 text-2xl font-bold text-indigo-600 dark:bg-indigo-900 dark:text-indigo-300">
                       #{playerRanks[index]}
                     </div>
                     <div>
-                      <h3 className="text-lg font-bold text-gray-800">
+                      <h3 className="text-lg font-bold text-gray-800 dark:text-gray-100">
                         {ps.player.name}
                       </h3>
-                      <p className="text-sm text-gray-600">
+                      <p className="text-sm text-gray-600 dark:text-gray-400">
                         {ps.mochiFuda.length} cards acquired
                       </p>
                     </div>
@@ -74,7 +76,7 @@ export function GameResultsPresentation({
                   <div className="text-right">
                     <Badge
                       variant="outline"
-                      className="bg-indigo-100 text-2xl font-bold text-indigo-700"
+                      className="bg-indigo-100 text-2xl font-bold text-indigo-700 dark:bg-indigo-900 dark:text-indigo-200"
                     >
                       {ps.score} pts
                     </Badge>
@@ -95,10 +97,10 @@ export function GameResultsPresentation({
             <Card key={ps.player.id} className="mb-6">
               <CardHeader>
                 <div className="flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-indigo-100 text-lg font-bold text-indigo-600">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-indigo-100 text-lg font-bold text-indigo-600 dark:bg-indigo-900 dark:text-indigo-300">
                     #{playerRanks[index]}
                   </div>
-                  <h2 className="text-xl font-bold text-gray-800">
+                  <h2 className="text-xl font-bold text-gray-800 dark:text-gray-100">
                     {ps.player.name} の MochiFuda ({playerMochiFudaCards.length}{' '}
                     cards)
                   </h2>
@@ -106,7 +108,7 @@ export function GameResultsPresentation({
               </CardHeader>
               <CardContent>
                 {playerMochiFudaCards.length === 0 ? (
-                  <p className="text-center text-gray-500">
+                  <p className="text-center text-gray-500 dark:text-gray-400">
                     カードを取得できませんでした
                   </p>
                 ) : (

@@ -1,5 +1,6 @@
 import type { NormalizedPrototype } from '@f88/promidas/types';
 import type { Player } from '@/models/karuta';
+import type { PlayMode } from '@/lib/karuta';
 import type { ScreenSize } from '@/types/screen-size';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -11,6 +12,7 @@ export type PlayerTatamiProps = {
   onCardClick: (card: NormalizedPrototype) => void;
   mochiFudaCount: number;
   score: number;
+  playMode: PlayMode;
   screenSize?: ScreenSize;
 };
 
@@ -20,6 +22,7 @@ export function PlayerTatami({
   onCardClick,
   mochiFudaCount,
   score,
+  playMode,
   screenSize,
 }: PlayerTatamiProps) {
   const titleSizeClass = screenSize
@@ -30,13 +33,16 @@ export function PlayerTatami({
       }[screenSize]
     : 'text-sm md:text-base lg:text-lg';
 
-  const gridColsClass = screenSize
-    ? {
-        smartphone: 'grid-cols-2',
-        tablet: 'grid-cols-3',
-        pc: 'grid-cols-4',
-      }[screenSize]
-    : 'grid-cols-2 md:grid-cols-3 lg:grid-cols-4';
+  const gridColsClass =
+    playMode === 'keyboard'
+      ? 'grid-cols-4'
+      : screenSize
+        ? {
+            smartphone: 'grid-cols-2',
+            tablet: 'grid-cols-3',
+            pc: 'grid-cols-4',
+          }[screenSize]
+        : 'grid-cols-2 md:grid-cols-3 lg:grid-cols-4';
 
   return (
     <Card className="border-2 border-indigo-300 shadow-lg">
@@ -66,6 +72,7 @@ export function PlayerTatami({
               normalizedPrototype={card}
               index={index}
               isClickable={true}
+              playMode={playMode}
               onClick={onCardClick}
             />
           ))}

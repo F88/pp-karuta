@@ -1,5 +1,6 @@
 import { useCallback } from 'react';
 import type { GameState } from '@/models/karuta';
+import type { PlayMode } from '@/lib/karuta';
 import type { NormalizedPrototype } from '@f88/promidas/types';
 import type { ScreenSize } from '@/types/screen-size';
 import { TatamiViewPresentation } from './tatami-view-presentation';
@@ -7,6 +8,7 @@ import { DeckManager } from '@/lib/karuta/deck/deck-manager';
 
 export type TatamiViewContainerProps = {
   gameState: GameState;
+  playMode: PlayMode;
   onCorrectAnswer: (playerId: string, cardId: number) => void;
   onIncorrectAnswer: (playerId: string) => void;
   screenSize?: ScreenSize;
@@ -14,6 +16,7 @@ export type TatamiViewContainerProps = {
 
 export function TatamiViewContainer({
   gameState,
+  playMode,
   onCorrectAnswer,
   onIncorrectAnswer,
   screenSize,
@@ -94,6 +97,7 @@ export function TatamiViewContainer({
       currentRace={currentRace}
       totalRaces={gameState.readingOrder.length}
       stackCount={gameState.stack.length}
+      playMode={playMode}
       onPlayerCardSelect={handlePlayerCardSelect}
       screenSize={screenSize}
     />

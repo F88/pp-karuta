@@ -1,13 +1,19 @@
 import type { NormalizedPrototype } from '@f88/promidas/types';
+import type { PlayMode } from '@/lib/karuta';
 import type { ScreenSize } from '@/types/screen-size';
 import { ToriFudaCard } from './tori-fuda-card';
 
 export type SharedTatamiProps = {
   tatamiCards: NormalizedPrototype[];
+  playMode?: PlayMode;
   screenSize?: ScreenSize;
 };
 
-export function SharedTatami({ tatamiCards, screenSize }: SharedTatamiProps) {
+export function SharedTatami({
+  tatamiCards,
+  playMode,
+  screenSize,
+}: SharedTatamiProps) {
   const titleSizeClass = screenSize
     ? {
         smartphone: 'text-base',
@@ -18,11 +24,11 @@ export function SharedTatami({ tatamiCards, screenSize }: SharedTatamiProps) {
 
   const gridColsClass = screenSize
     ? {
-        smartphone: 'grid-cols-2',
-        tablet: 'grid-cols-3',
+        smartphone: 'grid-cols-4',
+        tablet: 'grid-cols-4',
         pc: 'grid-cols-4',
       }[screenSize]
-    : 'grid-cols-2 md:grid-cols-3 lg:grid-cols-4';
+    : 'grid-cols-4 md:grid-cols-4 lg:grid-cols-4';
 
   return (
     <div className="mb-6">
@@ -38,6 +44,7 @@ export function SharedTatami({ tatamiCards, screenSize }: SharedTatamiProps) {
             normalizedPrototype={card}
             index={index}
             isClickable={false}
+            playMode={playMode}
           />
         ))}
       </div>

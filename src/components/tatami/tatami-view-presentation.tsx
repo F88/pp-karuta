@@ -1,5 +1,6 @@
 import { DeckManager } from '@/lib/karuta/deck/deck-manager';
 import type { Deck, GamePlayerState } from '@/models/karuta';
+import type { PlayMode } from '@/lib/karuta';
 import type { NormalizedPrototype } from '@f88/promidas/types';
 import type { ScreenSize } from '@/types/screen-size';
 import { GameHeader } from './game-header';
@@ -17,6 +18,7 @@ export type TatamiViewPresentationProps = {
   currentRace: number;
   totalRaces: number;
   stackCount: number;
+  playMode: PlayMode;
   onPlayerCardSelect: (playerId: string, card: NormalizedPrototype) => void;
   screenSize?: ScreenSize;
 };
@@ -29,6 +31,7 @@ export function TatamiViewPresentation({
   currentRace,
   totalRaces,
   stackCount,
+  playMode,
   onPlayerCardSelect,
   screenSize,
 }: TatamiViewPresentationProps) {
@@ -41,34 +44,23 @@ export function TatamiViewPresentation({
 
   // Determine grid layout based on player count and screen size
   const playerCount = playerStates.length;
+
   const getPlayerGridCols = () => {
-    if (screenSize) {
-      // Fixed screen size mode
-      if (screenSize === 'smartphone') {
-        return 'grid-cols-1';
-      }
-      if (screenSize === 'tablet') {
-        return playerCount <= 2 ? 'grid-cols-1' : 'grid-cols-2';
-      }
-      // PC
+    // Keyboard mode: always match player count
+    if (playMode === 'keyboard') {
       if (playerCount === 1) return 'grid-cols-1';
       if (playerCount === 2) return 'grid-cols-2';
       if (playerCount === 3) return 'grid-cols-3';
-      return 'grid-cols-2'; // 4+ players: 2x2 grid
+      if (playerCount === 4) return 'grid-cols-4';
+      return 'grid-cols-4'; // 5+ players: max 4 columns
     }
 
-    // Responsive mode
+    // Touch mode: simple layout
+    // 1 player: 1 column, 2+ players: 2 columns
     if (playerCount === 1) {
       return 'grid-cols-1';
     }
-    if (playerCount === 2) {
-      return 'grid-cols-1 md:grid-cols-2';
-    }
-    if (playerCount === 3) {
-      return 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3';
-    }
-    // 4+ players
-    return 'grid-cols-1 md:grid-cols-2';
+    return 'grid-cols-2';
   };
 
   return (
@@ -86,10 +78,13 @@ export function TatamiViewPresentation({
 
         {/* Top section: Shared Tatami + YomiFuda (natural height) */}
         <div className="my-8 flex-shrink-0 space-y-6">
-          <SharedTatami
-            tatamiCards={sharedTatamiCards}
-            screenSize={screenSize}
-          />
+          {playMode !== 'touch' && (
+            <SharedTatami
+              tatamiCards={sharedTatamiCards}
+              playMode={playMode}
+              screenSize={screenSize}
+            />
+          )}
           {/* <YomiFudaCard normalizedPrototype={yomiFuda} /> */}
           {/* <YomiFudaMarquee normalizedPrototype={yomiFuda} /> */}
           <Yomite
@@ -100,10 +95,10 @@ export function TatamiViewPresentation({
         </div>
 
         {/* Bottom section: Player Tatami Areas (takes remaining height) */}
-        <div className="flex flex-1 flex-col overflow-hidden border-t border-gray-300 bg-white/80 pt-4 backdrop-blur-sm dark:border-gray-700 dark:bg-gray-800/80">
-          <h2 className="mb-4 flex-shrink-0 text-center text-2xl font-bold text-gray-800 dark:text-gray-100">
+        <div className="flex flex-1 flex-col overflow-hidden">
+          {/* <h2 className="mb-4 flex-shrink-0 text-center text-2xl font-bold text-gray-800 dark:text-gray-100">
             🎮 Player Tatami Areas
-          </h2>
+          </h2> */}
           <div className="flex-1 overflow-y-auto">
             <div className={`grid gap-4 ${getPlayerGridCols()}`}>
               {playerStates.map((playerState) => {
@@ -121,6 +116,7 @@ export function TatamiViewPresentation({
                     }
                     mochiFudaCount={playerState.mochiFuda.length}
                     score={playerState.score}
+                    playMode={playMode}
                     screenSize={screenSize}
                   />
                 );
