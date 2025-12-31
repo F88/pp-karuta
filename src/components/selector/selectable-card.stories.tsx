@@ -210,3 +210,91 @@ export const TatamiSizes: Story = {
     );
   },
 };
+
+// Screen size variants
+export const ScreenSizeSmartphone: Story = {
+  args: {
+    isSelected: false,
+    onClick: () => {},
+    icon: <Smartphone className="h-6 w-6" />,
+    label: 'タッチ',
+    screenSize: 'smartphone',
+  },
+};
+
+export const ScreenSizeTablet: Story = {
+  args: {
+    isSelected: false,
+    onClick: () => {},
+    icon: <Smartphone className="h-6 w-6" />,
+    label: 'タッチ',
+    screenSize: 'tablet',
+  },
+};
+
+export const ScreenSizePC: Story = {
+  args: {
+    isSelected: false,
+    onClick: () => {},
+    icon: <Smartphone className="h-6 w-6" />,
+    label: 'タッチ',
+    screenSize: 'pc',
+  },
+};
+
+export const ScreenSizeComparison: Story = {
+  args: {
+    isSelected: false,
+    onClick: () => {},
+    label: '',
+  },
+  render: () => {
+    return (
+      <div className="space-y-6">
+        <div>
+          <h3 className="mb-2 text-sm font-semibold text-gray-600">
+            Smartphone
+          </h3>
+          <SelectableCard
+            isSelected={false}
+            onClick={() => {}}
+            icon={<Smartphone className="h-6 w-6" />}
+            label="タッチ"
+            screenSize="smartphone"
+          />
+        </div>
+        <div>
+          <h3 className="mb-2 text-sm font-semibold text-gray-600">Tablet</h3>
+          <SelectableCard
+            isSelected={false}
+            onClick={() => {}}
+            icon={<Smartphone className="h-6 w-6" />}
+            label="タッチ"
+            screenSize="tablet"
+          />
+        </div>
+        <div>
+          <h3 className="mb-2 text-sm font-semibold text-gray-600">PC</h3>
+          <SelectableCard
+            isSelected={false}
+            onClick={() => {}}
+            icon={<Smartphone className="h-6 w-6" />}
+            label="タッチ"
+            screenSize="pc"
+          />
+        </div>
+        <div>
+          <h3 className="mb-2 text-sm font-semibold text-gray-600">
+            Responsive (Default)
+          </h3>
+          <SelectableCard
+            isSelected={false}
+            onClick={() => {}}
+            icon={<Smartphone className="h-6 w-6" />}
+            label="タッチ"
+          />
+        </div>
+      </div>
+    );
+  },
+};

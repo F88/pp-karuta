@@ -1,4 +1,5 @@
 import type { StackRecipe } from '@/models/karuta';
+import type { ScreenSize } from '@/types/screen-size';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 
@@ -7,6 +8,8 @@ export type StackRecipeCardProps = {
   onSelect: (recipe: StackRecipe) => void;
   isSelected?: boolean;
   isLoading?: boolean;
+  /** Screen size for fixed sizing. If not provided, responsive classes will be used */
+  screenSize?: ScreenSize;
 };
 
 const getDifficultyBadgeClass = (difficulty: string, isSelected: boolean) => {
@@ -42,6 +45,7 @@ export function StackRecipeCard({
   onSelect,
   isSelected = false,
   isLoading = false,
+  screenSize,
 }: StackRecipeCardProps) {
   const baseClass = isSelected
     ? 'bg-indigo-600 text-white dark:bg-indigo-500'
@@ -58,12 +62,44 @@ export function StackRecipeCard({
     label: isSelected ? 'text-indigo-200' : 'text-gray-500 dark:text-gray-400',
   };
 
+  const sizeStyles = screenSize
+    ? {
+        smartphone: {
+          padding: 'p-4',
+          titleSize: 'text-base',
+          descriptionSize: 'text-xs',
+          contentSize: 'text-xs',
+          labelSize: 'text-xs',
+        },
+        tablet: {
+          padding: 'p-5',
+          titleSize: 'text-lg',
+          descriptionSize: 'text-sm',
+          contentSize: 'text-sm',
+          labelSize: 'text-sm',
+        },
+        pc: {
+          padding: 'p-6',
+          titleSize: 'text-xl',
+          descriptionSize: 'text-sm',
+          contentSize: 'text-sm',
+          labelSize: 'text-sm',
+        },
+      }[screenSize]
+    : {
+        padding: 'p-4 md:p-5 lg:p-6',
+        titleSize: 'text-base md:text-lg lg:text-xl',
+        descriptionSize: 'text-xs md:text-sm',
+        contentSize: 'text-xs md:text-sm',
+        labelSize: 'text-xs md:text-sm',
+      };
+
   return (
     <Button
       onClick={() => onSelect(recipe)}
       disabled={isLoading}
       variant={isSelected ? 'default' : 'outline'}
-      className={`group relative h-auto overflow-hidden rounded-2xl p-6 shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-2xl active:scale-95 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:scale-100 ${baseClass}`}
+      className={`group relative h-auto overflow-hidden rounded-2xl shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-2xl active:scale-95 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:scale-100 ${sizeStyles.padding} ${baseClass}`}
     >
       <div
         className={`absolute inset-0 bg-linear-to-br from-blue-400 to-indigo-500 opacity-0 transition-opacity group-hover:opacity-10 ${
@@ -71,25 +107,29 @@ export function StackRecipeCard({
         }`}
       />
       <div className="relative">
-        <h3 className={`mb-2 text-xl font-bold ${textClass.title}`}>
+        <h3
+          className={`mb-2 font-bold ${sizeStyles.titleSize} ${textClass.title}`}
+        >
           {recipe.title}
         </h3>
 
         {recipe.description && (
-          <p className={`mb-3 text-sm ${textClass.description}`}>
+          <p
+            className={`mb-3 ${sizeStyles.descriptionSize} ${textClass.description}`}
+          >
             {recipe.description}
           </p>
         )}
 
         {import.meta.env.VITE_DEBUG_MODE === 'true' && (
           <div className="mb-2 space-y-1">
-            <div className={`text-sm ${textClass.content}`}>
+            <div className={`${sizeStyles.contentSize} ${textClass.content}`}>
               <span className="font-medium">Size:</span>{' '}
               {recipe.maxSize === 'all'
                 ? 'All cards'
                 : `${recipe.maxSize} cards`}
             </div>
-            <div className={`text-sm ${textClass.content}`}>
+            <div className={`${sizeStyles.contentSize} ${textClass.content}`}>
               <span className="font-medium">Order:</span>{' '}
               {getSortMethodLabel(recipe.sortMethod)}
             </div>
@@ -97,7 +137,9 @@ export function StackRecipeCard({
         )}
 
         <div className="mb-2 flex items-center gap-2">
-          <span className={`text-xs font-semibold ${textClass.label}`}>
+          <span
+            className={`font-semibold ${sizeStyles.labelSize} ${textClass.label}`}
+          >
             Difficulty:
           </span>
           <Badge

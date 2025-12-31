@@ -1,4 +1,5 @@
 import type { Player } from '@/models/karuta';
+import type { ScreenSize } from '@/types/screen-size';
 import { GameManager } from '@/lib/karuta';
 import { SelectableCard } from '@/components/selector/selectable-card';
 
@@ -8,6 +9,7 @@ export type PlayersSelectorProps = {
   onTogglePlayer: (playerId: string) => void;
   onAddPlayer: () => void;
   isLoading: boolean;
+  screenSize?: ScreenSize;
 };
 
 export function PlayersSelector({
@@ -16,6 +18,7 @@ export function PlayersSelector({
   onTogglePlayer,
   onAddPlayer,
   isLoading,
+  screenSize,
 }: PlayersSelectorProps) {
   return (
     <>
@@ -33,6 +36,7 @@ export function PlayersSelector({
               icon={isSelected ? '✓' : '👤'}
               label={player.name}
               alignment="start"
+              screenSize={screenSize}
             />
           );
         })}
@@ -46,6 +50,7 @@ export function PlayersSelector({
           label=""
           className="bg-gray-50 hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700"
           alignment="center"
+          screenSize={screenSize}
         />
       </div>
       {selectedPlayerIds.length >= GameManager.MAX_GAME_PLAYERS && (

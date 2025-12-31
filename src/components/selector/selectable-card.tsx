@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import type { ScreenSize } from '@/types/screen-size';
 
 /**
  * SelectableCard component for displaying selectable options with optional icons.
@@ -18,6 +19,8 @@ export type SelectableCardProps = {
   className?: string;
   /** Alignment of content: 'start' (left) or 'center' */
   alignment?: 'start' | 'center';
+  /** Screen size for fixed sizing. If not provided, responsive classes will be used */
+  screenSize?: ScreenSize;
 };
 
 export function SelectableCard({
@@ -28,11 +31,41 @@ export function SelectableCard({
   label,
   className = '',
   alignment = 'center',
+  screenSize,
 }: SelectableCardProps) {
+  // Size-specific styles
+  const sizeStyles = screenSize
+    ? {
+        smartphone: {
+          padding: 'p-2',
+          gap: 'gap-2',
+          iconSize: 'h-8 w-8',
+          textSize: 'text-sm',
+        },
+        tablet: {
+          padding: 'p-4',
+          gap: 'gap-3',
+          iconSize: 'h-12 w-12',
+          textSize: 'text-base',
+        },
+        pc: {
+          padding: 'p-4',
+          gap: 'gap-3',
+          iconSize: 'h-12 w-12',
+          textSize: 'text-xl',
+        },
+      }[screenSize]
+    : {
+        padding: 'p-2 md:p-4',
+        gap: 'gap-2 md:gap-3',
+        iconSize: 'h-8 w-8 md:h-12 md:w-12',
+        textSize: 'text-sm md:text-base lg:text-xl',
+      };
+
   return (
     <div
       onClick={disabled ? undefined : onClick}
-      className={`group relative h-auto w-full overflow-hidden rounded-xl p-2 shadow-md transition-all duration-300 hover:scale-105 hover:shadow-lg active:scale-95 md:p-4 ${
+      className={`group relative h-auto w-full overflow-hidden rounded-xl shadow-md transition-all duration-300 hover:scale-105 hover:shadow-lg active:scale-95 ${sizeStyles.padding} ${
         disabled
           ? 'cursor-not-allowed opacity-50'
           : 'cursor-pointer hover:scale-105'
@@ -48,13 +81,13 @@ export function SelectableCard({
         }`}
       />
       <div
-        className={`relative flex items-center gap-2 md:gap-3 ${
+        className={`relative flex items-center ${sizeStyles.gap} ${
           alignment === 'start' ? 'justify-start' : 'justify-center'
         }`}
       >
         {icon && (
           <div
-            className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full md:h-12 md:w-12 ${
+            className={`flex shrink-0 items-center justify-center rounded-full ${sizeStyles.iconSize} ${
               isSelected
                 ? 'bg-white/20 text-white'
                 : 'bg-indigo-100 dark:bg-indigo-900'
@@ -67,7 +100,7 @@ export function SelectableCard({
           className={`${alignment === 'start' ? 'w-full' : ''} ${alignment === 'start' && icon ? 'flex-1' : ''}`}
         >
           <div
-            className={`${alignment === 'start' ? 'w-full' : ''} text-base font-semibold md:text-xl ${
+            className={`${alignment === 'start' ? 'w-full' : ''} font-semibold ${sizeStyles.textSize} ${
               alignment === 'start' ? 'text-left' : 'text-center'
             } ${isSelected ? 'text-white' : 'text-gray-900 dark:text-gray-100'}`}
           >

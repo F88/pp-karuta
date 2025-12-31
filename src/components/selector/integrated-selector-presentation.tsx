@@ -9,6 +9,8 @@ import { PlayersSelector } from './players-selector';
 import { DeckRecipeSelector } from './deck-recipe-selector';
 import { StackRecipeSelector } from './stack-recipe-selector';
 import { TatamiSizeSelector } from './tatami-size-selector';
+import { SectionWrapper } from './section-wrapper';
+import { useScreenSize } from '@/hooks/use-screen-size';
 
 export type IntegratedSelectorPresentationProps = {
   // PlayMode selection
@@ -80,6 +82,8 @@ export function IntegratedSelectorPresentation({
   error,
   // onShowIntro,
 }: IntegratedSelectorPresentationProps) {
+  const screenSize = useScreenSize();
+
   // Calculate expected stack size (use actual if available)
   const stackSize = generatedStack
     ? generatedStack.length
@@ -94,7 +98,7 @@ export function IntegratedSelectorPresentation({
       <div className="mx-auto max-w-7xl">
         {/* Header */}
         <div className="mb-8 text-center">
-          <h1 className="mb-2 text-4xl font-bold text-gray-800 dark:text-gray-100">
+          <h1 className="mb-2 text-2xl font-bold text-gray-800 md:text-3xl lg:text-4xl dark:text-gray-100">
             🎴 PP Karuta 26
           </h1>
           {/* <p className="text-lg text-gray-600 dark:text-gray-400">
@@ -107,57 +111,63 @@ export function IntegratedSelectorPresentation({
           <Alert variant="destructive" className="mb-6">
             <AlertDescription>
               <p className="font-semibold">エラーが発生しました:</p>
-              <p className="text-sm">{error}</p>
+              <p className="text-xs md:text-sm">{error}</p>
             </AlertDescription>
           </Alert>
         )}
 
         {/* Sections displayed sequentially */}
-        <div className="space-y-8">
+        <div className="space-y-6">
           {/* Section: PlayMode */}
-          <div className="space-y-4">
-            <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100">
-              入力方式
-            </h2>
+          <SectionWrapper
+            title="入力方式"
+            variant="primary"
+            screenSize={screenSize}
+          >
             <PlayModeSelector
               selectedPlayMode={selectedPlayMode}
               onSelectPlayMode={onSelectPlayMode}
               isLoading={isLoading}
+              screenSize={screenSize}
             />
-          </div>
+          </SectionWrapper>
 
           {/* Section: Players */}
-          <div className="space-y-4">
-            <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100">
-              プレイヤー
-            </h2>
+          <SectionWrapper
+            title="プレイヤー"
+            variant="success"
+            screenSize={screenSize}
+          >
             <PlayersSelector
               availablePlayers={availablePlayers}
               selectedPlayerIds={selectedPlayerIds}
               onTogglePlayer={onTogglePlayer}
               onAddPlayer={onAddPlayer}
               isLoading={isLoading}
+              screenSize={screenSize}
             />
-          </div>
+          </SectionWrapper>
 
           {/* Section: TatamiSize */}
-          <div className="space-y-4">
-            <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100">
-              畳サイズ
-            </h2>
+          <SectionWrapper
+            title="畳サイズ"
+            variant="warning"
+            screenSize={screenSize}
+          >
             <TatamiSizeSelector
               selectedTatamiSize={selectedTatamiSize}
               onSelectTatamiSize={onSelectTatamiSize}
               isLoading={isLoading}
+              screenSize={screenSize}
             />
-          </div>
+          </SectionWrapper>
 
           {/* Section: DeckRecipe */}
-          <div className="space-y-4">
-            <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100">
-              デッキ
-            </h2>
-
+          <SectionWrapper
+            title="デッキ"
+            variant="danger"
+            screenSize={screenSize}
+          >
             {!isRepoReady && (
               <div className="flex justify-center py-8">
                 <RepoSetup />
@@ -172,16 +182,18 @@ export function IntegratedSelectorPresentation({
                 isDeckLoading={isDeckLoading}
                 loadingDeckRecipeId={loadingDeckRecipeId}
                 generatedDeck={generatedDeck}
+                screenSize={screenSize}
               />
             )}
-          </div>
+          </SectionWrapper>
 
           {/* Section: StackRecipe */}
           {isRepoReady && (
-            <div className="space-y-4">
-              <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100">
-                札数
-              </h2>
+            <SectionWrapper
+              title="札数"
+              variant="secondary"
+              screenSize={screenSize}
+            >
               <StackRecipeSelector
                 stackRecipes={stackRecipes}
                 selectedStackRecipe={selectedStackRecipe}
@@ -189,8 +201,9 @@ export function IntegratedSelectorPresentation({
                 isLoading={isLoading}
                 generatedStack={generatedStack}
                 generatedDeck={generatedDeck}
+                screenSize={screenSize}
               />
-            </div>
+            </SectionWrapper>
           )}
         </div>
 
@@ -210,7 +223,7 @@ export function IntegratedSelectorPresentation({
             onClick={onStartGame}
             disabled={!canStartGame || isLoading}
             size="lg"
-            className="h-16 px-12 text-xl font-bold"
+            className="h-12 px-8 text-base font-bold md:h-14 md:px-10 md:text-lg lg:h-16 lg:px-12 lg:text-xl"
           >
             {isLoading ? (
               <>

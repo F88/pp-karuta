@@ -1,4 +1,5 @@
 import type { StackRecipe, Deck } from '@/models/karuta';
+import type { ScreenSize } from '@/types/screen-size';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { StackRecipeCard } from '@/components/recipe/stack-recipe-card';
 
@@ -9,6 +10,7 @@ export type StackRecipeSelectorProps = {
   isLoading: boolean;
   generatedStack: number[] | null;
   generatedDeck: Deck | null;
+  screenSize?: ScreenSize;
 };
 
 export function StackRecipeSelector({
@@ -18,6 +20,7 @@ export function StackRecipeSelector({
   isLoading,
   generatedStack,
   generatedDeck,
+  screenSize,
 }: StackRecipeSelectorProps) {
   const isDeckEmpty = generatedDeck !== null && generatedDeck.size === 0;
 
@@ -41,6 +44,7 @@ export function StackRecipeSelector({
             onSelect={onSelectStackRecipe}
             isSelected={selectedStackRecipe?.id === recipe.id}
             isLoading={isLoading}
+            screenSize={screenSize}
           />
         ))}
       </div>
