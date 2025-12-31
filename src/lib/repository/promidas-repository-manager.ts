@@ -29,11 +29,12 @@ export type RepositoryState =
  * Primary Responsibility: Provide a valid ProtopediaInMemoryRepository instance
  *
  * This class ensures only one repository instance exists and manages token validation
- * state internally. Token validation is performed automatically when needed.
+ * state internally. Supports both real API mode and dummy data mode for development.
  *
  * Features:
  * - Singleton management of repository instance
- * - Token validation state management
+ * - Token validation state management (unified for both real and dummy modes)
+ * - Dummy data mode support (via VITE_USE_DUMMY_DATA environment variable)
  * - Request deduplication for concurrent getRepository calls
  * - Dependency injection support for token storage
  *
@@ -45,7 +46,8 @@ export type RepositoryState =
  * Internal Implementation:
  * - Uses 2-axis state model (repository existence + token validation status)
  * - Exposes 4-state discriminated union externally (not-created/validating/created-token-valid/token-invalid)
- * - Validates tokens using setupSnapshot({ limit: 0 }) for minimal API verification
+ * - In dummy mode: Creates DummyRepository and sets tokenStatus to 'valid'
+ * - In normal mode: Validates tokens using setupSnapshot({ limit: 0 }) for minimal API verification
  */
 export class PromidasRepositoryManager {
   private static instance: PromidasRepositoryManager | null = null;
@@ -96,8 +98,8 @@ export class PromidasRepositoryManager {
   /**
    * Get the current repository state as a discriminated union
    *
-   * In dummy mode, returns dummy repository state.
-   * In normal mode, returns state based on token validation status.
+   * Works for both dummy mode and normal mode. State is determined by
+   * internal repository existence and tokenStatus fields.
    *
    * State determination based on internal state:
    * - `repository === null && tokenStatus === 'not-validated'` → `not-created`
@@ -110,19 +112,43 @@ export class PromidasRepositoryManager {
    * @returns Current repository state (4 possible states)
    */
   getState(): RepositoryState {
-    return this.isDummyMode() ? this.getDummyState() : this.getNormalState();
+    if (!this.repository) {
+      if (this.tokenStatus === 'invalid') {
+        return {
+          type: 'token-invalid',
+          error: this.error || 'Unknown error',
+        };
+      }
+      return { type: 'not-created' };
+    }
+
+    switch (this.tokenStatus) {
+      case 'not-validated':
+        return { type: 'validating' };
+      case 'valid':
+        return {
+          type: 'created-token-valid',
+          repository: this.repository,
+        };
+      case 'invalid':
+        return {
+          type: 'token-invalid',
+          error: this.error || 'Unknown error',
+        };
+    }
   }
 
   /**
    * Reset repository state to not-created
    *
-   * Clears the repository instance, validation state, error messages,
+   * Clears the repository instance (dummy or normal), validation state, error messages,
    * and any pending initialization promises.
    *
    * Call this when:
    * - Token is removed or changed
    * - Forcing re-validation of the repository
    * - Cleaning up the manager state
+   * - Switching between dummy and normal modes
    *
    * Warning: If getRepository() is currently executing, results from that
    * operation will be discarded by the finally block. Consider awaiting
@@ -172,47 +198,26 @@ export class PromidasRepositoryManager {
   }
 
   /**
-   * Get state for dummy repository
-   * In dummy mode, repository is always valid (no token validation needed)
-   * @returns Repository state for dummy mode
+   * Get or create dummy repository
+   *
+   * Creates a DummyRepository instance and sets internal state (this.repository
+   * and this.tokenStatus) to integrate with the unified state management.
+   *
+   * The dummy repository is created only once and cached in this.repository.
+   * Token status is set to 'valid' since dummy mode doesn't require real token validation.
+   *
+   * @private
+   * @returns Dummy repository instance
    */
-  private getDummyState(): RepositoryState {
-    console.info('[PromidasRepositoryManager] Getting dummy repository state');
-    return {
-      type: 'created-token-valid',
-      repository: createDummyRepository(),
-    };
-  }
-
-  /**
-   * Get state for normal repository
-   * @returns Repository state for normal mode
-   */
-  private getNormalState(): RepositoryState {
+  private getDummyRepository(): ProtopediaInMemoryRepository {
     if (!this.repository) {
-      if (this.tokenStatus === 'invalid') {
-        return {
-          type: 'token-invalid',
-          error: this.error || 'Unknown error',
-        };
-      }
-      return { type: 'not-created' };
+      this.repository = createDummyRepository();
+      this.tokenStatus = 'valid';
+      console.info(
+        '[PromidasRepositoryManager] Created dummy repository (VITE_USE_DUMMY_DATA=true)',
+      );
     }
-
-    switch (this.tokenStatus) {
-      case 'not-validated':
-        return { type: 'validating' };
-      case 'valid':
-        return {
-          type: 'created-token-valid',
-          repository: this.repository,
-        };
-      case 'invalid':
-        return {
-          type: 'token-invalid',
-          error: this.error || 'Unknown error',
-        };
-    }
+    return this.repository;
   }
 
   /**
@@ -221,41 +226,34 @@ export class PromidasRepositoryManager {
    * Returns a cached repository if already validated, otherwise retrieves token
    * from storage, creates repository, and validates it.
    *
-   * In dummy data mode (VITE_USE_DUMMY_DATA=true), returns a mock repository
-   * that generates fake data without making API calls.
+   * Mode determination:
+   * - If VITE_USE_DUMMY_DATA=true: Returns DummyRepository (no token validation)
+   * - Otherwise: Creates real repository and validates token via API
    *
    * Request deduplication: Concurrent calls to this method will receive the
    * same Promise, preventing duplicate initialization and API calls.
    *
-   * Validation process:
-   * 1. Check if dummy data mode is enabled (returns dummy repository)
-   * 2. Check if repository is already valid (returns cached instance)
-   * 3. Check if initialization is in progress (returns existing promise)
-   * 4. Retrieve token from storage
-   * 5. Create repository instance
-   * 6. Validate token with minimal API call (setupSnapshot with limit: 0)
-   * 7. Update state and return repository
+   * Dummy mode process:
+   * 1. Check if dummy repository already exists (returns cached instance)
+   * 2. Create DummyRepository and set tokenStatus to 'valid'
    *
-   * Note: Token validation is done with setupSnapshot({ limit: 0 }), so the repository
-   * is ready to use but contains no data. Callers should call setupSnapshot() with
-   * appropriate limit when they need actual prototype data.
+   * Normal mode process:
+   * 1. Check if repository is already valid (returns cached instance)
+   * 2. Check if initialization is in progress (returns existing promise)
+   * 3. Retrieve token from storage
+   * 4. Create repository instance
+   * 5. Validate token with minimal API call (setupSnapshot with limit: 0)
+   * 6. Update state and return repository
+   *
+   * Note: In normal mode, token validation is done with setupSnapshot({ limit: 0 }),
+   * so the repository is ready to use but contains no data. Callers should call
+   * setupSnapshot() with appropriate limit when they need actual prototype data.
    *
    * @returns Validated Promidas repository instance ready for data loading
-   * @throws Error if token is missing, empty, or validation fails
-   * @throws Error if repository creation fails
-   * @throws Error if API token is invalid or API is unreachable
+   * @throws Error if token is missing, empty, or validation fails (normal mode only)
+   * @throws Error if repository creation fails (normal mode only)
+   * @throws Error if API token is invalid or API is unreachable (normal mode only)
    */
-  /**
-   * Get or create dummy repository
-   * Delegates to createDummyRepository which manages singleton instance
-   * @returns Dummy repository instance
-   */
-  private getDummyRepository(): ProtopediaInMemoryRepository {
-    console.info(
-      '[PromidasRepositoryManager] Using dummy repository (VITE_USE_DUMMY_DATA=true)',
-    );
-    return createDummyRepository();
-  }
 
   async getRepository(): Promise<ProtopediaInMemoryRepository> {
     if (this.isDummyMode()) {
