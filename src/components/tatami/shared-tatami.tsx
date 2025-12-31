@@ -45,6 +45,7 @@ export function SharedTatami({
             index={index}
             isClickable={false}
             playMode={playMode}
+            showImage={true}
           />
         ))}
       </div>

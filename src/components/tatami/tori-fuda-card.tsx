@@ -7,6 +7,7 @@ export type ToriFudaCardProps = {
   normalizedPrototype: NormalizedPrototype;
   index: number;
   isClickable?: boolean;
+  showImage?: boolean;
   playMode?: PlayMode;
   keyboardKey?: string;
   onClick?: (card: NormalizedPrototype) => void;
@@ -16,11 +17,11 @@ export function ToriFudaCard({
   normalizedPrototype: card,
   index,
   isClickable = false,
+  showImage = true,
   playMode,
   keyboardKey,
   onClick,
 }: ToriFudaCardProps) {
-  const showImage = playMode !== 'keyboard';
 
   return (
     <Card
@@ -46,13 +47,11 @@ export function ToriFudaCard({
         )}
 
         {/* Keyboard Key Indicator */}
-        {playMode === 'keyboard' && (
+        {playMode === 'keyboard' && keyboardKey && (
           <div className="absolute top-2 right-2">
-            {keyboardKey && (
-              <Kbd className="text-sm font-bold shadow-md">
-                {keyboardKey.toUpperCase()}
-              </Kbd>
-            )}
+            <Kbd className="text-sm font-bold shadow-md">
+              {keyboardKey.toUpperCase()}
+            </Kbd>
           </div>
         )}
 

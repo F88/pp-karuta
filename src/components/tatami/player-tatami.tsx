@@ -26,6 +26,8 @@ export function PlayerTatami({
   playMode,
   screenSize,
 }: PlayerTatamiProps) {
+  const showImage = playMode === 'touch';
+
   const titleSizeClass = screenSize
     ? {
         smartphone: 'text-sm',
@@ -108,6 +110,7 @@ export function PlayerTatami({
               index={index}
               isClickable={true}
               playMode={playMode}
+              showImage={showImage}
               keyboardKey={getKeyForCard(index)}
               onClick={onCardClick}
             />
