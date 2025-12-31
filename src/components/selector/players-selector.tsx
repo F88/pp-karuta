@@ -43,9 +43,9 @@ export function PlayersSelector({
           onClick={onAddPlayer}
           disabled={isLoading}
           icon={<span className="text-4xl text-gray-400">+</span>}
-          alignment="start"
           label=""
           className="bg-gray-50 hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700"
+          alignment="center"
         />
       </div>
       {selectedPlayerIds.length >= GameManager.MAX_GAME_PLAYERS && (

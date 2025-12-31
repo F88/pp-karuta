@@ -10,6 +10,9 @@ const config: StorybookConfig = {
   stories: ['../src/**/*.stories.@(js|jsx|mjs|ts|tsx)'],
   addons: [],
   framework: '@storybook/react-vite',
+  typescript: {
+    reactDocgen: 'react-docgen-typescript',
+  },
   async viteFinal(config) {
     return mergeConfig(config, {
       plugins: [tailwindcss()],

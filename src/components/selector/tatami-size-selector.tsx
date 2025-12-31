@@ -23,7 +23,8 @@ export function TatamiSizeSelector({
             isSelected={isSelected}
             onClick={() => onSelectTatamiSize(size)}
             disabled={isLoading}
-            label={size}
+            label={String(size)}
+            alignment={'center'}
           />
         );
       })}

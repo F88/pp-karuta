@@ -203,7 +203,7 @@ export const TatamiSizes: Story = {
             key={size}
             isSelected={selected === size}
             onClick={() => setSelected(size)}
-            label={<span className="text-2xl font-bold">{size}</span>}
+            label={String(size)}
           />
         ))}
       </div>

@@ -20,14 +20,16 @@ export function PlayModeSelector({
         onClick={() => onSelectPlayMode('touch')}
         disabled={isLoading}
         icon={<Smartphone className="h-6 w-6" />}
-        label={<span className="text-lg">タッチ</span>}
+        label="タッチ"
+        alignment={'center'}
       />
       <SelectableCard
         isSelected={selectedPlayMode === 'keyboard'}
         onClick={() => onSelectPlayMode('keyboard')}
         disabled={isLoading}
         icon={<Keyboard className="h-6 w-6" />}
-        label={<span className="text-lg">キーボード</span>}
+        label="キーボード"
+        alignment={'center'}
       />
     </div>
   );
