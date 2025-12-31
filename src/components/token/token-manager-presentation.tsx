@@ -23,7 +23,6 @@ export interface TokenManagerPresentationProps {
   showToken: boolean;
   hasToken: boolean;
   isValidating: boolean;
-  useDummyData: boolean;
   repoState: RepositoryState;
   onInputChange: (value: string) => void;
   onToggleShowToken: () => void;
@@ -36,7 +35,6 @@ export function TokenManagerPresentation({
   showToken,
   hasToken,
   isValidating,
-  useDummyData,
   repoState,
   onInputChange,
   onToggleShowToken,
@@ -44,10 +42,6 @@ export function TokenManagerPresentation({
   onRemove,
 }: TokenManagerPresentationProps) {
   const getValidationMessage = () => {
-    if (useDummyData) {
-      return null;
-    }
-
     if (isValidating) {
       return <p className="text-muted-foreground text-xs">Tokenを確認中...</p>;
     }
@@ -68,10 +62,6 @@ export function TokenManagerPresentation({
   };
 
   const getStatusIcon = () => {
-    if (useDummyData) {
-      return null;
-    }
-
     if (!hasToken) {
       return <Circle className="text-muted-foreground" size={20} />;
     }

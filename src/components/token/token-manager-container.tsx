@@ -17,8 +17,6 @@ export function TokenManagerContainer() {
     type: 'not-created',
   });
 
-  const useDummyData = import.meta.env.VITE_USE_DUMMY_DATA === 'true';
-
   // Sync inputValue with token
   useEffect(() => {
     setInputValue(token || '');
@@ -31,16 +29,10 @@ export function TokenManagerContainer() {
       return;
     }
 
-    // Skip validation in dummy mode
-    if (useDummyData) {
-      setRepoState({ type: 'not-created' });
-      return;
-    }
-
     // Check current repo state
     const status = getRepositoryState();
     setRepoState(status);
-  }, [hasToken, useDummyData]);
+  }, [hasToken]);
 
   const handleSave = async () => {
     if (!inputValue.trim()) return;
@@ -49,11 +41,6 @@ export function TokenManagerContainer() {
     resetRepository();
 
     await saveToken(inputValue.trim());
-
-    // Skip validation in dummy mode
-    if (useDummyData) {
-      return;
-    }
 
     // Validate token by creating repository
     setIsValidating(true);
@@ -93,7 +80,6 @@ export function TokenManagerContainer() {
       showToken={showToken}
       hasToken={hasToken}
       isValidating={isValidating}
-      useDummyData={useDummyData}
       repoState={repoState}
       onInputChange={handleInputChange}
       onToggleShowToken={handleToggleShowToken}
