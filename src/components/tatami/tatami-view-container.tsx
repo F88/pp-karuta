@@ -1,6 +1,7 @@
 import { useCallback } from 'react';
 import type { GameState } from '@/models/karuta';
 import type { NormalizedPrototype } from '@f88/promidas/types';
+import type { ScreenSize } from '@/types/screen-size';
 import { TatamiViewPresentation } from './tatami-view-presentation';
 import { DeckManager } from '@/lib/karuta/deck/deck-manager';
 
@@ -8,12 +9,14 @@ export type TatamiViewContainerProps = {
   gameState: GameState;
   onCorrectAnswer: (playerId: string, cardId: number) => void;
   onIncorrectAnswer: (playerId: string) => void;
+  screenSize?: ScreenSize;
 };
 
 export function TatamiViewContainer({
   gameState,
   onCorrectAnswer,
   onIncorrectAnswer,
+  screenSize,
 }: TatamiViewContainerProps) {
   // Calculate current race from total mochiFuda count across all players
   const totalMochiFuda = gameState.playerStates.reduce(
@@ -92,6 +95,7 @@ export function TatamiViewContainer({
       totalRaces={gameState.readingOrder.length}
       stackCount={gameState.stack.length}
       onPlayerCardSelect={handlePlayerCardSelect}
+      screenSize={screenSize}
     />
   );
 }

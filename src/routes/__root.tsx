@@ -9,6 +9,7 @@ import { AppHeader } from '@/components/layout/app-header';
 import { RepoSetup } from '@/components/layout/repo-setup';
 import { RepoSetupDialog } from '@/components/layout/repo-setup-dialog';
 import { ThemeProvider } from '@/components/theme-provider';
+import { ScreenSizeProvider } from '@/contexts/screen-size-provider';
 import { PlayerManager } from '@/lib/karuta';
 import type { RepositoryState } from '@/lib/repository/promidas-repo';
 import { getRepositoryState } from '@/lib/repository/promidas-repo';
@@ -66,7 +67,9 @@ function RootComponent() {
         onOpenChange={() => setOpenRepoSetupDialog(false)}
         autoCloseOnValid={false}
       />
-      <Outlet />
+      <ScreenSizeProvider>
+        <Outlet />
+      </ScreenSizeProvider>
     </ThemeProvider>
   );
 }

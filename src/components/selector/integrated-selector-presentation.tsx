@@ -1,5 +1,6 @@
 import type { DeckRecipe, StackRecipe, Player, Deck } from '@/models/karuta';
 import type { PlayMode, TatamiSize } from '@/lib/karuta';
+import type { ScreenSize } from '@/types/screen-size';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { GameSetupSummary } from './game-setup-summary';
@@ -10,7 +11,6 @@ import { DeckRecipeSelector } from './deck-recipe-selector';
 import { StackRecipeSelector } from './stack-recipe-selector';
 import { TatamiSizeSelector } from './tatami-size-selector';
 import { SectionWrapper } from './section-wrapper';
-import { useScreenSize } from '@/hooks/use-screen-size';
 
 export type IntegratedSelectorPresentationProps = {
   // PlayMode selection
@@ -54,6 +54,9 @@ export type IntegratedSelectorPresentationProps = {
 
   // Intro
   onShowIntro?: () => void;
+
+  // Screen size
+  screenSize?: ScreenSize;
 };
 
 export function IntegratedSelectorPresentation({
@@ -81,9 +84,8 @@ export function IntegratedSelectorPresentation({
   isLoading,
   error,
   // onShowIntro,
+  screenSize,
 }: IntegratedSelectorPresentationProps) {
-  const screenSize = useScreenSize();
-
   // Calculate expected stack size (use actual if available)
   const stackSize = generatedStack
     ? generatedStack.length

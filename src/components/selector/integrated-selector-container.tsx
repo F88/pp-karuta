@@ -4,6 +4,7 @@ import type { UseGameSetupReturn } from '@/hooks/useGameSetup';
 import { STACK_RECIPES } from '@/lib/karuta';
 import { DeckRecipeManager } from '@/lib/karuta/deck';
 import { useEffect } from 'react';
+import { useScreenSizeContext } from '@/hooks/use-screen-size-context';
 
 export type IntegratedSelectorContainerProps = {
   setup: UseGameSetupReturn;
@@ -14,6 +15,8 @@ export function IntegratedSelectorContainer({
   setup,
   onShowIntro,
 }: IntegratedSelectorContainerProps) {
+  const screenSize = useScreenSizeContext();
+
   // Repository state
   const repoState = useRepositoryState();
 
@@ -55,6 +58,7 @@ export function IntegratedSelectorContainer({
         setup.error || (repoError ? `Repository error: ${repoError}` : null)
       }
       onShowIntro={onShowIntro}
+      screenSize={screenSize}
     />
   );
 }

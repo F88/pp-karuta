@@ -13,9 +13,11 @@ import type { GameState } from '@/models/karuta';
 import type { PlayMode } from '@/lib/karuta';
 import { useGameSetup } from '@/hooks/useGameSetup';
 import { useRepositoryState } from '@/hooks/use-repository-state';
+import { useScreenSizeContext } from '@/hooks/use-screen-size-context';
 
 export function GameFlow() {
   const navigate = useNavigate();
+  const screenSize = useScreenSizeContext();
 
   // Repository state
   const repoState = useRepositoryState();
@@ -161,6 +163,7 @@ export function GameFlow() {
         gameState={gameState}
         onCorrectAnswer={handleCorrectAnswer}
         onIncorrectAnswer={handleIncorrectAnswer}
+        screenSize={screenSize}
       />
     );
   }

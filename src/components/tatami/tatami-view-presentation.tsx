@@ -1,6 +1,7 @@
 import { DeckManager } from '@/lib/karuta/deck/deck-manager';
 import type { Deck, GamePlayerState } from '@/models/karuta';
 import type { NormalizedPrototype } from '@f88/promidas/types';
+import type { ScreenSize } from '@/types/screen-size';
 import { GameHeader } from './game-header';
 import { PlayerTatami } from './player-tatami';
 import { SharedTatami } from './shared-tatami';
@@ -17,6 +18,7 @@ export type TatamiViewPresentationProps = {
   totalRaces: number;
   stackCount: number;
   onPlayerCardSelect: (playerId: string, card: NormalizedPrototype) => void;
+  screenSize?: ScreenSize;
 };
 
 export function TatamiViewPresentation({
@@ -28,6 +30,7 @@ export function TatamiViewPresentation({
   totalRaces,
   stackCount,
   onPlayerCardSelect,
+  screenSize,
 }: TatamiViewPresentationProps) {
   // Calculate total stats from all players
   const totalScore = playerStates.reduce((sum, ps) => sum + ps.score, 0);
@@ -37,7 +40,7 @@ export function TatamiViewPresentation({
   );
 
   return (
-    <div className="flex h-screen flex-col bg-gradient-to-br from-green-50 to-teal-100 p-4">
+    <div className="flex h-screen flex-col bg-gradient-to-br from-green-50 to-teal-100 p-4 dark:from-gray-900 dark:to-gray-800">
       <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col overflow-hidden">
         <GameHeader
           currentRace={currentRace}
@@ -46,19 +49,27 @@ export function TatamiViewPresentation({
           mochiFudaCount={totalMochiFuda}
           stackCount={stackCount}
           tatamiCount={sharedTatamiCards.length}
+          screenSize={screenSize}
         />
 
         {/* Top section: Shared Tatami + YomiFuda (natural height) */}
         <div className="my-8 flex-shrink-0 space-y-6">
-          <SharedTatami tatamiCards={sharedTatamiCards} />
+          <SharedTatami
+            tatamiCards={sharedTatamiCards}
+            screenSize={screenSize}
+          />
           {/* <YomiFudaCard normalizedPrototype={yomiFuda} /> */}
           {/* <YomiFudaMarquee normalizedPrototype={yomiFuda} /> */}
-          <Yomite key={yomiFuda.id} normalizedPrototype={yomiFuda} />
+          <Yomite
+            key={yomiFuda.id}
+            normalizedPrototype={yomiFuda}
+            screenSize={screenSize}
+          />
         </div>
 
         {/* Bottom section: Player Tatami Areas (takes remaining height) */}
-        <div className="flex flex-1 flex-col overflow-hidden border-t border-gray-300 bg-white/80 pt-4 backdrop-blur-sm">
-          <h2 className="mb-4 flex-shrink-0 text-center text-2xl font-bold text-gray-800">
+        <div className="flex flex-1 flex-col overflow-hidden border-t border-gray-300 bg-white/80 pt-4 backdrop-blur-sm dark:border-gray-700 dark:bg-gray-800/80">
+          <h2 className="mb-4 flex-shrink-0 text-center text-2xl font-bold text-gray-800 dark:text-gray-100">
             🎮 Player Tatami Areas
           </h2>
           <div className="flex-1 overflow-y-auto">
@@ -78,6 +89,7 @@ export function TatamiViewPresentation({
                     }
                     mochiFudaCount={playerState.mochiFuda.length}
                     score={playerState.score}
+                    screenSize={screenSize}
                   />
                 );
               })}

@@ -1,5 +1,6 @@
 import type { NormalizedPrototype } from '@f88/promidas/types';
 import type { Player } from '@/models/karuta';
+import type { ScreenSize } from '@/types/screen-size';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { ToriFudaCard } from './tori-fuda-card';
@@ -10,6 +11,7 @@ export type PlayerTatamiProps = {
   onCardClick: (card: NormalizedPrototype) => void;
   mochiFudaCount: number;
   score: number;
+  screenSize?: ScreenSize;
 };
 
 export function PlayerTatami({
@@ -18,12 +20,31 @@ export function PlayerTatami({
   onCardClick,
   mochiFudaCount,
   score,
+  screenSize,
 }: PlayerTatamiProps) {
+  const titleSizeClass = screenSize
+    ? {
+        smartphone: 'text-sm',
+        tablet: 'text-base',
+        pc: 'text-lg',
+      }[screenSize]
+    : 'text-sm md:text-base lg:text-lg';
+
+  const gridColsClass = screenSize
+    ? {
+        smartphone: 'grid-cols-2',
+        tablet: 'grid-cols-3',
+        pc: 'grid-cols-4',
+      }[screenSize]
+    : 'grid-cols-2 md:grid-cols-3 lg:grid-cols-4';
+
   return (
     <Card className="border-2 border-indigo-300 shadow-lg">
       <CardHeader>
         <div className="flex items-center justify-between">
-          <h3 className="flex items-center gap-2 text-lg font-bold text-indigo-700">
+          <h3
+            className={`flex items-center gap-2 font-bold text-indigo-700 ${titleSizeClass}`}
+          >
             <span>👤</span>
             {player.name}
           </h3>
@@ -38,7 +59,7 @@ export function PlayerTatami({
         </div>
       </CardHeader>
       <CardContent>
-        <div className="grid grid-cols-4 gap-3">
+        <div className={`grid gap-3 ${gridColsClass}`}>
           {tatamiCards.map((card, index) => (
             <ToriFudaCard
               key={card.id}

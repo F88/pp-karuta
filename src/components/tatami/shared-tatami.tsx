@@ -1,17 +1,37 @@
 import type { NormalizedPrototype } from '@f88/promidas/types';
+import type { ScreenSize } from '@/types/screen-size';
 import { ToriFudaCard } from './tori-fuda-card';
 
 export type SharedTatamiProps = {
   tatamiCards: NormalizedPrototype[];
+  screenSize?: ScreenSize;
 };
 
-export function SharedTatami({ tatamiCards }: SharedTatamiProps) {
+export function SharedTatami({ tatamiCards, screenSize }: SharedTatamiProps) {
+  const titleSizeClass = screenSize
+    ? {
+        smartphone: 'text-base',
+        tablet: 'text-lg',
+        pc: 'text-xl',
+      }[screenSize]
+    : 'text-base md:text-lg lg:text-xl';
+
+  const gridColsClass = screenSize
+    ? {
+        smartphone: 'grid-cols-2',
+        tablet: 'grid-cols-3',
+        pc: 'grid-cols-4',
+      }[screenSize]
+    : 'grid-cols-2 md:grid-cols-3 lg:grid-cols-4';
+
   return (
     <div className="mb-6">
-      <h2 className="mb-4 text-center text-xl font-bold text-gray-700">
+      <h2
+        className={`mb-4 text-center font-bold text-gray-700 dark:text-gray-300 ${titleSizeClass}`}
+      >
         🎴 Shared Tatami (Reference Only)
       </h2>
-      <div className="grid grid-cols-4 gap-4">
+      <div className={`grid gap-4 ${gridColsClass}`}>
         {tatamiCards.map((card, index) => (
           <ToriFudaCard
             key={card.id}
