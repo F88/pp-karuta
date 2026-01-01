@@ -1,14 +1,10 @@
 import { Card, CardContent } from '@/components/ui/card';
-import { Kbd } from '@/components/ui/kbd';
 import type { ScreenSize } from '@/types/screen-size';
 import type { NormalizedPrototype } from '@f88/promidas/types';
 
 export type ToriFudaCardKeyboardProps = {
   normalizedPrototype: NormalizedPrototype;
   index: number;
-  isClickable?: boolean;
-  showImage?: boolean;
-  onClick?: (card: NormalizedPrototype) => void;
   keyboardKey?: string;
   screenSize: ScreenSize;
 };
@@ -16,37 +12,21 @@ export type ToriFudaCardKeyboardProps = {
 export function ToriFudaCardKeyboard({
   normalizedPrototype: card,
   index,
-  isClickable = false,
-  showImage = false,
-  onClick,
   keyboardKey,
   screenSize,
 }: ToriFudaCardKeyboardProps) {
-  const cardBaseClass = 'rounded-none border-2 border-black dark:border-white';
-  const cardClickableClass =
-    'group cursor-pointer transition-all duration-300 hover:scale-105 hover:shadow-xl active:scale-95';
-
-  const cardContentClass = 'relative p-0';
-
-  const keyboardKeyContainerClass = showImage
-    ? 'absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10'
-    : 'flex h-full min-h-[100px] items-center justify-center';
-  const keyboardKeyClass = screenSize
+  const borderWidthClass = screenSize
     ? {
-        smartphone: 'text-2xl font-bold shadow-lg',
-        tablet: 'text-3xl font-bold shadow-lg',
-        pc: 'text-4xl font-bold shadow-lg',
+        smartphone: 'border-2',
+        tablet: 'border-2',
+        pc: 'border-2',
       }[screenSize]
-    : 'text-2xl md:text-3xl lg:text-4xl font-bold shadow-lg';
+    : 'border-2';
+  const cardBaseClass = `@container aspect-video overflow-hidden rounded-none ${borderWidthClass} border-black bg-white shadow-none dark:border-white dark:bg-gray-950`;
+  const cardContentClass = 'flex h-full items-center justify-center p-0';
 
-  const imageContainerClass = screenSize
-    ? {
-        smartphone: 'aspect-video overflow-hidden rounded-none bg-gray-200',
-        tablet: 'aspect-video overflow-hidden rounded-none bg-gray-200',
-        pc: 'aspect-video overflow-hidden rounded-none bg-gray-200',
-      }[screenSize]
-    : 'aspect-video overflow-hidden rounded-none bg-gray-200';
-  const imageClass = 'h-full w-full object-cover';
+  const keyboardKeyClass =
+    'font-bold text-gray-700 dark:text-gray-300 @[60px]:text-base @[80px]:text-lg @[100px]:text-xl @[120px]:text-2xl @[140px]:text-3xl @[180px]:text-4xl @[220px]:text-5xl @[280px]:text-6xl';
 
   const indexBaseClass =
     'flex items-center justify-center rounded-full text-xs font-bold text-white';
@@ -81,40 +61,11 @@ export function ToriFudaCardKeyboard({
     : 'mt-1 md:mt-2 text-xs text-gray-400';
 
   return (
-    <Card
-      className={
-        isClickable ? `${cardBaseClass} ${cardClickableClass}` : cardBaseClass
-      }
-      onClick={isClickable && onClick ? () => onClick(card) : undefined}
-    >
+    <Card className={cardBaseClass}>
       <CardContent className={cardContentClass}>
-        {/* Keyboard Key Indicator (when no image) */}
-        {keyboardKey && !showImage && (
-          <div className={keyboardKeyContainerClass}>
-            <Kbd className={keyboardKeyClass}>{keyboardKey.toUpperCase()}</Kbd>
-          </div>
-        )}
-
-        {showImage && (
-          <div className={`${imageContainerClass} relative`}>
-            {/* Keyboard Key Indicator (overlay on image) */}
-            {keyboardKey && (
-              <div className="absolute top-1/2 left-1/2 z-10 -translate-x-1/2 -translate-y-1/2">
-                <Kbd className={keyboardKeyClass}>
-                  {keyboardKey.toUpperCase()}
-                </Kbd>
-              </div>
-            )}
-            <img
-              src={card.mainUrl}
-              alt={card.prototypeNm}
-              className={imageClass}
-              onError={(e) => {
-                e.currentTarget.src =
-                  'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="100" height="100"%3E%3Crect fill="%23ddd" width="100" height="100"/%3E%3Ctext x="50%25" y="50%25" text-anchor="middle" dy=".3em" fill="%23999"%3ENo Image%3C/text%3E%3C/svg%3E';
-              }}
-            />
-          </div>
+        {/* Keyboard Key Indicator */}
+        {keyboardKey && (
+          <span className={keyboardKeyClass}>{keyboardKey.toUpperCase()}</span>
         )}
 
         {import.meta.env.VITE_DEBUG_MODE === 'true' && (

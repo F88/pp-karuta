@@ -1,7 +1,7 @@
 import type { NormalizedPrototype } from '@f88/promidas/types';
 import type { PlayMode } from '@/lib/karuta';
 import type { ScreenSize } from '@/types/screen-size';
-import { ToriFudaCard } from './tori-fuda-card';
+import { ToriFudaCardTouch } from './tori-fuda-card-touch';
 
 export type SharedTatamiProps = {
   tatamiCards: NormalizedPrototype[];
@@ -11,7 +11,6 @@ export type SharedTatamiProps = {
 
 export function SharedTatami({
   tatamiCards,
-  playMode,
   screenSize = 'pc',
 }: SharedTatamiProps) {
   const titleSizeClass = screenSize
@@ -39,12 +38,11 @@ export function SharedTatami({
       </h2>
       <div className={`grid gap-4 ${gridColsClass}`}>
         {tatamiCards.map((card, index) => (
-          <ToriFudaCard
+          <ToriFudaCardTouch
             key={card.id}
             normalizedPrototype={card}
             index={index}
             isClickable={false}
-            playMode={playMode}
             showImage={true}
             screenSize={screenSize}
           />

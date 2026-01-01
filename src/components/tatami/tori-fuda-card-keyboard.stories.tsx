@@ -40,8 +40,6 @@ export const Default: Story = {
   args: {
     normalizedPrototype: mockCard,
     index: 0,
-    isClickable: true,
-    showImage: false,
     keyboardKey: 'Q',
     screenSize: 'pc',
   },
@@ -51,8 +49,6 @@ export const WithImage: Story = {
   args: {
     normalizedPrototype: mockCard,
     index: 0,
-    isClickable: true,
-    showImage: true,
     keyboardKey: 'W',
     screenSize: 'pc',
   },
@@ -62,8 +58,6 @@ export const Smartphone: Story = {
   args: {
     normalizedPrototype: mockCard,
     index: 0,
-    isClickable: true,
-    showImage: false,
     keyboardKey: '1',
     screenSize: 'smartphone',
   },
@@ -73,8 +67,6 @@ export const SmartphoneWithImage: Story = {
   args: {
     normalizedPrototype: mockCard,
     index: 0,
-    isClickable: true,
-    showImage: true,
     keyboardKey: '2',
     screenSize: 'smartphone',
   },
@@ -84,8 +76,6 @@ export const Tablet: Story = {
   args: {
     normalizedPrototype: mockCard,
     index: 0,
-    isClickable: true,
-    showImage: false,
     keyboardKey: 'E',
     screenSize: 'tablet',
   },
@@ -95,8 +85,6 @@ export const TabletWithImage: Story = {
   args: {
     normalizedPrototype: mockCard,
     index: 0,
-    isClickable: true,
-    showImage: true,
     keyboardKey: 'R',
     screenSize: 'tablet',
   },
@@ -106,8 +94,6 @@ export const NotClickable: Story = {
   args: {
     normalizedPrototype: mockCard,
     index: 0,
-    isClickable: false,
-    showImage: false,
     keyboardKey: 'A',
     screenSize: 'pc',
   },
@@ -122,32 +108,24 @@ export const DifferentKeys: Omit<Story, 'args'> = {
       <ToriFudaCardKeyboard
         normalizedPrototype={mockCard}
         index={0}
-        isClickable={true}
-        showImage={false}
         keyboardKey="Q"
         screenSize="pc"
       />
       <ToriFudaCardKeyboard
         normalizedPrototype={mockCard}
         index={1}
-        isClickable={true}
-        showImage={false}
         keyboardKey="W"
         screenSize="pc"
       />
       <ToriFudaCardKeyboard
         normalizedPrototype={mockCard}
         index={2}
-        isClickable={true}
-        showImage={false}
         keyboardKey="E"
         screenSize="pc"
       />
       <ToriFudaCardKeyboard
         normalizedPrototype={mockCard}
         index={3}
-        isClickable={true}
-        showImage={false}
         keyboardKey="R"
         screenSize="pc"
       />
@@ -166,8 +144,6 @@ export const Grid4x2: Omit<Story, 'args'> = {
           key={key}
           normalizedPrototype={mockCard}
           index={index}
-          isClickable={true}
-          showImage={false}
           keyboardKey={key}
           screenSize="pc"
         />

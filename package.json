@@ -62,6 +62,7 @@
     "@faker-js/faker": "^10.1.0",
     "@storybook/builder-vite": "^10.1.10",
     "@storybook/react-vite": "^10.1.10",
+    "@tailwindcss/container-queries": "^0.1.1",
     "@tanstack/router-plugin": "^1.144.0",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.1",
