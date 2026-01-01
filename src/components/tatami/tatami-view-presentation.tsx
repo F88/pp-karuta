@@ -1,8 +1,8 @@
+import type { PlayMode } from '@/lib/karuta';
 import { DeckManager } from '@/lib/karuta/deck/deck-manager';
 import type { Deck, GamePlayerState } from '@/models/karuta';
-import type { PlayMode } from '@/lib/karuta';
-import type { NormalizedPrototype } from '@f88/promidas/types';
 import type { ScreenSize } from '@/types/screen-size';
+import type { NormalizedPrototype } from '@f88/promidas/types';
 import { GameHeader } from './game-header';
 import { PlayerTatami } from './player-tatami';
 import { SharedTatami } from './shared-tatami';
@@ -20,6 +20,7 @@ export type TatamiViewPresentationProps = {
   stackCount: number;
   playMode: PlayMode;
   onPlayerCardSelect: (playerId: string, card: NormalizedPrototype) => void;
+  playerFeedbackStates: Record<string, 'correct' | 'incorrect' | null>;
   screenSize?: ScreenSize;
 };
 
@@ -33,6 +34,7 @@ export function TatamiViewPresentation({
   stackCount,
   playMode,
   onPlayerCardSelect,
+  playerFeedbackStates,
   screenSize,
 }: TatamiViewPresentationProps) {
   // Calculate total stats from all players
@@ -101,7 +103,7 @@ export function TatamiViewPresentation({
           </h2> */}
           <div className="flex-1 overflow-y-auto">
             <div className={`grid gap-4 ${getPlayerGridCols()}`}>
-              {playerStates.map((playerState) => {
+              {playerStates.map((playerState, playerIndex) => {
                 const playerTatamiCards = DeckManager.getByIds(
                   deck,
                   playerState.tatami,
@@ -110,6 +112,8 @@ export function TatamiViewPresentation({
                   <PlayerTatami
                     key={playerState.player.id}
                     player={playerState.player}
+                    playerIndex={playerIndex}
+                    playerCount={playerStates.length}
                     tatamiCards={playerTatamiCards}
                     onCardClick={(card) =>
                       onPlayerCardSelect(playerState.player.id, card)
@@ -117,6 +121,9 @@ export function TatamiViewPresentation({
                     mochiFudaCount={playerState.mochiFuda.length}
                     score={playerState.score}
                     playMode={playMode}
+                    feedbackState={
+                      playerFeedbackStates[playerState.player.id] ?? null
+                    }
                     screenSize={screenSize}
                   />
                 );

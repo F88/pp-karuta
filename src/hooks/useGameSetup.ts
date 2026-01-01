@@ -1,15 +1,16 @@
-import { useState, useCallback, useMemo, useEffect } from 'react';
-import type { Deck, DeckRecipe, StackRecipe, Player } from '@/models/karuta';
 import type { PlayMode, TatamiSize } from '@/lib/karuta';
 import {
   DeckManager,
+  DEFAULT_TATAMI_SIZE,
   GameManager,
   PlayerManager,
   StackManager,
   StackRecipeManager,
-  DEFAULT_TATAMI_SIZE,
 } from '@/lib/karuta';
+import { TATAMI_SIZES_16, TATAMI_SIZES_8, type TatamiSize16, type TatamiSize8 } from '@/lib/karuta/tatami/tatami-size';
+import type { Deck, DeckRecipe, Player, StackRecipe } from '@/models/karuta';
 import type { ProtopediaInMemoryRepository } from '@f88/promidas';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 export type UseGameSetupReturn = {
   // Deck state
@@ -36,7 +37,8 @@ export type UseGameSetupReturn = {
 
   // TatamiSize state
   selectedTatamiSize: TatamiSize;
-  selectTatamiSize: (size: TatamiSize) => void;
+  selectTatamiSize: (size: TatamiSize8 | TatamiSize16) => void;
+  availableTatamiSizes: readonly TatamiSize8[]| readonly TatamiSize16[];
 
   // Game creation
   canStartGame: boolean;
@@ -212,16 +214,28 @@ export function useGameSetup({
   );
 
   // Toggle player selection
-  const togglePlayer = useCallback((playerId: string) => {
-    setSelectedPlayerIds((prev) => {
-      if (prev.includes(playerId)) {
-        return prev.filter((id) => id !== playerId);
-      } else {
-        return [...prev, playerId];
-      }
-    });
-    setError(null);
-  }, []);
+  const togglePlayer = useCallback(
+    (playerId: string) => {
+      setSelectedPlayerIds((prev) => {
+        const newPlayerIds = prev.includes(playerId)
+          ? prev.filter((id) => id !== playerId)
+          : [...prev, playerId];
+
+        // If keyboard mode and player count becomes 3+, restrict tatami size
+        if (
+          selectedPlayMode === 'keyboard' &&
+          newPlayerIds.length >= 3 &&
+          (selectedTatamiSize === 12 || selectedTatamiSize === 16)
+        ) {
+          setSelectedTatamiSize(8);
+        }
+
+        return newPlayerIds;
+      });
+      setError(null);
+    },
+    [selectedPlayMode, selectedTatamiSize],
+  );
 
   // Add new player with random name
   const addPlayer = useCallback(async () => {
@@ -236,20 +250,65 @@ export function useGameSetup({
 
     // Save to storage
     await PlayerManager.savePlayers(updatedPlayers);
+
+    // Update selected players
+    setSelectedPlayerIds((prev) => {
+      const newPlayerIds = [...prev, newPlayer.id];
+
+      // If keyboard mode and player count becomes 3+, restrict tatami size
+      if (
+        selectedPlayMode === 'keyboard' &&
+        newPlayerIds.length >= 3 &&
+        (selectedTatamiSize === 12 || selectedTatamiSize === 16)
+      ) {
+        setSelectedTatamiSize(8);
+      }
+
+      return newPlayerIds;
+    });
+
     setError(null);
-  }, [availablePlayers]);
+  }, [availablePlayers, selectedPlayMode, selectedTatamiSize]);
 
   // Select PlayMode
-  const selectPlayMode = useCallback((mode: PlayMode) => {
-    setSelectedPlayMode(mode);
-    setError(null);
-  }, []);
+  const selectPlayMode = useCallback(
+    (mode: PlayMode) => {
+      setSelectedPlayMode(mode);
+      setError(null);
+
+      // If switching to keyboard mode with 3+ players, restrict tatami size to 4 or 8
+      if (mode === 'keyboard' && selectedPlayerIds.length >= 3) {
+        if (selectedTatamiSize === 12 || selectedTatamiSize === 16) {
+          setSelectedTatamiSize(8);
+        }
+      }
+    },
+    [selectedPlayerIds.length, selectedTatamiSize],
+  );
 
   // Select TatamiSize
   const selectTatamiSize = useCallback((size: TatamiSize) => {
     setSelectedTatamiSize(size);
     setError(null);
   }, []);
+
+  // Get available tatami sizes based on play mode and player count
+  const availableTatamiSizes = useMemo(() => {
+    if (selectedPlayMode === 'keyboard') {
+      switch (selectedPlayerIds.length) {
+        case 1:
+          return TATAMI_SIZES_16;
+        case 2:
+          return TATAMI_SIZES_16;
+        case 3:
+          return TATAMI_SIZES_8;
+        case 4:
+          return TATAMI_SIZES_8;
+        default:
+          return TATAMI_SIZES_8;
+      }
+    }
+  }, [selectedPlayMode, selectedPlayerIds.length]);
 
   // Can start game validation
   const canStartGame = useMemo(() => {
@@ -344,6 +403,7 @@ export function useGameSetup({
     selectPlayMode,
     selectedTatamiSize,
     selectTatamiSize,
+    availableTatamiSizes: availableTatamiSizes ?? ([4, 8, 12, 16] as const),
     canStartGame,
     createGameState,
     error,

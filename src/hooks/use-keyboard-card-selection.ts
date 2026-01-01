@@ -1,21 +1,14 @@
-import { useEffect } from 'react';
+import { DeckManager } from '@/lib/karuta/deck/deck-manager';
+import { getPlayerKeyBindings } from '@/lib/karuta/keyboard-bindings';
 import type { GamePlayerState } from '@/models/karuta';
 import type { NormalizedPrototype } from '@f88/promidas/types';
-import { DeckManager } from '@/lib/karuta/deck/deck-manager';
+import { useEffect } from 'react';
 
 type UseKeyboardCardSelectionProps = {
   enabled: boolean;
   playerStates: GamePlayerState[];
   deck: Map<number, NormalizedPrototype>;
   onCardSelect: (playerId: string, card: NormalizedPrototype) => void;
-};
-
-// Keyboard bindings for each player
-const PLAYER_KEY_BINDINGS: Record<string, string[]> = {
-  'player-1': ['1', '2', '3', '4', '5'],
-  'player-2': ['q', 'w', 'e', 'r', 't'],
-  'player-3': ['a', 's', 'd', 'f', 'g'],
-  'player-4': ['z', 'x', 'c', 'v', 'b'],
 };
 
 export function useKeyboardCardSelection({
@@ -35,10 +28,17 @@ export function useKeyboardCardSelection({
 
       const key = event.key.toLowerCase();
 
+      // Player count determines key bindings (1-2: 16 keys, 3-4: 8 keys)
+      const playerCount = playerStates.length;
+
       // Find which player and card index this key corresponds to
-      for (const playerState of playerStates) {
-        const playerId = playerState.player.id;
-        const keyBindings = PLAYER_KEY_BINDINGS[playerId];
+      for (
+        let playerIndex = 0;
+        playerIndex < playerStates.length;
+        playerIndex++
+      ) {
+        const playerState = playerStates[playerIndex];
+        const keyBindings = getPlayerKeyBindings(playerIndex, playerCount);
 
         if (!keyBindings) continue;
 
@@ -55,7 +55,7 @@ export function useKeyboardCardSelection({
           if (cardIndex < playerTatamiCards.length) {
             const selectedCard = playerTatamiCards[cardIndex];
             event.preventDefault();
-            onCardSelect(playerId, selectedCard);
+            onCardSelect(playerState.player.id, selectedCard);
             return;
           }
         }

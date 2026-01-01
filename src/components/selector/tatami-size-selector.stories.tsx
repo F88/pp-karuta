@@ -1,3 +1,4 @@
+import { TATAMI_SIZES } from '@/lib/karuta';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { TatamiSizeSelector } from './tatami-size-selector';
 
@@ -17,14 +18,7 @@ export const Default: Story = {
   args: {
     selectedTatamiSize: 8,
     onSelectTatamiSize: () => {},
-    isLoading: false,
-  },
-};
-
-export const Size20Selected: Story = {
-  args: {
-    selectedTatamiSize: 20,
-    onSelectTatamiSize: () => {},
+    availableSizes: TATAMI_SIZES,
     isLoading: false,
   },
 };
@@ -33,6 +27,7 @@ export const Loading: Story = {
   args: {
     selectedTatamiSize: 8,
     onSelectTatamiSize: () => {},
+    availableSizes: TATAMI_SIZES,
     isLoading: true,
   },
 };
@@ -42,6 +37,7 @@ export const ScreenSizeSmartphone: Story = {
   args: {
     selectedTatamiSize: 8,
     onSelectTatamiSize: () => {},
+    availableSizes: TATAMI_SIZES,
     isLoading: false,
     screenSize: 'smartphone',
   },
@@ -51,6 +47,7 @@ export const ScreenSizeTablet: Story = {
   args: {
     selectedTatamiSize: 8,
     onSelectTatamiSize: () => {},
+    availableSizes: TATAMI_SIZES,
     isLoading: false,
     screenSize: 'tablet',
   },
@@ -60,6 +57,7 @@ export const ScreenSizePC: Story = {
   args: {
     selectedTatamiSize: 8,
     onSelectTatamiSize: () => {},
+    availableSizes: TATAMI_SIZES,
     isLoading: false,
     screenSize: 'pc',
   },
@@ -69,6 +67,7 @@ export const ScreenSizeComparison: Story = {
   args: {
     selectedTatamiSize: 8,
     onSelectTatamiSize: () => {},
+    availableSizes: TATAMI_SIZES,
     isLoading: false,
   },
   render: () => {
@@ -81,6 +80,7 @@ export const ScreenSizeComparison: Story = {
           <TatamiSizeSelector
             selectedTatamiSize={8}
             onSelectTatamiSize={() => {}}
+            availableSizes={TATAMI_SIZES}
             isLoading={false}
             screenSize="smartphone"
           />
@@ -90,6 +90,7 @@ export const ScreenSizeComparison: Story = {
           <TatamiSizeSelector
             selectedTatamiSize={8}
             onSelectTatamiSize={() => {}}
+            availableSizes={TATAMI_SIZES}
             isLoading={false}
             screenSize="tablet"
           />
@@ -99,6 +100,7 @@ export const ScreenSizeComparison: Story = {
           <TatamiSizeSelector
             selectedTatamiSize={8}
             onSelectTatamiSize={() => {}}
+            availableSizes={TATAMI_SIZES}
             isLoading={false}
             screenSize="pc"
           />
@@ -110,6 +112,7 @@ export const ScreenSizeComparison: Story = {
           <TatamiSizeSelector
             selectedTatamiSize={8}
             onSelectTatamiSize={() => {}}
+            availableSizes={TATAMI_SIZES}
             isLoading={false}
           />
         </div>

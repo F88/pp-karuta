@@ -31,3 +31,5 @@ tools/prompts/*
 # src/App.tsx
 # src/lib/repository/promidas-repository-manager.test.ts
 src/components/game/game-flow.tsx
+src/components/tatami/tatami-view-container.tsx
+src/hooks/useGameSetup.ts

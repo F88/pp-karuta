@@ -1,11 +1,11 @@
-import { useCallback } from 'react';
-import type { GameState } from '@/models/karuta';
-import type { PlayMode } from '@/lib/karuta';
-import type { NormalizedPrototype } from '@f88/promidas/types';
-import type { ScreenSize } from '@/types/screen-size';
-import { TatamiViewPresentation } from './tatami-view-presentation';
-import { DeckManager } from '@/lib/karuta/deck/deck-manager';
 import { useKeyboardCardSelection } from '@/hooks/use-keyboard-card-selection';
+import type { PlayMode } from '@/lib/karuta';
+import { DeckManager } from '@/lib/karuta/deck/deck-manager';
+import type { GameState } from '@/models/karuta';
+import type { ScreenSize } from '@/types/screen-size';
+import type { NormalizedPrototype } from '@f88/promidas/types';
+import { useCallback, useState } from 'react';
+import { TatamiViewPresentation } from './tatami-view-presentation';
 
 export type TatamiViewContainerProps = {
   gameState: GameState;
@@ -29,6 +29,11 @@ export function TatamiViewContainer({
   );
   const completedRaces = totalMochiFuda;
   const currentRace = completedRaces + 1;
+
+  // Feedback states for each player
+  const [playerFeedbackStates, setPlayerFeedbackStates] = useState<
+    Record<string, 'correct' | 'incorrect' | null>
+  >({});
 
   // Get current YomiFuda from reading order
   const currentYomiFudaId = gameState.readingOrder[completedRaces];
@@ -62,6 +67,21 @@ export function TatamiViewContainer({
         `(ID: ${currentYomiFuda.id})`,
       );
       console.groupEnd();
+
+      // Set feedback state
+      setPlayerFeedbackStates((prev) => ({
+        ...prev,
+        [playerId]: isCorrect ? 'correct' : 'incorrect',
+      }));
+
+      // Clear feedback after animation (correct: 600ms, incorrect: 1500ms)
+      const feedbackDuration = isCorrect ? 1_500 : 500;
+      setTimeout(() => {
+        setPlayerFeedbackStates((prev) => ({
+          ...prev,
+          [playerId]: null,
+        }));
+      }, feedbackDuration);
 
       if (isCorrect) {
         onCorrectAnswer(playerId, selectedCard.id);
@@ -108,6 +128,7 @@ export function TatamiViewContainer({
       stackCount={gameState.stack.length}
       playMode={playMode}
       onPlayerCardSelect={handlePlayerCardSelect}
+      playerFeedbackStates={playerFeedbackStates}
       screenSize={screenSize}
     />
   );

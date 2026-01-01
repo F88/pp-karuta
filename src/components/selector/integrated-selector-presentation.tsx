@@ -1,16 +1,16 @@
-import type { DeckRecipe, StackRecipe, Player, Deck } from '@/models/karuta';
-import type { PlayMode, TatamiSize } from '@/lib/karuta';
-import type { ScreenSize } from '@/types/screen-size';
+import { RepoSetup } from '@/components/layout/repo-setup';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
+import type { PlayMode, TatamiSize } from '@/lib/karuta';
+import type { Deck, DeckRecipe, Player, StackRecipe } from '@/models/karuta';
+import type { ScreenSize } from '@/types/screen-size';
+import { DeckRecipeSelector } from './deck-recipe-selector';
 import { GameSetupSummary } from './game-setup-summary';
-import { RepoSetup } from '@/components/layout/repo-setup';
 import { PlayModeSelector } from './play-mode-selector';
 import { PlayersSelector } from './players-selector';
-import { DeckRecipeSelector } from './deck-recipe-selector';
+import { SectionWrapper } from './section-wrapper';
 import { StackRecipeSelector } from './stack-recipe-selector';
 import { TatamiSizeSelector } from './tatami-size-selector';
-import { SectionWrapper } from './section-wrapper';
 
 export type IntegratedSelectorPresentationProps = {
   // PlayMode selection
@@ -43,6 +43,7 @@ export type IntegratedSelectorPresentationProps = {
   // TatamiSize selection
   selectedTatamiSize: TatamiSize;
   onSelectTatamiSize: (size: TatamiSize) => void;
+  availableTatamiSizes: readonly TatamiSize[];
 
   // Start game
   onStartGame: () => void;
@@ -79,6 +80,7 @@ export function IntegratedSelectorPresentation({
   onAddPlayer,
   selectedTatamiSize,
   onSelectTatamiSize,
+  availableTatamiSizes,
   onStartGame,
   canStartGame,
   isLoading,
@@ -159,6 +161,7 @@ export function IntegratedSelectorPresentation({
             <TatamiSizeSelector
               selectedTatamiSize={selectedTatamiSize}
               onSelectTatamiSize={onSelectTatamiSize}
+              availableSizes={availableTatamiSizes}
               isLoading={isLoading}
               screenSize={screenSize}
             />

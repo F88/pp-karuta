@@ -9,8 +9,8 @@ export type ToriFudaCardProps = {
   isClickable?: boolean;
   showImage?: boolean;
   playMode?: PlayMode;
-  keyboardKey?: string;
   onClick?: (card: NormalizedPrototype) => void;
+  keyboardKey?: string;
 };
 
 export function ToriFudaCard({
@@ -19,10 +19,9 @@ export function ToriFudaCard({
   isClickable = false,
   showImage = true,
   playMode,
-  keyboardKey,
   onClick,
+  keyboardKey,
 }: ToriFudaCardProps) {
-
   return (
     <Card
       className={

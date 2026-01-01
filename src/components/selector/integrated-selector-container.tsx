@@ -1,10 +1,10 @@
-import { IntegratedSelectorPresentation } from './integrated-selector-presentation';
 import { useRepositoryState } from '@/hooks/use-repository-state';
+import { useScreenSizeContext } from '@/hooks/use-screen-size-context';
 import type { UseGameSetupReturn } from '@/hooks/useGameSetup';
 import { STACK_RECIPES } from '@/lib/karuta';
 import { DeckRecipeManager } from '@/lib/karuta/deck';
 import { useEffect } from 'react';
-import { useScreenSizeContext } from '@/hooks/use-screen-size-context';
+import { IntegratedSelectorPresentation } from './integrated-selector-presentation';
 
 export type IntegratedSelectorContainerProps = {
   setup: UseGameSetupReturn;
@@ -51,6 +51,7 @@ export function IntegratedSelectorContainer({
       onAddPlayer={setup.addPlayer}
       selectedTatamiSize={setup.selectedTatamiSize}
       onSelectTatamiSize={setup.selectTatamiSize}
+      availableTatamiSizes={setup.availableTatamiSizes}
       onStartGame={setup.createGameState}
       canStartGame={setup.canStartGame}
       isLoading={setup.isCreatingGame || repoState.type === 'validating'}

@@ -1,11 +1,11 @@
+import { SelectableCard } from '@/components/selector/selectable-card';
 import type { TatamiSize } from '@/lib/karuta';
 import type { ScreenSize } from '@/types/screen-size';
-import { TATAMI_SIZES } from '@/lib/karuta';
-import { SelectableCard } from '@/components/selector/selectable-card';
 
 export type TatamiSizeSelectorProps = {
   selectedTatamiSize: TatamiSize;
   onSelectTatamiSize: (size: TatamiSize) => void;
+  availableSizes: readonly TatamiSize[];
   isLoading: boolean;
   screenSize?: ScreenSize;
 };
@@ -13,12 +13,13 @@ export type TatamiSizeSelectorProps = {
 export function TatamiSizeSelector({
   selectedTatamiSize,
   onSelectTatamiSize,
+  availableSizes,
   isLoading,
   screenSize,
 }: TatamiSizeSelectorProps) {
   return (
-    <div className="grid grid-cols-5 gap-4">
-      {TATAMI_SIZES.map((size) => {
+    <div className="grid grid-cols-4 gap-4">
+      {availableSizes.map((size) => {
         const isSelected = selectedTatamiSize === size;
         return (
           <SelectableCard
