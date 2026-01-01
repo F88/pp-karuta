@@ -4,8 +4,8 @@
  * This component can be used in any route, making it easy to reassign
  * the game flow to different routes in the future (e.g., `/game`, `/play`, etc.)
  */
-import { useState, useCallback } from 'react';
-import { useNavigate } from '@tanstack/react-router';
+import { useState, useCallback, useEffect } from 'react';
+import { useNavigate, useSearch } from '@tanstack/react-router';
 import { IntegratedSelectorContainer } from '@/components/selector/integrated-selector-container';
 import { TatamiViewContainer } from '@/components/tatami/tatami-view-container';
 import { GameResultsContainer } from '@/components/gameResults/game-results-container';
@@ -18,6 +18,7 @@ import { useScreenSizeContext } from '@/hooks/use-screen-size-context';
 export function GameFlow() {
   const navigate = useNavigate();
   const screenSize = useScreenSizeContext();
+  const searchParams = useSearch({ from: '/' });
 
   // Repository state
   const repoState = useRepositoryState();
@@ -34,6 +35,14 @@ export function GameFlow() {
       setGameState(newGameState);
     },
   });
+
+  // Reset game state when reset query parameter changes
+  useEffect(() => {
+    if (searchParams?.reset) {
+      console.log('🔄 Resetting game state due to reset parameter');
+      setGameState(null);
+    }
+  }, [searchParams?.reset]);
 
   // Use the selected play mode from setup
   const playMode: PlayMode | null = setup.selectedPlayMode;

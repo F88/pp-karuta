@@ -17,10 +17,10 @@ export function AppHeaderPresentation({
     <header className="mb-4 flex items-center justify-between">
       <div className="flex items-center gap-4">
         {homeButton}
-        {rulesButton}
         {playerButton}
       </div>
       <div className="flex items-center gap-2">
+        {rulesButton}
         {repoStateIndicator}
         {themeToggle}
       </div>

@@ -1,6 +1,7 @@
 import type { PlayMode, TatamiSize } from '@/lib/karuta';
 import {
   DeckManager,
+  DeckRecipeManager,
   DEFAULT_TATAMI_SIZE,
   GameManager,
   PlayerManager,
@@ -11,6 +12,34 @@ import { TATAMI_SIZES_16, TATAMI_SIZES_8, type TatamiSize16, type TatamiSize8 } 
 import type { Deck, DeckRecipe, Player, StackRecipe } from '@/models/karuta';
 import type { ProtopediaInMemoryRepository } from '@f88/promidas';
 import { useCallback, useEffect, useMemo, useState } from 'react';
+
+const SESSION_STORAGE_KEY = 'pp-karuta-deck-setup';
+
+type SavedSetupState = {
+  selectedDeckRecipeId: string | null;
+  selectedStackRecipeId: string | null;
+  selectedPlayerIds: string[];
+  selectedPlayMode: PlayMode | null;
+  selectedTatamiSize: TatamiSize;
+};
+
+function saveSetupState(state: SavedSetupState) {
+  try {
+    sessionStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(state));
+  } catch (error) {
+    console.error('Failed to save setup state:', error);
+  }
+}
+
+function loadSetupState(): SavedSetupState | null {
+  try {
+    const saved = sessionStorage.getItem(SESSION_STORAGE_KEY);
+    return saved ? JSON.parse(saved) : null;
+  } catch (error) {
+    console.error('Failed to load setup state:', error);
+    return null;
+  }
+}
 
 export type UseGameSetupReturn = {
   // Deck state
@@ -58,6 +87,11 @@ export function useGameSetup({
   repository,
   onGameStateCreated,
 }: UseGameSetupOptions): UseGameSetupReturn {
+  // Load saved state
+  const savedState = loadSetupState();
+
+  console.log('🔍 useGameSetup initialized with savedState:', savedState);
+
   // Deck state - 重いので実体を保持（再利用のため）
   const [generatedDeck, setGeneratedDeck] = useState<Deck | null>(null);
   const [selectedDeckRecipe, setSelectedDeckRecipe] =
@@ -71,23 +105,35 @@ export function useGameSetup({
   const [generatedStack, setGeneratedStack] = useState<number[] | null>(null);
   const [selectedStackRecipe, setSelectedStackRecipe] =
     useState<StackRecipe | null>(() => {
-      // Default to 10 Cards recipe
+      // Restore from sessionStorage or use default
+      if (savedState?.selectedStackRecipeId) {
+        const restored = StackRecipeManager.findById(savedState.selectedStackRecipeId);
+        console.log('🔄 Restoring StackRecipe from sessionStorage:', restored?.id);
+        return restored || null;
+      }
       const defaultRecipe = StackRecipeManager.findById('standard-10');
+      console.log('📦 Using default StackRecipe:', defaultRecipe?.id);
       return defaultRecipe || null;
     });
 
   // Player state
   const [availablePlayers, setAvailablePlayers] = useState<Player[]>([]);
-  const [selectedPlayerIds, setSelectedPlayerIds] = useState<string[]>([]);
+  const [selectedPlayerIds, setSelectedPlayerIds] = useState<string[]>(() => {
+    console.log('🔄 Restoring selectedPlayerIds from sessionStorage:', savedState?.selectedPlayerIds);
+    return savedState?.selectedPlayerIds || [];
+  });
 
   // PlayMode state
-  const [selectedPlayMode, setSelectedPlayMode] = useState<PlayMode | null>(
-    'touch',
-  );
+  const [selectedPlayMode, setSelectedPlayMode] = useState<PlayMode | null>(() => {
+    console.log('🔄 Restoring selectedPlayMode from sessionStorage:', savedState?.selectedPlayMode);
+    return savedState?.selectedPlayMode || 'touch';
+  });
 
   // TatamiSize state
-  const [selectedTatamiSize, setSelectedTatamiSize] =
-    useState<TatamiSize>(DEFAULT_TATAMI_SIZE);
+  const [selectedTatamiSize, setSelectedTatamiSize] = useState<TatamiSize>(() => {
+    console.log('🔄 Restoring selectedTatamiSize from sessionStorage:', savedState?.selectedTatamiSize);
+    return savedState?.selectedTatamiSize || DEFAULT_TATAMI_SIZE;
+  });
 
   // Error & loading state
   const [error, setError] = useState<string | null>(null);
@@ -171,6 +217,26 @@ export function useGameSetup({
     [generatedDeck, repository, selectedDeckRecipe?.id, selectedStackRecipe],
   );
 
+  // Restore deck recipe from sessionStorage when repository becomes available
+  useEffect(() => {
+    const savedState = loadSetupState();
+    console.log('🔍 Checking deck restoration:', {
+      hasRepository: !!repository,
+      savedDeckRecipeId: savedState?.selectedDeckRecipeId,
+      currentDeckRecipe: selectedDeckRecipe?.id,
+    });
+
+    if (repository && savedState?.selectedDeckRecipeId && !selectedDeckRecipe) {
+      const recipe = DeckRecipeManager.RECIPES.find(r => r.id === savedState.selectedDeckRecipeId);
+      if (recipe) {
+        console.log('🔄 Restoring deck recipe from sessionStorage:', recipe.id);
+        void selectDeckRecipe(recipe);
+      } else {
+        console.warn('⚠️ Saved deck recipe not found:', savedState.selectedDeckRecipeId);
+      }
+    }
+  }, [repository, selectedDeckRecipe]);
+
   // Reset deck when repository becomes available or changes
   useEffect(() => {
     // If repository becomes available and we have a selected deck recipe,
@@ -187,7 +253,24 @@ export function useGameSetup({
     selectedDeckRecipe,
     generatedDeck,
     isDeckLoading,
-    selectDeckRecipe,
+  ]);
+
+  // Save state to sessionStorage whenever it changes
+  useEffect(() => {
+    const state: SavedSetupState = {
+      selectedDeckRecipeId: selectedDeckRecipe?.id || null,
+      selectedStackRecipeId: selectedStackRecipe?.id || null,
+      selectedPlayerIds,
+      selectedPlayMode,
+      selectedTatamiSize,
+    };
+    saveSetupState(state);
+  }, [
+    selectedDeckRecipe,
+    selectedStackRecipe,
+    selectedPlayerIds,
+    selectedPlayMode,
+    selectedTatamiSize,
   ]);
 
   // Select StackRecipe and generate Stack if Deck exists
