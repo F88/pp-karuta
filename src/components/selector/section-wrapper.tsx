@@ -37,16 +37,40 @@ export function SectionWrapper({
       }[screenSize]
     : 'text-xs md:text-sm lg:text-base';
 
+  const paddingClass = screenSize
+    ? {
+        smartphone: 'p-3 pt-5',
+        tablet: 'p-4 pt-6',
+        pc: 'p-4 pt-6',
+      }[screenSize]
+    : 'p-3 pt-5 md:p-4 md:pt-6';
+
+  const titlePositionClass = screenSize
+    ? {
+        smartphone: '-top-2 left-3 px-1.5',
+        tablet: '-top-2.5 left-4 px-2',
+        pc: '-top-2.5 left-4 px-2',
+      }[screenSize]
+    : '-top-2 left-3 px-1.5 md:-top-2.5 md:left-4 md:px-2';
+
+  const spacingClass = screenSize
+    ? {
+        smartphone: 'space-y-2',
+        tablet: 'space-y-3',
+        pc: 'space-y-3',
+      }[screenSize]
+    : 'space-y-2 md:space-y-3';
+
   return (
     <div
-      className={`relative rounded-lg border-2 border-gray-200 p-4 pt-6 dark:border-gray-700 ${className}`}
+      className={`relative rounded-lg border-2 border-gray-200 dark:border-gray-700 ${paddingClass} ${className}`}
     >
       <h2
-        className={`absolute -top-2.5 left-4 bg-gradient-to-br from-indigo-50 to-purple-50 px-2 font-bold tracking-wider uppercase dark:from-gray-900 dark:to-gray-800 ${titleSizeClass} ${variantStyles[variant]}`}
+        className={`absolute bg-gradient-to-br from-indigo-50 to-purple-50 font-bold tracking-wider uppercase dark:from-gray-900 dark:to-gray-800 ${titleSizeClass} ${titlePositionClass} ${variantStyles[variant]}`}
       >
         {title}
       </h2>
-      <div className="space-y-3">{children}</div>
+      <div className={spacingClass}>{children}</div>
     </div>
   );
 }

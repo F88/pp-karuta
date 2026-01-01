@@ -65,14 +65,14 @@ export function StackRecipeCard({
   const sizeStyles = screenSize
     ? {
         smartphone: {
-          padding: 'p-4',
+          padding: 'p-2',
           titleSize: 'text-base',
           descriptionSize: 'text-xs',
           contentSize: 'text-xs',
           labelSize: 'text-xs',
         },
         tablet: {
-          padding: 'p-5',
+          padding: 'p-4',
           titleSize: 'text-lg',
           descriptionSize: 'text-sm',
           contentSize: 'text-sm',
@@ -112,15 +112,13 @@ export function StackRecipeCard({
         >
           {recipe.title}
         </h3>
-
         {recipe.description && (
           <p
-            className={`mb-3 ${sizeStyles.descriptionSize} ${textClass.description}`}
+            className={`mb-2 ${sizeStyles.descriptionSize} ${textClass.description}`}
           >
             {recipe.description}
           </p>
         )}
-
         {import.meta.env.VITE_DEBUG_MODE === 'true' && (
           <div className="mb-2 space-y-1">
             <div className={`${sizeStyles.contentSize} ${textClass.content}`}>
@@ -136,36 +134,27 @@ export function StackRecipeCard({
           </div>
         )}
 
-        <div className="mb-2 flex items-center gap-2">
-          <span
-            className={`font-semibold ${sizeStyles.labelSize} ${textClass.label}`}
-          >
-            Difficulty:
-          </span>
-          <Badge
-            variant="outline"
-            className={getDifficultyBadgeClass(recipe.difficulty, isSelected)}
-          >
-            {recipe.difficulty}
-          </Badge>
-        </div>
-
-        {import.meta.env.VITE_DEBUG_MODE === 'true' ||
-          (recipe.tags.length > 0 && (
-            <div className="flex flex-wrap gap-1">
-              {recipe.tags.map((tag) => (
-                <Badge
-                  key={tag}
-                  variant="secondary"
-                  className={
-                    isSelected ? 'bg-white/20 text-white hover:bg-white/30' : ''
-                  }
-                >
-                  #{tag}
-                </Badge>
-              ))}
-            </div>
-          ))}
+        {screenSize !== 'smartphone' && (
+          <div className="flex flex-wrap items-center gap-1">
+            <Badge
+              variant="outline"
+              className={getDifficultyBadgeClass(recipe.difficulty, isSelected)}
+            >
+              {recipe.difficulty}
+            </Badge>
+            {recipe.tags.map((tag) => (
+              <Badge
+                key={tag}
+                variant="secondary"
+                className={
+                  isSelected ? 'bg-white/20 text-white hover:bg-white/30' : ''
+                }
+              >
+                #{tag}
+              </Badge>
+            ))}
+          </div>
+        )}
       </div>
     </Button>
   );
