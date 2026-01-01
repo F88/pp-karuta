@@ -57,7 +57,7 @@ export type IntegratedSelectorPresentationProps = {
   onShowIntro?: () => void;
 
   // Screen size
-  screenSize?: ScreenSize;
+  screenSize: ScreenSize;
 };
 
 export function IntegratedSelectorPresentation({
@@ -220,6 +220,7 @@ export function IntegratedSelectorPresentation({
           selectedStackRecipe={selectedStackRecipe}
           stackSize={stackSize}
           selectedPlayerCount={selectedPlayerIds.length}
+          screenSize={screenSize}
         />
 
         {/* Start Game Button */}

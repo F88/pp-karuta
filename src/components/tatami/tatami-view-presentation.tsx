@@ -47,6 +47,33 @@ export function TatamiViewPresentation({
   // Determine grid layout based on player count and screen size
   const playerCount = playerStates.length;
 
+  // Responsive padding class
+  const containerPadding = screenSize
+    ? {
+        smartphone: 'p-2',
+        tablet: 'p-3',
+        pc: 'p-4',
+      }[screenSize]
+    : 'p-2 md:p-3 lg:p-4';
+
+  // Responsive spacing between sections
+  const sectionSpacing = screenSize
+    ? {
+        smartphone: 'my-4 space-y-3',
+        tablet: 'my-6 space-y-4',
+        pc: 'my-8 space-y-6',
+      }[screenSize]
+    : 'my-4 md:my-6 lg:my-8 space-y-3 md:space-y-4 lg:space-y-6';
+
+  // Responsive gap for player grid
+  const playerGridGap = screenSize
+    ? {
+        smartphone: 'gap-2',
+        tablet: 'gap-3',
+        pc: 'gap-4',
+      }[screenSize]
+    : 'gap-2 md:gap-3 lg:gap-4';
+
   const getPlayerGridCols = () => {
     // Keyboard mode: always match player count
     if (playMode === 'keyboard') {
@@ -59,14 +86,16 @@ export function TatamiViewPresentation({
 
     // Touch mode: simple layout
     // 1 player: 1 column, 2+ players: 2 columns
-    if (playerCount <= 2) {
+    if (playerCount <= 1) {
       return 'grid-cols-1';
     }
     return 'grid-cols-2';
   };
 
   return (
-    <div className="flex h-screen flex-col bg-gradient-to-br from-green-50 to-teal-100 p-4 dark:from-gray-900 dark:to-gray-800">
+    <div
+      className={`flex h-screen flex-col bg-gradient-to-br from-green-50 to-teal-100 dark:from-gray-900 dark:to-gray-800 ${containerPadding}`}
+    >
       <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col overflow-hidden">
         <GameHeader
           currentRace={currentRace}
@@ -79,7 +108,7 @@ export function TatamiViewPresentation({
         />
 
         {/* Top section: Shared Tatami + YomiFuda (natural height) */}
-        <div className="my-8 flex-shrink-0 space-y-6">
+        <div className={`flex-shrink-0 ${sectionSpacing}`}>
           {playMode !== 'touch' && (
             <SharedTatami
               tatamiCards={sharedTatamiCards}
@@ -102,7 +131,7 @@ export function TatamiViewPresentation({
             🎮 Player Tatami Areas
           </h2> */}
           <div className="flex-1 overflow-y-auto">
-            <div className={`grid gap-4 ${getPlayerGridCols()}`}>
+            <div className={`grid ${playerGridGap} ${getPlayerGridCols()}`}>
               {playerStates.map((playerState, playerIndex) => {
                 const playerTatamiCards = DeckManager.getByIds(
                   deck,

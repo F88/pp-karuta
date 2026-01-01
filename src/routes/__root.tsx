@@ -10,6 +10,7 @@ import { RepoSetup } from '@/components/layout/repo-setup';
 import { RepoSetupDialog } from '@/components/layout/repo-setup-dialog';
 import { ThemeProvider } from '@/components/theme-provider';
 import { ScreenSizeProvider } from '@/contexts/screen-size-provider';
+import { useScreenSizeContext } from '@/hooks/use-screen-size-context';
 import { PlayerManager } from '@/lib/karuta';
 import type { RepositoryState } from '@/lib/repository/promidas-repository-manager';
 import { getRepositoryState } from '@/lib/repository/promidas-repository-manager';
@@ -21,6 +22,17 @@ export const Route = createRootRoute({
 });
 
 function RootComponent() {
+  return (
+    <ThemeProvider defaultTheme="system" storageKey="pp-karuta-theme">
+      <ScreenSizeProvider>
+        <RootLayout />
+      </ScreenSizeProvider>
+    </ThemeProvider>
+  );
+}
+
+function RootLayout() {
+  const screenSize = useScreenSizeContext();
   const [repoState, setRepoState] = useState<RepositoryState>(() =>
     getRepositoryState(),
   );
@@ -41,35 +53,39 @@ function RootComponent() {
     });
   }, []);
 
-  // const handleDialogOpenChange = (open: boolean) => {
-  //   setRepoSetupDialog(open);
-  // };
-
-  // const handleRepoIndicatorClick = () => {
-  //   setRepoSetupDialog(true);
-  // };
+  const headerPadding = screenSize
+    ? {
+        smartphone: 'pt-12',
+        tablet: 'pt-14',
+        pc: 'pt-16',
+      }[screenSize]
+    : 'pt-12 md:pt-14 lg:pt-16';
 
   return (
-    <ThemeProvider defaultTheme="system" storageKey="pp-karuta-theme">
-      <AppHeader
-        repoState={repoState}
-        onRepoIndicatorClick={() => setOpenRepoSetupDialog(true)}
-      />
+    <>
+      <div className="fixed top-0 right-0 left-0 z-50">
+        <AppHeader
+          repoState={repoState}
+          onRepoIndicatorClick={() => setOpenRepoSetupDialog(true)}
+          screenSize={screenSize}
+        />
+      </div>
 
-      {import.meta.env.VITE_DEBUG_MODE === 'true' && (
-        <div className="flex items-center justify-center p-4">
-          <RepoSetup />
-        </div>
-      )}
+      {/* Add padding-top to account for fixed header */}
+      <div className={headerPadding}>
+        {import.meta.env.VITE_DEBUG_MODE === 'true' && (
+          <div className="flex items-center justify-center p-4">
+            <RepoSetup />
+          </div>
+        )}
 
-      <RepoSetupDialog
-        open={openRepoSetupDialog}
-        onOpenChange={() => setOpenRepoSetupDialog(false)}
-        autoCloseOnValid={false}
-      />
-      <ScreenSizeProvider>
+        <RepoSetupDialog
+          open={openRepoSetupDialog}
+          onOpenChange={() => setOpenRepoSetupDialog(false)}
+          autoCloseOnValid={false}
+        />
         <Outlet />
-      </ScreenSizeProvider>
-    </ThemeProvider>
+      </div>
+    </>
   );
 }

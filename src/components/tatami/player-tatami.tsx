@@ -48,8 +48,8 @@ export function PlayerTatami({
       : screenSize
         ? {
             smartphone: 'grid-cols-2',
-            tablet: 'grid-cols-3',
-            pc: 'grid-cols-4',
+            tablet: 'grid-cols-2',
+            pc: 'grid-cols-2',
           }[screenSize]
         : 'grid-cols-2 md:grid-cols-3 lg:grid-cols-4';
 
@@ -96,8 +96,9 @@ export function PlayerTatami({
           </div>
         </div>
       </CardHeader>
-      <CardContent>
-        <div className={`grid gap-3 ${gridColsClass}`}>
+      <CardContent className="p-0">
+        {/* <ScrollArea className="h-[60vh]"> */}
+        <div className={`grid gap-3 p-6 ${gridColsClass}`}>
           {tatamiCards.map((card, index) => (
             <ToriFudaCard
               key={card.id}
@@ -112,6 +113,7 @@ export function PlayerTatami({
             />
           ))}
         </div>
+        {/* </ScrollArea> */}
       </CardContent>
     </Card>
   );

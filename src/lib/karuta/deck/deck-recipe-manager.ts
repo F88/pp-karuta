@@ -35,7 +35,7 @@ function generateSequentialDecks(
         limit,
       },
       difficulty: 'beginner',
-      tags: ['sequential', 'practice'],
+      tags: [],
     });
   }
 
@@ -69,7 +69,7 @@ export class DeckRecipeManager {
         ...ALL_PROTOTYPES,
       },
       difficulty: 'beginner',
-      tags: ['quick', 'practice'],
+      tags: [],
     },
   ];
 

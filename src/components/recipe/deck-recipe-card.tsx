@@ -13,21 +13,6 @@ export type DeckRecipeCardProps = {
   screenSize?: ScreenSize;
 };
 
-const getDifficultyBadgeClass = (difficulty: string, isSelected: boolean) => {
-  if (isSelected) return 'bg-white/20 text-white';
-
-  switch (difficulty) {
-    case 'beginner':
-      return 'bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-200';
-    case 'intermediate':
-      return 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-200';
-    case 'advanced':
-      return 'bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-200';
-    default:
-      return 'bg-gray-100 text-gray-700 dark:bg-gray-900 dark:text-gray-200';
-  }
-};
-
 export function DeckRecipeCard({
   recipe,
   onSelect,
@@ -172,12 +157,12 @@ export function DeckRecipeCard({
 
         {screenSize !== 'smartphone' && (
           <div className="flex flex-wrap items-center gap-1">
-            <Badge
+            {/* <Badge
               variant="outline"
               className={getDifficultyBadgeClass(recipe.difficulty, isSelected)}
             >
               {recipe.difficulty}
-            </Badge>
+            </Badge> */}
             {recipe.tags.map((tag) => (
               <Badge
                 key={tag}
