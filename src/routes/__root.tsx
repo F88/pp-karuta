@@ -11,8 +11,8 @@ import { RepoSetupDialog } from '@/components/layout/repo-setup-dialog';
 import { ThemeProvider } from '@/components/theme-provider';
 import { ScreenSizeProvider } from '@/contexts/screen-size-provider';
 import { PlayerManager } from '@/lib/karuta';
-import type { RepositoryState } from '@/lib/repository/promidas-repo';
-import { getRepositoryState } from '@/lib/repository/promidas-repo';
+import type { RepositoryState } from '@/lib/repository/promidas-repository-manager';
+import { getRepositoryState } from '@/lib/repository/promidas-repository-manager';
 import { createRootRoute, Outlet } from '@tanstack/react-router';
 import { useEffect, useState } from 'react';
 

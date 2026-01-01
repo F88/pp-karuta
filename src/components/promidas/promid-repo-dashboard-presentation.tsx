@@ -1,4 +1,4 @@
-import type { RepositoryState } from '@/lib/repository/promidas-repo';
+import type { RepositoryState } from '@/lib/repository/promidas-repository-manager';
 import type { StoreState } from '@f88/promidas-utils/store';
 import type { PrototypeInMemoryStats } from '@f88/promidas';
 import {

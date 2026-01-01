@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import {
   getRepositoryState,
   type RepositoryState,
-} from '@/lib/repository/promidas-repo';
+} from '@/lib/repository/promidas-repository-manager';
 import { usePromidasStoreState } from '@/hooks/use-promidas-store-state';
 import { PromidasRepoDashboardPresentation } from './promid-repo-dashboard-presentation';
 

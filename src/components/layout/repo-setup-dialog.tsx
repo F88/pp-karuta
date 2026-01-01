@@ -6,7 +6,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { getRepositoryState } from '@/lib/repository/promidas-repo';
+import { getRepositoryState } from '@/lib/repository/promidas-repository-manager';
 import { RepoSetup } from './repo-setup';
 
 interface RepoSetupDialogProps {

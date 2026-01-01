@@ -16,7 +16,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import type { RepositoryState } from '@/lib/repository/promidas-repo';
+import type { RepositoryState } from '@/lib/repository/promidas-repository-manager';
 
 export interface TokenManagerPresentationProps {
   inputValue: string;

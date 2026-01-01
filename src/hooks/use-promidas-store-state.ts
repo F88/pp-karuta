@@ -8,7 +8,10 @@ import { useState, useEffect } from 'react';
 import { getStoreState } from '@f88/promidas-utils/store';
 import type { StoreState } from '@f88/promidas-utils/store';
 import type { PrototypeInMemoryStats } from '@f88/promidas';
-import { getRepositoryState } from '@/lib/repository/promidas-repo';
+import {
+  getRepositoryState,
+  getPromidasRepository,
+} from '@/lib/repository/promidas-repository-manager';
 
 export interface UsePromidasStoreStateResult {
   storeState: StoreState;
@@ -46,9 +49,6 @@ export function usePromidasStoreState(): UsePromidasStoreStateResult {
       }
 
       try {
-        // Import repository dynamically to avoid circular dependency
-        const { getPromidasRepository } =
-          await import('@/lib/repository/promidas-repo');
         const repo = await getPromidasRepository();
         const currentStats = repo.getStats();
         setStats(currentStats);

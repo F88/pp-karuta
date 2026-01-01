@@ -4,7 +4,7 @@ import {
   getRepositoryState,
   resetRepository,
   type RepositoryState,
-} from '@/lib/repository/promidas-repo';
+} from '@/lib/repository/promidas-repository-manager';
 import { getPromidasRepositoryManager } from '@/lib/repository/promidas-repository-manager';
 import { TokenManagerPresentation } from './token-manager-presentation';
 

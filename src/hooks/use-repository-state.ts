@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { getRepositoryState } from '@/lib/repository/promidas-repo';
+import { getRepositoryState } from '@/lib/repository/promidas-repository-manager';
 import type { RepositoryState } from '@/lib/repository/promidas-repository-manager';
 
 /**

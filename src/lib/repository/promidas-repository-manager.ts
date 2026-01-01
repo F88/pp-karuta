@@ -357,3 +357,10 @@ export class PromidasRepositoryManager {
 export function getPromidasRepositoryManager(): PromidasRepositoryManager {
   return PromidasRepositoryManager.getInstance();
 }
+
+// Convenience exports for direct usage
+const manager = getPromidasRepositoryManager();
+
+export const getRepositoryState = () => manager.getState();
+export const resetRepository = () => manager.reset();
+export const getPromidasRepository = () => manager.getRepository();

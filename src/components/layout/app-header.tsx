@@ -3,7 +3,7 @@ import { ThemeIndicator } from '@/components/theme-indicator';
 import { Button } from '@/components/ui/button';
 import { RepoStateIndicator } from './repo-state-indicator';
 import { AppHeaderPresentation } from './app-header-presentation';
-import type { RepositoryState } from '@/lib/repository/promidas-repo';
+import type { RepositoryState } from '@/lib/repository/promidas-repository-manager';
 
 interface AppHeaderProps {
   repoState: RepositoryState;

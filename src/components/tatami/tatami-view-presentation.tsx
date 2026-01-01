@@ -59,7 +59,7 @@ export function TatamiViewPresentation({
 
     // Touch mode: simple layout
     // 1 player: 1 column, 2+ players: 2 columns
-    if (playerCount === 1) {
+    if (playerCount <= 2) {
       return 'grid-cols-1';
     }
     return 'grid-cols-2';
