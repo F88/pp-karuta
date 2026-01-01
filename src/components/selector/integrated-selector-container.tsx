@@ -32,32 +32,47 @@ export function IntegratedSelectorContainer({
 
   return (
     <IntegratedSelectorPresentation
-      selectedPlayMode={setup.selectedPlayMode}
-      onSelectPlayMode={setup.selectPlayMode}
-      isRepoReady={isRepoReady}
-      deckRecipes={DeckRecipeManager.RECIPES}
-      selectedDeckRecipe={setup.selectedDeckRecipe}
-      onSelectDeckRecipe={setup.selectDeckRecipe}
-      isDeckLoading={setup.isDeckLoading}
-      loadingDeckRecipeId={setup.loadingDeckRecipeId}
-      generatedDeck={setup.generatedDeck}
-      stackRecipes={STACK_RECIPES}
-      selectedStackRecipe={setup.selectedStackRecipe}
-      onSelectStackRecipe={setup.selectStackRecipe}
-      generatedStack={setup.generatedStack}
-      availablePlayers={setup.availablePlayers}
-      selectedPlayerIds={setup.selectedPlayerIds}
-      onTogglePlayer={setup.togglePlayer}
-      onAddPlayer={setup.addPlayer}
-      selectedTatamiSize={setup.selectedTatamiSize}
-      onSelectTatamiSize={setup.selectTatamiSize}
-      availableTatamiSizes={setup.availableTatamiSizes}
-      onStartGame={setup.createGameState}
-      canStartGame={setup.canStartGame}
-      isLoading={setup.isCreatingGame || repoState.type === 'validating'}
-      error={
-        setup.error || (repoError ? `Repository error: ${repoError}` : null)
-      }
+      playMode={{
+        selected: setup.selectedPlayMode,
+        onSelect: setup.selectPlayMode,
+      }}
+      repository={{
+        isReady: isRepoReady,
+      }}
+      deckRecipe={{
+        recipes: DeckRecipeManager.RECIPES,
+        selected: setup.selectedDeckRecipe,
+        onSelect: setup.selectDeckRecipe,
+        isLoading: setup.isDeckLoading,
+        loadingRecipeId: setup.loadingDeckRecipeId,
+        generatedDeck: setup.generatedDeck,
+      }}
+      stackRecipe={{
+        recipes: STACK_RECIPES,
+        selected: setup.selectedStackRecipe,
+        onSelect: setup.selectStackRecipe,
+        generatedStack: setup.generatedStack,
+      }}
+      players={{
+        available: setup.availablePlayers,
+        selectedIds: setup.selectedPlayerIds,
+        onToggle: setup.togglePlayer,
+        onAdd: setup.addPlayer,
+      }}
+      tatamiSize={{
+        selected: setup.selectedTatamiSize,
+        onSelect: setup.selectTatamiSize,
+        availableSizes: setup.availableTatamiSizes,
+      }}
+      game={{
+        onStart: setup.createGameState,
+        canStart: setup.canStartGame,
+      }}
+      state={{
+        isLoading: setup.isCreatingGame || repoState.type === 'validating',
+        error:
+          setup.error || (repoError ? `Repository error: ${repoError}` : null),
+      }}
       onShowIntro={onShowIntro}
       screenSize={screenSize}
     />
