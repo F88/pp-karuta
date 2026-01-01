@@ -8,7 +8,12 @@ import {
   StackManager,
   StackRecipeManager,
 } from '@/lib/karuta';
-import { TATAMI_SIZES_16, TATAMI_SIZES_8, type TatamiSize16, type TatamiSize8 } from '@/lib/karuta/tatami/tatami-size';
+import {
+  TATAMI_SIZES_16,
+  TATAMI_SIZES_8,
+  type TatamiSize16,
+  type TatamiSize8,
+} from '@/lib/karuta/tatami/tatami-size';
 import type { Deck, DeckRecipe, Player, StackRecipe } from '@/models/karuta';
 import type { ProtopediaInMemoryRepository } from '@f88/promidas';
 import { useCallback, useEffect, useMemo, useState } from 'react';
@@ -67,7 +72,7 @@ export type UseGameSetupReturn = {
   // TatamiSize state
   selectedTatamiSize: TatamiSize;
   selectTatamiSize: (size: TatamiSize8 | TatamiSize16) => void;
-  availableTatamiSizes: readonly TatamiSize8[]| readonly TatamiSize16[];
+  availableTatamiSizes: readonly TatamiSize8[] | readonly TatamiSize16[];
 
   // Game creation
   canStartGame: boolean;
@@ -107,8 +112,13 @@ export function useGameSetup({
     useState<StackRecipe | null>(() => {
       // Restore from sessionStorage or use default
       if (savedState?.selectedStackRecipeId) {
-        const restored = StackRecipeManager.findById(savedState.selectedStackRecipeId);
-        console.log('🔄 Restoring StackRecipe from sessionStorage:', restored?.id);
+        const restored = StackRecipeManager.findById(
+          savedState.selectedStackRecipeId,
+        );
+        console.log(
+          '🔄 Restoring StackRecipe from sessionStorage:',
+          restored?.id,
+        );
         return restored || null;
       }
       const defaultRecipe = StackRecipeManager.findById('standard-10');
@@ -119,21 +129,34 @@ export function useGameSetup({
   // Player state
   const [availablePlayers, setAvailablePlayers] = useState<Player[]>([]);
   const [selectedPlayerIds, setSelectedPlayerIds] = useState<string[]>(() => {
-    console.log('🔄 Restoring selectedPlayerIds from sessionStorage:', savedState?.selectedPlayerIds);
+    console.log(
+      '🔄 Restoring selectedPlayerIds from sessionStorage:',
+      savedState?.selectedPlayerIds,
+    );
     return savedState?.selectedPlayerIds || [];
   });
 
   // PlayMode state
-  const [selectedPlayMode, setSelectedPlayMode] = useState<PlayMode | null>(() => {
-    console.log('🔄 Restoring selectedPlayMode from sessionStorage:', savedState?.selectedPlayMode);
-    return savedState?.selectedPlayMode || 'touch';
-  });
+  const [selectedPlayMode, setSelectedPlayMode] = useState<PlayMode | null>(
+    () => {
+      console.log(
+        '🔄 Restoring selectedPlayMode from sessionStorage:',
+        savedState?.selectedPlayMode,
+      );
+      return savedState?.selectedPlayMode || 'touch';
+    },
+  );
 
   // TatamiSize state
-  const [selectedTatamiSize, setSelectedTatamiSize] = useState<TatamiSize>(() => {
-    console.log('🔄 Restoring selectedTatamiSize from sessionStorage:', savedState?.selectedTatamiSize);
-    return savedState?.selectedTatamiSize || DEFAULT_TATAMI_SIZE;
-  });
+  const [selectedTatamiSize, setSelectedTatamiSize] = useState<TatamiSize>(
+    () => {
+      console.log(
+        '🔄 Restoring selectedTatamiSize from sessionStorage:',
+        savedState?.selectedTatamiSize,
+      );
+      return savedState?.selectedTatamiSize || DEFAULT_TATAMI_SIZE;
+    },
+  );
 
   // Error & loading state
   const [error, setError] = useState<string | null>(null);
@@ -227,12 +250,17 @@ export function useGameSetup({
     });
 
     if (repository && savedState?.selectedDeckRecipeId && !selectedDeckRecipe) {
-      const recipe = DeckRecipeManager.RECIPES.find(r => r.id === savedState.selectedDeckRecipeId);
+      const recipe = DeckRecipeManager.RECIPES.find(
+        (r) => r.id === savedState.selectedDeckRecipeId,
+      );
       if (recipe) {
         console.log('🔄 Restoring deck recipe from sessionStorage:', recipe.id);
         void selectDeckRecipe(recipe);
       } else {
-        console.warn('⚠️ Saved deck recipe not found:', savedState.selectedDeckRecipeId);
+        console.warn(
+          '⚠️ Saved deck recipe not found:',
+          savedState.selectedDeckRecipeId,
+        );
       }
     }
     // selectDeckRecipe is intentionally not in dependencies to avoid infinite loops
@@ -252,12 +280,7 @@ export function useGameSetup({
     }
     // selectDeckRecipe is intentionally not in dependencies to avoid infinite loops
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    repository,
-    selectedDeckRecipe,
-    generatedDeck,
-    isDeckLoading,
-  ]);
+  }, [repository, selectedDeckRecipe, generatedDeck, isDeckLoading]);
 
   // Save state to sessionStorage whenever it changes
   useEffect(() => {
