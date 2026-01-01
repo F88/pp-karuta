@@ -12,7 +12,7 @@ export function Yomite({ normalizedPrototype, screenSize }: YomiteProps) {
     '📜' +
     (normalizedPrototype.prototypeNm ?? 'NO NAME') +
     ' - ' +
-    (normalizedPrototype.summary || 'No description');
+    (normalizedPrototype.summary || 'NO DESCRIPTION');
 
   const { displayedText } = useTypewriter({ text: seq, speed: 200 });
 

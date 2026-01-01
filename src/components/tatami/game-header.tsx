@@ -46,8 +46,8 @@ export function GameHeader({
 
   const marginClass = screenSize
     ? {
-        smartphone: 'my-2',
-        tablet: 'my-3',
+        smartphone: 'my-0',
+        tablet: 'my-2',
         pc: 'my-4',
       }[screenSize]
     : 'my-2 sm:my-3 md:my-4';

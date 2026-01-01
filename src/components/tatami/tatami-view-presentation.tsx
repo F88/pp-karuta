@@ -51,8 +51,8 @@ export function TatamiViewPresentation({
   const containerPadding = screenSize
     ? {
         smartphone: 'p-2',
-        tablet: 'p-3',
-        pc: 'p-4',
+        tablet: 'p-4',
+        pc: 'p-6',
       }[screenSize]
     : 'p-2 md:p-3 lg:p-4';
 

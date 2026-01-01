@@ -42,6 +42,22 @@ export function PlayerTatami({
       }[screenSize]
     : 'text-sm md:text-base lg:text-lg';
 
+  const paddingClass = screenSize
+    ? {
+        smartphone: 'p-2',
+        tablet: 'p-4',
+        pc: 'p-6',
+      }[screenSize]
+    : 'p-3 md:p-4 lg:p-6';
+
+  const gapClass = screenSize
+    ? {
+        smartphone: 'gap-2',
+        tablet: 'gap-3',
+        pc: 'gap-3',
+      }[screenSize]
+    : 'gap-2 md:gap-3';
+
   const gridColsClass =
     playMode === 'keyboard'
       ? 'grid-cols-4'
@@ -76,29 +92,27 @@ export function PlayerTatami({
     <Card
       className={`border-2 ${borderClass} ${shadowClass} ${animationClass} transition-all duration-300`}
     >
-      <CardHeader>
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <h3
-              className={`flex items-center gap-2 font-bold text-indigo-700 ${titleSizeClass}`}
-            >
-              <span>👤</span>
-              {player.name}
-            </h3>
-          </div>
+      <CardHeader className={paddingClass}>
+        <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+          <h3
+            className={`flex items-center gap-2 font-bold text-indigo-700 ${titleSizeClass}`}
+          >
+            <span>👤</span>
+            {player.name}
+          </h3>
           <div className="flex gap-2">
             <Badge variant="outline" className="bg-yellow-100 text-yellow-700">
-              {score} pts
+              {score.toLocaleString()} pts
             </Badge>
             <Badge variant="outline" className="bg-pink-100 text-pink-700">
-              {mochiFudaCount} cards
+              {mochiFudaCount.toLocaleString()} 枚
             </Badge>
           </div>
         </div>
       </CardHeader>
-      <CardContent className="p-0">
+      <CardContent className={paddingClass}>
         {/* <ScrollArea className="h-[60vh]"> */}
-        <div className={`grid gap-3 p-6 ${gridColsClass}`}>
+        <div className={`grid ${gapClass} ${gridColsClass}`}>
           {tatamiCards.map((card, index) => (
             <ToriFudaCard
               key={card.id}

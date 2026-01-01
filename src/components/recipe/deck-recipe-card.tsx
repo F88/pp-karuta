@@ -57,7 +57,7 @@ export function DeckRecipeCard({
           contentSize: 'text-sm',
         },
         pc: {
-          padding: 'p-8',
+          padding: 'p-6',
           titleSize: 'text-2xl',
           descriptionSize: 'text-sm',
           labelSize: 'text-sm',
@@ -92,21 +92,21 @@ export function DeckRecipeCard({
       <div className="absolute inset-0 bg-linear-to-br from-blue-400 to-indigo-500 opacity-0 transition-opacity group-hover:opacity-10" />
       <div className="relative">
         <h2
-          className={`mb-2 font-bold ${sizeStyles.titleSize} ${textClass.title}`}
+          className={`my-0 font-bold ${sizeStyles.titleSize} ${textClass.title}`}
         >
           {recipe.title}
         </h2>
 
         {recipe.description && (
           <p
-            className={`mb-2 ${sizeStyles.descriptionSize} ${textClass.description}`}
+            className={`my-0 ${sizeStyles.descriptionSize} ${textClass.description}`}
           >
             {recipe.description}
           </p>
         )}
 
         {import.meta.env.VITE_DEBUG_MODE === 'true' && (
-          <div className="mb-3 space-y-1">
+          <div className="my-2 space-y-1">
             <div
               className={`font-semibold ${sizeStyles.labelSize} ${textClass.label}`}
             >

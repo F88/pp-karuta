@@ -93,19 +93,20 @@ export function StackRecipeCard({
       />
       <div className="relative">
         <h3
-          className={`mb-2 font-bold ${sizeStyles.titleSize} ${textClass.title}`}
+          className={`my-0 font-bold ${sizeStyles.titleSize} ${textClass.title}`}
         >
           {recipe.title}
         </h3>
         {recipe.description && (
           <p
-            className={`mb-2 ${sizeStyles.descriptionSize} ${textClass.description}`}
+            className={`my-0 ${sizeStyles.descriptionSize} ${textClass.description}`}
           >
             {recipe.description}
           </p>
         )}
+
         {import.meta.env.VITE_DEBUG_MODE === 'true' && (
-          <div className="mb-2 space-y-1">
+          <div className="my-2 space-y-1">
             <div className={`${sizeStyles.contentSize} ${textClass.content}`}>
               <span className="font-medium">Size:</span>{' '}
               {recipe.maxSize === 'all'
