@@ -33,7 +33,7 @@ export function ToriFudaCard({
         pc: 'border-8',
       }[screenSize]
     : 'border-4 md:border-8';
-  const cardBaseClass = `rounded-none ${borderWidthForCardBaseClass} border-black`;
+  const cardBaseClass = `rounded-none ${borderWidthForCardBaseClass} border-black dark:border-white`;
   const cardClickableClass =
     'group cursor-pointer transition-all duration-300 hover:scale-105 hover:shadow-xl active:scale-95';
 
