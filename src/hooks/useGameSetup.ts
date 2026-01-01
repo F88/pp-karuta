@@ -235,6 +235,8 @@ export function useGameSetup({
         console.warn('⚠️ Saved deck recipe not found:', savedState.selectedDeckRecipeId);
       }
     }
+    // selectDeckRecipe is intentionally not in dependencies to avoid infinite loops
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [repository, selectedDeckRecipe]);
 
   // Reset deck when repository becomes available or changes
@@ -248,6 +250,8 @@ export function useGameSetup({
       );
       void selectDeckRecipe(selectedDeckRecipe);
     }
+    // selectDeckRecipe is intentionally not in dependencies to avoid infinite loops
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     repository,
     selectedDeckRecipe,

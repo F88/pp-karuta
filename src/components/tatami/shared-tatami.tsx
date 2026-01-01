@@ -12,7 +12,7 @@ export type SharedTatamiProps = {
 export function SharedTatami({
   tatamiCards,
   playMode,
-  screenSize,
+  screenSize = 'pc',
 }: SharedTatamiProps) {
   const titleSizeClass = screenSize
     ? {
@@ -46,6 +46,7 @@ export function SharedTatami({
             isClickable={false}
             playMode={playMode}
             showImage={true}
+            screenSize={screenSize}
           />
         ))}
       </div>

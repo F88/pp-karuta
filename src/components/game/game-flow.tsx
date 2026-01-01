@@ -37,12 +37,16 @@ export function GameFlow() {
   });
 
   // Reset game state when reset query parameter changes
+  const resetValue = searchParams?.reset;
   useEffect(() => {
-    if (searchParams?.reset) {
+    if (resetValue) {
       console.log('🔄 Resetting game state due to reset parameter');
+      // This is an intentional state reset triggered by navigation
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setGameState(null);
     }
-  }, [searchParams?.reset]);
+
+  }, [resetValue]);
 
   // Use the selected play mode from setup
   const playMode: PlayMode | null = setup.selectedPlayMode;

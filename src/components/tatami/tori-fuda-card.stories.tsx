@@ -66,6 +66,7 @@ export const Default: Story = {
     isClickable: false,
     showImage: true,
     playMode: 'touch',
+    screenSize: 'pc',
   },
 };
 
@@ -77,6 +78,7 @@ export const KeyboardMode: Story = {
     showImage: false,
     playMode: 'keyboard',
     keyboardKey: '1',
+    screenSize: 'pc',
   },
 };
 
@@ -84,6 +86,7 @@ export const KeyboardModeWithDifferentKeys: Story = {
   args: {
     normalizedPrototype: mockCard,
     index: 0,
+    screenSize: 'pc',
   },
   render: (args) => (
     <div className="grid grid-cols-4 gap-4">
@@ -101,6 +104,7 @@ export const KeyboardModeWithDifferentKeys: Story = {
           showImage={false}
           playMode="keyboard"
           keyboardKey={key}
+          screenSize="pc"
         />
       ))}
     </div>
@@ -114,6 +118,7 @@ export const TouchMode: Story = {
     isClickable: true,
     showImage: true,
     playMode: 'touch',
+    screenSize: 'pc',
   },
 };
 
@@ -121,6 +126,7 @@ export const TouchModeGrid: Story = {
   args: {
     normalizedPrototype: mockCard,
     index: 0,
+    screenSize: 'pc',
   },
   render: (args) => (
     <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
@@ -137,6 +143,7 @@ export const TouchModeGrid: Story = {
           isClickable={true}
           showImage={true}
           playMode="touch"
+          screenSize="pc"
         />
       ))}
     </div>
@@ -150,6 +157,7 @@ export const NotClickable: Story = {
     isClickable: false,
     showImage: true,
     playMode: 'touch',
+    screenSize: 'pc',
   },
 };
 
@@ -160,6 +168,7 @@ export const WithoutImage: Story = {
     isClickable: true,
     showImage: false,
     playMode: 'touch',
+    screenSize: 'pc',
   },
 };
 
@@ -176,5 +185,6 @@ export const LongText: Story = {
     isClickable: true,
     showImage: true,
     playMode: 'touch',
+    screenSize: 'pc',
   },
 };

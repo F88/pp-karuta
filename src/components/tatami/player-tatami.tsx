@@ -30,7 +30,7 @@ export function PlayerTatami({
   score,
   playMode,
   feedbackState = null,
-  screenSize,
+  screenSize = 'pc',
 }: PlayerTatamiProps) {
   const showImage = playMode === 'touch';
 
@@ -108,6 +108,7 @@ export function PlayerTatami({
               showImage={showImage}
               onClick={onCardClick}
               keyboardKey={getKeyForCard(playerIndex, index, playerCount)}
+              screenSize={screenSize}
             />
           ))}
         </div>
