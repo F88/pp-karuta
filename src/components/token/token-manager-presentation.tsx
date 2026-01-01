@@ -17,6 +17,7 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import type { RepositoryState } from '@/lib/repository/promidas-repository-manager';
+import type { ScreenSize } from '@/types/screen-size';
 
 export interface TokenManagerPresentationProps {
   inputValue: string;
@@ -28,6 +29,7 @@ export interface TokenManagerPresentationProps {
   onToggleShowToken: () => void;
   onSave: () => void;
   onRemove: () => void;
+  screenSize: ScreenSize;
 }
 
 export function TokenManagerPresentation({
@@ -40,6 +42,7 @@ export function TokenManagerPresentation({
   onToggleShowToken,
   onSave,
   onRemove,
+  screenSize: _screenSize, // Reserved for future responsive behavior
 }: TokenManagerPresentationProps) {
   const getValidationMessage = () => {
     if (isValidating) {

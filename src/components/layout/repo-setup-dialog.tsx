@@ -7,18 +7,21 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { getRepositoryState } from '@/lib/repository/promidas-repository-manager';
+import type { ScreenSize } from '@/types/screen-size';
 import { RepoSetup } from './repo-setup';
 
 interface RepoSetupDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   autoCloseOnValid?: boolean;
+  screenSize: ScreenSize;
 }
 
 export function RepoSetupDialog({
   open,
   onOpenChange,
   autoCloseOnValid = false,
+  screenSize,
 }: RepoSetupDialogProps) {
   // Monitor repository state and auto-close when valid (if enabled)
   useEffect(() => {
@@ -47,7 +50,7 @@ export function RepoSetupDialog({
             Configure your PROMIDAS API token to access prototype data.
           </DialogDescription>
         </DialogHeader>
-        <RepoSetup />
+        <RepoSetup screenSize={screenSize} />
       </DialogContent>
     </Dialog>
   );

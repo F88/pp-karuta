@@ -45,6 +45,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
+    screenSize: 'pc',
     inputValue: '',
     showToken: false,
     hasToken: false,
@@ -55,6 +56,7 @@ export const Default: Story = {
 
 export const NoToken: Story = {
   args: {
+    screenSize: 'pc',
     inputValue: '',
     showToken: false,
     hasToken: false,
@@ -65,6 +67,7 @@ export const NoToken: Story = {
 
 export const TokenInputInProgress: Story = {
   args: {
+    screenSize: 'pc',
     inputValue: 'some-partial-token',
     showToken: false,
     hasToken: false,
@@ -75,6 +78,7 @@ export const TokenInputInProgress: Story = {
 
 export const TokenVisible: Story = {
   args: {
+    screenSize: 'pc',
     inputValue: 'my-secret-token-12345',
     showToken: true,
     hasToken: true,
@@ -85,6 +89,7 @@ export const TokenVisible: Story = {
 
 export const TokenHidden: Story = {
   args: {
+    screenSize: 'pc',
     inputValue: 'my-secret-token-12345',
     showToken: false,
     hasToken: true,
@@ -95,6 +100,7 @@ export const TokenHidden: Story = {
 
 export const Validating: Story = {
   args: {
+    screenSize: 'pc',
     inputValue: 'validating-token',
     showToken: false,
     hasToken: true,
@@ -105,6 +111,7 @@ export const Validating: Story = {
 
 export const ValidToken: Story = {
   args: {
+    screenSize: 'pc',
     inputValue: 'valid-token-12345',
     showToken: false,
     hasToken: true,
@@ -115,6 +122,7 @@ export const ValidToken: Story = {
 
 export const InvalidToken: Story = {
   args: {
+    screenSize: 'pc',
     inputValue: 'invalid-token',
     showToken: false,
     hasToken: true,
@@ -125,6 +133,7 @@ export const InvalidToken: Story = {
 
 export const DummyMode: Story = {
   args: {
+    screenSize: 'pc',
     inputValue: '',
     showToken: false,
     hasToken: false,
@@ -135,6 +144,7 @@ export const DummyMode: Story = {
 
 export const DummyModeWithToken: Story = {
   args: {
+    screenSize: 'pc',
     inputValue: 'dummy-token',
     showToken: false,
     hasToken: true,

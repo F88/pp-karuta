@@ -4,9 +4,16 @@ import {
   type RepositoryState,
 } from '@/lib/repository/promidas-repository-manager';
 import { usePromidasStoreState } from '@/hooks/use-promidas-store-state';
+import type { ScreenSize } from '@/types/screen-size';
 import { PromidasRepoDashboardPresentation } from './promid-repo-dashboard-presentation';
 
-export function PromidasRepoDashboard() {
+interface PromidasRepoDashboardProps {
+  screenSize: ScreenSize;
+}
+
+export function PromidasRepoDashboard({
+  screenSize,
+}: PromidasRepoDashboardProps) {
   const [repoState, setRepoState] = useState<RepositoryState>({
     type: 'not-created',
   });
@@ -36,6 +43,7 @@ export function PromidasRepoDashboard() {
       storeState={storeState}
       storeStats={stats}
       useDummyData={useDummyData}
+      screenSize={screenSize}
     />
   );
 }

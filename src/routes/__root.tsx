@@ -75,7 +75,7 @@ function RootLayout() {
       <div className={headerPadding}>
         {import.meta.env.VITE_DEBUG_MODE === 'true' && (
           <div className="flex items-center justify-center p-4">
-            <RepoSetup />
+            <RepoSetup screenSize={screenSize} />
           </div>
         )}
 
@@ -83,6 +83,7 @@ function RootLayout() {
           open={openRepoSetupDialog}
           onOpenChange={() => setOpenRepoSetupDialog(false)}
           autoCloseOnValid={false}
+          screenSize={screenSize}
         />
         <Outlet />
       </div>

@@ -1,6 +1,7 @@
 import type { RepositoryState } from '@/lib/repository/promidas-repository-manager';
 import type { StoreState } from '@f88/promidas-utils/store';
 import type { PrototypeInMemoryStats } from '@f88/promidas';
+import type { ScreenSize } from '@/types/screen-size';
 import {
   Card,
   CardContent,
@@ -16,6 +17,7 @@ export interface PromidasRepoDashboardPresentationProps {
   storeState: StoreState;
   storeStats: PrototypeInMemoryStats | null;
   useDummyData: boolean;
+  screenSize: ScreenSize;
 }
 
 export function PromidasRepoDashboardPresentation({
@@ -24,6 +26,7 @@ export function PromidasRepoDashboardPresentation({
   storeState,
   storeStats,
   useDummyData,
+  screenSize: _screenSize, // Reserved for future responsive behavior
 }: PromidasRepoDashboardPresentationProps) {
   const getRepoStateLabel = (state: RepositoryState): string => {
     switch (state.type) {

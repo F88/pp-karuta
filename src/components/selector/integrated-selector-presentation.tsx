@@ -175,7 +175,7 @@ export function IntegratedSelectorPresentation({
           >
             {!isRepoReady && (
               <div className="flex justify-center py-8">
-                <RepoSetup />
+                <RepoSetup screenSize={screenSize} />
               </div>
             )}
 

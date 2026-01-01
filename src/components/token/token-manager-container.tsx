@@ -6,9 +6,16 @@ import {
   type RepositoryState,
 } from '@/lib/repository/promidas-repository-manager';
 import { getPromidasRepositoryManager } from '@/lib/repository/promidas-repository-manager';
+import type { ScreenSize } from '@/types/screen-size';
 import { TokenManagerPresentation } from './token-manager-presentation';
 
-export function TokenManagerContainer() {
+interface TokenManagerContainerProps {
+  screenSize: ScreenSize;
+}
+
+export function TokenManagerContainer({
+  screenSize,
+}: TokenManagerContainerProps) {
   const { token, hasToken, saveToken, removeToken } = useToken();
   const [inputValue, setInputValue] = useState('');
   const [showToken, setShowToken] = useState(false);
@@ -85,6 +92,7 @@ export function TokenManagerContainer() {
       onToggleShowToken={handleToggleShowToken}
       onSave={handleSave}
       onRemove={handleRemove}
+      screenSize={screenSize}
     />
   );
 }
