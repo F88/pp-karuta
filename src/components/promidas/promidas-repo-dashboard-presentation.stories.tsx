@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { PromidasRepoDashboardPresentation } from './promid-repo-dashboard-presentation';
+import { PromidasRepoDashboardPresentation } from './promidas-repo-dashboard-presentation';
 
 const meta = {
   title: 'Promidas/PromidasRepoDashboardPresentation',

@@ -5,7 +5,7 @@ import {
 } from '@/lib/repository/promidas-repository-manager';
 import { usePromidasStoreState } from '@/hooks/use-promidas-store-state';
 import type { ScreenSize } from '@/types/screen-size';
-import { PromidasRepoDashboardPresentation } from './promid-repo-dashboard-presentation';
+import { PromidasRepoDashboardPresentation } from './promidas-repo-dashboard-presentation';
 
 interface PromidasRepoDashboardProps {
   screenSize: ScreenSize;

@@ -1,5 +1,5 @@
 import { TokenManagerContainer } from '@/components/token/token-manager-container';
-import { PromidasRepoDashboard } from '@/components/promidas/promid-repo-dashboard-container';
+import { PromidasRepoDashboard } from '@/components/promidas/promidas-repo-dashboard-container';
 import type { ScreenSize } from '@/types/screen-size';
 
 interface RepoSetupProps {

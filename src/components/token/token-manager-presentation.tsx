@@ -42,8 +42,40 @@ export function TokenManagerPresentation({
   onToggleShowToken,
   onSave,
   onRemove,
-  screenSize: _screenSize, // Reserved for future responsive behavior
+  screenSize,
 }: TokenManagerPresentationProps) {
+  const padding = screenSize
+    ? {
+        smartphone: 'p-3',
+        tablet: 'p-4',
+        pc: 'p-6',
+      }[screenSize]
+    : 'p-3 md:p-4 lg:p-6';
+
+  const titleSize = screenSize
+    ? {
+        smartphone: 'text-base',
+        tablet: 'text-lg',
+        pc: 'text-xl',
+      }[screenSize]
+    : 'text-base md:text-lg lg:text-xl';
+
+  const textSize = screenSize
+    ? {
+        smartphone: 'text-xs',
+        tablet: 'text-sm',
+        pc: 'text-sm',
+      }[screenSize]
+    : 'text-xs md:text-sm';
+
+  const spacing = screenSize
+    ? {
+        smartphone: 'space-y-2',
+        tablet: 'space-y-3',
+        pc: 'space-y-3',
+      }[screenSize]
+    : 'space-y-2 md:space-y-3';
+
   const getValidationMessage = () => {
     if (isValidating) {
       return <p className="text-muted-foreground text-xs">Tokenを確認中...</p>;
@@ -86,18 +118,20 @@ export function TokenManagerPresentation({
 
   return (
     <Card className="w-full max-w-sm">
-      <CardHeader>
+      <CardHeader className={padding}>
         <div className="flex items-start justify-between">
           <div>
-            <CardTitle>API Token</CardTitle>
-            <CardDescription>ProtoPedia APIトークンを設定</CardDescription>
+            <CardTitle className={titleSize}>API Token</CardTitle>
+            <CardDescription className={textSize}>
+              ProtoPedia APIトークンを設定
+            </CardDescription>
           </div>
           {getStatusIcon()}
         </div>
       </CardHeader>
-      <CardContent>
+      <CardContent className={padding}>
         <form
-          className="space-y-3"
+          className={spacing}
           onSubmit={(e) => {
             e.preventDefault();
             onSave();
@@ -145,8 +179,8 @@ export function TokenManagerPresentation({
           {getValidationMessage()}
         </form>
       </CardContent>
-      <CardFooter>
-        <p className="text-muted-foreground text-xs">
+      <CardFooter className={padding}>
+        <p className={`text-muted-foreground ${textSize}`}>
           トークンは{' '}
           <a
             href="https://protopedia.net"

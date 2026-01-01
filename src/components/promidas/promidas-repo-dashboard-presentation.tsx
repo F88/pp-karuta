@@ -26,8 +26,40 @@ export function PromidasRepoDashboardPresentation({
   storeState,
   storeStats,
   useDummyData,
-  screenSize: _screenSize, // Reserved for future responsive behavior
+  screenSize,
 }: PromidasRepoDashboardPresentationProps) {
+  const padding = screenSize
+    ? {
+        smartphone: 'p-3',
+        tablet: 'p-4',
+        pc: 'p-6',
+      }[screenSize]
+    : 'p-3 md:p-4 lg:p-6';
+
+  const titleSize = screenSize
+    ? {
+        smartphone: 'text-sm',
+        tablet: 'text-base',
+        pc: 'text-base',
+      }[screenSize]
+    : 'text-sm md:text-base';
+
+  const textSize = screenSize
+    ? {
+        smartphone: 'text-xs',
+        tablet: 'text-sm',
+        pc: 'text-sm',
+      }[screenSize]
+    : 'text-xs md:text-sm';
+
+  const spacing = screenSize
+    ? {
+        smartphone: 'space-y-3',
+        tablet: 'space-y-4',
+        pc: 'space-y-4',
+      }[screenSize]
+    : 'space-y-3 md:space-y-4';
+
   const getRepoStateLabel = (state: RepositoryState): string => {
     switch (state.type) {
       case 'not-created':
@@ -94,12 +126,14 @@ export function PromidasRepoDashboardPresentation({
   if (useDummyData) {
     return (
       <Card className="w-full max-w-md">
-        <CardHeader>
-          <CardTitle className="text-base">PROMIDAS Repository</CardTitle>
-          <CardDescription>ダミーデータモード</CardDescription>
+        <CardHeader className={padding}>
+          <CardTitle className={titleSize}>PROMIDAS Repository</CardTitle>
+          <CardDescription className={textSize}>
+            ダミーデータモード
+          </CardDescription>
         </CardHeader>
-        <CardContent>
-          <p className="text-muted-foreground text-sm">
+        <CardContent className={padding}>
+          <p className={`text-muted-foreground ${textSize}`}>
             環境変数 VITE_USE_DUMMY_DATA=true のため、
             実際のRepositoryは使用されていません。
           </p>
@@ -110,15 +144,17 @@ export function PromidasRepoDashboardPresentation({
 
   return (
     <Card className="w-full max-w-md">
-      <CardHeader>
-        <CardTitle className="text-base">PROMIDAS Repository</CardTitle>
-        <CardDescription>Repository & Store 状態</CardDescription>
+      <CardHeader className={padding}>
+        <CardTitle className={titleSize}>PROMIDAS Repository</CardTitle>
+        <CardDescription className={textSize}>
+          Repository & Store 状態
+        </CardDescription>
       </CardHeader>
-      <CardContent className="space-y-4">
+      <CardContent className={`${padding} ${spacing}`}>
         {/* Repository State */}
         <div className="space-y-2">
           <div className="flex items-center justify-between">
-            <span className="text-sm font-medium">Repository</span>
+            <span className={`${textSize} font-medium`}>Repository</span>
             <Badge
               variant="outline"
               className={getRepoStateBadgeColor(repoState)}
@@ -132,7 +168,7 @@ export function PromidasRepoDashboardPresentation({
         {/* Store State */}
         <div className="space-y-2">
           <div className="flex items-center justify-between">
-            <span className="text-sm font-medium">Store</span>
+            <span className={`${textSize} font-medium`}>Store</span>
             <Badge
               variant="outline"
               className={getStoreStateBadgeColor(storeState)}
@@ -143,7 +179,7 @@ export function PromidasRepoDashboardPresentation({
 
           {/* Store Stats Details */}
           {storeStats && storeState !== 'not-stored' && (
-            <div className="text-muted-foreground space-y-1 text-xs">
+            <div className={`text-muted-foreground space-y-1 ${textSize}`}>
               <div className="flex justify-between">
                 <span>プロトタイプ数:</span>
                 <span className="font-mono">{storeStats.size}件</span>
