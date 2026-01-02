@@ -16,6 +16,8 @@ import {
 } from '@/lib/karuta/tatami/tatami-size';
 import type { Deck, DeckRecipe, Player, StackRecipe } from '@/models/karuta';
 import type { ProtopediaInMemoryRepository } from '@f88/promidas';
+import type { NormalizedPrototype } from '@f88/promidas/types';
+import type { ListPrototypesParams } from 'protopedia-api-v2-client';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
 const SESSION_STORAGE_KEY = 'pp-karuta-deck-setup';
@@ -27,6 +29,26 @@ type SavedSetupState = {
   selectedPlayMode: PlayMode | null;
   selectedTatamiSize: TatamiSize;
 };
+
+/**
+ * Compare two ListPrototypesParams to determine if they are equivalent
+ * @param a - First params object
+ * @param b - Second params object
+ * @returns true if params are equivalent, false otherwise
+ */
+function areApiParamsEqual(
+  a: ListPrototypesParams,
+  b: ListPrototypesParams,
+): boolean {
+  return (
+    a.offset === b.offset &&
+    a.limit === b.limit &&
+    a.userNm === b.userNm &&
+    a.materialNm === b.materialNm &&
+    a.tagNm === b.tagNm &&
+    a.eventNm === b.eventNm
+  );
+}
 
 function saveSetupState(state: SavedSetupState) {
   try {
@@ -105,6 +127,9 @@ export function useGameSetup({
   const [loadingDeckRecipeId, setLoadingDeckRecipeId] = useState<string | null>(
     null,
   );
+  // Track last used apiParams to avoid redundant API calls
+  const [lastApiParams, setLastApiParams] =
+    useState<ListPrototypesParams | null>(null);
 
   // Stack state - 生成済みStackを保持（正確な枚数表示のため）
   const [generatedStack, setGeneratedStack] = useState<number[] | null>(null);
@@ -210,7 +235,35 @@ export function useGameSetup({
       setError(null);
 
       try {
-        const deck = await DeckManager.generateFromRecipe(recipe, repository);
+        let deck: Map<number, NormalizedPrototype>;
+
+        // Check if apiParams are identical to avoid redundant API calls
+        const canReuseSnapshot =
+          lastApiParams !== null &&
+          areApiParamsEqual(lastApiParams, recipe.apiParams);
+
+        if (canReuseSnapshot) {
+          console.log(
+            '♻️ Reusing repository snapshot (same apiParams), applying filter...',
+          );
+          // Reuse existing snapshot without making API call
+          let prototypes = await repository.getAllFromSnapshot();
+
+          // Apply filter if present in recipe
+          if (recipe.filter) {
+            prototypes = prototypes.filter(recipe.filter);
+          }
+
+          // Convert readonly array to regular array for DeckManager
+          deck = DeckManager.create([...prototypes]);
+        } else {
+          console.log('🌐 Fetching new data from API (apiParams changed)');
+          // Different apiParams, make API call
+          deck = await DeckManager.generateFromRecipe(recipe, repository);
+          // Update cached apiParams after successful API call
+          setLastApiParams(recipe.apiParams);
+        }
+
         setGeneratedDeck(deck);
         setSelectedDeckRecipe(recipe);
         console.log('✅ Deck generated successfully:', deck.size, 'cards');
@@ -237,7 +290,13 @@ export function useGameSetup({
         console.log('✔️ isDeckLoading set to false');
       }
     },
-    [generatedDeck, repository, selectedDeckRecipe?.id, selectedStackRecipe],
+    [
+      generatedDeck,
+      repository,
+      selectedDeckRecipe?.id,
+      selectedStackRecipe,
+      lastApiParams,
+    ],
   );
 
   // Restore deck recipe from sessionStorage when repository becomes available
