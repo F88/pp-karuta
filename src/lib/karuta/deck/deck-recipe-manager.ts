@@ -1,4 +1,5 @@
 import type { DeckRecipe } from '@/models/karuta';
+import type { NormalizedPrototype } from 'node_modules/@f88/promidas/dist/types/normalized-prototype';
 import type { ListPrototypesParams } from 'protopedia-api-v2-client';
 
 type ROTOTYPES_WINDOW = Pick<ListPrototypesParams, 'offset' | 'limit'>;
@@ -42,6 +43,31 @@ function generateSequentialDecks(
   return recipes;
 }
 
+const DECK_RECIPE_ALL_PROTOTYPES: DeckRecipe = {
+  id: 'all-prototypes',
+  title: '全作品',
+  description: '全ての作品',
+  apiParams: {
+    ...ALL_PROTOTYPES,
+  },
+  difficulty: 'beginner',
+  tags: [],
+};
+
+const DECK_ETO: DeckRecipe = {
+  ...DECK_RECIPE_ALL_PROTOTYPES,
+  id: 'eto-uma',
+  title: '干支セット',
+  description: '干支にちなんだ作品セット',
+  difficulty: 'beginner',
+  tags: ['干支'],
+  filter: (prototypes: NormalizedPrototype[]) => {
+    return prototypes.filter((e) => {
+      return e.prototypeNm.includes('ProtpPedia');
+    });
+  },
+};
+
 /**
  * RecipeManager - Centralized management for DeckRecipes
  * Handles recipe definitions, lookup, and factory methods
@@ -58,19 +84,12 @@ export class DeckRecipeManager {
    * Uses apiParams to control setupSnapshot data acquisition
    */
   static readonly RECIPES: DeckRecipe[] = [
+    // ETO
+    DECK_ETO,
+    // All-prototypes recipe
+    DECK_RECIPE_ALL_PROTOTYPES,
     // Range-based recipes
     ...this.rangeRecipes,
-    // All-prototypes recipe
-    {
-      id: 'all-prototypes',
-      title: '全作品',
-      description: '全ての作品',
-      apiParams: {
-        ...ALL_PROTOTYPES,
-      },
-      difficulty: 'beginner',
-      tags: [],
-    },
   ];
 
   // ========================================

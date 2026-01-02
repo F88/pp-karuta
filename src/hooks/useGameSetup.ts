@@ -247,15 +247,8 @@ export function useGameSetup({
             '♻️ Reusing repository snapshot (same apiParams), applying filter...',
           );
           // Reuse existing snapshot without making API call
-          let prototypes = await repository.getAllFromSnapshot();
-
-          // Apply filter if present in recipe
-          if (recipe.filter) {
-            prototypes = prototypes.filter(recipe.filter);
-          }
-
-          // Convert readonly array to regular array for DeckManager
-          deck = DeckManager.create([...prototypes]);
+          const prototypes = await repository.getAllFromSnapshot();
+          deck = DeckManager.createFromPrototypes(prototypes, recipe.filter);
         } else {
           console.log('🌐 Fetching new data from API (apiParams changed)');
           // Different apiParams, make API call
