@@ -34,3 +34,4 @@ tools/prompts/*
 # src/components/tatami/tatami-view-container.tsx
 # src/hooks/useGameSetup.ts
 src/components/tatami/tori-fuda-card-touch.stories.tsx
+src/lib/karuta/deck/deck-recipe-manager.ts
