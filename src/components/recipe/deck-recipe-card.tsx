@@ -44,32 +44,72 @@ export function DeckRecipeCard({
     ? {
         smartphone: {
           padding: 'p-2',
-          titleSize: 'text-lg',
-          descriptionSize: 'text-xs',
-          labelSize: 'text-xs',
-          contentSize: 'text-xs',
+          title: {
+            size: 'text-lg',
+            margin: 'mb-1',
+          },
+          description: {
+            size: 'text-xs',
+            margin: 'mb-1',
+          },
+          label: {
+            size: 'text-xs',
+          },
+          content: {
+            size: 'text-xs',
+          },
         },
         tablet: {
           padding: 'p-4',
-          titleSize: 'text-xl',
-          descriptionSize: 'text-sm',
-          labelSize: 'text-sm',
-          contentSize: 'text-sm',
+          title: {
+            size: 'text-xl',
+            margin: 'mb-2',
+          },
+          description: {
+            size: 'text-sm',
+            margin: 'mb-2',
+          },
+          label: {
+            size: 'text-sm',
+          },
+          content: {
+            size: 'text-sm',
+          },
         },
         pc: {
           padding: 'p-6',
-          titleSize: 'text-2xl',
-          descriptionSize: 'text-sm',
-          labelSize: 'text-sm',
-          contentSize: 'text-sm',
+          title: {
+            size: 'text-2xl',
+            margin: 'mb-3',
+          },
+          description: {
+            size: 'text-sm',
+            margin: 'mb-3',
+          },
+          label: {
+            size: 'text-sm',
+          },
+          content: {
+            size: 'text-sm',
+          },
         },
       }[screenSize]
     : {
         padding: 'p-4 md:p-6 lg:p-8',
-        titleSize: 'text-lg md:text-xl lg:text-2xl',
-        descriptionSize: 'text-xs md:text-sm',
-        labelSize: 'text-xs md:text-sm',
-        contentSize: 'text-xs md:text-sm',
+        title: {
+          size: 'text-lg md:text-xl lg:text-2xl',
+          margin: 'mb-1 md:mb-2 lg:mb-3',
+        },
+        description: {
+          size: 'text-xs md:text-sm',
+          margin: 'mb-1 md:mb-2 lg:mb-3',
+        },
+        label: {
+          size: 'text-xs md:text-sm',
+        },
+        content: {
+          size: 'text-xs md:text-sm',
+        },
       };
 
   return (
@@ -92,14 +132,14 @@ export function DeckRecipeCard({
       <div className="absolute inset-0 bg-linear-to-br from-blue-400 to-indigo-500 opacity-0 transition-opacity group-hover:opacity-10" />
       <div className="relative">
         <h2
-          className={`my-0 font-bold ${sizeStyles.titleSize} ${textClass.title}`}
+          className={`font-bold wrap-break-word whitespace-normal ${sizeStyles.title.size} ${sizeStyles.title.margin} ${textClass.title}`}
         >
           {recipe.title}
         </h2>
 
         {recipe.description && (
           <p
-            className={`my-0 ${sizeStyles.descriptionSize} ${textClass.description}`}
+            className={`wrap-break-word whitespace-normal ${sizeStyles.description.size} ${sizeStyles.description.margin} ${textClass.description}`}
           >
             {recipe.description}
           </p>
@@ -108,12 +148,12 @@ export function DeckRecipeCard({
         {import.meta.env.VITE_DEBUG_MODE === 'true' && (
           <div className="my-2 space-y-1">
             <div
-              className={`font-semibold ${sizeStyles.labelSize} ${textClass.label}`}
+              className={`font-semibold ${sizeStyles.label.size} ${textClass.label}`}
             >
               API Parameters:
             </div>
             <div
-              className={`space-y-0.5 ${sizeStyles.contentSize} ${textClass.content}`}
+              className={`space-y-0.5 ${sizeStyles.content.size} ${textClass.content}`}
             >
               {recipe.apiParams.limit && (
                 <div>
@@ -155,27 +195,25 @@ export function DeckRecipeCard({
           </div>
         )}
 
-        {screenSize !== 'smartphone' && (
-          <div className="flex flex-wrap items-center gap-1">
-            {/* <Badge
+        <div className="flex flex-wrap items-center gap-1">
+          {/* <Badge
               variant="outline"
               className={getDifficultyBadgeClass(recipe.difficulty, isSelected)}
             >
               {recipe.difficulty}
             </Badge> */}
-            {recipe.tags.map((tag) => (
-              <Badge
-                key={tag}
-                variant="secondary"
-                className={
-                  isSelected ? 'bg-white/20 text-white hover:bg-white/30' : ''
-                }
-              >
-                #{tag}
-              </Badge>
-            ))}
-          </div>
-        )}
+          {recipe.tags.map((tag) => (
+            <Badge
+              key={tag}
+              variant="secondary"
+              className={
+                isSelected ? 'bg-white/20 text-white hover:bg-white/30' : ''
+              }
+            >
+              {tag}
+            </Badge>
+          ))}
+        </div>
       </div>
     </Button>
   );
