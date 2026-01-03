@@ -53,23 +53,23 @@ export function ToriFudaCardTouch({
 
   const titleClass = screenSize
     ? {
-        smartphone: 'mb-1 line-clamp-2 text-xs font-semibold text-gray-800',
-        tablet: 'mb-1 line-clamp-2 text-sm font-semibold text-gray-800',
-        pc: 'mb-1 line-clamp-2 text-sm font-semibold text-gray-800',
+        smartphone: 'mb-1 text-xs font-semibold text-gray-800',
+        tablet: 'mb-1 text-md font-semibold text-gray-800',
+        pc: 'mb-1 text-2xl font-semibold text-gray-800',
       }[screenSize]
-    : 'mb-1 line-clamp-2 text-xs md:text-sm font-semibold text-gray-800';
+    : 'mb-1 text-xs md:text-sm font-semibold text-gray-800';
   const summaryClass = screenSize
     ? {
-        smartphone: 'line-clamp-2 text-xs text-gray-600',
-        tablet: 'line-clamp-2 text-xs text-gray-600',
-        pc: 'line-clamp-2 text-xs text-gray-600',
+        smartphone: 'text-xs text-gray-600',
+        tablet: 'text-md text-gray-600',
+        pc: 'text-xl text-gray-600',
       }[screenSize]
-    : 'line-clamp-2 text-xs text-gray-600';
+    : 'text-xs text-gray-600';
   const idClass = screenSize
     ? {
         smartphone: 'mt-1 text-xs text-gray-400',
-        tablet: 'mt-2 text-xs text-gray-400',
-        pc: 'mt-2 text-xs text-gray-400',
+        tablet: 'mt-2 text-md text-gray-400',
+        pc: 'mt-2 text-2xl text-gray-400',
       }[screenSize]
     : 'mt-1 md:mt-2 text-xs text-gray-400';
 
@@ -98,12 +98,11 @@ export function ToriFudaCardTouch({
         {import.meta.env.VITE_DEBUG_MODE === 'true' && (
           <>
             <div className={`${indexBaseClass} ${indexClass}`}>{index + 1}</div>
-
+            <div className={idClass}>ID: {card.id}</div>
             <h3 className={titleClass}>{card.prototypeNm}</h3>
             <p className={summaryClass}>
               {card.summary || 'No summary available'}
             </p>
-            <div className={idClass}>ID: {card.id}</div>
           </>
         )}
       </CardContent>
