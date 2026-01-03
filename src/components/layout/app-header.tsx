@@ -37,7 +37,7 @@ export function AppHeader({
           className="text-xs md:text-sm lg:text-base"
         >
           <Link to="/" onClick={handleHomeClick} title="ホームに戻る">
-            <span className="text-base md:text-lg lg:text-xl">🎴</span> TOP
+            <span className="text-base md:text-lg lg:text-xl">🎴</span> MENU
           </Link>
         </Button>
       }
@@ -50,8 +50,7 @@ export function AppHeader({
           className="text-xs md:text-sm lg:text-base"
         >
           <Link to="/player" title="プレイヤー管理">
-            <span className="text-base md:text-lg lg:text-xl">👥</span>{' '}
-            プレイヤー
+            <span className="text-base md:text-lg lg:text-xl">🧙</span> PLAYER
           </Link>
         </Button>
       }
