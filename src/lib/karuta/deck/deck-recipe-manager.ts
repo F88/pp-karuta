@@ -1,6 +1,7 @@
 import type { DeckRecipe } from '@/models/karuta';
 import type { NormalizedPrototype } from 'node_modules/@f88/promidas/dist/types/normalized-prototype';
 import type { ListPrototypesParams } from 'protopedia-api-v2-client';
+import { normalizeString } from '@/lib/string-utils';
 
 type ROTOTYPES_WINDOW = Pick<ListPrototypesParams, 'offset' | 'limit'>;
 
@@ -47,25 +48,108 @@ const DECK_RECIPE_ALL_PROTOTYPES: DeckRecipe = {
   id: 'all-prototypes',
   title: '全作品',
   description: '全ての作品',
-  apiParams: {
-    ...ALL_PROTOTYPES,
-  },
+  apiParams: { ...ALL_PROTOTYPES },
   difficulty: 'beginner',
   tags: [],
 };
 
-const DECK_ETO: DeckRecipe = {
-  ...DECK_RECIPE_ALL_PROTOTYPES,
-  id: 'eto-uma',
-  title: '干支セット',
-  description: '干支にちなんだ作品セット',
-  difficulty: 'beginner',
-  tags: ['干支'],
-  filter: (prototypes: NormalizedPrototype[]) => {
+/**
+ * Create a filter function for keyword-based filtering
+ * Filters prototypes by matching keywords against prototypeNm and summary (case-insensitive)
+ * Half-width and full-width katakana/alphanumeric are treated as equivalent
+ * @param keywords - Keywords to match against prototypeNm and summary
+ * @returns Filter function for DeckRecipe
+ */
+function createKeywordFilter(keywords: string[]) {
+  // Normalize keywords once for better performance
+  const normalizedKeywords = keywords.map((k) => normalizeString(k));
+
+  return (prototypes: NormalizedPrototype[]) => {
     return prototypes.filter((e) => {
-      return e.prototypeNm.includes('ProtpPedia');
+      // Normalize prototype data
+      const normalizedName = normalizeString(e.prototypeNm);
+      const normalizedSummary = normalizeString(e.summary);
+
+      // Find matching keyword in name
+      let matchedKeyword = normalizedKeywords.find((keyword) =>
+        normalizedName.includes(keyword),
+      );
+
+      // If not found in name, search in summary
+      if (!matchedKeyword) {
+        matchedKeyword = normalizedKeywords.find((keyword) =>
+          normalizedSummary.includes(keyword),
+        );
+      }
+
+      if (matchedKeyword) {
+        console.debug(
+          `✅ DeckRecipe filter matched: "${matchedKeyword}" in ${e.id} - ${e.prototypeNm}`,
+        );
+      }
+
+      return !!matchedKeyword;
     });
-  },
+  };
+}
+
+const DECK_ETO_BASE: Pick<DeckRecipe, 'apiParams' | 'difficulty' | 'tags'> = {
+  apiParams: { ...ALL_PROTOTYPES },
+  difficulty: 'intermediate',
+  tags: ['干支'],
+};
+
+const DECK_ETO_MI: DeckRecipe = {
+  ...DECK_ETO_BASE,
+  id: 'eto-mi',
+  title: '🐍 巳',
+  description: 'へびにちなんだ作品',
+  filter: createKeywordFilter([
+    '🐍',
+    'SNAKE',
+    'HEBI',
+    'HEAVY',
+    'へび',
+    'ヘビ',
+    'スネーク',
+    '巳',
+    '蛇',
+  ]),
+};
+
+const DECK_ETO_UMA: DeckRecipe = {
+  ...DECK_ETO_BASE,
+  id: 'eto-uma',
+  title: '🐴 UMA',
+  description: 'うまにちなんだ作品',
+  filter: createKeywordFilter([
+    '🐴',
+    'HORSE',
+    'UMA',
+    'うま',
+    'ウマ',
+    'ホース',
+    '午',
+    '馬',
+  ]),
+};
+
+const DECK_ETO_HITSUJI: DeckRecipe = {
+  ...DECK_ETO_BASE,
+  id: 'eto-hitsuji',
+  title: '🐏 未',
+  description: 'ひつじにちなんだ作品',
+  filter: createKeywordFilter([
+    '🐏',
+    'SHEEP',
+    'HITSUJI',
+    'ひつじ',
+    'ヒツジ',
+    'ラム',
+    'ジンギスカン',
+    // '未',
+    '羊',
+  ]),
 };
 
 /**
@@ -85,7 +169,9 @@ export class DeckRecipeManager {
    */
   static readonly RECIPES: DeckRecipe[] = [
     // ETO
-    DECK_ETO,
+    DECK_ETO_MI,
+    DECK_ETO_UMA,
+    DECK_ETO_HITSUJI,
     // All-prototypes recipe
     DECK_RECIPE_ALL_PROTOTYPES,
     // Range-based recipes

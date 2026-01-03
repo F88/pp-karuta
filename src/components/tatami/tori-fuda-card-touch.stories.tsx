@@ -186,7 +186,8 @@ export const ImageError: Story = {
   args: {
     normalizedPrototype: {
       ...mockCard,
-      mainUrl: 'https://invalid-url-that-will-fail-to-load.example.com/image.jpg',
+      mainUrl:
+        'https://invalid-url-that-will-fail-to-load.example.com/image.jpg',
     },
     index: 0,
     isClickable: true,
