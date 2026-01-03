@@ -24,6 +24,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
+    screenSize: 'pc',
     homeButton: <Button variant="ghost">🎴</Button>,
     rulesButton: <Button variant="ghost">📜 掟</Button>,
     playerButton: <Button variant="ghost">👥 プレイヤー</Button>,
@@ -40,6 +41,7 @@ export const Default: Story = {
 
 export const WithValidToken: Story = {
   args: {
+    screenSize: 'pc',
     homeButton: <Button variant="ghost">🎴</Button>,
     rulesButton: <Button variant="ghost">📜 掟</Button>,
     playerButton: <Button variant="ghost">👥 プレイヤー</Button>,
@@ -58,6 +60,7 @@ export const WithValidToken: Story = {
 
 export const WithInvalidToken: Story = {
   args: {
+    screenSize: 'pc',
     homeButton: <Button variant="ghost">🎴</Button>,
     playerButton: <Button variant="ghost">👥 プレイヤー</Button>,
     rulesButton: <Button variant="ghost">📜 掟</Button>,
@@ -80,6 +83,7 @@ export const AllStates = {
       <div>
         <h3 className="mb-2 text-sm font-semibold">No Token:</h3>
         <AppHeaderPresentation
+          screenSize="pc"
           homeButton={<Button variant="ghost">🎴</Button>}
           rulesButton={<Button variant="ghost">📜 掟</Button>}
           playerButton={<Button variant="ghost">👥 プレイヤー</Button>}
@@ -96,6 +100,7 @@ export const AllStates = {
       <div>
         <h3 className="mb-2 text-sm font-semibold">Ready:</h3>
         <AppHeaderPresentation
+          screenSize="pc"
           homeButton={<Button variant="ghost">🎴</Button>}
           rulesButton={<Button variant="ghost">📜 掟</Button>}
           playerButton={<Button variant="ghost">👥 プレイヤー</Button>}
@@ -114,6 +119,7 @@ export const AllStates = {
       <div>
         <h3 className="mb-2 text-sm font-semibold">Invalid:</h3>
         <AppHeaderPresentation
+          screenSize="pc"
           homeButton={<Button variant="ghost">🎴</Button>}
           rulesButton={<Button variant="ghost">📜 掟</Button>}
           playerButton={<Button variant="ghost">👥 プレイヤー</Button>}

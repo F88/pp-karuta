@@ -17,6 +17,8 @@ export class DeckManager {
   /**
    * Create a Deck from array of NormalizedPrototype
    * Ensures unique IDs by using Map structure
+   * @param prototypes - Array of prototypes to create Deck from
+   * @returns Generated Deck (Map of ID -> NormalizedPrototype)
    * @throws {Error} If validation fails or duplicates found
    */
   static create(prototypes: NormalizedPrototype[]): Deck {
@@ -47,17 +49,50 @@ export class DeckManager {
   }
 
   /**
-   * Generate a Deck from DeckRecipe
-   * Fetches data from repository using recipe's apiParams
-   * @param recipe - DeckRecipe to generate Deck from
-   * @param repository - ProtopediaInMemoryRepository for data fetching
+   * Create a Deck from prototypes array with optional filter
+   * Converts readonly array to mutable and applies filter if provided
+   * @param prototypes - Source prototypes (readonly array from repository)
+   * @param filter - Optional filter function to apply before creating Deck
    * @returns Generated Deck (Map of ID -> NormalizedPrototype)
-   * @throws {Error} If validation fails or data fetch fails
+   * @throws {Error} If validation fails during Deck creation
    */
-  static async generateFromRecipe(
+  static createFromPrototypes(
+    prototypes: readonly NormalizedPrototype[],
+    filter?: (prototypes: NormalizedPrototype[]) => NormalizedPrototype[],
+  ): Deck {
+    // Convert readonly array to mutable array first
+    const mutablePrototypes = [...prototypes];
+
+    // Apply filter if provided
+    if (filter != null) {
+      console.debug(
+        '[DEBUG] createFromPrototypes - Applying filter to prototypes before deck creation',
+      );
+      const filtered = filter(mutablePrototypes);
+      console.debug(
+        '[DEBUG] createFromPrototypes - Prototypes count after filtering:',
+        {
+          before: mutablePrototypes.length,
+          after: filtered.length,
+        },
+      );
+      return this.create(filtered);
+    }
+    return this.create(mutablePrototypes);
+  }
+
+  /**
+   * Get prototypes from DeckRecipe by fetching data from repository
+   * Calls setupSnapshot and getAllFromSnapshot without applying filters
+   * @param recipe - DeckRecipe containing apiParams for repository query
+   * @param repository - ProtopediaInMemoryRepository for data fetching
+   * @returns Readonly array of NormalizedPrototypes (unfiltered)
+   * @throws {Error} If recipe validation fails or API call fails
+   */
+  static async getPrototypesFromRecipe(
     recipe: DeckRecipe,
     repository: ProtopediaInMemoryRepository,
-  ): Promise<Deck> {
+  ): Promise<readonly NormalizedPrototype[]> {
     // Validation: Recipe
     if (!recipe || !recipe.apiParams) {
       throw new Error(`Invalid recipe: apiParams is required`);
@@ -81,26 +116,32 @@ export class DeckManager {
       `[INFO] Retrieved ${allPrototypes.length} prototypes from snapshot`,
     );
 
-    // Apply filter if specified in recipe
-    const filteredPrototypes = recipe.filter
-      ? recipe.filter([...allPrototypes])
-      : [...allPrototypes];
+    return allPrototypes;
+  }
 
-    // Validation: All prototypes have valid IDs
-    const invalidPrototype = filteredPrototypes.find(
-      (p) => !p || typeof p.id !== 'number',
-    );
-    if (invalidPrototype) {
-      throw new Error(`Invalid prototype found: missing or invalid ID`);
-    }
-
-    // Use create method for consistency
-    return this.create(filteredPrototypes);
+  /**
+   * Generate a Deck from DeckRecipe
+   * Fetches data from repository and applies recipe's filter
+   * Internally calls getPrototypesFromRecipe + createFromPrototypes
+   * @param recipe - DeckRecipe containing apiParams and optional filter
+   * @param repository - ProtopediaInMemoryRepository for data fetching
+   * @returns Generated Deck (Map of ID -> NormalizedPrototype)
+   * @throws {Error} If validation fails or data fetch fails
+   */
+  static async generateFromRecipe(
+    recipe: DeckRecipe,
+    repository: ProtopediaInMemoryRepository,
+  ): Promise<Deck> {
+    const prototypes = await this.getPrototypesFromRecipe(recipe, repository);
+    return this.createFromPrototypes(prototypes, recipe.filter);
   }
 
   /**
    * Recreate Deck from prototype IDs and full prototype list
    * Used for regenerating decks from DeckMetaData
+   * @param prototypeIds - Array of prototype IDs to include in Deck
+   * @param allPrototypes - Full list of available prototypes
+   * @returns Recreated Deck (Map of ID -> NormalizedPrototype)
    * @throws {Error} If validation fails or prototypes not found
    */
   static recreate(

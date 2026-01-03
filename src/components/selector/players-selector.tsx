@@ -1,7 +1,7 @@
 import type { Player } from '@/models/karuta';
+import type { ScreenSize } from '@/types/screen-size';
 import { GameManager } from '@/lib/karuta';
-import { PlayerSelectionCard } from '@/components/player/player-selection-card';
-import { Button } from '@/components/ui/button';
+import { SelectableCard } from '@/components/selector/selectable-card';
 
 export type PlayersSelectorProps = {
   availablePlayers: Player[];
@@ -9,6 +9,7 @@ export type PlayersSelectorProps = {
   onTogglePlayer: (playerId: string) => void;
   onAddPlayer: () => void;
   isLoading: boolean;
+  screenSize?: ScreenSize;
 };
 
 export function PlayersSelector({
@@ -17,6 +18,7 @@ export function PlayersSelector({
   onTogglePlayer,
   onAddPlayer,
   isLoading,
+  screenSize,
 }: PlayersSelectorProps) {
   return (
     <>
@@ -26,32 +28,30 @@ export function PlayersSelector({
           const maxPlayersReached =
             selectedPlayerIds.length >= GameManager.MAX_GAME_PLAYERS;
           return (
-            <PlayerSelectionCard
+            <SelectableCard
               key={player.id}
-              player={player}
               isSelected={isSelected}
-              onToggle={onTogglePlayer}
-              isDisabled={isLoading || (!isSelected && maxPlayersReached)}
+              onClick={() => onTogglePlayer(player.id)}
+              disabled={isLoading || (!isSelected && maxPlayersReached)}
+              icon={isSelected ? '✓' : '👤'}
+              label={player.name}
+              alignment="start"
+              screenSize={screenSize}
             />
           );
         })}
 
         {/* Add Player Button */}
-        <Button
+        <SelectableCard
+          isSelected={false}
           onClick={onAddPlayer}
           disabled={isLoading}
-          variant="outline"
-          className="group relative h-auto overflow-hidden rounded-xl p-6 transition-all duration-300 hover:scale-105 hover:shadow-lg active:scale-95 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:scale-100"
-        >
-          <div className="flex h-full flex-col items-center justify-center gap-2">
-            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gray-100 text-4xl text-gray-400 transition-colors group-hover:bg-indigo-100 group-hover:text-indigo-600 dark:bg-gray-700 dark:text-gray-500">
-              +
-            </div>
-            {/* <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
-              プレイヤー追加
-            </span> */}
-          </div>
-        </Button>
+          icon={<span className="text-4xl text-gray-400">+</span>}
+          label=""
+          className="bg-gray-50 hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700"
+          alignment="center"
+          screenSize={screenSize}
+        />
       </div>
       {selectedPlayerIds.length >= GameManager.MAX_GAME_PLAYERS && (
         <p className="text-center text-sm text-gray-500 dark:text-gray-400">

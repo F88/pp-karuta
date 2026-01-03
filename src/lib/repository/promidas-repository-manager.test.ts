@@ -26,6 +26,14 @@ vi.mock('@f88/promidas-utils/builder', () => ({
   toErrorMessage: vi.fn((err) => String(err)),
 }));
 
+// Mock dummy-repository module to avoid generating 10000 prototypes in tests
+vi.mock('./dummy-repository', () => ({
+  createDummyRepository: vi.fn(() => ({
+    setupSnapshot: vi.fn().mockResolvedValue({ ok: true, stats: {} }),
+    getStats: vi.fn().mockReturnValue({ size: 0 }),
+  })),
+}));
+
 const mockStats: PrototypeInMemoryStats = {
   size: 0,
   cachedAt: new Date(),

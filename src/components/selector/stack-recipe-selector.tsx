@@ -1,4 +1,5 @@
 import type { StackRecipe, Deck } from '@/models/karuta';
+import type { ScreenSize } from '@/types/screen-size';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { StackRecipeCard } from '@/components/recipe/stack-recipe-card';
 
@@ -9,6 +10,7 @@ export type StackRecipeSelectorProps = {
   isLoading: boolean;
   generatedStack: number[] | null;
   generatedDeck: Deck | null;
+  screenSize?: ScreenSize;
 };
 
 export function StackRecipeSelector({
@@ -18,6 +20,7 @@ export function StackRecipeSelector({
   isLoading,
   generatedStack,
   generatedDeck,
+  screenSize,
 }: StackRecipeSelectorProps) {
   const isDeckEmpty = generatedDeck !== null && generatedDeck.size === 0;
 
@@ -41,13 +44,16 @@ export function StackRecipeSelector({
             onSelect={onSelectStackRecipe}
             isSelected={selectedStackRecipe?.id === recipe.id}
             isLoading={isLoading}
+            screenSize={screenSize}
           />
         ))}
       </div>
       {generatedStack && (
         <Alert className="border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-950">
           <AlertDescription className="text-green-800 dark:text-green-200">
-            ✓ Stack生成完了: {generatedStack.length}枚
+            ✓ 枚数: {generatedStack.length.toLocaleString()} 枚
+            {import.meta.env.VITE_DEBUG_MODE === 'true' &&
+              generatedStack.map((id) => ` ${id}`).join(',')}
           </AlertDescription>
         </Alert>
       )}

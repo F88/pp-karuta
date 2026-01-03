@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import type { ProtopediaInMemoryRepository } from '@f88/promidas';
-import { getPromidasRepository } from '@/lib/repository/promidas-repo';
+import { getPromidasRepository } from '@/lib/repository/promidas-repository-manager';
 
 export type UsePromidasRepositoryResult = {
   repository: ProtopediaInMemoryRepository | null;

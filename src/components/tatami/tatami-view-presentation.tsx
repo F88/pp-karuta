@@ -1,5 +1,7 @@
+import type { PlayMode } from '@/lib/karuta';
 import { DeckManager } from '@/lib/karuta/deck/deck-manager';
 import type { Deck, GamePlayerState } from '@/models/karuta';
+import type { ScreenSize } from '@/types/screen-size';
 import type { NormalizedPrototype } from '@f88/promidas/types';
 import { GameHeader } from './game-header';
 import { PlayerTatami } from './player-tatami';
@@ -16,7 +18,10 @@ export type TatamiViewPresentationProps = {
   currentRace: number;
   totalRaces: number;
   stackCount: number;
+  playMode: PlayMode;
   onPlayerCardSelect: (playerId: string, card: NormalizedPrototype) => void;
+  playerFeedbackStates: Record<string, 'correct' | 'incorrect' | null>;
+  screenSize?: ScreenSize;
 };
 
 export function TatamiViewPresentation({
@@ -27,7 +32,10 @@ export function TatamiViewPresentation({
   currentRace,
   totalRaces,
   stackCount,
+  playMode,
   onPlayerCardSelect,
+  playerFeedbackStates,
+  screenSize,
 }: TatamiViewPresentationProps) {
   // Calculate total stats from all players
   const totalScore = playerStates.reduce((sum, ps) => sum + ps.score, 0);
@@ -36,8 +44,58 @@ export function TatamiViewPresentation({
     0,
   );
 
+  // Determine grid layout based on player count and screen size
+  const playerCount = playerStates.length;
+
+  // Responsive padding class
+  const containerPadding = screenSize
+    ? {
+        smartphone: 'p-2',
+        tablet: 'p-4',
+        pc: 'p-6',
+      }[screenSize]
+    : 'p-2 md:p-3 lg:p-4';
+
+  // Responsive spacing between sections
+  const sectionSpacing = screenSize
+    ? {
+        smartphone: 'my-4 space-y-3',
+        tablet: 'my-6 space-y-4',
+        pc: 'my-8 space-y-6',
+      }[screenSize]
+    : 'my-4 md:my-6 lg:my-8 space-y-3 md:space-y-4 lg:space-y-6';
+
+  // Responsive gap for player grid
+  const playerGridGap = screenSize
+    ? {
+        smartphone: 'gap-2',
+        tablet: 'gap-3',
+        pc: 'gap-4',
+      }[screenSize]
+    : 'gap-2 md:gap-3 lg:gap-4';
+
+  const getPlayerGridCols = () => {
+    // Keyboard mode: always match player count
+    if (playMode === 'keyboard') {
+      if (playerCount === 1) return 'grid-cols-1';
+      if (playerCount === 2) return 'grid-cols-2';
+      if (playerCount === 3) return 'grid-cols-3';
+      if (playerCount === 4) return 'grid-cols-4';
+      return 'grid-cols-4'; // 5+ players: max 4 columns
+    }
+
+    // Touch mode: simple layout
+    // 1 player: 1 column, 2+ players: 2 columns
+    if (playerCount <= 1) {
+      return 'grid-cols-1';
+    }
+    return 'grid-cols-2';
+  };
+
   return (
-    <div className="flex h-screen flex-col bg-gradient-to-br from-green-50 to-teal-100 p-4">
+    <div
+      className={`flex h-screen flex-col bg-gradient-to-br from-green-50 to-teal-100 dark:from-gray-900 dark:to-gray-800 ${containerPadding}`}
+    >
       <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col overflow-hidden">
         <GameHeader
           currentRace={currentRace}
@@ -46,24 +104,35 @@ export function TatamiViewPresentation({
           mochiFudaCount={totalMochiFuda}
           stackCount={stackCount}
           tatamiCount={sharedTatamiCards.length}
+          screenSize={screenSize}
         />
 
         {/* Top section: Shared Tatami + YomiFuda (natural height) */}
-        <div className="my-8 flex-shrink-0 space-y-6">
-          <SharedTatami tatamiCards={sharedTatamiCards} />
+        <div className={`flex-shrink-0 ${sectionSpacing}`}>
+          {playMode !== 'touch' && (
+            <SharedTatami
+              tatamiCards={sharedTatamiCards}
+              playMode={playMode}
+              screenSize={screenSize}
+            />
+          )}
           {/* <YomiFudaCard normalizedPrototype={yomiFuda} /> */}
           {/* <YomiFudaMarquee normalizedPrototype={yomiFuda} /> */}
-          <Yomite key={yomiFuda.id} normalizedPrototype={yomiFuda} />
+          <Yomite
+            key={yomiFuda.id}
+            normalizedPrototype={yomiFuda}
+            screenSize={screenSize}
+          />
         </div>
 
         {/* Bottom section: Player Tatami Areas (takes remaining height) */}
-        <div className="flex flex-1 flex-col overflow-hidden border-t border-gray-300 bg-white/80 pt-4 backdrop-blur-sm">
-          <h2 className="mb-4 flex-shrink-0 text-center text-2xl font-bold text-gray-800">
+        <div className="flex flex-1 flex-col overflow-hidden">
+          {/* <h2 className="mb-4 flex-shrink-0 text-center text-2xl font-bold text-gray-800 dark:text-gray-100">
             🎮 Player Tatami Areas
-          </h2>
+          </h2> */}
           <div className="flex-1 overflow-y-auto">
-            <div className="grid grid-cols-2 gap-4">
-              {playerStates.map((playerState) => {
+            <div className={`grid ${playerGridGap} ${getPlayerGridCols()}`}>
+              {playerStates.map((playerState, playerIndex) => {
                 const playerTatamiCards = DeckManager.getByIds(
                   deck,
                   playerState.tatami,
@@ -72,12 +141,19 @@ export function TatamiViewPresentation({
                   <PlayerTatami
                     key={playerState.player.id}
                     player={playerState.player}
+                    playerIndex={playerIndex}
+                    playerCount={playerStates.length}
                     tatamiCards={playerTatamiCards}
                     onCardClick={(card) =>
                       onPlayerCardSelect(playerState.player.id, card)
                     }
                     mochiFudaCount={playerState.mochiFuda.length}
                     score={playerState.score}
+                    playMode={playMode}
+                    feedbackState={
+                      playerFeedbackStates[playerState.player.id] ?? null
+                    }
+                    screenSize={screenSize}
                   />
                 );
               })}

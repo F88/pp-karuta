@@ -1,4 +1,4 @@
-import type { RepositoryState } from '@/lib/repository/promidas-repo';
+import type { RepositoryState } from '@/lib/repository/promidas-repository-manager';
 import { Button } from '@/components/ui/button';
 import { CloudCog, CloudSync, CloudCheck, CloudAlert } from 'lucide-react';
 

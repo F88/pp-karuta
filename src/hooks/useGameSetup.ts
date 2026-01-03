@@ -1,15 +1,72 @@
-import { useState, useCallback, useMemo, useEffect } from 'react';
-import type { Deck, DeckRecipe, StackRecipe, Player } from '@/models/karuta';
 import type { PlayMode, TatamiSize } from '@/lib/karuta';
 import {
   DeckManager,
+  DeckRecipeManager,
+  DEFAULT_TATAMI_SIZE,
   GameManager,
   PlayerManager,
   StackManager,
   StackRecipeManager,
-  DEFAULT_TATAMI_SIZE,
 } from '@/lib/karuta';
+import {
+  TATAMI_SIZES_16,
+  TATAMI_SIZES_8,
+  type TatamiSize16,
+  type TatamiSize8,
+} from '@/lib/karuta/tatami/tatami-size';
+import type { Deck, DeckRecipe, Player, StackRecipe } from '@/models/karuta';
 import type { ProtopediaInMemoryRepository } from '@f88/promidas';
+import type { NormalizedPrototype } from '@f88/promidas/types';
+import type { ListPrototypesParams } from 'protopedia-api-v2-client';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+
+const SESSION_STORAGE_KEY = 'pp-karuta-deck-setup';
+
+type SavedSetupState = {
+  selectedDeckRecipeId: string | null;
+  selectedStackRecipeId: string | null;
+  selectedPlayerIds: string[];
+  selectedPlayMode: PlayMode | null;
+  selectedTatamiSize: TatamiSize;
+};
+
+/**
+ * Compare two ListPrototypesParams to determine if they are equivalent
+ * @param a - First params object
+ * @param b - Second params object
+ * @returns true if params are equivalent, false otherwise
+ */
+function areApiParamsEqual(
+  a: ListPrototypesParams,
+  b: ListPrototypesParams,
+): boolean {
+  return (
+    a.offset === b.offset &&
+    a.limit === b.limit &&
+    a.userNm === b.userNm &&
+    a.materialNm === b.materialNm &&
+    a.tagNm === b.tagNm &&
+    a.eventNm === b.eventNm
+  );
+}
+
+function saveSetupState(state: SavedSetupState) {
+  try {
+    sessionStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(state));
+  } catch (error) {
+    console.error('Failed to save setup state:', error);
+  }
+}
+
+function loadSetupState(): SavedSetupState | null {
+  try {
+    const saved = sessionStorage.getItem(SESSION_STORAGE_KEY);
+    return saved ? JSON.parse(saved) : null;
+  } catch (error) {
+    console.error('Failed to load setup state:', error);
+    return null;
+  }
+}
 
 export type UseGameSetupReturn = {
   // Deck state
@@ -36,7 +93,8 @@ export type UseGameSetupReturn = {
 
   // TatamiSize state
   selectedTatamiSize: TatamiSize;
-  selectTatamiSize: (size: TatamiSize) => void;
+  selectTatamiSize: (size: TatamiSize8 | TatamiSize16) => void;
+  availableTatamiSizes: readonly TatamiSize8[] | readonly TatamiSize16[];
 
   // Game creation
   canStartGame: boolean;
@@ -56,6 +114,11 @@ export function useGameSetup({
   repository,
   onGameStateCreated,
 }: UseGameSetupOptions): UseGameSetupReturn {
+  // Load saved state
+  const savedState = loadSetupState();
+
+  console.log('🔍 useGameSetup initialized with savedState:', savedState);
+
   // Deck state - 重いので実体を保持（再利用のため）
   const [generatedDeck, setGeneratedDeck] = useState<Deck | null>(null);
   const [selectedDeckRecipe, setSelectedDeckRecipe] =
@@ -64,28 +127,61 @@ export function useGameSetup({
   const [loadingDeckRecipeId, setLoadingDeckRecipeId] = useState<string | null>(
     null,
   );
+  // Track last used apiParams to avoid redundant API calls
+  const [lastApiParams, setLastApiParams] =
+    useState<ListPrototypesParams | null>(null);
 
   // Stack state - 生成済みStackを保持（正確な枚数表示のため）
   const [generatedStack, setGeneratedStack] = useState<number[] | null>(null);
   const [selectedStackRecipe, setSelectedStackRecipe] =
     useState<StackRecipe | null>(() => {
-      // Default to 10 Cards recipe
+      // Restore from sessionStorage or use default
+      if (savedState?.selectedStackRecipeId) {
+        const restored = StackRecipeManager.findById(
+          savedState.selectedStackRecipeId,
+        );
+        console.log(
+          '🔄 Restoring StackRecipe from sessionStorage:',
+          restored?.id,
+        );
+        return restored || null;
+      }
       const defaultRecipe = StackRecipeManager.findById('standard-10');
+      console.log('📦 Using default StackRecipe:', defaultRecipe?.id);
       return defaultRecipe || null;
     });
 
   // Player state
   const [availablePlayers, setAvailablePlayers] = useState<Player[]>([]);
-  const [selectedPlayerIds, setSelectedPlayerIds] = useState<string[]>([]);
+  const [selectedPlayerIds, setSelectedPlayerIds] = useState<string[]>(() => {
+    console.log(
+      '🔄 Restoring selectedPlayerIds from sessionStorage:',
+      savedState?.selectedPlayerIds,
+    );
+    return savedState?.selectedPlayerIds || [];
+  });
 
   // PlayMode state
   const [selectedPlayMode, setSelectedPlayMode] = useState<PlayMode | null>(
-    'touch',
+    () => {
+      console.log(
+        '🔄 Restoring selectedPlayMode from sessionStorage:',
+        savedState?.selectedPlayMode,
+      );
+      return savedState?.selectedPlayMode || 'touch';
+    },
   );
 
   // TatamiSize state
-  const [selectedTatamiSize, setSelectedTatamiSize] =
-    useState<TatamiSize>(DEFAULT_TATAMI_SIZE);
+  const [selectedTatamiSize, setSelectedTatamiSize] = useState<TatamiSize>(
+    () => {
+      console.log(
+        '🔄 Restoring selectedTatamiSize from sessionStorage:',
+        savedState?.selectedTatamiSize,
+      );
+      return savedState?.selectedTatamiSize || DEFAULT_TATAMI_SIZE;
+    },
+  );
 
   // Error & loading state
   const [error, setError] = useState<string | null>(null);
@@ -139,7 +235,28 @@ export function useGameSetup({
       setError(null);
 
       try {
-        const deck = await DeckManager.generateFromRecipe(recipe, repository);
+        let deck: Map<number, NormalizedPrototype>;
+
+        // Check if apiParams are identical to avoid redundant API calls
+        const canReuseSnapshot =
+          lastApiParams !== null &&
+          areApiParamsEqual(lastApiParams, recipe.apiParams);
+
+        if (canReuseSnapshot) {
+          console.log(
+            '♻️ Reusing repository snapshot (same apiParams), applying filter...',
+          );
+          // Reuse existing snapshot without making API call
+          const prototypes = await repository.getAllFromSnapshot();
+          deck = DeckManager.createFromPrototypes(prototypes, recipe.filter);
+        } else {
+          console.log('🌐 Fetching new data from API (apiParams changed)');
+          // Different apiParams, make API call
+          deck = await DeckManager.generateFromRecipe(recipe, repository);
+          // Update cached apiParams after successful API call
+          setLastApiParams(recipe.apiParams);
+        }
+
         setGeneratedDeck(deck);
         setSelectedDeckRecipe(recipe);
         console.log('✅ Deck generated successfully:', deck.size, 'cards');
@@ -166,8 +283,41 @@ export function useGameSetup({
         console.log('✔️ isDeckLoading set to false');
       }
     },
-    [generatedDeck, repository, selectedDeckRecipe?.id, selectedStackRecipe],
+    [
+      generatedDeck,
+      repository,
+      selectedDeckRecipe?.id,
+      selectedStackRecipe,
+      lastApiParams,
+    ],
   );
+
+  // Restore deck recipe from sessionStorage when repository becomes available
+  useEffect(() => {
+    const savedState = loadSetupState();
+    console.log('🔍 Checking deck restoration:', {
+      hasRepository: !!repository,
+      savedDeckRecipeId: savedState?.selectedDeckRecipeId,
+      currentDeckRecipe: selectedDeckRecipe?.id,
+    });
+
+    if (repository && savedState?.selectedDeckRecipeId && !selectedDeckRecipe) {
+      const recipe = DeckRecipeManager.RECIPES.find(
+        (r) => r.id === savedState.selectedDeckRecipeId,
+      );
+      if (recipe) {
+        console.log('🔄 Restoring deck recipe from sessionStorage:', recipe.id);
+        void selectDeckRecipe(recipe);
+      } else {
+        console.warn(
+          '⚠️ Saved deck recipe not found:',
+          savedState.selectedDeckRecipeId,
+        );
+      }
+    }
+    // selectDeckRecipe is intentionally not in dependencies to avoid infinite loops
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [repository, selectedDeckRecipe]);
 
   // Reset deck when repository becomes available or changes
   useEffect(() => {
@@ -180,12 +330,26 @@ export function useGameSetup({
       );
       void selectDeckRecipe(selectedDeckRecipe);
     }
+    // selectDeckRecipe is intentionally not in dependencies to avoid infinite loops
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [repository, selectedDeckRecipe, generatedDeck, isDeckLoading]);
+
+  // Save state to sessionStorage whenever it changes
+  useEffect(() => {
+    const state: SavedSetupState = {
+      selectedDeckRecipeId: selectedDeckRecipe?.id || null,
+      selectedStackRecipeId: selectedStackRecipe?.id || null,
+      selectedPlayerIds,
+      selectedPlayMode,
+      selectedTatamiSize,
+    };
+    saveSetupState(state);
   }, [
-    repository,
     selectedDeckRecipe,
-    generatedDeck,
-    isDeckLoading,
-    selectDeckRecipe,
+    selectedStackRecipe,
+    selectedPlayerIds,
+    selectedPlayMode,
+    selectedTatamiSize,
   ]);
 
   // Select StackRecipe and generate Stack if Deck exists
@@ -212,16 +376,28 @@ export function useGameSetup({
   );
 
   // Toggle player selection
-  const togglePlayer = useCallback((playerId: string) => {
-    setSelectedPlayerIds((prev) => {
-      if (prev.includes(playerId)) {
-        return prev.filter((id) => id !== playerId);
-      } else {
-        return [...prev, playerId];
-      }
-    });
-    setError(null);
-  }, []);
+  const togglePlayer = useCallback(
+    (playerId: string) => {
+      setSelectedPlayerIds((prev) => {
+        const newPlayerIds = prev.includes(playerId)
+          ? prev.filter((id) => id !== playerId)
+          : [...prev, playerId];
+
+        // If keyboard mode and player count becomes 3+, restrict tatami size
+        if (
+          selectedPlayMode === 'keyboard' &&
+          newPlayerIds.length >= 3 &&
+          (selectedTatamiSize === 12 || selectedTatamiSize === 16)
+        ) {
+          setSelectedTatamiSize(8);
+        }
+
+        return newPlayerIds;
+      });
+      setError(null);
+    },
+    [selectedPlayMode, selectedTatamiSize],
+  );
 
   // Add new player with random name
   const addPlayer = useCallback(async () => {
@@ -236,20 +412,65 @@ export function useGameSetup({
 
     // Save to storage
     await PlayerManager.savePlayers(updatedPlayers);
+
+    // Update selected players
+    setSelectedPlayerIds((prev) => {
+      const newPlayerIds = [...prev, newPlayer.id];
+
+      // If keyboard mode and player count becomes 3+, restrict tatami size
+      if (
+        selectedPlayMode === 'keyboard' &&
+        newPlayerIds.length >= 3 &&
+        (selectedTatamiSize === 12 || selectedTatamiSize === 16)
+      ) {
+        setSelectedTatamiSize(8);
+      }
+
+      return newPlayerIds;
+    });
+
     setError(null);
-  }, [availablePlayers]);
+  }, [availablePlayers, selectedPlayMode, selectedTatamiSize]);
 
   // Select PlayMode
-  const selectPlayMode = useCallback((mode: PlayMode) => {
-    setSelectedPlayMode(mode);
-    setError(null);
-  }, []);
+  const selectPlayMode = useCallback(
+    (mode: PlayMode) => {
+      setSelectedPlayMode(mode);
+      setError(null);
+
+      // If switching to keyboard mode with 3+ players, restrict tatami size to 4 or 8
+      if (mode === 'keyboard' && selectedPlayerIds.length >= 3) {
+        if (selectedTatamiSize === 12 || selectedTatamiSize === 16) {
+          setSelectedTatamiSize(8);
+        }
+      }
+    },
+    [selectedPlayerIds.length, selectedTatamiSize],
+  );
 
   // Select TatamiSize
   const selectTatamiSize = useCallback((size: TatamiSize) => {
     setSelectedTatamiSize(size);
     setError(null);
   }, []);
+
+  // Get available tatami sizes based on play mode and player count
+  const availableTatamiSizes = useMemo(() => {
+    if (selectedPlayMode === 'keyboard') {
+      switch (selectedPlayerIds.length) {
+        case 1:
+          return TATAMI_SIZES_16;
+        case 2:
+          return TATAMI_SIZES_16;
+        case 3:
+          return TATAMI_SIZES_8;
+        case 4:
+          return TATAMI_SIZES_8;
+        default:
+          return TATAMI_SIZES_8;
+      }
+    }
+  }, [selectedPlayMode, selectedPlayerIds.length]);
 
   // Can start game validation
   const canStartGame = useMemo(() => {
@@ -344,6 +565,7 @@ export function useGameSetup({
     selectPlayMode,
     selectedTatamiSize,
     selectTatamiSize,
+    availableTatamiSizes: availableTatamiSizes ?? ([4, 8, 12, 16] as const),
     canStartGame,
     createGameState,
     error,
