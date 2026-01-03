@@ -51,7 +51,9 @@ export function StackRecipeSelector({
       {generatedStack && (
         <Alert className="border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-950">
           <AlertDescription className="text-green-800 dark:text-green-200">
-            ✓ Stack生成完了: {generatedStack.length}枚
+            ✓ 枚数: {generatedStack.length.toLocaleString()} 枚
+            {import.meta.env.VITE_DEBUG_MODE === 'true' &&
+              generatedStack.map((id) => ` ${id}`).join(',')}
           </AlertDescription>
         </Alert>
       )}

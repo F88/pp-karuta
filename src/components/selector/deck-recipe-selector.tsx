@@ -40,7 +40,7 @@ export function DeckRecipeSelector({
       {generatedDeck && (
         <Alert className="border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-950">
           <AlertDescription className="text-green-800 dark:text-green-200">
-            ✓ Deck生成完了: {generatedDeck.size}枚
+            ✓ デッキ: {generatedDeck.size.toLocaleString()} 枚
           </AlertDescription>
         </Alert>
       )}
