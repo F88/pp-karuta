@@ -1,7 +1,18 @@
-import type { DeckRecipe, Deck } from '@/models/karuta';
+import { useState } from 'react';
+
 import type { ScreenSize } from '@/types/screen-size';
+
+import type { Deck, DeckRecipe } from '@/models/karuta';
+
+import { ChevronDown } from 'lucide-react';
+
 import { DeckRecipeCard } from '@/components/recipe/deck-recipe-card';
-import { Alert, AlertDescription } from '@/components/ui/alert';
+import { DeckPreview } from '@/components/selector/deck-preview';
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from '@/components/ui/collapsible';
 
 export type DeckRecipeSelectorProps = {
   deckRecipes: DeckRecipe[];
@@ -11,6 +22,8 @@ export type DeckRecipeSelectorProps = {
   loadingDeckRecipeId: string | null;
   generatedDeck: Deck | null;
   screenSize?: ScreenSize;
+  enableGrouping?: boolean;
+  initialOpenCategories?: string[];
 };
 
 export function DeckRecipeSelector({
@@ -21,28 +34,153 @@ export function DeckRecipeSelector({
   loadingDeckRecipeId,
   generatedDeck,
   screenSize,
+  enableGrouping = true,
+  initialOpenCategories,
 }: DeckRecipeSelectorProps) {
+  const groupedRecipes = enableGrouping
+    ? deckRecipes.reduce(
+        (acc, recipe) => {
+          const tags = recipe.tags.length > 0 ? recipe.tags : ['未分類'];
+          tags.forEach((tag) => {
+            if (!acc[tag]) {
+              acc[tag] = [];
+            }
+            acc[tag].push(recipe);
+          });
+          return acc;
+        },
+        {} as Record<string, DeckRecipe[]>,
+      )
+    : null;
+
+  // Initialize open categories based on initialOpenCategories prop
+  const [openCategories, setOpenCategories] = useState<Record<string, boolean>>(
+    () => {
+      if (!groupedRecipes) return {};
+
+      return Object.keys(groupedRecipes).reduce(
+        (acc, key) => {
+          acc[key] = initialOpenCategories?.includes(key) ?? false;
+          return acc;
+        },
+        {} as Record<string, boolean>,
+      );
+    },
+  );
+
+  const toggleCategory = (category: string) => {
+    setOpenCategories((prev) => ({
+      ...prev,
+      [category]: !prev[category],
+    }));
+  };
+
+  let triggerPadding: string;
+  let titleSize: string;
+  let iconSize: string;
+  let containerSpacing: string;
+  let grid: { cols: string; gap: string };
+
+  switch (screenSize) {
+    case 'smartphone':
+      triggerPadding = 'px-3 py-2';
+      titleSize = 'text-sm';
+      iconSize = 'h-4 w-4';
+      containerSpacing = 'space-y-2';
+      grid = {
+        cols: 'grid-cols-2',
+        gap: 'gap-2',
+      };
+      break;
+    case 'tablet':
+      triggerPadding = 'px-4 py-2.5';
+      titleSize = 'text-base';
+      iconSize = 'h-4 w-4';
+      containerSpacing = 'space-y-3';
+      grid = {
+        cols: 'grid-cols-4',
+        gap: 'gap-4',
+      };
+      break;
+    case 'pc':
+      triggerPadding = 'px-4 py-3';
+      titleSize = 'text-base';
+      iconSize = 'h-5 w-5';
+      containerSpacing = 'space-y-4';
+      grid = {
+        cols: 'grid-cols-6',
+        gap: 'gap-4',
+      };
+      break;
+    default:
+      triggerPadding = 'px-4 py-2.5';
+      titleSize = 'text-base';
+      iconSize = 'h-4 w-4';
+      containerSpacing = 'space-y-3';
+      grid = {
+        cols: 'grid-cols-3',
+        gap: 'gap-4',
+      };
+  }
+
+  const renderRecipeCards = (recipes: DeckRecipe[]) => (
+    <div className={`grid ${grid.gap} ${grid.cols}`}>
+      {recipes.map((recipe) => (
+        <DeckRecipeCard
+          key={recipe.id}
+          recipe={recipe}
+          onSelect={onSelectDeckRecipe}
+          isSelected={selectedDeckRecipe?.id === recipe.id}
+          isLoading={isDeckLoading}
+          isLoadingThisRecipe={loadingDeckRecipeId === recipe.id}
+          screenSize={screenSize}
+        />
+      ))}
+    </div>
+  );
+
   return (
     <>
-      <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
-        {deckRecipes.map((recipe) => (
-          <DeckRecipeCard
-            key={recipe.id}
-            recipe={recipe}
-            onSelect={onSelectDeckRecipe}
-            isSelected={selectedDeckRecipe?.id === recipe.id}
-            isLoading={isDeckLoading}
-            isLoadingThisRecipe={loadingDeckRecipeId === recipe.id}
-            screenSize={screenSize}
-          />
-        ))}
-      </div>
       {generatedDeck && (
-        <Alert className="border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-950">
-          <AlertDescription className="text-green-800 dark:text-green-200">
-            ✓ デッキ: {generatedDeck.size.toLocaleString()} 枚
-          </AlertDescription>
-        </Alert>
+        <DeckPreview
+          //
+          deck={generatedDeck}
+          showDetails={import.meta.env.VITE_DEBUG_MODE === 'true'}
+        />
+      )}
+      {enableGrouping && groupedRecipes ? (
+        <div className={containerSpacing}>
+          {Object.entries(groupedRecipes).map(([category, recipes]) => (
+            <Collapsible
+              key={category}
+              open={openCategories[category]}
+              onOpenChange={() => toggleCategory(category)}
+            >
+              <CollapsibleTrigger
+                className={`border-border bg-background/50 hover:bg-accent hover:border-accent-foreground/20 flex w-full items-center justify-between rounded-md border transition-all ${triggerPadding}`}
+              >
+                <h3 className={`font-semibold ${titleSize}`}>{category}</h3>
+                <ChevronDown
+                  className={`text-muted-foreground transition-transform duration-200 ${iconSize} ${
+                    openCategories[category] ? 'rotate-180' : ''
+                  }`}
+                />
+              </CollapsibleTrigger>
+              <CollapsibleContent className="pt-4">
+                {renderRecipeCards(recipes)}
+              </CollapsibleContent>
+            </Collapsible>
+          ))}
+        </div>
+      ) : (
+        renderRecipeCards(deckRecipes)
+      )}
+      {generatedDeck && (
+        <DeckPreview
+          //
+          deck={generatedDeck}
+          showDetails={import.meta.env.VITE_DEBUG_MODE === 'true'}
+        />
       )}
     </>
   );

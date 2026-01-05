@@ -10,6 +10,7 @@
 import { useState, useEffect } from 'react';
 import Markdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import { logger } from '@/lib/logger';
 import './IntroPage.css';
 
 export function IntroPage({ onBack }: { onBack: () => void }) {
@@ -35,7 +36,7 @@ export function IntroPage({ onBack }: { onBack: () => void }) {
         setMarkdown(content);
       })
       .catch((error) => {
-        console.error('Failed to load INTRO.txt:', error);
+        logger.error('Failed to load INTRO.txt:', error);
         setMarkdown('# Error loading INTRO.txt');
       });
   }, []);

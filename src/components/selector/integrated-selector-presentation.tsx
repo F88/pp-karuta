@@ -1,9 +1,12 @@
+import type { Deck, DeckRecipe, Player, StackRecipe } from '@/models/karuta';
+
+import type { ScreenSize } from '@/types/screen-size';
+
+import type { PlayMode, TatamiSize } from '@/lib/karuta';
+
 import { RepoSetup } from '@/components/layout/repo-setup';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
-import type { PlayMode, TatamiSize } from '@/lib/karuta';
-import type { Deck, DeckRecipe, Player, StackRecipe } from '@/models/karuta';
-import type { ScreenSize } from '@/types/screen-size';
 import { DeckRecipeSelector } from './deck-recipe-selector';
 import { GameSetupSummary } from './game-setup-summary';
 import { PlayModeSelector } from './play-mode-selector';
@@ -177,6 +180,10 @@ export function IntegratedSelectorPresentation({
                 loadingDeckRecipeId={deckRecipe.loadingRecipeId}
                 generatedDeck={deckRecipe.generatedDeck}
                 screenSize={screenSize}
+                // enableGrouping={false}
+                initialOpenCategories={
+                  deckRecipe.selected ? deckRecipe.selected.tags : ['干支']
+                }
               />
             )}
           </SectionWrapper>
@@ -226,7 +233,7 @@ export function IntegratedSelectorPresentation({
                 Loading...
               </>
             ) : (
-              'ゲーム開始'
+              'START'
             )}
           </Button>
         </div>

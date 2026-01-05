@@ -20,6 +20,7 @@ import {
   type TatamiSize16,
   type TatamiSize8,
 } from '@/lib/karuta/tatami/tatami-size';
+import { logger } from '@/lib/logger';
 import type { Deck, DeckRecipe, Player, StackRecipe } from '@/models/karuta';
 import type { ProtopediaInMemoryRepository } from '@f88/promidas';
 import type { NormalizedPrototype } from '@f88/promidas/types';
@@ -91,7 +92,7 @@ async function generateDeckWithOptimization(
   deck: Deck;
   usedApiParams: ListPrototypesParams;
 }> {
-  console.log(
+  logger.debug(
     '🔨 [generateDeckWithOptimization] Starting for recipe:',
     recipe.id,
   );
@@ -101,32 +102,32 @@ async function generateDeckWithOptimization(
     lastApiParams !== null &&
     areApiParamsEqual(lastApiParams, recipe.apiParams);
 
-  console.info(
+  logger.info(
     '🔍 [generateDeckWithOptimization] canReuseSnapshot:',
     canReuseSnapshot,
   );
 
   let prototypes: readonly NormalizedPrototype[];
   if (canReuseSnapshot) {
-    console.debug(
+    logger.debug(
       '♻️ Reusing repository snapshot (same apiParams), applying filter...',
     );
     // Reuse existing snapshot without making API call
     prototypes = await repository.getAllFromSnapshot();
   } else {
-    console.debug('🌐 Fetching new data from API (apiParams changed)');
+    logger.debug('🌐 Fetching new data from API (apiParams changed)');
     // Different apiParams, make API call
     prototypes = await DeckManager.getPrototypesFromRecipe(recipe, repository);
   }
 
-  console.debug(
+  logger.debug(
     '📊 [generateDeckWithOptimization] Fetched prototypes:',
     prototypes.length,
   );
 
   const deck = DeckManager.createDeckWithFilter(prototypes, recipe.filter);
 
-  console.info(
+  logger.info(
     '✅ [generateDeckWithOptimization] Created deck with',
     deck.size,
     'cards',
@@ -150,7 +151,7 @@ function saveSetupState(state: SavedSetupState) {
   try {
     sessionStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(state));
   } catch (error) {
-    console.error('Failed to save setup state:', error);
+    logger.error('Failed to save setup state:', error);
   }
 }
 
@@ -167,7 +168,7 @@ function loadSetupState(): SavedSetupState | null {
     const saved = sessionStorage.getItem(SESSION_STORAGE_KEY);
     return saved ? JSON.parse(saved) : null;
   } catch (error) {
-    console.error('Failed to load setup state:', error);
+    logger.error('Failed to load setup state:', error);
     return null;
   }
 }
@@ -300,7 +301,7 @@ export function useGameSetup({
   // Load saved state
   const savedState = loadSetupState();
 
-  console.log('🔍 useGameSetup initialized with savedState:', savedState);
+  logger.debug('🔍 useGameSetup initialized with savedState:', savedState);
 
   // Deck state - 重いので実体を保持（再利用のため）
   const [generatedDeck, setGeneratedDeck] = useState<Deck | null>(null);
@@ -323,21 +324,21 @@ export function useGameSetup({
         const restored = StackRecipeManager.findById(
           savedState.selectedStackRecipeId,
         );
-        console.log(
+        logger.debug(
           '🔄 Restoring StackRecipe from sessionStorage:',
           restored?.id,
         );
         return restored || null;
       }
       const defaultRecipe = StackRecipeManager.findById('standard-10');
-      console.log('📦 Using default StackRecipe:', defaultRecipe?.id);
+      logger.debug('📦 Using default StackRecipe:', defaultRecipe?.id);
       return defaultRecipe || null;
     });
 
   // Player state
   const [availablePlayers, setAvailablePlayers] = useState<Player[]>([]);
   const [selectedPlayerIds, setSelectedPlayerIds] = useState<string[]>(() => {
-    console.log(
+    logger.debug(
       '🔄 Restoring selectedPlayerIds from sessionStorage:',
       savedState?.selectedPlayerIds,
     );
@@ -347,7 +348,7 @@ export function useGameSetup({
   // PlayMode state
   const [selectedPlayMode, setSelectedPlayMode] = useState<PlayMode | null>(
     () => {
-      console.log(
+      logger.debug(
         '🔄 Restoring selectedPlayMode from sessionStorage:',
         savedState?.selectedPlayMode,
       );
@@ -358,7 +359,7 @@ export function useGameSetup({
   // TatamiSize state
   const [selectedTatamiSize, setSelectedTatamiSize] = useState<TatamiSize>(
     () => {
-      console.log(
+      logger.debug(
         '🔄 Restoring selectedTatamiSize from sessionStorage:',
         savedState?.selectedTatamiSize,
       );
@@ -404,7 +405,7 @@ export function useGameSetup({
 
       // 2. Early return if same recipe is already selected
       if (selectedDeckRecipe?.id === recipe.id && generatedDeck !== null) {
-        console.log(
+        logger.debug(
           '📦 Same DeckRecipe selected, reusing existing Deck:',
           recipe.id,
         );
@@ -433,7 +434,7 @@ export function useGameSetup({
         const errorMessage =
           err instanceof Error ? err.message : 'Failed to generate Deck';
         setError(errorMessage);
-        console.error('Failed to generate Deck:', err);
+        logger.error('Failed to generate Deck:', err);
         setIsDeckLoading(false);
         setLoadingDeckRecipeId(null);
         return;
@@ -443,22 +444,22 @@ export function useGameSetup({
       setLastApiParams(usedApiParams);
       setGeneratedDeck(deck);
       setSelectedDeckRecipe(recipe);
-      console.log('✅ Deck generated successfully:', deck.size, 'cards');
+      logger.debug('✅ Deck generated successfully:', deck.size, 'cards');
 
       // 6. Regenerate stack as side effect
       if (selectedStackRecipe && deck.size > 0) {
         try {
           const stack = StackManager.generate(deck, selectedStackRecipe);
           setGeneratedStack(stack);
-          console.log('✅ Stack regenerated:', stack.length, 'cards');
+          logger.debug('✅ Stack regenerated:', stack.length, 'cards');
         } catch (stackErr) {
           // Stack generation is non-critical, log error but don't fail
-          console.error('Failed to regenerate Stack:', stackErr);
+          logger.error('Failed to regenerate Stack:', stackErr);
           setGeneratedStack(null);
         }
       } else if (deck.size === 0) {
         setGeneratedStack(null);
-        console.log('⚠️ Deck is empty, skipping Stack generation');
+        logger.debug('⚠️ Deck is empty, skipping Stack generation');
       }
 
       // 7. Clear loading state
@@ -477,7 +478,7 @@ export function useGameSetup({
   // Restore deck recipe from sessionStorage when repository becomes available
   useEffect(() => {
     const savedState = loadSetupState();
-    console.log('🔍 Checking deck restoration:', {
+    logger.debug('🔍 Checking deck restoration:', {
       hasRepository: !!repository,
       savedDeckRecipeId: savedState?.selectedDeckRecipeId,
       currentDeckRecipe: selectedDeckRecipe?.id,
@@ -488,10 +489,13 @@ export function useGameSetup({
         (r) => r.id === savedState.selectedDeckRecipeId,
       );
       if (recipe) {
-        console.log('🔄 Restoring deck recipe from sessionStorage:', recipe.id);
+        logger.debug(
+          '🔄 Restoring deck recipe from sessionStorage:',
+          recipe.id,
+        );
         void selectDeckRecipe(recipe);
       } else {
-        console.warn(
+        logger.warn(
           '⚠️ Saved deck recipe not found:',
           savedState.selectedDeckRecipeId,
         );
@@ -506,7 +510,7 @@ export function useGameSetup({
     // If repository becomes available and we have a selected deck recipe,
     // but no deck yet, regenerate the deck
     if (repository && selectedDeckRecipe && !generatedDeck && !isDeckLoading) {
-      console.log(
+      logger.debug(
         '🔄 Repository became available, regenerating deck for recipe:',
         selectedDeckRecipe.id,
       );
@@ -544,11 +548,11 @@ export function useGameSetup({
       if (generatedDeck && generatedDeck.size > 0) {
         const stack = StackManager.generate(generatedDeck, recipe);
         setGeneratedStack(stack);
-        console.log('✅ Stack generated:', stack.length, 'cards');
+        logger.debug('✅ Stack generated:', stack.length, 'cards');
       } else {
         setGeneratedStack(null);
         if (generatedDeck && generatedDeck.size === 0) {
-          console.log('⚠️ Deck is empty, skipping Stack generation');
+          logger.debug('⚠️ Deck is empty, skipping Stack generation');
         }
       }
     },
@@ -660,7 +664,10 @@ export function useGameSetup({
   const canStartGame = useMemo(() => {
     return (
       generatedDeck !== null &&
+      generatedDeck.size > 0 &&
       selectedStackRecipe !== null &&
+      generatedStack !== null &&
+      generatedStack.length > 0 &&
       selectedPlayerIds.length > 0 &&
       selectedPlayMode !== null &&
       !isDeckLoading &&
@@ -669,6 +676,7 @@ export function useGameSetup({
   }, [
     generatedDeck,
     selectedStackRecipe,
+    generatedStack,
     selectedPlayerIds,
     selectedPlayMode,
     isDeckLoading,
@@ -717,7 +725,7 @@ export function useGameSetup({
       const errorMessage =
         err instanceof Error ? err.message : 'Failed to create game state';
       setError(errorMessage);
-      console.error('Failed to create game state:', err);
+      logger.error('Failed to create game state:', err);
     } finally {
       setIsCreatingGame(false);
     }

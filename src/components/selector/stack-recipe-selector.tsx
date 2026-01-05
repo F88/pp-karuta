@@ -1,6 +1,7 @@
-import type { StackRecipe, Deck } from '@/models/karuta';
 import type { ScreenSize } from '@/types/screen-size';
-import { Alert, AlertDescription } from '@/components/ui/alert';
+
+import type { Deck, StackRecipe } from '@/models/karuta';
+
 import { StackRecipeCard } from '@/components/recipe/stack-recipe-card';
 
 export type StackRecipeSelectorProps = {
@@ -18,7 +19,7 @@ export function StackRecipeSelector({
   selectedStackRecipe,
   onSelectStackRecipe,
   isLoading,
-  generatedStack,
+  // generatedStack,
   generatedDeck,
   screenSize,
 }: StackRecipeSelectorProps) {
@@ -28,7 +29,7 @@ export function StackRecipeSelector({
     return (
       <div className="rounded-lg border border-yellow-200 bg-yellow-50 p-4 dark:border-yellow-800 dark:bg-yellow-950">
         <p className="text-sm font-semibold text-yellow-800 dark:text-yellow-200">
-          ⚠️ Deckが空のため、Stackを生成できません
+          ⚠️ デッキが空 (0組) のため、ゲームを開始出来ません
         </p>
       </div>
     );
@@ -48,6 +49,7 @@ export function StackRecipeSelector({
           />
         ))}
       </div>
+      {/* // Show generated stack info
       {generatedStack && (
         <Alert className="border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-950">
           <AlertDescription className="text-green-800 dark:text-green-200">
@@ -56,7 +58,7 @@ export function StackRecipeSelector({
               generatedStack.map((id) => ` ${id}`).join(',')}
           </AlertDescription>
         </Alert>
-      )}
+      )} */}
     </>
   );
 }

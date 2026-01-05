@@ -40,6 +40,7 @@ import type { LogLevel } from '@f88/promidas/logger';
 import type { SnapshotOperationResult } from '@f88/promidas/repository';
 import type { ListPrototypesParams } from 'protopedia-api-v2-client';
 
+import { logger } from '@/lib/logger';
 import { tokenStorage as defaultTokenStorage } from '@/lib/token-storage';
 import { createDummyRepository } from './dummy-repository';
 
@@ -63,16 +64,16 @@ import { createDummyRepository } from './dummy-repository';
  *
  * switch (state.type) {
  *   case 'not-created':
- *     console.log('Repository not initialized');
+ *     logger.debug('Repository not initialized');
  *     break;
  *   case 'validating':
- *     console.log('Token validation in progress...');
+ *     logger.debug('Token validation in progress...');
  *     break;
  *   case 'created-token-valid':
  *     const repo = state.repository; // Type-safe access
  *     break;
  *   case 'token-invalid':
- *     console.error('Token error:', state.error);
+ *     logger.error('Token error:', state.error);
  *     break;
  * }
  * ```
@@ -137,9 +138,9 @@ export type RepositoryState =
  * ```typescript
  * const state = manager.getState();
  * if (state.type === 'created-token-valid') {
- *   console.log('Repository ready:', state.repository);
+ *   logger.debug('Repository ready:', state.repository);
  * } else if (state.type === 'token-invalid') {
- *   console.error('Token error:', state.error);
+ *   logger.error('Token error:', state.error);
  * }
  * ```
  */
@@ -338,7 +339,7 @@ export class PromidasRepositoryManager {
    *
    * if (result.ok) {
    *   const prototypes = await repo.getAllFromSnapshot();
-   *   console.log(`Loaded ${prototypes.length} prototypes`);
+   *   logger.debug(`Loaded ${prototypes.length} prototypes`);
    * }
    * ```
    */
@@ -393,7 +394,7 @@ export class PromidasRepositoryManager {
     if (!this.repository) {
       this.repository = createDummyRepository();
       this.tokenStatus = 'valid';
-      console.info(
+      logger.info(
         '[PromidasRepositoryManager] Created dummy repository (VITE_USE_DUMMY_DATA=true)',
       );
     }
@@ -454,9 +455,9 @@ export class PromidasRepositoryManager {
    * ```typescript
    * try {
    *   const repo = await manager.getRepository();
-   *   console.log('Repository ready');
+   *   logger.debug('Repository ready');
    * } catch (error) {
-   *   console.error('Repository initialization failed:', error.message);
+   *   logger.error('Repository initialization failed:', error.message);
    *   // Handle token errors, API failures, etc.
    * }
    * ```
@@ -470,7 +471,7 @@ export class PromidasRepositoryManager {
    *   manager.getRepository(),
    * ]);
    * // Only one API validation call is made
-   * console.log(repo1 === repo2 && repo2 === repo3); // true
+   * logger.debug(repo1 === repo2 && repo2 === repo3); // true
    * ```
    */
 
@@ -521,7 +522,7 @@ export class PromidasRepositoryManager {
             this.error = null;
           }
         } catch (err) {
-          console.error('Failed to create Promidas repository:', err);
+          logger.error('Failed to create Promidas repository:', err);
           const errorMessage =
             err instanceof Error
               ? toErrorMessage(err)
@@ -537,11 +538,11 @@ export class PromidasRepositoryManager {
         // Step 2: Validate token by testing API access
         const result = await this.validateRepository(repo);
         if (!result.ok) {
-          console.error('Token validation failed:', result);
+          logger.error('Token validation failed:', result);
           const parsed = parseSnapshotOperationFailure(result);
           const errorMessage =
             parsed?.localizedMessage || '不明なエラーが発生しました。';
-          console.info('Parsed token validation error:', errorMessage);
+          logger.info('Parsed token validation error:', errorMessage);
           if (this.initPromiseId === promiseId) {
             this.repository = null;
             this.tokenStatus = 'invalid';

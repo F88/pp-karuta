@@ -21,21 +21,58 @@ export function GameSetupSummary({
   selectedPlayerCount,
   screenSize,
 }: GameSetupSummaryProps) {
-  const padding =
-    screenSize === 'smartphone'
-      ? 'p-3'
-      : screenSize === 'tablet'
-        ? 'p-4'
-        : 'p-6';
-  const titleSize =
-    screenSize === 'smartphone'
-      ? 'text-base'
-      : screenSize === 'tablet'
-        ? 'text-lg'
-        : 'text-xl';
-  const marginBottom = screenSize === 'smartphone' ? 'mb-3' : 'mb-4';
-  const gap = screenSize === 'smartphone' ? 'gap-2' : 'gap-3';
-  const textSize = screenSize === 'smartphone' ? 'text-xs' : 'text-sm';
+  const padding = (() => {
+    switch (screenSize) {
+      case 'smartphone':
+        return 'p-3';
+      case 'tablet':
+        return 'p-4';
+      case 'pc':
+        return 'p-6';
+    }
+  })();
+
+  const titleSize = (() => {
+    switch (screenSize) {
+      case 'smartphone':
+        return 'text-base';
+      case 'tablet':
+        return 'text-lg';
+      case 'pc':
+        return 'text-xl';
+    }
+  })();
+
+  const marginBottom = (() => {
+    switch (screenSize) {
+      case 'smartphone':
+        return 'mb-3';
+      case 'tablet':
+      case 'pc':
+        return 'mb-4';
+    }
+  })();
+
+  const gap = (() => {
+    switch (screenSize) {
+      case 'smartphone':
+        return 'gap-2';
+      case 'tablet':
+      case 'pc':
+        return 'gap-3';
+    }
+  })();
+
+  const textSize = (() => {
+    switch (screenSize) {
+      case 'smartphone':
+        return 'text-sm';
+      case 'tablet':
+        return 'text-base';
+      case 'pc':
+        return 'text-xl';
+    }
+  })();
 
   return (
     <div
@@ -55,12 +92,24 @@ export function GameSetupSummary({
           </span>
           <span className={`${textSize} text-gray-900 dark:text-gray-100`}>
             {selectedPlayMode === 'keyboard'
-              ? '⌨️ Keyboard'
+              ? '⌨️ キーボード'
               : selectedPlayMode === 'touch'
-                ? '📱 Touch'
+                ? '📱 タッチ'
                 : '未選択'}
           </span>
         </div>
+
+        <div className="flex items-center gap-2">
+          <span
+            className={`${textSize} font-semibold text-gray-700 dark:text-gray-300`}
+          >
+            参加者:
+          </span>
+          <span className={`${textSize} text-gray-900 dark:text-gray-100`}>
+            {selectedPlayerCount > 0 ? `${selectedPlayerCount} 人` : '未選択'}
+          </span>
+        </div>
+
         <div className="flex items-center gap-2">
           <span
             className={`${textSize} font-semibold text-gray-700 dark:text-gray-300`}
@@ -73,7 +122,7 @@ export function GameSetupSummary({
                 {selectedDeckRecipe.title}
                 {generatedDeck && (
                   <span className="ml-1 text-xs text-gray-600 dark:text-gray-400">
-                    ({generatedDeck.size.toLocaleString()}枚)
+                    ({generatedDeck.size.toLocaleString()} 組)
                   </span>
                 )}
               </>
@@ -94,23 +143,13 @@ export function GameSetupSummary({
                 {selectedStackRecipe.title}
                 {stackSize !== null && (
                   <span className="ml-1 text-xs text-gray-600 dark:text-gray-400">
-                    ({stackSize.toLocaleString()}枚)
+                    ({stackSize.toLocaleString()} 組)
                   </span>
                 )}
               </>
             ) : (
               '未選択'
             )}
-          </span>
-        </div>
-        <div className="flex items-center gap-2">
-          <span
-            className={`${textSize} font-semibold text-gray-700 dark:text-gray-300`}
-          >
-            プレイヤー:
-          </span>
-          <span className={`${textSize} text-gray-900 dark:text-gray-100`}>
-            {selectedPlayerCount > 0 ? `${selectedPlayerCount}人` : '未選択'}
           </span>
         </div>
       </div>

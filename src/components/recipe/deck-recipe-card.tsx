@@ -11,6 +11,8 @@ export type DeckRecipeCardProps = {
   isLoadingThisRecipe?: boolean;
   /** Screen size for fixed sizing. If not provided, responsive classes will be used */
   screenSize?: ScreenSize;
+  /** Whether to show tags. Default is false */
+  showTags?: boolean;
 };
 
 export function DeckRecipeCard({
@@ -20,6 +22,7 @@ export function DeckRecipeCard({
   isLoading = false,
   isLoadingThisRecipe = false,
   screenSize,
+  showTags = false,
 }: DeckRecipeCardProps) {
   const baseClass = isSelected
     ? 'bg-indigo-600 text-white dark:bg-indigo-500'
@@ -195,25 +198,27 @@ export function DeckRecipeCard({
           </div>
         )}
 
-        <div className="flex flex-wrap items-center gap-1">
-          {/* <Badge
+        {showTags && (
+          <div className="flex flex-wrap items-center gap-1">
+            {/* <Badge
               variant="outline"
               className={getDifficultyBadgeClass(recipe.difficulty, isSelected)}
             >
               {recipe.difficulty}
             </Badge> */}
-          {recipe.tags.map((tag) => (
-            <Badge
-              key={tag}
-              variant="secondary"
-              className={
-                isSelected ? 'bg-white/20 text-white hover:bg-white/30' : ''
-              }
-            >
-              {tag}
-            </Badge>
-          ))}
-        </div>
+            {recipe.tags.map((tag) => (
+              <Badge
+                key={tag}
+                variant="secondary"
+                className={
+                  isSelected ? 'bg-white/20 text-white hover:bg-white/30' : ''
+                }
+              >
+                {tag}
+              </Badge>
+            ))}
+          </div>
+        )}
       </div>
     </Button>
   );

@@ -12,6 +12,7 @@ import { ThemeProvider } from '@/components/theme-provider';
 import { ScreenSizeProvider } from '@/contexts/screen-size-provider';
 import { useScreenSizeContext } from '@/hooks/use-screen-size-context';
 import { PlayerManager } from '@/lib/karuta';
+import { logger } from '@/lib/logger';
 import type { RepositoryState } from '@/lib/repository/promidas-repository-manager';
 import { promidasRepositoryManager } from '@/lib/repository/promidas-repository-manager';
 import { createRootRoute, Outlet } from '@tanstack/react-router';
@@ -49,7 +50,7 @@ function RootLayout() {
   // Initialize players on app startup
   useEffect(() => {
     PlayerManager.initialize().catch((error) => {
-      console.error('Failed to initialize players:', error);
+      logger.error('Failed to initialize players:', error);
     });
   }, []);
 

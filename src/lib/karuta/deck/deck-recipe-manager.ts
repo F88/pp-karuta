@@ -1,11 +1,44 @@
-import type { DeckRecipe } from '@/models/karuta';
-import type { NormalizedPrototype } from 'node_modules/@f88/promidas/dist/types/normalized-prototype';
-import type { ListPrototypesParams } from 'protopedia-api-v2-client';
-import { normalizeString } from '@/lib/string-utils';
+/**
+ * @fileoverview DeckRecipe management module
+ *
+ * This module provides centralized management for DeckRecipes, including:
+ * - Recipe definitions (ETO-themed, release year-based, range-based, etc.)
+ * - Recipe generation utilities
+ * - Filter creation for prototype filtering
+ * - Recipe lookup and filtering methods
+ *
+ * @module DeckRecipeManager
+ */
 
+import type { DeckRecipe } from '@/models/karuta';
+import type { ListPrototypesParams } from 'protopedia-api-v2-client';
+import { ETO_RECIPES } from './deck-recipe-eto';
+import { createReleaseDateYearFilter } from './filter-factory';
+
+/**
+ * Type for prototype window parameters (offset and limit)
+ */
 type ROTOTYPES_WINDOW = Pick<ListPrototypesParams, 'offset' | 'limit'>;
 
+/**
+ * Default parameters for fetching all prototypes
+ * - offset: 0 (start from the beginning)
+ * - limit: 10,000 (maximum number of prototypes to fetch)
+ */
 const ALL_PROTOTYPES: ROTOTYPES_WINDOW = { offset: 0, limit: 10_000 };
+
+/**
+ * Recipe for all prototypes without any filtering
+ * This is the default deck that includes all available prototypes
+ */
+const DECK_RECIPE_ALL_PROTOTYPES: DeckRecipe = {
+  id: 'all-prototypes',
+  title: '🌐 全作品',
+  description: '全ての作品',
+  apiParams: { ...ALL_PROTOTYPES },
+  difficulty: 'beginner',
+  tags: [],
+};
 
 // ========================================
 // Section 0: Recipe Generation Helpers
@@ -44,113 +77,30 @@ function generateSequentialDecks(
   return recipes;
 }
 
-const DECK_RECIPE_ALL_PROTOTYPES: DeckRecipe = {
-  id: 'all-prototypes',
-  title: '全作品',
-  description: '全ての作品',
-  apiParams: { ...ALL_PROTOTYPES },
-  difficulty: 'beginner',
-  tags: [],
-};
-
 /**
- * Create a filter function for keyword-based filtering
- * Filters prototypes by matching keywords against prototypeNm and summary (case-insensitive)
- * Half-width and full-width katakana/alphanumeric are treated as equivalent
- * @param keywords - Keywords to match against prototypeNm and summary
- * @returns Filter function for DeckRecipe
+ * Generate release year based deck recipes
+ * @param years - Array of years to generate recipes for (e.g., [2023, 2024, 2025])
+ * @returns Array of DeckRecipes
  */
-function createKeywordFilter(keywords: string[]) {
-  // Normalize keywords once for better performance
-  const normalizedKeywords = keywords.map((k) => normalizeString(k));
-
-  return (prototypes: NormalizedPrototype[]) => {
-    return prototypes.filter((e) => {
-      // Normalize prototype data
-      const normalizedName = normalizeString(e.prototypeNm);
-      const normalizedSummary = normalizeString(e.summary);
-
-      // Find matching keyword in name
-      let matchedKeyword = normalizedKeywords.find((keyword) =>
-        normalizedName.includes(keyword),
-      );
-
-      // If not found in name, search in summary
-      if (!matchedKeyword) {
-        matchedKeyword = normalizedKeywords.find((keyword) =>
-          normalizedSummary.includes(keyword),
-        );
-      }
-
-      if (matchedKeyword) {
-        console.debug(
-          `✅ DeckRecipe filter matched: "${matchedKeyword}" in ${e.id} - ${e.prototypeNm}`,
-        );
-      }
-
-      return !!matchedKeyword;
-    });
-  };
+function generateReleaseYearDecks(years: number[]): DeckRecipe[] {
+  return years.map((year) => ({
+    id: `rel-${year}`,
+    title: `🎉 ${year}`,
+    description: `${year}年生まれ`,
+    apiParams: { ...ALL_PROTOTYPES },
+    difficulty: 'intermediate',
+    tags: [
+      'リリース',
+      //  String(year)
+    ],
+    filter: createReleaseDateYearFilter(year),
+  }));
 }
 
-const DECK_ETO_BASE: Pick<DeckRecipe, 'apiParams' | 'difficulty' | 'tags'> = {
-  apiParams: { ...ALL_PROTOTYPES },
-  difficulty: 'intermediate',
-  tags: ['干支'],
-};
-
-const DECK_ETO_MI: DeckRecipe = {
-  ...DECK_ETO_BASE,
-  id: 'eto-mi',
-  title: '🐍 巳',
-  description: 'へびにちなんだ作品',
-  filter: createKeywordFilter([
-    '🐍',
-    'SNAKE',
-    'HEBI',
-    'HEAVY',
-    'へび',
-    'ヘビ',
-    'スネーク',
-    '巳',
-    '蛇',
-  ]),
-};
-
-const DECK_ETO_UMA: DeckRecipe = {
-  ...DECK_ETO_BASE,
-  id: 'eto-uma',
-  title: '🐴 UMA',
-  description: 'うまにちなんだ作品',
-  filter: createKeywordFilter([
-    '🐴',
-    'HORSE',
-    'UMA',
-    'うま',
-    'ウマ',
-    'ホース',
-    '午',
-    '馬',
-  ]),
-};
-
-const DECK_ETO_HITSUJI: DeckRecipe = {
-  ...DECK_ETO_BASE,
-  id: 'eto-hitsuji',
-  title: '🐏 未',
-  description: 'ひつじにちなんだ作品',
-  filter: createKeywordFilter([
-    '🐏',
-    'SHEEP',
-    'HITSUJI',
-    'ひつじ',
-    'ヒツジ',
-    'ラム',
-    'ジンギスカン',
-    // '未',
-    '羊',
-  ]),
-};
+// ========================================
+// Section 1: ETO (Chinese Zodiac) Recipes
+// ========================================
+// Moved to ./deck-recipe-eto.ts
 
 /**
  * RecipeManager - Centralized management for DeckRecipes
@@ -162,6 +112,17 @@ export class DeckRecipeManager {
   // ========================================
 
   private static rangeRecipes: DeckRecipe[] = generateSequentialDecks(7);
+  private static releaseYearRecipes: DeckRecipe[] = generateReleaseYearDecks([
+    2027,
+    //
+    2026,
+    //
+    2025, 2024, 2023, 2022, 2021,
+    //
+    2020, 2019, 2018, 2017, 2016,
+    //
+    2015, 2014,
+  ]);
 
   /**
    * Available DeckRecipes for selection
@@ -169,9 +130,9 @@ export class DeckRecipeManager {
    */
   static readonly RECIPES: DeckRecipe[] = [
     // ETO
-    DECK_ETO_MI,
-    DECK_ETO_UMA,
-    DECK_ETO_HITSUJI,
+    ...ETO_RECIPES,
+    // Release year based
+    ...this.releaseYearRecipes,
     // All-prototypes recipe
     DECK_RECIPE_ALL_PROTOTYPES,
     // Range-based recipes

@@ -4,16 +4,17 @@
  * and repository snapshot management. Handles deck lifecycle from recipe to game-ready state.
  */
 
+import { logger } from '@/lib/logger';
 import type {
   Deck,
-  DeckRecipe,
   DeckIdentifier,
-  DeckMetaData,
   DeckIdsHash,
+  DeckMetaData,
+  DeckRecipe,
 } from '@/models/karuta';
-import type { NormalizedPrototype } from '@f88/promidas/types';
 import type { ProtopediaInMemoryRepository } from '@f88/promidas';
 import type { SnapshotOperationResult } from '@f88/promidas/repository';
+import type { NormalizedPrototype } from '@f88/promidas/types';
 
 /**
  * Centralized manager for all Deck-related operations.
@@ -51,7 +52,7 @@ export class DeckManager {
       throw new Error(`Invalid recipe: apiParams is required`);
     }
 
-    console.debug(`[INFO] API Params:`, recipe.apiParams);
+    logger.debug(`[INFO] API Params:`, recipe.apiParams);
 
     // Setup snapshot only (no getAllFromSnapshot)
     return await repository.setupSnapshot(recipe.apiParams);
@@ -118,11 +119,11 @@ export class DeckManager {
 
     // Apply filter if provided
     if (filter != null) {
-      console.debug(
+      logger.debug(
         '[DEBUG] createDeckWithFilter - Applying filter to prototypes before deck creation',
       );
       const filtered = filter(mutablePrototypes);
-      console.debug(
+      logger.debug(
         '[DEBUG] createDeckWithFilter - Prototypes count after filtering:',
         {
           before: mutablePrototypes.length,
@@ -163,9 +164,7 @@ export class DeckManager {
     // Get all prototypes from snapshot
     const allPrototypes = await repository.getAllFromSnapshot();
 
-    console.log(
-      `[INFO] Retrieved ${allPrototypes.length} prototypes from snapshot`,
-    );
+    logger.info(`Retrieved ${allPrototypes.length} prototypes from snapshot`);
 
     return allPrototypes;
   }
