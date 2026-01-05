@@ -35,5 +35,6 @@ tools/prompts/*
 # src/hooks/useGameSetup.ts
 # src/components/tatami/tori-fuda-card-touch.stories.tsx
 # src/lib/karuta/deck/deck-recipe-manager.ts
-src/hooks/useGameSetup.ts
+# src/hooks/useGameSetup.ts
+# src/lib/karuta/deck/deck-recipe-manager.test.ts
 
