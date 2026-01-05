@@ -652,6 +652,8 @@ export function useGameSetup({
           return TATAMI_SIZES_8;
       }
     }
+    // Touch mode has no restrictions
+    return TATAMI_SIZES_16;
   }, [selectedPlayMode, selectedPlayerIds.length]);
 
   // Can start game validation
