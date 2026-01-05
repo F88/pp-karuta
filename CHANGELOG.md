@@ -1,8 +1,8 @@
 # Changelog
 
-All notable changes to pp-karuta will be documented in this file.
+pp-karuta の主要な変更はこのファイルに記録されます。
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
+フォーマットは [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) に基づいています。
 
 ## [Unreleased]
 
@@ -10,68 +10,68 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Added
 
-- Centralized logger with environment control and prefixes
-- Release year based deck recipes (2015-2027)
-- Collapsible component for grouping deck recipes
-- DeckPreview component for displaying generated deck
-- Keyboard shortcuts for card selection with Kbd component
-- Screen size detection and responsive components (smartphone/tablet/PC)
-- Container queries for responsive keyboard text sizing
-- DummyRepository for development mode with 10,000 fake prototypes
-- String normalization functions for keyword filtering
+- 環境制御とプレフィックス付きの集中ログ機能
+- リリース年ベースのデッキレシピ (2015-2027)
+- デッキレシピをグループ化するための折りたたみコンポーネント
+- 生成されたデッキを表示する DeckPreview コンポーネント
+- Kbd コンポーネントによるカード選択用キーボードショートカット
+- 画面サイズ検出とレスポンシブコンポーネント (スマートフォン/タブレット/PC)
+- レスポンシブなキーボードテキストサイズ調整用のコンテナクエリ
+- 10,000 個の疑似プロトタイプを使用する開発モード用 DummyRepository
+- キーワードフィルタリング用の文字列正規化機能
 
 ### Changed
 
-- Improved deck recipe selector UI with dynamic grid layout based on screen size
-- Enhanced game results presentation with responsive action buttons
-- Optimized build chunks with refined vendor chunking configuration
-- Touch mode now allows Tatami size 16 without restrictions
-- Refactored ToriFudaCard into keyboard and touch components
-- Updated app header button labels for consistency and clarity
-- Improved player tatami layout and spacing
+- 画面サイズに基づく動的グリッドレイアウトでデッキレシピセレクタ UI を改善
+- レスポンシブなアクションボタンでゲーム結果表示を強化
+- ベンダーチャンク構成を改良してビルドチャンクを最適化
+- タッチモードで畳サイズ 16 を制限なく使用可能に変更
+- ToriFudaCard をキーボード用とタッチ用のコンポーネントにリファクタリング
+- 一貫性と明確性のためにアプリヘッダーのボタンラベルを更新
+- プレイヤー畳のレイアウトとスペーシングを改善
 
 ### Fixed
 
-- Repository state monitoring with equality check to prevent unnecessary re-renders
-- Deck selection restoration from sessionStorage on all navigation paths
-- Type assignment for DEFAULT_TATAMI_SIZE_8
-- Correct DECK_ETO_SARU emoji in test
+- 不要な再レンダリングを防ぐための等価性チェックによるリポジトリ状態監視
+- すべてのナビゲーションパスで sessionStorage からのデッキ選択復元を修正
+- DEFAULT_TATAMI_SIZE_8 の型割り当てを修正
+- テストの DECK_ETO_SARU の絵文字を修正
 
 ## [2025.12.29] - 2025-12-29
 
 ### Added
 
-- StackRecipe system and integrated selector
-- Player management system with unlimited player creation
-- Per-player state management for multi-player support
-- Game header, player tatami, shared tatami, and tatami grid components
-- 4 player limit enforcement in UI
-- API params hidden in debug mode
-- Repository state indicator to header
-- PlayMode selection with repository validation flow
-- PromidasRepositoryManager for singleton management and token validation
-- Repository state management and store monitoring
-- Dummy data configuration for development settings
+- StackRecipe システムと統合セレクタ
+- 無制限のプレイヤー作成が可能なプレイヤー管理システム
+- マルチプレイヤーサポートのためのプレイヤーごとの状態管理
+- ゲームヘッダー、プレイヤー畳、共有畳、畳グリッドコンポーネント
+- UI での4人プレイヤー制限の実施
+- デバッグモードで API パラメータを非表示
+- ヘッダーにリポジトリ状態インジケータを追加
+- リポジトリ検証フローを含む PlayMode 選択
+- シングルトン管理とトークン検証のための PromidasRepositoryManager
+- リポジトリ状態管理とストア監視
+- 開発設定用のダミーデータ設定
 
 ### Changed
 
-- Migrated to Shadcn UI components with improved type safety
-- sortMethod from sequential to id-based sorting
-- Reorganized deck recipe management and updated UI layout
-- Upgraded promidas-utils and unified file naming
-- Extracted game flow logic to reusable component
-- Split PromidasRepoDashboard into Container/Presenter pattern
+- 型安全性を向上させた Shadcn UI コンポーネントへ移行
+- sortMethod を sequential から id ベースのソートに変更
+- デッキレシピ管理を再編成し UI レイアウトを更新
+- promidas-utils をアップグレードしファイル命名を統一
+- ゲームフローロジックを再利用可能なコンポーネントに抽出
+- PromidasRepoDashboard を Container/Presenter パターンに分割
 
 ### Fixed
 
-- Syntax error in useGameSetup function
-- Empty deck cases in stack generation
-- Repository state management and UI navigation
-- Polling to auto-close repository setup dialog
+- useGameSetup 関数の構文エラーを修正
+- スタック生成での空デッキケースを処理
+- リポジトリ状態管理と UI ナビゲーションを修正
+- リポジトリセットアップダイアログを自動で閉じるポーリング処理を修正
 
 ## [2025.12.26] - 2025-12-26
 
-Initial release
+初回リリース
 
 [unreleased]: https://github.com/F88/pp-karuta/compare/2026.01.05...HEAD
 [2026.01.05]: https://github.com/F88/pp-karuta/compare/2025.12.29...2026.01.05
