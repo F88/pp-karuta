@@ -10,13 +10,10 @@
  * @module DeckRecipeManager
  */
 
-import type { ListPrototypesParams } from 'protopedia-api-v2-client';
-
-import type { NormalizedPrototype } from '@f88/promidas/types';
-
-import { normalizeString } from '@/lib/string-utils';
-
 import type { DeckRecipe } from '@/models/karuta';
+import type { ListPrototypesParams } from 'protopedia-api-v2-client';
+import { ETO_RECIPES } from './deck-recipe-eto';
+import { createReleaseDateYearFilter } from './filter-factory';
 
 /**
  * Type for prototype window parameters (offset and limit)
@@ -100,149 +97,10 @@ function generateReleaseYearDecks(years: number[]): DeckRecipe[] {
   }));
 }
 
-/**
- * Create a filter function for releaseDate-based filtering
- * Filters prototypes by releaseDate year
- * @param year - Year to filter by
- * @returns Filter function for DeckRecipe
- */
-function createReleaseDateYearFilter(year: number) {
-  return (prototypes: NormalizedPrototype[]) => {
-    return prototypes.filter((e) => {
-      if (!e.releaseDate) {
-        return false;
-      }
-
-      const releaseYear = new Date(e.releaseDate).getFullYear();
-      const matched = releaseYear === year;
-
-      if (matched) {
-        console.debug(
-          `✅ DeckRecipe releaseDate filter matched: ${year} in ${e.id} - ${e.prototypeNm} (${e.releaseDate})`,
-        );
-      }
-
-      return matched;
-    });
-  };
-}
-
-/**
- * Create a filter function for keyword-based filtering
- * Filters prototypes by matching keywords against prototypeNm and summary (case-insensitive)
- * Half-width and full-width katakana/alphanumeric are treated as equivalent
- * @param keywords - Keywords to match against prototypeNm and summary
- * @returns Filter function for DeckRecipe
- */
-function createKeywordFilter(keywords: string[]) {
-  // Normalize keywords once for better performance
-  const normalizedKeywords = keywords.map((k) => normalizeString(k));
-
-  return (prototypes: NormalizedPrototype[]) => {
-    return prototypes.filter((e) => {
-      // Normalize prototype data
-      const normalizedName = normalizeString(e.prototypeNm);
-      const normalizedSummary = normalizeString(e.summary);
-
-      // Find matching keyword in name
-      let matchedKeyword = normalizedKeywords.find((keyword) =>
-        normalizedName.includes(keyword),
-      );
-
-      // If not found in name, search in summary
-      if (!matchedKeyword) {
-        matchedKeyword = normalizedKeywords.find((keyword) =>
-          normalizedSummary.includes(keyword),
-        );
-      }
-
-      if (matchedKeyword) {
-        console.debug(
-          `✅ DeckRecipe filter matched: "${matchedKeyword}" in ${e.id} - ${e.prototypeNm}`,
-        );
-      }
-
-      return !!matchedKeyword;
-    });
-  };
-}
-
-/**
- * Base configuration for ETO (Chinese zodiac) themed recipes
- * - Fetches all prototypes for filtering
- * - Intermediate difficulty level
- * - Tagged with '干支' (zodiac)
- */
-const DECK_ETO_BASE: Pick<DeckRecipe, 'apiParams' | 'difficulty' | 'tags'> = {
-  apiParams: { ...ALL_PROTOTYPES },
-  difficulty: 'intermediate',
-  tags: ['干支'],
-};
-
-/**
- * ETO recipe for Snake (巳) themed prototypes
- * Filters prototypes containing snake-related keywords in Japanese and English
- */
-const DECK_ETO_MI: DeckRecipe = {
-  ...DECK_ETO_BASE,
-  id: 'eto-mi',
-  title: '🐍 巳',
-  description: 'へびにちなんだ作品',
-  filter: createKeywordFilter([
-    '🐍',
-    'SNAKE',
-    'HEBI',
-    'HEAVY',
-    'へび',
-    'ヘビ',
-    'スネーク',
-    '巳',
-    '蛇',
-  ]),
-};
-
-/**
- * ETO recipe for Horse (午) themed prototypes
- * Filters prototypes containing horse-related keywords in Japanese and English
- */
-const DECK_ETO_UMA: DeckRecipe = {
-  ...DECK_ETO_BASE,
-  id: 'eto-uma',
-  title: '🐴 UMA',
-  description: 'うまにちなんだ作品',
-  filter: createKeywordFilter([
-    '🐴',
-    'HORSE',
-    'UMA',
-    'うま',
-    'ウマ',
-    'ホース',
-    '午',
-    '馬',
-  ]),
-};
-
-/**
- * ETO recipe for Sheep (未) themed prototypes
- * Filters prototypes containing sheep-related keywords in Japanese and English
- */
-const DECK_ETO_HITSUJI: DeckRecipe = {
-  ...DECK_ETO_BASE,
-  id: 'eto-hitsuji',
-  title: '🐏 未',
-  description: 'ひつじにちなんだ作品',
-  filter: createKeywordFilter([
-    '🐏',
-    'SHEEP',
-    'HITSUJI',
-    'ひつじ',
-    'ヒツジ',
-    'ラム',
-    'ジンギスカン',
-    // '未',
-    '羊',
-  ]),
-};
+// ========================================
+// Section 1: ETO (Chinese Zodiac) Recipes
+// ========================================
+// Moved to ./deck-recipe-eto.ts
 
 /**
  * RecipeManager - Centralized management for DeckRecipes
@@ -272,9 +130,7 @@ export class DeckRecipeManager {
    */
   static readonly RECIPES: DeckRecipe[] = [
     // ETO
-    DECK_ETO_MI,
-    DECK_ETO_UMA,
-    DECK_ETO_HITSUJI,
+    ...ETO_RECIPES,
     // Release year based
     ...this.releaseYearRecipes,
     // All-prototypes recipe

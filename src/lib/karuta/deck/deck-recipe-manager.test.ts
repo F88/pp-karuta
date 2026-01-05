@@ -1,6 +1,5 @@
 import { describe, it, expect } from 'vitest';
 import { DeckRecipeManager } from './deck-recipe-manager';
-import type { NormalizedPrototype } from '@f88/promidas/types';
 
 describe('DeckRecipeManager', () => {
   describe('findById', () => {
@@ -9,15 +8,6 @@ describe('DeckRecipeManager', () => {
       expect(recipe).toBeDefined();
       expect(recipe?.id).toBe('all-prototypes');
       expect(recipe?.title).toBe('🌐 全作品');
-    });
-
-    it('should find ETO recipe by id', () => {
-      const recipe = DeckRecipeManager.findById('eto-mi');
-      expect(recipe).toBeDefined();
-      expect(recipe?.id).toBe('eto-mi');
-      expect(recipe?.title).toBe('🐍 巳');
-      expect(recipe?.difficulty).toBe('intermediate');
-      expect(recipe?.tags).toContain('干支');
     });
 
     it('should find range-based recipe by id', () => {
@@ -39,8 +29,8 @@ describe('DeckRecipeManager', () => {
     it('should return all recipes', () => {
       const recipes = DeckRecipeManager.getAll();
       expect(recipes.length).toBeGreaterThan(0);
-      // 3 ETO + 14 releaseYears + 1 all-prototypes + 7 range-based = 25
-      expect(recipes.length).toBe(25);
+      // 12 ETO + 14 releaseYears + 1 all-prototypes + 7 range-based = 34
+      expect(recipes.length).toBe(34);
     });
 
     it('should return a new array instance', () => {
@@ -68,8 +58,8 @@ describe('DeckRecipeManager', () => {
       recipes.forEach((recipe) => {
         expect(recipe.difficulty).toBe('intermediate');
       });
-      // 3 ETO recipes + 14 releaseYears = 17
-      expect(recipes.length).toBe(17);
+      // 12 ETO recipes + 14 releaseYears = 26
+      expect(recipes.length).toBe(26);
     });
 
     it('should return empty array for advanced difficulty', () => {
@@ -85,8 +75,8 @@ describe('DeckRecipeManager', () => {
       recipes.forEach((recipe) => {
         expect(recipe.tags).toContain('干支');
       });
-      // 3 ETO recipes
-      expect(recipes.length).toBe(3);
+      // 12 ETO recipes
+      expect(recipes.length).toBe(12);
     });
 
     it('should return empty array for non-existent tag', () => {
@@ -96,37 +86,6 @@ describe('DeckRecipeManager', () => {
   });
 
   describe('Recipe structure validation', () => {
-    it('should have valid ETO-MI recipe structure', () => {
-      const recipe = DeckRecipeManager.findById('eto-mi');
-      expect(recipe).toBeDefined();
-      expect(recipe?.id).toBe('eto-mi');
-      expect(recipe?.title).toBe('🐍 巳');
-      expect(recipe?.description).toBe('へびにちなんだ作品');
-      expect(recipe?.apiParams).toEqual({ offset: 0, limit: 10000 });
-      expect(recipe?.difficulty).toBe('intermediate');
-      expect(recipe?.tags).toEqual(['干支']);
-      expect(recipe?.filter).toBeDefined();
-      expect(typeof recipe?.filter).toBe('function');
-    });
-
-    it('should have valid ETO-UMA recipe structure', () => {
-      const recipe = DeckRecipeManager.findById('eto-uma');
-      expect(recipe).toBeDefined();
-      expect(recipe?.id).toBe('eto-uma');
-      expect(recipe?.title).toBe('🐴 UMA');
-      expect(recipe?.description).toBe('うまにちなんだ作品');
-      expect(recipe?.filter).toBeDefined();
-    });
-
-    it('should have valid ETO-HITSUJI recipe structure', () => {
-      const recipe = DeckRecipeManager.findById('eto-hitsuji');
-      expect(recipe).toBeDefined();
-      expect(recipe?.id).toBe('eto-hitsuji');
-      expect(recipe?.title).toBe('🐏 未');
-      expect(recipe?.description).toBe('ひつじにちなんだ作品');
-      expect(recipe?.filter).toBeDefined();
-    });
-
     it('should have valid all-prototypes recipe structure', () => {
       const recipe = DeckRecipeManager.findById('all-prototypes');
       expect(recipe).toBeDefined();
@@ -149,199 +108,6 @@ describe('DeckRecipeManager', () => {
         expect(recipe?.apiParams?.limit).toBe(1000);
         expect(recipe?.difficulty).toBe('beginner');
         expect(recipe?.tags).toEqual([]);
-      }
-    });
-  });
-
-  describe('Keyword filter functionality', () => {
-    const mockPrototypes: NormalizedPrototype[] = [
-      {
-        id: 1,
-        prototypeNm: 'Snake Game',
-        users: ['User1'],
-        summary: 'A game about snakes',
-        freeComment: '',
-        systemDescription: '',
-        tags: [],
-        materials: [],
-        events: [],
-        awards: [],
-        teamNm: '',
-        releaseFlg: 1,
-        status: 1,
-        createDate: '2024-01-01T00:00:00.000Z',
-        mainUrl: 'https://example.com/1',
-        viewCount: 0,
-        goodCount: 0,
-        commentCount: 0,
-      },
-      {
-        id: 2,
-        prototypeNm: 'Horse Racing',
-        users: ['User2'],
-        summary: 'A racing game',
-        freeComment: '',
-        systemDescription: '',
-        tags: [],
-        materials: [],
-        events: [],
-        awards: [],
-        teamNm: '',
-        releaseFlg: 1,
-        status: 1,
-        createDate: '2024-01-02T00:00:00.000Z',
-        mainUrl: 'https://example.com/2',
-        viewCount: 0,
-        goodCount: 0,
-        commentCount: 0,
-      },
-      {
-        id: 3,
-        prototypeNm: 'Cat Simulator',
-        users: ['User3'],
-        summary: 'A game about cats',
-        freeComment: '',
-        systemDescription: '',
-        tags: [],
-        materials: [],
-        events: [],
-        awards: [],
-        teamNm: '',
-        releaseFlg: 1,
-        status: 1,
-        createDate: '2024-01-03T00:00:00.000Z',
-        mainUrl: 'https://example.com/3',
-        viewCount: 0,
-        goodCount: 0,
-        commentCount: 0,
-      },
-      {
-        id: 4,
-        prototypeNm: 'へびのゲーム',
-        users: ['User4'],
-        summary: '蛇について',
-        freeComment: '',
-        systemDescription: '',
-        tags: [],
-        materials: [],
-        events: [],
-        awards: [],
-        teamNm: '',
-        releaseFlg: 1,
-        status: 1,
-        createDate: '2024-01-04T00:00:00.000Z',
-        mainUrl: 'https://example.com/4',
-        viewCount: 0,
-        goodCount: 0,
-        commentCount: 0,
-      },
-      {
-        id: 5,
-        prototypeNm: 'UMAゲーム',
-        users: ['User5'],
-        summary: '馬のゲーム',
-        freeComment: '',
-        systemDescription: '',
-        tags: [],
-        materials: [],
-        events: [],
-        awards: [],
-        teamNm: '',
-        releaseFlg: 1,
-        status: 1,
-        createDate: '2024-01-05T00:00:00.000Z',
-        mainUrl: 'https://example.com/5',
-        viewCount: 0,
-        goodCount: 0,
-        commentCount: 0,
-      },
-    ];
-
-    it('should filter prototypes using ETO-MI filter', () => {
-      const recipe = DeckRecipeManager.findById('eto-mi');
-      expect(recipe?.filter).toBeDefined();
-
-      if (recipe?.filter) {
-        const filtered = recipe.filter(mockPrototypes);
-        expect(filtered.length).toBe(2);
-        expect(filtered.map((p) => p.id)).toEqual([1, 4]);
-      }
-    });
-
-    it('should filter prototypes using ETO-UMA filter', () => {
-      const recipe = DeckRecipeManager.findById('eto-uma');
-      expect(recipe?.filter).toBeDefined();
-
-      if (recipe?.filter) {
-        const filtered = recipe.filter(mockPrototypes);
-        expect(filtered.length).toBe(2);
-        expect(filtered.map((p) => p.id)).toEqual([2, 5]);
-      }
-    });
-
-    it('should return empty array when no matches found', () => {
-      const recipe = DeckRecipeManager.findById('eto-hitsuji');
-      expect(recipe?.filter).toBeDefined();
-
-      if (recipe?.filter) {
-        const filtered = recipe.filter(mockPrototypes);
-        expect(filtered).toEqual([]);
-      }
-    });
-
-    it('should filter case-insensitively', () => {
-      const recipe = DeckRecipeManager.findById('eto-mi');
-      expect(recipe?.filter).toBeDefined();
-
-      const mixedCasePrototypes: NormalizedPrototype[] = [
-        {
-          ...mockPrototypes[0],
-          prototypeNm: 'SNAKE game',
-        },
-        {
-          ...mockPrototypes[1],
-          prototypeNm: 'snake GAME',
-        },
-      ];
-
-      if (recipe?.filter) {
-        const filtered = recipe.filter(mixedCasePrototypes);
-        expect(filtered.length).toBe(2);
-      }
-    });
-
-    it('should match keywords in summary field', () => {
-      const recipe = DeckRecipeManager.findById('eto-mi');
-      expect(recipe?.filter).toBeDefined();
-
-      const summaryMatchPrototypes: NormalizedPrototype[] = [
-        {
-          ...mockPrototypes[0],
-          prototypeNm: 'Random Game',
-          summary: 'This game features snakes',
-        },
-      ];
-
-      if (recipe?.filter) {
-        const filtered = recipe.filter(summaryMatchPrototypes);
-        expect(filtered.length).toBe(1);
-      }
-    });
-
-    it('should handle emoji keywords', () => {
-      const recipe = DeckRecipeManager.findById('eto-mi');
-      expect(recipe?.filter).toBeDefined();
-
-      const emojiPrototypes: NormalizedPrototype[] = [
-        {
-          ...mockPrototypes[0],
-          prototypeNm: '🐍 Snake Game',
-        },
-      ];
-
-      if (recipe?.filter) {
-        const filtered = recipe.filter(emojiPrototypes);
-        expect(filtered.length).toBe(1);
       }
     });
   });
