@@ -1,7 +1,7 @@
 import type { DeckRecipe, Deck } from '@/models/karuta';
 import type { ScreenSize } from '@/types/screen-size';
 import { DeckRecipeCard } from '@/components/recipe/deck-recipe-card';
-import { Alert, AlertDescription } from '@/components/ui/alert';
+import { DeckPreview } from './deck-preview';
 
 export type DeckRecipeSelectorProps = {
   deckRecipes: DeckRecipe[];
@@ -24,6 +24,13 @@ export function DeckRecipeSelector({
 }: DeckRecipeSelectorProps) {
   return (
     <>
+      {generatedDeck && (
+        <DeckPreview
+          //
+          deck={generatedDeck}
+          showDetails={import.meta.env.VITE_DEBUG_MODE === 'true'}
+        />
+      )}
       <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
         {deckRecipes.map((recipe) => (
           <DeckRecipeCard
@@ -38,11 +45,11 @@ export function DeckRecipeSelector({
         ))}
       </div>
       {generatedDeck && (
-        <Alert className="border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-950">
-          <AlertDescription className="text-green-800 dark:text-green-200">
-            ✓ デッキ: {generatedDeck.size.toLocaleString()} 枚
-          </AlertDescription>
-        </Alert>
+        <DeckPreview
+          //
+          deck={generatedDeck}
+          showDetails={import.meta.env.VITE_DEBUG_MODE === 'true'}
+        />
       )}
     </>
   );
