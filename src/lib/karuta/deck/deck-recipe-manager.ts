@@ -1,3 +1,15 @@
+/**
+ * @fileoverview DeckRecipe management module
+ *
+ * This module provides centralized management for DeckRecipes, including:
+ * - Recipe definitions (ETO-themed, release year-based, range-based, etc.)
+ * - Recipe generation utilities
+ * - Filter creation for prototype filtering
+ * - Recipe lookup and filtering methods
+ *
+ * @module DeckRecipeManager
+ */
+
 import type { ListPrototypesParams } from 'protopedia-api-v2-client';
 
 import type { NormalizedPrototype } from '@f88/promidas/types';
@@ -6,10 +18,22 @@ import { normalizeString } from '@/lib/string-utils';
 
 import type { DeckRecipe } from '@/models/karuta';
 
+/**
+ * Type for prototype window parameters (offset and limit)
+ */
 type ROTOTYPES_WINDOW = Pick<ListPrototypesParams, 'offset' | 'limit'>;
 
+/**
+ * Default parameters for fetching all prototypes
+ * - offset: 0 (start from the beginning)
+ * - limit: 10,000 (maximum number of prototypes to fetch)
+ */
 const ALL_PROTOTYPES: ROTOTYPES_WINDOW = { offset: 0, limit: 10_000 };
 
+/**
+ * Recipe for all prototypes without any filtering
+ * This is the default deck that includes all available prototypes
+ */
 const DECK_RECIPE_ALL_PROTOTYPES: DeckRecipe = {
   id: 'all-prototypes',
   title: '🌐 全作品',
@@ -143,12 +167,22 @@ function createKeywordFilter(keywords: string[]) {
   };
 }
 
+/**
+ * Base configuration for ETO (Chinese zodiac) themed recipes
+ * - Fetches all prototypes for filtering
+ * - Intermediate difficulty level
+ * - Tagged with '干支' (zodiac)
+ */
 const DECK_ETO_BASE: Pick<DeckRecipe, 'apiParams' | 'difficulty' | 'tags'> = {
   apiParams: { ...ALL_PROTOTYPES },
   difficulty: 'intermediate',
   tags: ['干支'],
 };
 
+/**
+ * ETO recipe for Snake (巳) themed prototypes
+ * Filters prototypes containing snake-related keywords in Japanese and English
+ */
 const DECK_ETO_MI: DeckRecipe = {
   ...DECK_ETO_BASE,
   id: 'eto-mi',
@@ -167,6 +201,10 @@ const DECK_ETO_MI: DeckRecipe = {
   ]),
 };
 
+/**
+ * ETO recipe for Horse (午) themed prototypes
+ * Filters prototypes containing horse-related keywords in Japanese and English
+ */
 const DECK_ETO_UMA: DeckRecipe = {
   ...DECK_ETO_BASE,
   id: 'eto-uma',
@@ -184,6 +222,10 @@ const DECK_ETO_UMA: DeckRecipe = {
   ]),
 };
 
+/**
+ * ETO recipe for Sheep (未) themed prototypes
+ * Filters prototypes containing sheep-related keywords in Japanese and English
+ */
 const DECK_ETO_HITSUJI: DeckRecipe = {
   ...DECK_ETO_BASE,
   id: 'eto-hitsuji',
