@@ -660,7 +660,10 @@ export function useGameSetup({
   const canStartGame = useMemo(() => {
     return (
       generatedDeck !== null &&
+      generatedDeck.size > 0 &&
       selectedStackRecipe !== null &&
+      generatedStack !== null &&
+      generatedStack.length > 0 &&
       selectedPlayerIds.length > 0 &&
       selectedPlayMode !== null &&
       !isDeckLoading &&
@@ -669,6 +672,7 @@ export function useGameSetup({
   }, [
     generatedDeck,
     selectedStackRecipe,
+    generatedStack,
     selectedPlayerIds,
     selectedPlayMode,
     isDeckLoading,
