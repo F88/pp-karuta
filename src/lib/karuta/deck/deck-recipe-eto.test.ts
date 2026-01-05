@@ -99,7 +99,7 @@ describe('ETO Deck Recipes', () => {
 
     it('should have valid DECK_ETO_SARU (Monkey) structure', () => {
       expect(DECK_ETO_SARU.id).toBe('eto-saru');
-      expect(DECK_ETO_SARU.title).toBe('🐵 申');
+      expect(DECK_ETO_SARU.title).toBe('🐒 申');
       expect(DECK_ETO_SARU.description).toBe('さるにちなんだ作品');
       expect(DECK_ETO_SARU.difficulty).toBe('intermediate');
       expect(DECK_ETO_SARU.tags).toContain('干支');
