@@ -97,24 +97,24 @@ export function DeckRecipeSelector({
 
   switch (screenSize) {
     case 'smartphone':
-      triggerPadding = 'p-3';
-      titleSize = 'text-base';
+      triggerPadding = 'px-3 py-2';
+      titleSize = 'text-sm';
       iconSize = 'h-4 w-4';
       break;
     case 'tablet':
-      triggerPadding = 'p-4';
-      titleSize = 'text-lg';
-      iconSize = 'h-5 w-5';
+      triggerPadding = 'px-4 py-2.5';
+      titleSize = 'text-base';
+      iconSize = 'h-4 w-4';
       break;
     case 'pc':
-      triggerPadding = 'p-5';
-      titleSize = 'text-xl';
-      iconSize = 'h-6 w-6';
+      triggerPadding = 'px-4 py-3';
+      titleSize = 'text-base';
+      iconSize = 'h-5 w-5';
       break;
     default:
-      triggerPadding = 'p-4';
-      titleSize = 'text-lg';
-      iconSize = 'h-5 w-5';
+      triggerPadding = 'px-4 py-2.5';
+      titleSize = 'text-base';
+      iconSize = 'h-4 w-4';
   }
 
   return (
@@ -135,11 +135,11 @@ export function DeckRecipeSelector({
               onOpenChange={() => toggleCategory(category)}
             >
               <CollapsibleTrigger
-                className={`from-primary/10 to-primary/5 hover:from-primary/20 hover:to-primary/10 flex w-full items-center justify-between rounded-lg bg-linear-to-r transition-all hover:shadow-md ${triggerPadding}`}
+                className={`border-border bg-background/50 hover:bg-accent hover:border-accent-foreground/20 flex w-full items-center justify-between rounded-md border transition-all ${triggerPadding}`}
               >
-                <h3 className={`font-bold ${titleSize}`}>{category}</h3>
+                <h3 className={`font-semibold ${titleSize}`}>{category}</h3>
                 <ChevronDown
-                  className={`transition-transform duration-200 ${iconSize} ${
+                  className={`text-muted-foreground transition-transform duration-200 ${iconSize} ${
                     openCategories[category] ? 'rotate-180' : ''
                   }`}
                 />
