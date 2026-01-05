@@ -30,4 +30,10 @@ tools/prompts/*
 # Temporary ignore files
 # src/App.tsx
 # src/lib/repository/promidas-repository-manager.test.ts
-src/components/game/game-flow.tsx
+# src/components/game/game-flow.tsx
+# src/components/tatami/tatami-view-container.tsx
+# src/hooks/useGameSetup.ts
+# src/components/tatami/tori-fuda-card-touch.stories.tsx
+# src/lib/karuta/deck/deck-recipe-manager.ts
+src/hooks/useGameSetup.ts
+

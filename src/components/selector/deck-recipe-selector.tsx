@@ -1,4 +1,5 @@
 import type { DeckRecipe, Deck } from '@/models/karuta';
+import type { ScreenSize } from '@/types/screen-size';
 import { DeckRecipeCard } from '@/components/recipe/deck-recipe-card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 
@@ -9,6 +10,7 @@ export type DeckRecipeSelectorProps = {
   isDeckLoading: boolean;
   loadingDeckRecipeId: string | null;
   generatedDeck: Deck | null;
+  screenSize?: ScreenSize;
 };
 
 export function DeckRecipeSelector({
@@ -18,6 +20,7 @@ export function DeckRecipeSelector({
   isDeckLoading,
   loadingDeckRecipeId,
   generatedDeck,
+  screenSize,
 }: DeckRecipeSelectorProps) {
   return (
     <>
@@ -30,13 +33,14 @@ export function DeckRecipeSelector({
             isSelected={selectedDeckRecipe?.id === recipe.id}
             isLoading={isDeckLoading}
             isLoadingThisRecipe={loadingDeckRecipeId === recipe.id}
+            screenSize={screenSize}
           />
         ))}
       </div>
       {generatedDeck && (
         <Alert className="border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-950">
           <AlertDescription className="text-green-800 dark:text-green-200">
-            ✓ Deck生成完了: {generatedDeck.size}枚
+            ✓ デッキ: {generatedDeck.size.toLocaleString()} 枚
           </AlertDescription>
         </Alert>
       )}

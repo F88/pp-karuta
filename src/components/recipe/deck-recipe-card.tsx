@@ -1,4 +1,5 @@
 import type { DeckRecipe } from '@/models/karuta';
+import type { ScreenSize } from '@/types/screen-size';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 
@@ -8,21 +9,8 @@ export type DeckRecipeCardProps = {
   isSelected?: boolean;
   isLoading?: boolean;
   isLoadingThisRecipe?: boolean;
-};
-
-const getDifficultyBadgeClass = (difficulty: string, isSelected: boolean) => {
-  if (isSelected) return 'bg-white/20 text-white';
-
-  switch (difficulty) {
-    case 'beginner':
-      return 'bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-200';
-    case 'intermediate':
-      return 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-200';
-    case 'advanced':
-      return 'bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-200';
-    default:
-      return 'bg-gray-100 text-gray-700 dark:bg-gray-900 dark:text-gray-200';
-  }
+  /** Screen size for fixed sizing. If not provided, responsive classes will be used */
+  screenSize?: ScreenSize;
 };
 
 export function DeckRecipeCard({
@@ -31,6 +19,7 @@ export function DeckRecipeCard({
   isSelected = false,
   isLoading = false,
   isLoadingThisRecipe = false,
+  screenSize,
 }: DeckRecipeCardProps) {
   const baseClass = isSelected
     ? 'bg-indigo-600 text-white dark:bg-indigo-500'
@@ -51,12 +40,84 @@ export function DeckRecipeCard({
       : 'text-gray-700 dark:text-gray-300',
   };
 
+  const sizeStyles = screenSize
+    ? {
+        smartphone: {
+          padding: 'p-2',
+          title: {
+            size: 'text-lg',
+            margin: 'mb-1',
+          },
+          description: {
+            size: 'text-xs',
+            margin: 'mb-1',
+          },
+          label: {
+            size: 'text-xs',
+          },
+          content: {
+            size: 'text-xs',
+          },
+        },
+        tablet: {
+          padding: 'p-4',
+          title: {
+            size: 'text-xl',
+            margin: 'mb-2',
+          },
+          description: {
+            size: 'text-sm',
+            margin: 'mb-2',
+          },
+          label: {
+            size: 'text-sm',
+          },
+          content: {
+            size: 'text-sm',
+          },
+        },
+        pc: {
+          padding: 'p-6',
+          title: {
+            size: 'text-2xl',
+            margin: 'mb-3',
+          },
+          description: {
+            size: 'text-sm',
+            margin: 'mb-3',
+          },
+          label: {
+            size: 'text-sm',
+          },
+          content: {
+            size: 'text-sm',
+          },
+        },
+      }[screenSize]
+    : {
+        padding: 'p-4 md:p-6 lg:p-8',
+        title: {
+          size: 'text-lg md:text-xl lg:text-2xl',
+          margin: 'mb-1 md:mb-2 lg:mb-3',
+        },
+        description: {
+          size: 'text-xs md:text-sm',
+          margin: 'mb-1 md:mb-2 lg:mb-3',
+        },
+        label: {
+          size: 'text-xs md:text-sm',
+        },
+        content: {
+          size: 'text-xs md:text-sm',
+        },
+      };
+
   return (
     <Button
       onClick={() => onSelect(recipe)}
       disabled={isLoading}
       variant={isSelected ? 'default' : 'outline'}
-      className={`group relative h-auto overflow-hidden rounded-2xl p-8 shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-2xl active:scale-95 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:scale-100 ${baseClass}`}
+      className={`group relative h-auto overflow-hidden rounded-2xl shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-2xl active:scale-95 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:scale-100 ${sizeStyles.padding} ${baseClass}`}
     >
       {isLoadingThisRecipe && (
         <div className="absolute inset-0 flex items-center justify-center bg-white/90 dark:bg-gray-800/90">
@@ -70,22 +131,30 @@ export function DeckRecipeCard({
       )}
       <div className="absolute inset-0 bg-linear-to-br from-blue-400 to-indigo-500 opacity-0 transition-opacity group-hover:opacity-10" />
       <div className="relative">
-        <h2 className={`mb-2 text-2xl font-bold ${textClass.title}`}>
+        <h2
+          className={`font-bold wrap-break-word whitespace-normal ${sizeStyles.title.size} ${sizeStyles.title.margin} ${textClass.title}`}
+        >
           {recipe.title}
         </h2>
 
         {recipe.description && (
-          <p className={`mb-3 text-sm ${textClass.description}`}>
+          <p
+            className={`wrap-break-word whitespace-normal ${sizeStyles.description.size} ${sizeStyles.description.margin} ${textClass.description}`}
+          >
             {recipe.description}
           </p>
         )}
 
         {import.meta.env.VITE_DEBUG_MODE === 'true' && (
-          <div className="mb-3 space-y-1">
-            <div className={`text-xs font-semibold ${textClass.label}`}>
+          <div className="my-2 space-y-1">
+            <div
+              className={`font-semibold ${sizeStyles.label.size} ${textClass.label}`}
+            >
               API Parameters:
             </div>
-            <div className={`space-y-0.5 text-sm ${textClass.content}`}>
+            <div
+              className={`space-y-0.5 ${sizeStyles.content.size} ${textClass.content}`}
+            >
               {recipe.apiParams.limit && (
                 <div>
                   <span className="font-medium">Limit:</span>{' '}
@@ -126,33 +195,25 @@ export function DeckRecipeCard({
           </div>
         )}
 
-        <div className="mb-2 flex items-center gap-2">
-          <span className={`text-xs font-semibold ${textClass.label}`}>
-            Difficulty:
-          </span>
-          <Badge
-            variant="outline"
-            className={getDifficultyBadgeClass(recipe.difficulty, isSelected)}
-          >
-            {recipe.difficulty}
-          </Badge>
+        <div className="flex flex-wrap items-center gap-1">
+          {/* <Badge
+              variant="outline"
+              className={getDifficultyBadgeClass(recipe.difficulty, isSelected)}
+            >
+              {recipe.difficulty}
+            </Badge> */}
+          {recipe.tags.map((tag) => (
+            <Badge
+              key={tag}
+              variant="secondary"
+              className={
+                isSelected ? 'bg-white/20 text-white hover:bg-white/30' : ''
+              }
+            >
+              {tag}
+            </Badge>
+          ))}
         </div>
-
-        {recipe.tags.length > 0 && (
-          <div className="flex flex-wrap gap-1">
-            {recipe.tags.map((tag) => (
-              <Badge
-                key={tag}
-                variant="secondary"
-                className={
-                  isSelected ? 'bg-white/20 text-white hover:bg-white/30' : ''
-                }
-              >
-                #{tag}
-              </Badge>
-            ))}
-          </div>
-        )}
       </div>
     </Button>
   );

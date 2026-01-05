@@ -1,12 +1,19 @@
 import { useEffect, useState } from 'react';
 import {
-  getRepositoryState,
+  promidasRepositoryManager,
   type RepositoryState,
-} from '@/lib/repository/promidas-repo';
+} from '@/lib/repository/promidas-repository-manager';
 import { usePromidasStoreState } from '@/hooks/use-promidas-store-state';
-import { PromidasRepoDashboardPresentation } from './promid-repo-dashboard-presentation';
+import type { ScreenSize } from '@/types/screen-size';
+import { PromidasRepoDashboardPresentation } from './promidas-repo-dashboard-presentation';
 
-export function PromidasRepoDashboard() {
+interface PromidasRepoDashboardProps {
+  screenSize: ScreenSize;
+}
+
+export function PromidasRepoDashboard({
+  screenSize,
+}: PromidasRepoDashboardProps) {
   const [repoState, setRepoState] = useState<RepositoryState>({
     type: 'not-created',
   });
@@ -17,7 +24,7 @@ export function PromidasRepoDashboard() {
 
   useEffect(() => {
     const updateRepoState = () => {
-      const status = getRepositoryState();
+      const status = promidasRepositoryManager.getState();
       setRepoState(status);
       setRepoError(status.type === 'token-invalid' ? status.error : null);
     };
@@ -36,6 +43,7 @@ export function PromidasRepoDashboard() {
       storeState={storeState}
       storeStats={stats}
       useDummyData={useDummyData}
+      screenSize={screenSize}
     />
   );
 }

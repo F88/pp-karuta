@@ -4,18 +4,21 @@
  * This component can be used in any route, making it easy to reassign
  * the game flow to different routes in the future (e.g., `/game`, `/play`, etc.)
  */
-import { useState, useCallback } from 'react';
-import { useNavigate } from '@tanstack/react-router';
+import { useState, useCallback, useEffect } from 'react';
+import { useNavigate, useSearch } from '@tanstack/react-router';
 import { IntegratedSelectorContainer } from '@/components/selector/integrated-selector-container';
 import { TatamiViewContainer } from '@/components/tatami/tatami-view-container';
 import { GameResultsContainer } from '@/components/gameResults/game-results-container';
 import type { GameState } from '@/models/karuta';
 import type { PlayMode } from '@/lib/karuta';
-import { useGameSetup } from '@/hooks/useGameSetup';
+import { useGameSetup } from '@/hooks/use-game-setup';
 import { useRepositoryState } from '@/hooks/use-repository-state';
+import { useScreenSizeContext } from '@/hooks/use-screen-size-context';
 
 export function GameFlow() {
   const navigate = useNavigate();
+  const screenSize = useScreenSizeContext();
+  const searchParams = useSearch({ from: '/' });
 
   // Repository state
   const repoState = useRepositoryState();
@@ -30,69 +33,92 @@ export function GameFlow() {
     onGameStateCreated: (newGameState: GameState) => {
       console.log('🎮 Game started');
       setGameState(newGameState);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     },
   });
 
-  // Extract playMode from first playerState (all players share same mode)
-  const playMode: PlayMode | null = gameState?.playerStates[0]
-    ? 'keyboard' // TODO: Store playMode in GameState
-    : null;
+  // Reset game state when reset query parameter changes
+  const resetValue = searchParams?.reset;
+  useEffect(() => {
+    if (resetValue) {
+      console.log('🔄 Resetting game state due to reset parameter');
+      // This is an intentional state reset triggered by navigation
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setGameState(null);
+    }
+  }, [resetValue]);
 
-  const handleCorrectAnswer = useCallback((playerId: string, cardId: number) => {
-    console.log('🎯 handleCorrectAnswer called with playerId:', playerId, 'cardId:', cardId);
+  // Use the selected play mode from setup
+  const playMode: PlayMode | null = setup.selectedPlayMode;
 
-    setGameState((prev) => {
-      if (!prev) return prev;
+  const handleCorrectAnswer = useCallback(
+    (playerId: string, cardId: number) => {
+      console.log(
+        '🎯 handleCorrectAnswer called with playerId:',
+        playerId,
+        'cardId:',
+        cardId,
+      );
 
-      // Update player states
-      const updatedPlayerStates = prev.playerStates.map((ps) => {
-        // Remove card from ALL players' tatami
-        const newPlayerTatami = ps.tatami.filter((id) => id !== cardId);
+      setGameState((prev) => {
+        if (!prev) return prev;
 
-        // Add next card from stack to ALL players' tatami
-        if (prev.stack.length > 0) {
-          newPlayerTatami.push(prev.stack[0]);
-        }
+        // Update player states
+        const updatedPlayerStates = prev.playerStates.map((ps) => {
+          // Remove card from ALL players' tatami
+          const newPlayerTatami = ps.tatami.filter((id) => id !== cardId);
 
-        // Update mochiFuda and score only for the player who got it correct
-        if (ps.player.id === playerId) {
+          // Add next card from stack to ALL players' tatami
+          if (prev.stack.length > 0) {
+            newPlayerTatami.push(prev.stack[0]);
+          }
+
+          // Update mochiFuda and score only for the player who got it correct
+          if (ps.player.id === playerId) {
+            return {
+              ...ps,
+              tatami: newPlayerTatami,
+              mochiFuda: [...ps.mochiFuda, cardId],
+              score: ps.score + 1,
+            };
+          }
+
+          // For other players, only update tatami
           return {
             ...ps,
             tatami: newPlayerTatami,
-            mochiFuda: [...ps.mochiFuda, cardId],
-            score: ps.score + 1,
           };
+        });
+
+        // Update shared tatami
+        const newSharedTatami = prev.tatami.filter((id) => id !== cardId);
+        const newStack = [...prev.stack];
+
+        // Add next card from stack to shared tatami
+        if (newStack.length > 0) {
+          const nextCard = newStack.shift();
+          if (nextCard !== undefined) {
+            newSharedTatami.push(nextCard);
+          }
         }
 
-        // For other players, only update tatami
+        console.log(
+          '🎴 Updated - SharedTatami:',
+          newSharedTatami,
+          'Stack:',
+          newStack,
+        );
+
         return {
-          ...ps,
-          tatami: newPlayerTatami,
+          ...prev,
+          tatami: newSharedTatami,
+          stack: newStack,
+          playerStates: updatedPlayerStates,
         };
       });
-
-      // Update shared tatami
-      const newSharedTatami = prev.tatami.filter((id) => id !== cardId);
-      const newStack = [...prev.stack];
-
-      // Add next card from stack to shared tatami
-      if (newStack.length > 0) {
-        const nextCard = newStack.shift();
-        if (nextCard !== undefined) {
-          newSharedTatami.push(nextCard);
-        }
-      }
-
-      console.log('🎴 Updated - SharedTatami:', newSharedTatami, 'Stack:', newStack);
-
-      return {
-        ...prev,
-        tatami: newSharedTatami,
-        stack: newStack,
-        playerStates: updatedPlayerStates,
-      };
-    });
-  }, []);
+    },
+    [],
+  );
 
   const handleIncorrectAnswer = useCallback((playerId: string) => {
     setGameState((prev) => {
@@ -130,11 +156,11 @@ export function GameFlow() {
   }, [navigate]);
 
   // Game is over when all cards are acquired
-  const totalMochiFuda = gameState?.playerStates.reduce(
-    (sum, ps) => sum + ps.mochiFuda.length,
-    0,
-  ) || 0;
-  const isGameOver = gameState && totalMochiFuda >= gameState.readingOrder.length;
+  const totalMochiFuda =
+    gameState?.playerStates.reduce((sum, ps) => sum + ps.mochiFuda.length, 0) ||
+    0;
+  const isGameOver =
+    gameState && totalMochiFuda >= gameState.readingOrder.length;
 
   console.log('📊 Game status:', {
     totalMochiFuda,
@@ -159,17 +185,16 @@ export function GameFlow() {
     return (
       <TatamiViewContainer
         gameState={gameState}
+        playMode={playMode}
         onCorrectAnswer={handleCorrectAnswer}
         onIncorrectAnswer={handleIncorrectAnswer}
+        screenSize={screenSize}
       />
     );
   }
 
   // Show integrated selector (default view)
   return (
-    <IntegratedSelectorContainer
-      setup={setup}
-      onShowIntro={handleShowIntro}
-    />
+    <IntegratedSelectorContainer setup={setup} onShowIntro={handleShowIntro} />
   );
 }

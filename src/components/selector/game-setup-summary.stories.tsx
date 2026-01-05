@@ -44,6 +44,7 @@ export const KeyboardMode: Story = {
     },
     stackSize: 50,
     selectedPlayerCount: 2,
+    screenSize: 'pc',
   },
 };
 
@@ -70,6 +71,7 @@ export const TouchMode: Story = {
     },
     stackSize: 100,
     selectedPlayerCount: 4,
+    screenSize: 'tablet',
   },
 };
 
@@ -96,6 +98,7 @@ export const SmallDeck: Story = {
     },
     stackSize: 10,
     selectedPlayerCount: 1,
+    screenSize: 'smartphone',
   },
 };
 
@@ -122,6 +125,7 @@ export const LargeDeck: Story = {
     },
     stackSize: 500,
     selectedPlayerCount: 8,
+    screenSize: 'pc',
   },
 };
 
@@ -148,5 +152,6 @@ export const SortedStack: Story = {
     },
     stackSize: 100,
     selectedPlayerCount: 3,
+    screenSize: 'tablet',
   },
 };

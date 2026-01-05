@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { PromidasRepoDashboardPresentation } from './promid-repo-dashboard-presentation';
+import { PromidasRepoDashboardPresentation } from './promidas-repo-dashboard-presentation';
 
 const meta = {
   title: 'Promidas/PromidasRepoDashboardPresentation',
@@ -27,6 +27,7 @@ type Story = StoryObj<typeof meta>;
 
 export const DummyMode: Story = {
   args: {
+    screenSize: 'pc',
     repoState: { type: 'not-created' },
     repoError: null,
     storeState: 'not-stored',
@@ -37,6 +38,7 @@ export const DummyMode: Story = {
 
 export const NotCreated: Story = {
   args: {
+    screenSize: 'pc',
     repoState: { type: 'not-created' },
     repoError: null,
     storeState: 'not-stored',
@@ -47,6 +49,7 @@ export const NotCreated: Story = {
 
 export const TokenInvalid: Story = {
   args: {
+    screenSize: 'pc',
     repoState: {
       type: 'token-invalid',
       error: 'Invalid token',
@@ -60,6 +63,7 @@ export const TokenInvalid: Story = {
 
 export const ValidWithNotStored: Story = {
   args: {
+    screenSize: 'pc',
     repoState: { type: 'not-created' },
     repoError: null,
     storeState: 'not-stored',
@@ -70,6 +74,7 @@ export const ValidWithNotStored: Story = {
 
 export const ValidWithStored: Story = {
   args: {
+    screenSize: 'pc',
     repoState: { type: 'not-created' },
     repoError: null,
     storeState: 'stored',
@@ -87,6 +92,7 @@ export const ValidWithStored: Story = {
 
 export const ValidWithExpired: Story = {
   args: {
+    screenSize: 'pc',
     repoState: { type: 'not-created' },
     repoError: null,
     storeState: 'expired',
@@ -104,6 +110,7 @@ export const ValidWithExpired: Story = {
 
 export const LargeDataset: Story = {
   args: {
+    screenSize: 'pc',
     repoState: { type: 'not-created' },
     repoError: null,
     storeState: 'stored',
@@ -121,6 +128,7 @@ export const LargeDataset: Story = {
 
 export const ShortRemainingTime: Story = {
   args: {
+    screenSize: 'pc',
     repoState: { type: 'not-created' },
     repoError: null,
     storeState: 'stored',

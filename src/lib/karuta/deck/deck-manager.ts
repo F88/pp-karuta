@@ -1,3 +1,9 @@
+/**
+ * @fileoverview Centralized manager for Deck operations in the Karuta game.
+ * Provides static methods for deck creation, prototype retrieval, metadata generation,
+ * and repository snapshot management. Handles deck lifecycle from recipe to game-ready state.
+ */
+
 import type {
   Deck,
   DeckRecipe,
@@ -7,19 +13,64 @@ import type {
 } from '@/models/karuta';
 import type { NormalizedPrototype } from '@f88/promidas/types';
 import type { ProtopediaInMemoryRepository } from '@f88/promidas';
+import type { SnapshotOperationResult } from '@f88/promidas/repository';
 
 /**
- * DeckManager - Centralized Deck operations
+ * Centralized manager for all Deck-related operations.
+ *
+ * Provides utilities for:
+ * - Creating decks from prototypes or recipes
+ * - Managing repository snapshots
+ * - Accessing deck contents and metadata
+ * - Generating cryptographic hashes for deck identification
+ *
+ * All methods are static as this class serves as a utility namespace.
  */
 export class DeckManager {
   // ==================== Generation ====================
 
   /**
-   * Create a Deck from array of NormalizedPrototype
-   * Ensures unique IDs by using Map structure
-   * @throws {Error} If validation fails or duplicates found
+   * Sets up repository snapshot from DeckRecipe without fetching data.
+   *
+   * Prepares the repository snapshot using the recipe's API parameters
+   * but does not retrieve the actual prototype data. This is useful for
+   * staged loading or when you want to verify API parameters before fetching.
+   *
+   * @param recipe - DeckRecipe containing apiParams for repository query
+   * @param repository - ProtopediaInMemoryRepository instance for snapshot setup
+   * @returns SnapshotOperationResult indicating success/failure with stats or error details
+   * @throws {Error} If recipe is invalid or missing apiParams
+   * @private
    */
-  static create(prototypes: NormalizedPrototype[]): Deck {
+  private static async setupSnapshotFromRecipe(
+    recipe: DeckRecipe,
+    repository: ProtopediaInMemoryRepository,
+  ): Promise<SnapshotOperationResult> {
+    // Validation: Recipe
+    if (!recipe || !recipe.apiParams) {
+      throw new Error(`Invalid recipe: apiParams is required`);
+    }
+
+    console.debug(`[INFO] API Params:`, recipe.apiParams);
+
+    // Setup snapshot only (no getAllFromSnapshot)
+    return await repository.setupSnapshot(recipe.apiParams);
+  }
+
+  /**
+   * Creates a Deck from an array of NormalizedPrototype objects.
+   *
+   * Ensures unique prototype IDs by using Map structure and validates input
+   * integrity. Throws errors if duplicates are detected or validation fails.
+   *
+   * @param prototypes - Array of normalized prototypes to create deck from
+   * @returns Generated deck as a Map of prototype ID to NormalizedPrototype
+   * @throws {Error} If input is not an array
+   * @throws {Error} If any prototype has missing or invalid ID
+   * @throws {Error} If duplicate prototype IDs are detected
+   * @private
+   */
+  private static createDeck(prototypes: NormalizedPrototype[]): Deck {
     // Validation: Input must be array
     if (!Array.isArray(prototypes)) {
       throw new Error(`Invalid input: prototypes must be an array`);
@@ -47,26 +98,61 @@ export class DeckManager {
   }
 
   /**
-   * Generate a Deck from DeckRecipe
-   * Fetches data from repository using recipe's apiParams
-   * @param recipe - DeckRecipe to generate Deck from
-   * @param repository - ProtopediaInMemoryRepository for data fetching
-   * @returns Generated Deck (Map of ID -> NormalizedPrototype)
-   * @throws {Error} If validation fails or data fetch fails
+   * Creates a Deck from prototypes array with optional filtering.
+   *
+   * Converts readonly array from repository to mutable array and applies
+   * optional filter function before deck creation. Useful when working with
+   * repository snapshots that return readonly arrays.
+   *
+   * @param prototypes - Source prototypes (typically readonly array from repository)
+   * @param filter - Optional filter function to apply before creating deck
+   * @returns Generated deck as a Map of prototype ID to NormalizedPrototype
+   * @throws {Error} If validation fails during deck creation
    */
-  static async generateFromRecipe(
+  static createDeckWithFilter(
+    prototypes: readonly NormalizedPrototype[],
+    filter?: (prototypes: NormalizedPrototype[]) => NormalizedPrototype[],
+  ): Deck {
+    // Convert readonly array to mutable array first
+    const mutablePrototypes = [...prototypes];
+
+    // Apply filter if provided
+    if (filter != null) {
+      console.debug(
+        '[DEBUG] createDeckWithFilter - Applying filter to prototypes before deck creation',
+      );
+      const filtered = filter(mutablePrototypes);
+      console.debug(
+        '[DEBUG] createDeckWithFilter - Prototypes count after filtering:',
+        {
+          before: mutablePrototypes.length,
+          after: filtered.length,
+        },
+      );
+      return this.createDeck(filtered);
+    }
+    return this.createDeck(mutablePrototypes);
+  }
+
+  /**
+   * Fetches prototypes from DeckRecipe by querying the repository.
+   *
+   * Sets up repository snapshot and retrieves all matching prototypes
+   * without applying any filters. The returned prototypes are unfiltered
+   * and ready for further processing.
+   *
+   * @param recipe - DeckRecipe containing apiParams for repository query
+   * @param repository - ProtopediaInMemoryRepository instance for data fetching
+   * @returns Readonly array of NormalizedPrototypes (unfiltered)
+   * @throws {Error} If recipe validation fails
+   * @throws {Error} If repository API call fails
+   */
+  static async getPrototypesFromRecipe(
     recipe: DeckRecipe,
     repository: ProtopediaInMemoryRepository,
-  ): Promise<Deck> {
-    // Validation: Recipe
-    if (!recipe || !recipe.apiParams) {
-      throw new Error(`Invalid recipe: apiParams is required`);
-    }
-
-    console.debug(`[INFO] API Params:`, recipe.apiParams);
-
-    // Fetch data using recipe's apiParams
-    const result = await repository.setupSnapshot(recipe.apiParams);
+  ): Promise<readonly NormalizedPrototype[]> {
+    // Setup snapshot using the dedicated method
+    const result = await this.setupSnapshotFromRecipe(recipe, repository);
 
     if (!result.ok) {
       throw new Error(
@@ -81,92 +167,51 @@ export class DeckManager {
       `[INFO] Retrieved ${allPrototypes.length} prototypes from snapshot`,
     );
 
-    // Apply filter if specified in recipe
-    const filteredPrototypes = recipe.filter
-      ? recipe.filter([...allPrototypes])
-      : [...allPrototypes];
-
-    // Validation: All prototypes have valid IDs
-    const invalidPrototype = filteredPrototypes.find(
-      (p) => !p || typeof p.id !== 'number',
-    );
-    if (invalidPrototype) {
-      throw new Error(`Invalid prototype found: missing or invalid ID`);
-    }
-
-    // Use create method for consistency
-    return this.create(filteredPrototypes);
-  }
-
-  /**
-   * Recreate Deck from prototype IDs and full prototype list
-   * Used for regenerating decks from DeckMetaData
-   * @throws {Error} If validation fails or prototypes not found
-   */
-  static recreate(
-    prototypeIds: number[],
-    allPrototypes: NormalizedPrototype[],
-  ): Deck {
-    // Validation: Inputs must be arrays
-    if (!Array.isArray(prototypeIds) || !Array.isArray(allPrototypes)) {
-      throw new Error(`Invalid input: both arguments must be arrays`);
-    }
-
-    // Validation: IDs array cannot be empty
-    if (prototypeIds.length === 0) {
-      throw new Error(`Invalid input: prototypeIds array cannot be empty`);
-    }
-
-    const prototypeMap = new Map(allPrototypes.map((p) => [p.id, p] as const));
-
-    const deckMap = new Map<number, NormalizedPrototype>();
-    const notFoundIds: number[] = [];
-
-    for (const id of prototypeIds) {
-      const prototype = prototypeMap.get(id);
-      if (prototype) {
-        deckMap.set(id, prototype);
-      } else {
-        notFoundIds.push(id);
-      }
-    }
-
-    // Validation: All IDs must be found
-    if (notFoundIds.length > 0) {
-      throw new Error(
-        `Prototypes not found for IDs: ${notFoundIds.join(', ')}`,
-      );
-    }
-
-    return deckMap;
+    return allPrototypes;
   }
 
   // ==================== Access ====================
 
   /**
-   * Get all prototype IDs from deck (sorted)
+   * Retrieves all prototype IDs from a deck in sorted order.
+   *
+   * @param deck - The deck to extract IDs from
+   * @returns Array of prototype IDs sorted in ascending numerical order
    */
   static getIds(deck: Deck): number[] {
     return [...deck.keys()].sort((a, b) => a - b);
   }
 
   /**
-   * Get all prototypes from deck as array
+   * Retrieves all prototypes from a deck as an array.
+   *
+   * @param deck - The deck to extract prototypes from
+   * @returns Array of NormalizedPrototype objects (order not guaranteed)
    */
   static getPrototypes(deck: Deck): NormalizedPrototype[] {
     return [...deck.values()];
   }
 
   /**
-   * Get NormalizedPrototype from deck by ID
+   * Retrieves a single NormalizedPrototype from deck by ID.
+   *
+   * @param deck - The deck to search
+   * @param id - The prototype ID to look up
+   * @returns The matching NormalizedPrototype, or undefined if not found
    */
   static getById(deck: Deck, id: number): NormalizedPrototype | undefined {
     return deck.get(id);
   }
 
   /**
-   * Get multiple NormalizedPrototypes from deck by IDs
-   * @returns Array of NormalizedPrototypes (filters out not found)
+   * Retrieves multiple NormalizedPrototypes from deck by IDs.
+   *
+   * Filters out any IDs that are not found in the deck, returning
+   * only the successfully located prototypes.
+   *
+   * @param deck - The deck to search
+   * @param ids - Array of prototype IDs to look up
+   * @returns Array of NormalizedPrototypes (excludes not found IDs)
    */
   static getByIds(deck: Deck, ids: number[]): NormalizedPrototype[] {
     return ids
@@ -175,14 +220,21 @@ export class DeckManager {
   }
 
   /**
-   * Get deck size
+   * Returns the total number of prototypes in the deck.
+   *
+   * @param deck - The deck to measure
+   * @returns The number of prototypes in the deck
    */
   static getSize(deck: Deck): number {
     return deck.size;
   }
 
   /**
-   * Check if deck contains a prototype by ID
+   * Checks whether a deck contains a prototype with the given ID.
+   *
+   * @param deck - The deck to search
+   * @param id - The prototype ID to check for
+   * @returns true if the deck contains the ID, false otherwise
    */
   static has(deck: Deck, id: number): boolean {
     return deck.has(id);
@@ -191,7 +243,13 @@ export class DeckManager {
   // ==================== Metadata ====================
 
   /**
-   * Generate SHA-256 hash from string
+   * Generates a SHA-256 hash from a string.
+   *
+   * Uses the Web Crypto API to create a cryptographically secure hash.
+   * Returns the hash as a lowercase hexadecimal string.
+   *
+   * @param message - The input string to hash
+   * @returns Promise resolving to the SHA-256 hash as a hex string
    * @private
    */
   private static async sha256(message: string): Promise<string> {
@@ -205,8 +263,14 @@ export class DeckManager {
   }
 
   /**
-   * Create DeckIdsHash from prototype IDs
-   * Same IDs = Same hash (reproducible)
+   * Creates a DeckIdsHash from prototype IDs.
+   *
+   * Generates a reproducible hash based solely on the prototype IDs.
+   * Same set of IDs will always produce the same hash (order-independent
+   * due to sorting). Useful for detecting identical deck compositions.
+   *
+   * @param prototypeIds - Array of prototype IDs to hash
+   * @returns Promise resolving to the DeckIdsHash string
    */
   static async createIdsHash(prototypeIds: number[]): Promise<DeckIdsHash> {
     const sortedIds = [...prototypeIds].sort((a, b) => a - b);
@@ -215,7 +279,14 @@ export class DeckManager {
   }
 
   /**
-   * Create DeckIdentifier from deck and fetch timestamp
+   * Creates a DeckIdentifier from deck and fetch timestamp.
+   *
+   * Generates a unique identifier that includes both the prototype IDs
+   * and the fetch timestamp, making it specific to this exact deck instance.
+   *
+   * @param deck - The deck to create an identifier for
+   * @param fetchedAt - Unix timestamp (milliseconds) when the deck was fetched
+   * @returns Promise resolving to the DeckIdentifier object
    */
   static async createIdentifier(
     deck: Deck,
@@ -228,7 +299,18 @@ export class DeckManager {
   }
 
   /**
-   * Create DeckMetaData from deck, fetch timestamp, and title
+   * Creates comprehensive DeckMetaData from deck, timestamp, and title.
+   *
+   * Generates complete metadata including:
+   * - deckHash: Unique hash combining timestamp and IDs
+   * - deckIdsHash: Reproducible hash of just the IDs
+   * - Prototype IDs in sorted order
+   * - Fetch timestamp and title
+   *
+   * @param deck - The deck to create metadata for
+   * @param fetchedAt - Unix timestamp (milliseconds) when the deck was fetched
+   * @param title - Human-readable title for the deck
+   * @returns Promise resolving to the complete DeckMetaData object
    */
   static async createMetaData(
     deck: Deck,
