@@ -1,11 +1,23 @@
-import type { DeckRecipe } from '@/models/karuta';
-import type { NormalizedPrototype } from 'node_modules/@f88/promidas/dist/types/normalized-prototype';
 import type { ListPrototypesParams } from 'protopedia-api-v2-client';
+
+import type { NormalizedPrototype } from '@f88/promidas/types';
+
 import { normalizeString } from '@/lib/string-utils';
+
+import type { DeckRecipe } from '@/models/karuta';
 
 type ROTOTYPES_WINDOW = Pick<ListPrototypesParams, 'offset' | 'limit'>;
 
 const ALL_PROTOTYPES: ROTOTYPES_WINDOW = { offset: 0, limit: 10_000 };
+
+const DECK_RECIPE_ALL_PROTOTYPES: DeckRecipe = {
+  id: 'all-prototypes',
+  title: '🌐 全作品',
+  description: '全ての作品',
+  apiParams: { ...ALL_PROTOTYPES },
+  difficulty: 'beginner',
+  tags: [],
+};
 
 // ========================================
 // Section 0: Recipe Generation Helpers
@@ -44,14 +56,52 @@ function generateSequentialDecks(
   return recipes;
 }
 
-const DECK_RECIPE_ALL_PROTOTYPES: DeckRecipe = {
-  id: 'all-prototypes',
-  title: '全作品',
-  description: '全ての作品',
-  apiParams: { ...ALL_PROTOTYPES },
-  difficulty: 'beginner',
-  tags: [],
-};
+/**
+ * Generate release year based deck recipes
+ * @param years - Array of years to generate recipes for (e.g., [2023, 2024, 2025])
+ * @returns Array of DeckRecipes
+ */
+function generateReleaseYearDecks(years: number[]): DeckRecipe[] {
+  return years.map((year) => ({
+    id: `rel-${year}`,
+    title: `🎉 ${year}`,
+    description: `${year}年生まれ`,
+    apiParams: { ...ALL_PROTOTYPES },
+    difficulty: 'intermediate',
+    tags: [
+      'リリース',
+      //  String(year)
+    ],
+    filter: createReleaseDateYearFilter(year),
+  }));
+}
+
+/**
+ * Create a filter function for releaseDate-based filtering
+ * Filters prototypes by releaseDate year
+ * @param year - Year to filter by
+ * @returns Filter function for DeckRecipe
+ */
+function createReleaseDateYearFilter(year: number) {
+  return (prototypes: NormalizedPrototype[]) => {
+    return prototypes.filter((e) => {
+      if (!e.releaseDate) {
+        return false;
+      }
+
+      const releaseYear = new Date(e.releaseDate).getFullYear();
+      const matched = releaseYear === year;
+
+      if (matched) {
+        console.debug(
+          `✅ DeckRecipe releaseDate filter matched: ${year} in ${e.id} - ${e.prototypeNm} (${e.releaseDate})`,
+        );
+      }
+
+      return matched;
+    });
+  };
+}
 
 /**
  * Create a filter function for keyword-based filtering
@@ -162,6 +212,15 @@ export class DeckRecipeManager {
   // ========================================
 
   private static rangeRecipes: DeckRecipe[] = generateSequentialDecks(7);
+  private static releaseYearRecipes: DeckRecipe[] = generateReleaseYearDecks([
+    2017, 2018, 2019, 2020,
+    //
+    2021, 2022, 2023, 2024, 2025,
+    //
+    2026,
+    //
+    2027,
+  ]);
 
   /**
    * Available DeckRecipes for selection
@@ -172,6 +231,8 @@ export class DeckRecipeManager {
     DECK_ETO_MI,
     DECK_ETO_UMA,
     DECK_ETO_HITSUJI,
+    // Release year based
+    ...this.releaseYearRecipes,
     // All-prototypes recipe
     DECK_RECIPE_ALL_PROTOTYPES,
     // Range-based recipes
