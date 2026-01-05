@@ -75,8 +75,56 @@ export function DeckRecipeSelector({
     }));
   };
 
+  let triggerPadding: string;
+  let titleSize: string;
+  let iconSize: string;
+  let containerSpacing: string;
+  let grid: { cols: string; gap: string };
+
+  switch (screenSize) {
+    case 'smartphone':
+      triggerPadding = 'px-3 py-2';
+      titleSize = 'text-sm';
+      iconSize = 'h-4 w-4';
+      containerSpacing = 'space-y-2';
+      grid = {
+        cols: 'grid-cols-2',
+        gap: 'gap-2',
+      };
+      break;
+    case 'tablet':
+      triggerPadding = 'px-4 py-2.5';
+      titleSize = 'text-base';
+      iconSize = 'h-4 w-4';
+      containerSpacing = 'space-y-3';
+      grid = {
+        cols: 'grid-cols-4',
+        gap: 'gap-4',
+      };
+      break;
+    case 'pc':
+      triggerPadding = 'px-4 py-3';
+      titleSize = 'text-base';
+      iconSize = 'h-5 w-5';
+      containerSpacing = 'space-y-4';
+      grid = {
+        cols: 'grid-cols-6',
+        gap: 'gap-4',
+      };
+      break;
+    default:
+      triggerPadding = 'px-4 py-2.5';
+      titleSize = 'text-base';
+      iconSize = 'h-4 w-4';
+      containerSpacing = 'space-y-3';
+      grid = {
+        cols: 'grid-cols-3',
+        gap: 'gap-4',
+      };
+  }
+
   const renderRecipeCards = (recipes: DeckRecipe[]) => (
-    <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
+    <div className={`grid ${grid.gap} ${grid.cols}`}>
       {recipes.map((recipe) => (
         <DeckRecipeCard
           key={recipe.id}
@@ -90,37 +138,6 @@ export function DeckRecipeSelector({
       ))}
     </div>
   );
-
-  let triggerPadding: string;
-  let titleSize: string;
-  let iconSize: string;
-  let containerSpacing: string;
-
-  switch (screenSize) {
-    case 'smartphone':
-      triggerPadding = 'px-3 py-2';
-      titleSize = 'text-sm';
-      iconSize = 'h-4 w-4';
-      containerSpacing = 'space-y-2';
-      break;
-    case 'tablet':
-      triggerPadding = 'px-4 py-2.5';
-      titleSize = 'text-base';
-      iconSize = 'h-4 w-4';
-      containerSpacing = 'space-y-3';
-      break;
-    case 'pc':
-      triggerPadding = 'px-4 py-3';
-      titleSize = 'text-base';
-      iconSize = 'h-5 w-5';
-      containerSpacing = 'space-y-4';
-      break;
-    default:
-      triggerPadding = 'px-4 py-2.5';
-      titleSize = 'text-base';
-      iconSize = 'h-4 w-4';
-      containerSpacing = 'space-y-3';
-  }
 
   return (
     <>
