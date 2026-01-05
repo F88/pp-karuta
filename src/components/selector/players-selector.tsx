@@ -45,7 +45,10 @@ export function PlayersSelector({
         <SelectableCard
           isSelected={false}
           onClick={onAddPlayer}
-          disabled={isLoading}
+          disabled={
+            isLoading ||
+            selectedPlayerIds.length >= GameManager.MAX_GAME_PLAYERS
+          }
           icon={<span className="text-4xl text-gray-400">+</span>}
           label=""
           className="bg-gray-50 hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700"
