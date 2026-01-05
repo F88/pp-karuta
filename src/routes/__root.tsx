@@ -13,7 +13,7 @@ import { ScreenSizeProvider } from '@/contexts/screen-size-provider';
 import { useScreenSizeContext } from '@/hooks/use-screen-size-context';
 import { PlayerManager } from '@/lib/karuta';
 import type { RepositoryState } from '@/lib/repository/promidas-repository-manager';
-import { getRepositoryState } from '@/lib/repository/promidas-repository-manager';
+import { promidasRepositoryManager } from '@/lib/repository/promidas-repository-manager';
 import { createRootRoute, Outlet } from '@tanstack/react-router';
 import { useEffect, useState } from 'react';
 
@@ -34,13 +34,13 @@ function RootComponent() {
 function RootLayout() {
   const screenSize = useScreenSizeContext();
   const [repoState, setRepoState] = useState<RepositoryState>(() =>
-    getRepositoryState(),
+    promidasRepositoryManager.getState(),
   );
   const [openRepoSetupDialog, setOpenRepoSetupDialog] = useState(false);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setRepoState(getRepositoryState());
+      setRepoState(promidasRepositoryManager.getState());
     }, 1000);
 
     return () => clearInterval(interval);

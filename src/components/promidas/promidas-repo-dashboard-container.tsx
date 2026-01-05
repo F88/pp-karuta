@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import {
-  getRepositoryState,
+  promidasRepositoryManager,
   type RepositoryState,
 } from '@/lib/repository/promidas-repository-manager';
 import { usePromidasStoreState } from '@/hooks/use-promidas-store-state';
@@ -24,7 +24,7 @@ export function PromidasRepoDashboard({
 
   useEffect(() => {
     const updateRepoState = () => {
-      const status = getRepositoryState();
+      const status = promidasRepositoryManager.getState();
       setRepoState(status);
       setRepoError(status.type === 'token-invalid' ? status.error : null);
     };

@@ -244,7 +244,7 @@ export function GameResultsPresentation({
                     <div
                       className={`flex items-center justify-center rounded-full bg-indigo-100 font-bold text-indigo-600 dark:bg-indigo-900 dark:text-indigo-300 ${sizeStyles.ranking.icon}`}
                     >
-                      #{playerRanks[index]}
+                      {playerRanks[index]}
                     </div>
                     <div>
                       <h3
@@ -298,7 +298,7 @@ export function GameResultsPresentation({
                   <div
                     className={`flex items-center justify-center rounded-full bg-indigo-100 font-bold text-indigo-600 dark:bg-indigo-900 dark:text-indigo-300 ${sizeStyles.playerCard.icon}`}
                   >
-                    #{playerRanks[index]}
+                    {playerRanks[index]}
                   </div>
                   <h2
                     className={`font-bold text-gray-800 dark:text-gray-100 ${sizeStyles.playerCard.title}`}

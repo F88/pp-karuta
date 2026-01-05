@@ -1,11 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useToken } from '@/hooks/use-token';
 import {
-  getRepositoryState,
-  resetRepository,
+  promidasRepositoryManager,
   type RepositoryState,
 } from '@/lib/repository/promidas-repository-manager';
-import { getPromidasRepositoryManager } from '@/lib/repository/promidas-repository-manager';
 import type { ScreenSize } from '@/types/screen-size';
 import { TokenManagerPresentation } from './token-manager-presentation';
 
@@ -37,7 +35,7 @@ export function TokenManagerContainer({
     }
 
     // Check current repo state
-    const status = getRepositoryState();
+    const status = promidasRepositoryManager.getState();
     setRepoState(status);
   }, [hasToken]);
 
@@ -45,16 +43,15 @@ export function TokenManagerContainer({
     if (!inputValue.trim()) return;
 
     // Reset repository before validation
-    resetRepository();
+    promidasRepositoryManager.reset();
 
     await saveToken(inputValue.trim());
 
     // Validate token by creating repository
     setIsValidating(true);
     try {
-      const manager = getPromidasRepositoryManager();
-      await manager.getRepository();
-      const status = getRepositoryState();
+      await promidasRepositoryManager.getRepository();
+      const status = promidasRepositoryManager.getState();
       console.log('[TokenManager] Repository state after validation:', status);
       setRepoState(status);
     } catch (err) {
@@ -68,7 +65,7 @@ export function TokenManagerContainer({
 
   const handleRemove = async () => {
     await removeToken();
-    resetRepository();
+    promidasRepositoryManager.reset();
     setInputValue('');
     setRepoState({ type: 'not-created' });
   };

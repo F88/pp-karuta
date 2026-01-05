@@ -1,3 +1,9 @@
+/**
+ * @fileoverview Hook for managing game setup workflow and state persistence.
+ * Handles deck generation, stack creation, player management, and game initialization
+ * with session storage integration for state restoration across page reloads.
+ */
+
 import type { PlayMode, TatamiSize } from '@/lib/karuta';
 import {
   DeckManager,
@@ -22,19 +28,32 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 
 const SESSION_STORAGE_KEY = 'pp-karuta-deck-setup';
 
+/**
+ * State structure for persisting game setup to session storage.
+ * Allows restoration of user selections after page reload.
+ */
 type SavedSetupState = {
+  /** ID of the selected deck recipe, or null if none selected */
   selectedDeckRecipeId: string | null;
+  /** ID of the selected stack recipe, or null if none selected */
   selectedStackRecipeId: string | null;
+  /** Array of IDs for selected players */
   selectedPlayerIds: string[];
+  /** Selected play mode (touch/keyboard), or null if none selected */
   selectedPlayMode: PlayMode | null;
+  /** Selected tatami mat size */
   selectedTatamiSize: TatamiSize;
 };
 
 /**
- * Compare two ListPrototypesParams to determine if they are equivalent
- * @param a - First params object
- * @param b - Second params object
- * @returns true if params are equivalent, false otherwise
+ * Compares two ListPrototypesParams objects for deep equality.
+ *
+ * Used to determine if API parameters have changed, allowing the hook to reuse
+ * cached repository snapshots when possible and avoid redundant API calls.
+ *
+ * @param a - First API parameters object to compare
+ * @param b - Second API parameters object to compare
+ * @returns true if all relevant fields match, false otherwise
  */
 function areApiParamsEqual(
   a: ListPrototypesParams,
@@ -50,6 +69,83 @@ function areApiParamsEqual(
   );
 }
 
+/**
+ * Generate a deck from a recipe with snapshot optimization.
+ * Reuses repository snapshot if apiParams haven't changed, otherwise fetches new data.
+ *
+ * @param repository - The repository instance to fetch prototypes from
+ * @param recipe - The deck recipe containing apiParams and optional filter function
+ * @param lastApiParams - Previous API params for optimization (null if first call or no cache)
+ * @returns Object containing the generated deck and the API params that were used
+ * @returns Object.deck - The generated deck as a Map of prototype IDs to prototypes
+ * @returns Object.usedApiParams - The API parameters used for this generation (for caching)
+ * @throws {Error} If repository snapshot retrieval fails
+ * @throws {Error} If API call to fetch prototypes fails
+ * @throws {Error} If deck creation from prototypes fails
+ */
+async function generateDeckWithOptimization(
+  repository: ProtopediaInMemoryRepository,
+  recipe: DeckRecipe,
+  lastApiParams: ListPrototypesParams | null,
+): Promise<{
+  deck: Deck;
+  usedApiParams: ListPrototypesParams;
+}> {
+  console.log(
+    '🔨 [generateDeckWithOptimization] Starting for recipe:',
+    recipe.id,
+  );
+
+  // Check if apiParams are identical to avoid redundant API calls
+  const canReuseSnapshot =
+    lastApiParams !== null &&
+    areApiParamsEqual(lastApiParams, recipe.apiParams);
+
+  console.info(
+    '🔍 [generateDeckWithOptimization] canReuseSnapshot:',
+    canReuseSnapshot,
+  );
+
+  let prototypes: readonly NormalizedPrototype[];
+  if (canReuseSnapshot) {
+    console.debug(
+      '♻️ Reusing repository snapshot (same apiParams), applying filter...',
+    );
+    // Reuse existing snapshot without making API call
+    prototypes = await repository.getAllFromSnapshot();
+  } else {
+    console.debug('🌐 Fetching new data from API (apiParams changed)');
+    // Different apiParams, make API call
+    prototypes = await DeckManager.getPrototypesFromRecipe(recipe, repository);
+  }
+
+  console.debug(
+    '📊 [generateDeckWithOptimization] Fetched prototypes:',
+    prototypes.length,
+  );
+
+  const deck = DeckManager.createDeckWithFilter(prototypes, recipe.filter);
+
+  console.info(
+    '✅ [generateDeckWithOptimization] Created deck with',
+    deck.size,
+    'cards',
+  );
+
+  return {
+    deck,
+    usedApiParams: recipe.apiParams,
+  };
+}
+
+/**
+ * Persists the current game setup state to session storage.
+ *
+ * Allows state restoration after page reload. Errors are caught and logged
+ * to prevent disruption of game setup flow.
+ *
+ * @param state - The setup state to save
+ */
 function saveSetupState(state: SavedSetupState) {
   try {
     sessionStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(state));
@@ -58,6 +154,14 @@ function saveSetupState(state: SavedSetupState) {
   }
 }
 
+/**
+ * Loads previously saved game setup state from session storage.
+ *
+ * Returns null if no saved state exists or if parsing fails. Errors are
+ * caught and logged to prevent disruption of game setup flow.
+ *
+ * @returns The saved setup state, or null if unavailable or invalid
+ */
 function loadSetupState(): SavedSetupState | null {
   try {
     const saved = sessionStorage.getItem(SESSION_STORAGE_KEY);
@@ -68,48 +172,127 @@ function loadSetupState(): SavedSetupState | null {
   }
 }
 
+/**
+ * Return value from the useGameSetup hook.
+ * Provides comprehensive game setup state and control functions.
+ */
 export type UseGameSetupReturn = {
   // Deck state
+  /** The generated deck map (prototype ID to prototype), or null if not yet generated */
   generatedDeck: Deck | null;
+  /** Currently selected deck recipe, or null if none selected */
   selectedDeckRecipe: DeckRecipe | null;
+  /** Function to select a deck recipe and trigger deck generation */
   selectDeckRecipe: (recipe: DeckRecipe) => Promise<void>;
+  /** Whether a deck is currently being generated */
   isDeckLoading: boolean;
+  /** ID of the deck recipe currently being loaded, or null */
   loadingDeckRecipeId: string | null;
 
   // Stack state
+  /** The generated stack (array of prototype indices), or null if not yet generated */
   generatedStack: number[] | null;
+  /** Currently selected stack recipe, or null if none selected */
   selectedStackRecipe: StackRecipe | null;
+  /** Function to select a stack recipe and trigger stack generation */
   selectStackRecipe: (recipe: StackRecipe) => void;
 
   // Player state
+  /** All available players in the system */
   availablePlayers: Player[];
+  /** IDs of currently selected players */
   selectedPlayerIds: string[];
+  /** Function to toggle a player's selection state */
   togglePlayer: (playerId: string) => void;
+  /** Function to add a new player to the available players */
   addPlayer: () => Promise<void>;
 
   // PlayMode state
+  /** Currently selected play mode (touch/keyboard), or null if none selected */
   selectedPlayMode: PlayMode | null;
+  /** Function to select a play mode */
   selectPlayMode: (mode: PlayMode) => void;
 
   // TatamiSize state
+  /** Currently selected tatami mat size */
   selectedTatamiSize: TatamiSize;
+  /** Function to select a tatami size */
   selectTatamiSize: (size: TatamiSize8 | TatamiSize16) => void;
+  /** Available tatami sizes based on current play mode and player count */
   availableTatamiSizes: readonly TatamiSize8[] | readonly TatamiSize16[];
 
   // Game creation
+  /** Whether all required selections are made and game can be started */
   canStartGame: boolean;
+  /** Function to create the game state and trigger game start */
   createGameState: () => Promise<void>;
 
   // Error & loading
+  /** Current error message, or null if no error */
   error: string | null;
+  /** Whether game state is currently being created */
   isCreatingGame: boolean;
 };
 
+/**
+ * Configuration options for the useGameSetup hook.
+ */
 export type UseGameSetupOptions = {
+  /** PROMIDAS repository instance for fetching prototypes, or null if not yet initialized */
   repository: ProtopediaInMemoryRepository | null;
+  /** Callback invoked when game state is successfully created */
   onGameStateCreated: (gameState: import('@/models/karuta').GameState) => void;
 };
 
+/**
+ * Custom React hook for managing the complete game setup workflow.
+ *
+ * This hook orchestrates the entire game setup process including:
+ * - Deck recipe selection and deck generation with API optimization
+ * - Stack recipe selection and stack generation
+ * - Player management (selection, creation)
+ * - Play mode and tatami size configuration
+ * - State persistence via session storage
+ * - Validation and game state creation
+ *
+ * Features:
+ * - Automatic state restoration from session storage on mount
+ * - Smart deck generation that reuses repository snapshots when API params unchanged
+ * - Automatic stack regeneration when deck changes
+ * - Dynamic tatami size restrictions based on play mode and player count
+ * - Comprehensive validation before game creation
+ *
+ * @param options - Configuration object containing repository and callback
+ * @param options.repository - PROMIDAS repository for fetching prototypes
+ * @param options.onGameStateCreated - Callback invoked when game is ready to start
+ * @returns Object containing all setup state and control functions
+ *
+ * @example
+ * ```tsx
+ * function GameSetupScreen() {
+ *   const { repository } = usePromidasRepository();
+ *   const navigate = useNavigate();
+ *
+ *   const {
+ *     selectDeckRecipe,
+ *     selectStackRecipe,
+ *     togglePlayer,
+ *     selectPlayMode,
+ *     canStartGame,
+ *     createGameState,
+ *     error
+ *   } = useGameSetup({
+ *     repository,
+ *     onGameStateCreated: (gameState) => {
+ *       // Navigate to game screen with state
+ *       navigate('/game', { state: gameState });
+ *     }
+ *   });
+ *
+ *   // Use setup functions...
+ * }
+ * ```
+ */
 export function useGameSetup({
   repository,
   onGameStateCreated,
@@ -211,82 +394,81 @@ export function useGameSetup({
     loadPlayers();
   }, []);
 
-  // Select DeckRecipe and generate Deck immediately
   const selectDeckRecipe = useCallback(
     async (recipe: DeckRecipe) => {
+      // 1. Validation
       if (!repository) {
         setError('Repository is not initialized');
         return;
       }
 
-      // If same recipe is selected and Deck already exists, skip regeneration
+      // 2. Early return if same recipe is already selected
       if (selectedDeckRecipe?.id === recipe.id && generatedDeck !== null) {
         console.log(
           '📦 Same DeckRecipe selected, reusing existing Deck:',
           recipe.id,
         );
-        setIsDeckLoading(false); // Ensure loading state is false
+        setIsDeckLoading(false);
         return;
       }
 
-      console.log('🔨 Generating new Deck for recipe:', recipe.id);
+      // 3. Set loading state
       setIsDeckLoading(true);
       setLoadingDeckRecipeId(recipe.id);
       setError(null);
 
+      // 4. Generate deck with optimization
+      let deck: Deck;
+      let usedApiParams: ListPrototypesParams;
+
       try {
-        let deck: Map<number, NormalizedPrototype>;
-
-        // Check if apiParams are identical to avoid redundant API calls
-        const canReuseSnapshot =
-          lastApiParams !== null &&
-          areApiParamsEqual(lastApiParams, recipe.apiParams);
-
-        if (canReuseSnapshot) {
-          console.log(
-            '♻️ Reusing repository snapshot (same apiParams), applying filter...',
-          );
-          // Reuse existing snapshot without making API call
-          const prototypes = await repository.getAllFromSnapshot();
-          deck = DeckManager.createFromPrototypes(prototypes, recipe.filter);
-        } else {
-          console.log('🌐 Fetching new data from API (apiParams changed)');
-          // Different apiParams, make API call
-          deck = await DeckManager.generateFromRecipe(recipe, repository);
-          // Update cached apiParams after successful API call
-          setLastApiParams(recipe.apiParams);
-        }
-
-        setGeneratedDeck(deck);
-        setSelectedDeckRecipe(recipe);
-        console.log('✅ Deck generated successfully:', deck.size, 'cards');
-
-        // If StackRecipe is already selected, regenerate Stack with new Deck
-        // Only generate stack if deck is not empty
-        if (selectedStackRecipe && deck.size > 0) {
-          const stack = StackManager.generate(deck, selectedStackRecipe);
-          setGeneratedStack(stack);
-          console.log('✅ Stack regenerated:', stack.length, 'cards');
-        } else if (deck.size === 0) {
-          setGeneratedStack(null);
-          console.log('⚠️ Deck is empty, skipping Stack generation');
-        }
+        const result = await generateDeckWithOptimization(
+          repository,
+          recipe,
+          lastApiParams,
+        );
+        deck = result.deck;
+        usedApiParams = result.usedApiParams;
       } catch (err) {
         const errorMessage =
           err instanceof Error ? err.message : 'Failed to generate Deck';
         setError(errorMessage);
         console.error('Failed to generate Deck:', err);
-      } finally {
-        console.log('🔄 Setting isDeckLoading to false');
         setIsDeckLoading(false);
         setLoadingDeckRecipeId(null);
-        console.log('✔️ isDeckLoading set to false');
+        return;
       }
+
+      // 5. Update deck state
+      setLastApiParams(usedApiParams);
+      setGeneratedDeck(deck);
+      setSelectedDeckRecipe(recipe);
+      console.log('✅ Deck generated successfully:', deck.size, 'cards');
+
+      // 6. Regenerate stack as side effect
+      if (selectedStackRecipe && deck.size > 0) {
+        try {
+          const stack = StackManager.generate(deck, selectedStackRecipe);
+          setGeneratedStack(stack);
+          console.log('✅ Stack regenerated:', stack.length, 'cards');
+        } catch (stackErr) {
+          // Stack generation is non-critical, log error but don't fail
+          console.error('Failed to regenerate Stack:', stackErr);
+          setGeneratedStack(null);
+        }
+      } else if (deck.size === 0) {
+        setGeneratedStack(null);
+        console.log('⚠️ Deck is empty, skipping Stack generation');
+      }
+
+      // 7. Clear loading state
+      setIsDeckLoading(false);
+      setLoadingDeckRecipeId(null);
     },
     [
-      generatedDeck,
       repository,
       selectedDeckRecipe?.id,
+      generatedDeck,
       selectedStackRecipe,
       lastApiParams,
     ],

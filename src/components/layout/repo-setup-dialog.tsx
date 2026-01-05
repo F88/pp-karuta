@@ -6,7 +6,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { getRepositoryState } from '@/lib/repository/promidas-repository-manager';
+import { promidasRepositoryManager } from '@/lib/repository/promidas-repository-manager';
 import type { ScreenSize } from '@/types/screen-size';
 import { RepoSetup } from './repo-setup';
 
@@ -31,7 +31,7 @@ export function RepoSetupDialog({
     if (useDummyData) return;
 
     const intervalId = setInterval(() => {
-      const repoState = getRepositoryState();
+      const repoState = promidasRepositoryManager.getState();
       console.debug('[RepoSetupDialog] Checking repo state:', repoState);
       if (repoState.type === 'created-token-valid') {
         onOpenChange(false);

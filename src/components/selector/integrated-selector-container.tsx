@@ -1,6 +1,6 @@
 import { useRepositoryState } from '@/hooks/use-repository-state';
 import { useScreenSizeContext } from '@/hooks/use-screen-size-context';
-import type { UseGameSetupReturn } from '@/hooks/useGameSetup';
+import type { UseGameSetupReturn } from '@/hooks/use-game-setup';
 import { STACK_RECIPES } from '@/lib/karuta';
 import { DeckRecipeManager } from '@/lib/karuta/deck';
 import { useEffect } from 'react';
