@@ -25,23 +25,15 @@ export default defineConfig({
         manualChunks: (id) => {
           // Vendor chunks
           if (id.includes('node_modules')) {
-            // React core
-            if (id.includes('react') || id.includes('react-dom')) {
-              return 'react-vendor';
-            }
             // TanStack Router
             if (id.includes('@tanstack/react-router')) {
               return 'tanstack-router';
-            }
-            // UI libraries (radix-ui, lucide)
-            if (id.includes('@radix-ui') || id.includes('lucide-react')) {
-              return 'ui-vendor';
             }
             // Promidas (large library)
             if (id.includes('@f88/promidas')) {
               return 'promidas';
             }
-            // API client (large, but needed)
+            // API client
             if (id.includes('protopedia-api-v2-client')) {
               return 'api-vendor';
             }
@@ -49,13 +41,20 @@ export default defineConfig({
             if (id.includes('@faker-js/faker')) {
               return 'faker-vendor';
             }
+            // React core and scheduler (must be together)
+            if (
+              id.match(/\/node_modules\/react\//) ||
+              id.match(/\/node_modules\/react-dom\//) ||
+              id.match(/\/node_modules\/scheduler\//)
+            ) {
+              return 'react-vendor';
+            }
             // All other vendors (radix-ui, lucide, markdown, etc.)
             return 'vendor';
           }
 
-          // App code chunks - group by major functionality
+          // App code chunks
           if (id.includes('/src/')) {
-            // All components together
             return 'ppk';
           }
         },

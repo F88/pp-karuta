@@ -37,4 +37,5 @@ tools/prompts/*
 # src/lib/karuta/deck/deck-recipe-manager.ts
 # src/hooks/useGameSetup.ts
 # src/lib/karuta/deck/deck-recipe-manager.test.ts
+vite.config.ts
 
