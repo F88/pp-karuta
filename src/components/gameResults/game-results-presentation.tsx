@@ -303,15 +303,15 @@ export function GameResultsPresentation({
                   <h2
                     className={`font-bold text-gray-800 dark:text-gray-100 ${sizeStyles.playerCard.title}`}
                   >
-                    {ps.player.name} の MochiFuda ({playerMochiFudaCards.length}{' '}
-                    cards)
+                    {ps.player.name} (
+                    {playerMochiFudaCards.length.toLocaleString()} 枚)
                   </h2>
                 </div>
               </CardHeader>
               <CardContent>
                 {playerMochiFudaCards.length === 0 ? (
                   <p className="text-center text-gray-500 dark:text-gray-400">
-                    カードを取得できませんでした
+                    NO FUDA
                   </p>
                 ) : (
                   <div className={`grid gap-4 ${sizeStyles.grid}`}>
