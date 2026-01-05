@@ -180,7 +180,7 @@ export function IntegratedSelectorPresentation({
                 loadingDeckRecipeId={deckRecipe.loadingRecipeId}
                 generatedDeck={deckRecipe.generatedDeck}
                 screenSize={screenSize}
-                enableGrouping={true}
+                // enableGrouping={false}
                 initialOpenCategories={
                   deckRecipe.selected ? deckRecipe.selected.tags : ['干支']
                 }
