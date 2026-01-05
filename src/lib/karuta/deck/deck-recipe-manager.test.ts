@@ -39,8 +39,8 @@ describe('DeckRecipeManager', () => {
     it('should return all recipes', () => {
       const recipes = DeckRecipeManager.getAll();
       expect(recipes.length).toBeGreaterThan(0);
-      // 3 ETO + 11 releaseYears + 1 all-prototypes + 7 range-based = 22
-      expect(recipes.length).toBe(22);
+      // 3 ETO + 14 releaseYears + 1 all-prototypes + 7 range-based = 25
+      expect(recipes.length).toBe(25);
     });
 
     it('should return a new array instance', () => {
@@ -68,8 +68,8 @@ describe('DeckRecipeManager', () => {
       recipes.forEach((recipe) => {
         expect(recipe.difficulty).toBe('intermediate');
       });
-      // 3 ETO recipes + 11 releaseYears = 14
-      expect(recipes.length).toBe(14);
+      // 3 ETO recipes + 14 releaseYears = 17
+      expect(recipes.length).toBe(17);
     });
 
     it('should return empty array for advanced difficulty', () => {
