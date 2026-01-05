@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState } from 'react';
 
 import type { ScreenSize } from '@/types/screen-size';
 
@@ -53,38 +53,20 @@ export function DeckRecipeSelector({
       )
     : null;
 
-  // Calculate initial open categories
-  const getInitialOpenCategories = useCallback((): Record<string, boolean> => {
-    if (!groupedRecipes) return {};
-
-    return Object.keys(groupedRecipes).reduce(
-      (acc, key) => {
-        if (selectedDeckRecipe) {
-          // Open categories containing the selected recipe
-          const recipes = groupedRecipes[key];
-          acc[key] = recipes.some(
-            (recipe) => recipe.id === selectedDeckRecipe.id,
-          );
-        } else if (initialOpenCategories) {
-          // Use initial open categories if no recipe is selected
-          acc[key] = initialOpenCategories.includes(key);
-        } else {
-          acc[key] = false;
-        }
-        return acc;
-      },
-      {} as Record<string, boolean>,
-    );
-  }, [groupedRecipes, selectedDeckRecipe, initialOpenCategories]);
-
+  // Initialize open categories based on initialOpenCategories prop
   const [openCategories, setOpenCategories] = useState<Record<string, boolean>>(
-    getInitialOpenCategories,
-  );
+    () => {
+      if (!groupedRecipes) return {};
 
-  // Update categories when selected recipe or grouping changes
-  useEffect(() => {
-    setOpenCategories(getInitialOpenCategories());
-  }, [getInitialOpenCategories]);
+      return Object.keys(groupedRecipes).reduce(
+        (acc, key) => {
+          acc[key] = initialOpenCategories?.includes(key) ?? false;
+          return acc;
+        },
+        {} as Record<string, boolean>,
+      );
+    },
+  );
 
   const toggleCategory = (category: string) => {
     setOpenCategories((prev) => ({

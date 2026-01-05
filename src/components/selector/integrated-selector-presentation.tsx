@@ -181,7 +181,9 @@ export function IntegratedSelectorPresentation({
                 generatedDeck={deckRecipe.generatedDeck}
                 screenSize={screenSize}
                 enableGrouping={true}
-                initialOpenCategories={['干支']}
+                initialOpenCategories={
+                  deckRecipe.selected ? deckRecipe.selected.tags : ['干支']
+                }
               />
             )}
           </SectionWrapper>
