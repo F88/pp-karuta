@@ -1,7 +1,18 @@
-import type { DeckRecipe, Deck } from '@/models/karuta';
+import { useState } from 'react';
+
 import type { ScreenSize } from '@/types/screen-size';
+
+import type { Deck, DeckRecipe } from '@/models/karuta';
+
+import { ChevronDown } from 'lucide-react';
+
 import { DeckRecipeCard } from '@/components/recipe/deck-recipe-card';
-import { DeckPreview } from './deck-preview';
+import { DeckPreview } from '@/components/selector/deck-preview';
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from '@/components/ui/collapsible';
 
 export type DeckRecipeSelectorProps = {
   deckRecipes: DeckRecipe[];
@@ -11,6 +22,8 @@ export type DeckRecipeSelectorProps = {
   loadingDeckRecipeId: string | null;
   generatedDeck: Deck | null;
   screenSize?: ScreenSize;
+  enableGrouping?: boolean;
+  initialOpenCategories?: string[];
 };
 
 export function DeckRecipeSelector({
@@ -21,7 +34,90 @@ export function DeckRecipeSelector({
   loadingDeckRecipeId,
   generatedDeck,
   screenSize,
+  enableGrouping = true,
+  initialOpenCategories,
 }: DeckRecipeSelectorProps) {
+  const groupedRecipes = enableGrouping
+    ? deckRecipes.reduce(
+        (acc, recipe) => {
+          const tags = recipe.tags.length > 0 ? recipe.tags : ['未分類'];
+          tags.forEach((tag) => {
+            if (!acc[tag]) {
+              acc[tag] = [];
+            }
+            acc[tag].push(recipe);
+          });
+          return acc;
+        },
+        {} as Record<string, DeckRecipe[]>,
+      )
+    : null;
+
+  const [openCategories, setOpenCategories] = useState<Record<string, boolean>>(
+    groupedRecipes
+      ? Object.keys(groupedRecipes).reduce(
+          (acc, key) => {
+            if (initialOpenCategories) {
+              acc[key] = initialOpenCategories.includes(key);
+            } else {
+              acc[key] = false;
+            }
+            return acc;
+          },
+          {} as Record<string, boolean>,
+        )
+      : {},
+  );
+
+  const toggleCategory = (category: string) => {
+    setOpenCategories((prev) => ({
+      ...prev,
+      [category]: !prev[category],
+    }));
+  };
+
+  const renderRecipeCards = (recipes: DeckRecipe[]) => (
+    <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
+      {recipes.map((recipe) => (
+        <DeckRecipeCard
+          key={recipe.id}
+          recipe={recipe}
+          onSelect={onSelectDeckRecipe}
+          isSelected={selectedDeckRecipe?.id === recipe.id}
+          isLoading={isDeckLoading}
+          isLoadingThisRecipe={loadingDeckRecipeId === recipe.id}
+          screenSize={screenSize}
+        />
+      ))}
+    </div>
+  );
+
+  let triggerPadding: string;
+  let titleSize: string;
+  let iconSize: string;
+
+  switch (screenSize) {
+    case 'smartphone':
+      triggerPadding = 'p-3';
+      titleSize = 'text-base';
+      iconSize = 'h-4 w-4';
+      break;
+    case 'tablet':
+      triggerPadding = 'p-4';
+      titleSize = 'text-lg';
+      iconSize = 'h-5 w-5';
+      break;
+    case 'pc':
+      triggerPadding = 'p-5';
+      titleSize = 'text-xl';
+      iconSize = 'h-6 w-6';
+      break;
+    default:
+      triggerPadding = 'p-4';
+      titleSize = 'text-lg';
+      iconSize = 'h-5 w-5';
+  }
+
   return (
     <>
       {generatedDeck && (
@@ -31,19 +127,33 @@ export function DeckRecipeSelector({
           showDetails={import.meta.env.VITE_DEBUG_MODE === 'true'}
         />
       )}
-      <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
-        {deckRecipes.map((recipe) => (
-          <DeckRecipeCard
-            key={recipe.id}
-            recipe={recipe}
-            onSelect={onSelectDeckRecipe}
-            isSelected={selectedDeckRecipe?.id === recipe.id}
-            isLoading={isDeckLoading}
-            isLoadingThisRecipe={loadingDeckRecipeId === recipe.id}
-            screenSize={screenSize}
-          />
-        ))}
-      </div>
+      {enableGrouping && groupedRecipes ? (
+        <div className="space-y-4">
+          {Object.entries(groupedRecipes).map(([category, recipes]) => (
+            <Collapsible
+              key={category}
+              open={openCategories[category]}
+              onOpenChange={() => toggleCategory(category)}
+            >
+              <CollapsibleTrigger
+                className={`from-primary/10 to-primary/5 hover:from-primary/20 hover:to-primary/10 flex w-full items-center justify-between rounded-lg bg-linear-to-r transition-all hover:shadow-md ${triggerPadding}`}
+              >
+                <h3 className={`font-bold ${titleSize}`}>{category}</h3>
+                <ChevronDown
+                  className={`transition-transform duration-200 ${iconSize} ${
+                    openCategories[category] ? 'rotate-180' : ''
+                  }`}
+                />
+              </CollapsibleTrigger>
+              <CollapsibleContent className="pt-4">
+                {renderRecipeCards(recipes)}
+              </CollapsibleContent>
+            </Collapsible>
+          ))}
+        </div>
+      ) : (
+        renderRecipeCards(deckRecipes)
+      )}
       {generatedDeck && (
         <DeckPreview
           //
