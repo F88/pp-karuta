@@ -6,6 +6,7 @@ import {
 } from '@/lib/repository/promidas-repository-manager';
 import type { ScreenSize } from '@/types/screen-size';
 import { TokenManagerPresentation } from './token-manager-presentation';
+import { logger } from '@/lib/logger';
 
 interface TokenManagerContainerProps {
   screenSize: ScreenSize;
@@ -52,11 +53,11 @@ export function TokenManagerContainer({
     try {
       await promidasRepositoryManager.getRepository();
       const status = promidasRepositoryManager.getState();
-      console.log('[TokenManager] Repository state after validation:', status);
+      logger.info('[TokenManager] Repository state after validation:', status);
       setRepoState(status);
     } catch (err) {
       const message = err instanceof Error ? err.message : String(err);
-      console.error('[TokenManager] Validation failed:', message);
+      logger.error('[TokenManager] Validation failed:', message);
       setRepoState({ type: 'token-invalid', error: message });
     } finally {
       setIsValidating(false);

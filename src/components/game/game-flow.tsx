@@ -14,6 +14,7 @@ import type { PlayMode } from '@/lib/karuta';
 import { useGameSetup } from '@/hooks/use-game-setup';
 import { useRepositoryState } from '@/hooks/use-repository-state';
 import { useScreenSizeContext } from '@/hooks/use-screen-size-context';
+import { logger } from '@/lib/logger';
 
 export function GameFlow() {
   const navigate = useNavigate();
@@ -31,7 +32,7 @@ export function GameFlow() {
   const setup = useGameSetup({
     repository,
     onGameStateCreated: (newGameState: GameState) => {
-      console.log('🎮 Game started');
+      logger.debug('🎮 Game started');
       setGameState(newGameState);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     },
@@ -41,7 +42,7 @@ export function GameFlow() {
   const resetValue = searchParams?.reset;
   useEffect(() => {
     if (resetValue) {
-      console.log('🔄 Resetting game state due to reset parameter');
+      logger.debug('🔄 Resetting game state due to reset parameter');
       // This is an intentional state reset triggered by navigation
       // eslint-disable-next-line react-hooks/set-state-in-effect
       setGameState(null);
@@ -53,7 +54,7 @@ export function GameFlow() {
 
   const handleCorrectAnswer = useCallback(
     (playerId: string, cardId: number) => {
-      console.log(
+      logger.debug(
         '🎯 handleCorrectAnswer called with playerId:',
         playerId,
         'cardId:',
@@ -102,7 +103,7 @@ export function GameFlow() {
           }
         }
 
-        console.log(
+        logger.debug(
           '🎴 Updated - SharedTatami:',
           newSharedTatami,
           'Stack:',
@@ -147,7 +148,7 @@ export function GameFlow() {
 
   const handleReplay = useCallback(async () => {
     // Replay with same settings (no selector)
-    console.log('🔄 Replaying game with same settings');
+    logger.debug('🔄 Replaying game with same settings');
     await setup.createGameState();
   }, [setup]);
 
@@ -162,7 +163,7 @@ export function GameFlow() {
   const isGameOver =
     gameState && totalMochiFuda >= gameState.readingOrder.length;
 
-  console.log('📊 Game status:', {
+  logger.debug('📊 Game status:', {
     totalMochiFuda,
     readingOrderLength: gameState?.readingOrder.length,
     isGameOver,

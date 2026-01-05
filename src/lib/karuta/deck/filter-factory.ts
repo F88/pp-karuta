@@ -8,6 +8,7 @@
 
 import type { NormalizedPrototype } from '@f88/promidas/types';
 
+import { logger } from '@/lib/logger';
 import { normalizeString } from '@/lib/string-utils';
 
 /**
@@ -40,7 +41,7 @@ export function createKeywordFilter(keywords: string[]) {
       }
 
       if (matchedKeyword) {
-        console.debug(
+        logger.debug(
           `✅ DeckRecipe filter matched: "${matchedKeyword}" in ${e.id} - ${e.prototypeNm}`,
         );
       }
@@ -71,7 +72,7 @@ export function createReleaseDateYearFilter(year: number) {
       const matched = releaseYear === year;
 
       if (matched) {
-        console.debug(
+        logger.debug(
           `✅ DeckRecipe releaseDate filter matched: ${year} in ${e.id} - ${e.prototypeNm} (${e.releaseDate})`,
         );
       }

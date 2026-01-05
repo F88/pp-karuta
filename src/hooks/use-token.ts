@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
+import { logger } from '@/lib/logger';
 import { tokenStorage } from '@/lib/token-storage';
 
 export function useToken() {
@@ -14,7 +15,7 @@ export function useToken() {
         setTokenValue(storedToken);
         setHasToken(await tokenStorage.has());
       } catch (err) {
-        console.error('[useToken] Failed to load token from storage', err);
+        logger.error('[useToken] Failed to load token from storage', err);
       } finally {
         setIsLoading(false);
       }

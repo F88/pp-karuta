@@ -1,6 +1,7 @@
 import { useKeyboardCardSelection } from '@/hooks/use-keyboard-card-selection';
 import type { PlayMode } from '@/lib/karuta';
 import { DeckManager } from '@/lib/karuta/deck/deck-manager';
+import { logger } from '@/lib/logger';
 import type { GameState } from '@/models/karuta';
 import type { ScreenSize } from '@/types/screen-size';
 import type { NormalizedPrototype } from '@f88/promidas/types';
@@ -54,19 +55,11 @@ export function TatamiViewContainer({
 
       const isCorrect = selectedCard.id === currentYomiFuda.id;
 
-      console.group(isCorrect ? '✅ Correct!' : '❌ Incorrect!');
-      console.log('Player:', playerId);
-      console.log(
-        'Selected:',
-        selectedCard.prototypeNm,
-        `(ID: ${selectedCard.id})`,
-      );
-      console.log(
-        'Answer:',
-        currentYomiFuda.prototypeNm,
-        `(ID: ${currentYomiFuda.id})`,
-      );
-      console.groupEnd();
+      logger.debug(isCorrect ? '✅ Correct!' : '❌ Incorrect!', {
+        player: playerId,
+        selected: { name: selectedCard.prototypeNm, id: selectedCard.id },
+        answer: { name: currentYomiFuda.prototypeNm, id: currentYomiFuda.id },
+      });
 
       // Set feedback state
       setPlayerFeedbackStates((prev) => ({
@@ -102,13 +95,13 @@ export function TatamiViewContainer({
 
   // Check if game is complete
   if (completedRaces >= gameState.readingOrder.length) {
-    console.log('🎉 All cards acquired! Game complete.');
+    logger.debug('🎉 All cards acquired! Game complete.');
     return <div>Loading results...</div>;
   }
 
   // Safety check
   if (!currentYomiFuda) {
-    console.error(
+    logger.error(
       'Current YomiFuda not found in deck:',
       currentYomiFudaId,
       'at index',

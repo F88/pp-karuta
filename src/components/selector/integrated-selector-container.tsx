@@ -1,3 +1,4 @@
+import { logger } from '@/lib/logger';
 import { useRepositoryState } from '@/hooks/use-repository-state';
 import { useScreenSizeContext } from '@/hooks/use-screen-size-context';
 import type { UseGameSetupReturn } from '@/hooks/use-game-setup';
@@ -23,7 +24,7 @@ export function IntegratedSelectorContainer({
   // Show repository error
   useEffect(() => {
     if (repoState.type === 'token-invalid') {
-      console.error('Repository error:', repoState.error);
+      logger.error('Repository error:', repoState.error);
     }
   }, [repoState]);
 

@@ -6,6 +6,8 @@ import type {
 import type { NormalizedPrototype } from '@f88/promidas/types';
 import type { ListPrototypesParams } from 'protopedia-api-v2-client';
 import { EventEmitter } from 'events';
+
+import { logger } from '@/lib/logger';
 import type {
   SnapshotOperationSuccess,
   SnapshotOperationFailure,
@@ -39,10 +41,10 @@ export class DummyRepository implements ProtopediaInMemoryRepository {
     const elapsedMs = endTime - startTime;
 
     this.filteredPrototypes = this.allPrototypes;
-    console.debug(
+    logger.debug(
       `[DummyRepository] Generated 10000 prototypes in ${elapsedMs.toFixed(2)}ms`,
     );
-    console.info('[DummyRepository] Initialized with 10000 dummy prototypes');
+    logger.info('[DummyRepository] Initialized with 10000 dummy prototypes');
   }
 
   getConfig(): Omit<Required<PrototypeInMemoryStoreConfig>, 'logger'> {
@@ -67,7 +69,7 @@ export class DummyRepository implements ProtopediaInMemoryRepository {
   async setupSnapshot(
     params: ListPrototypesParams,
   ): Promise<SnapshotOperationResult> {
-    console.info('[DummyRepository] setupSnapshot called with params:', params);
+    logger.info('[DummyRepository] setupSnapshot called with params:', params);
 
     this.events.emit('snapshotStarted', 'setup');
 
@@ -114,8 +116,8 @@ export class DummyRepository implements ProtopediaInMemoryRepository {
     const endTime = performance.now();
     const elapsedMs = endTime - startTime;
 
-    console.debug(`[DummyRepository] Filtering took ${elapsedMs.toFixed(2)}ms`);
-    console.info(
+    logger.debug(`[DummyRepository] Filtering took ${elapsedMs.toFixed(2)}ms`);
+    logger.info(
       `[DummyRepository] Filtered ${this.allPrototypes.length} -> ${filtered.length} -> ${paginated.length} prototypes`,
     );
 
@@ -129,7 +131,7 @@ export class DummyRepository implements ProtopediaInMemoryRepository {
   }
 
   async refreshSnapshot(): Promise<SnapshotOperationResult> {
-    console.info('[DummyRepository] refreshSnapshot called (no-op)');
+    logger.info('[DummyRepository] refreshSnapshot called (no-op)');
 
     this.events.emit('snapshotStarted', 'refresh');
 
@@ -196,7 +198,7 @@ export class DummyRepository implements ProtopediaInMemoryRepository {
   }
 
   dispose(): void {
-    console.info('[DummyRepository] dispose called (no-op)');
+    logger.info('[DummyRepository] dispose called (no-op)');
   }
 }
 

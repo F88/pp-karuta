@@ -1,4 +1,6 @@
 import { useEffect } from 'react';
+
+import { logger } from '@/lib/logger';
 import {
   Dialog,
   DialogContent,
@@ -32,7 +34,7 @@ export function RepoSetupDialog({
 
     const intervalId = setInterval(() => {
       const repoState = promidasRepositoryManager.getState();
-      console.debug('[RepoSetupDialog] Checking repo state:', repoState);
+      logger.debug('[RepoSetupDialog] Checking repo state:', repoState);
       if (repoState.type === 'created-token-valid') {
         onOpenChange(false);
       }

@@ -1,6 +1,7 @@
 import { useCallback } from 'react';
 import type { GamePlayerState, Deck } from '@/models/karuta';
 import { GameResultsPresentation } from './game-results-presentation';
+import { logger } from '@/lib/logger';
 
 export type GameResultsContainerProps = {
   deck: Deck;
@@ -16,12 +17,12 @@ export function GameResultsContainer({
   onReplay,
 }: GameResultsContainerProps) {
   const handleBackToTop = useCallback(() => {
-    console.log('🏠 Back to TOP');
+    logger.debug('🏠 Back to TOP');
     onBackToTop();
   }, [onBackToTop]);
 
   const handleReplay = useCallback(() => {
-    console.log('🔄 Replay - Regenerating stack from deck');
+    logger.debug('🔄 Replay - Regenerating stack from deck');
     onReplay();
   }, [onReplay]);
 
