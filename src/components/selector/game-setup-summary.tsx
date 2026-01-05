@@ -92,9 +92,9 @@ export function GameSetupSummary({
           </span>
           <span className={`${textSize} text-gray-900 dark:text-gray-100`}>
             {selectedPlayMode === 'keyboard'
-              ? '⌨️ Keyboard'
+              ? '⌨️ キーボード'
               : selectedPlayMode === 'touch'
-                ? '📱 Touch'
+                ? '📱 タッチ'
                 : '未選択'}
           </span>
         </div>
@@ -103,10 +103,10 @@ export function GameSetupSummary({
           <span
             className={`${textSize} font-semibold text-gray-700 dark:text-gray-300`}
           >
-            プレイヤー:
+            参加者:
           </span>
           <span className={`${textSize} text-gray-900 dark:text-gray-100`}>
-            {selectedPlayerCount > 0 ? `${selectedPlayerCount}人` : '未選択'}
+            {selectedPlayerCount > 0 ? `${selectedPlayerCount} 人` : '未選択'}
           </span>
         </div>
 
@@ -122,7 +122,7 @@ export function GameSetupSummary({
                 {selectedDeckRecipe.title}
                 {generatedDeck && (
                   <span className="ml-1 text-xs text-gray-600 dark:text-gray-400">
-                    ({generatedDeck.size.toLocaleString()}枚)
+                    ({generatedDeck.size.toLocaleString()} 組)
                   </span>
                 )}
               </>
@@ -143,7 +143,7 @@ export function GameSetupSummary({
                 {selectedStackRecipe.title}
                 {stackSize !== null && (
                   <span className="ml-1 text-xs text-gray-600 dark:text-gray-400">
-                    ({stackSize.toLocaleString()}枚)
+                    ({stackSize.toLocaleString()} 組)
                   </span>
                 )}
               </>
