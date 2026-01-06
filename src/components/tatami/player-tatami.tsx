@@ -6,6 +6,7 @@ import type { Player } from '@/models/karuta';
 import type { ScreenSize } from '@/types/screen-size';
 import type { NormalizedPrototype } from '@f88/promidas/types';
 import { getResponsiveStyles } from '@/lib/ui-utils';
+import { User } from 'lucide-react';
 import { ToriFudaCard } from './tori-fuda-card';
 
 export type PlayerTatamiProps = {
@@ -37,24 +38,60 @@ export function PlayerTatami({
 
   const styles = getResponsiveStyles(screenSize, {
     smartphone: {
-      title: 'text-sm',
-      padding: 'p-3',
+      icon: 'h-6 w-6',
+      title: 'text-base',
+      header: {
+        padding: 'px-2 pt-2 pb-0',
+      },
+      content: {
+        padding: 'p-2',
+      },
       gap: 'gap-2',
+      badge: {
+        text: 'text-base',
+      },
     },
     tablet: {
-      title: 'text-base',
-      padding: 'p-4',
-      gap: 'gap-3',
+      icon: 'h-6 w-6',
+      title: 'text-xl',
+      header: {
+        padding: 'px-3 pt-3 pb-0',
+      },
+      content: {
+        padding: 'p-4',
+      },
+      gap: 'gap-4',
+      badge: {
+        text: 'text-xl',
+      },
     },
     pc: {
-      title: 'text-lg',
-      padding: 'p-6',
-      gap: 'gap-4',
+      icon: 'h-6 w-6',
+      title: 'text-2xl',
+      header: {
+        padding: 'px-4 pt-4 pb-0',
+      },
+      content: {
+        padding: 'p-6',
+      },
+      gap: 'gap-6',
+      badge: {
+        text: 'text-2xl',
+      },
     },
     responsive: {
+      icon: 'h-4 w-4 md:h-5 md:w-5 lg:h-6 lg:w-6',
       title: 'text-sm md:text-base lg:text-lg',
-      padding: 'p-3 md:p-4 lg:p-6',
+      header: {
+        padding: 'p-2 md:p-3 lg:p-4',
+      },
+      content: {
+        padding: 'p-2 md:p-4 lg:p-6',
+      },
       gap: 'gap-2 md:gap-3 lg:gap-4',
+      badge: {
+        text: 'text-xs md:text-sm lg:text-base',
+      },
     },
   });
 
@@ -91,25 +128,34 @@ export function PlayerTatami({
     <Card
       className={`border-2 ${borderClass} ${shadowClass} ${animationClass} transition-all duration-300`}
     >
-      <CardHeader className={styles.padding}>
-        <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+      <CardHeader className={`${styles.header.padding}`}>
+        <div className="flex flex-row justify-between gap-2">
+          {/* Player's Name */}
           <h3
-            className={`flex items-center gap-2 font-bold text-indigo-700 ${styles.title}`}
+            className={`text-foreground flex min-w-0 flex-1 items-center gap-2 font-bold ${styles.title}`}
           >
-            <span>👤</span>
-            {player.name}
+            <User className={`shrink-0 ${styles.icon}`} />
+            <span className="min-w-0 truncate">{player.name}</span>
           </h3>
-          <div className="flex gap-2">
-            <Badge variant="outline" className="bg-yellow-100 text-yellow-700">
+
+          {/* Score and MochiFuda Count */}
+          <div className="flex flex-nowrap gap-2">
+            <Badge
+              variant="outline"
+              className={`shrink-0 bg-yellow-100 text-yellow-700 ${styles.badge.text}`}
+            >
               {score.toLocaleString()} pts
             </Badge>
-            <Badge variant="outline" className="bg-pink-100 text-pink-700">
+            <Badge
+              variant="outline"
+              className={`shrink-0 bg-green-100 text-green-700 ${styles.badge.text}`}
+            >
               {mochiFudaCount.toLocaleString()} 枚
             </Badge>
           </div>
         </div>
       </CardHeader>
-      <CardContent className={styles.padding}>
+      <CardContent className={styles.content.padding}>
         {/* <ScrollArea className="h-[60vh]"> */}
         <div className={`grid ${styles.gap} ${gridColsClass}`}>
           {tatamiCards.map((card, index) => (

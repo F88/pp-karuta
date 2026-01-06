@@ -118,13 +118,13 @@ export function GameHeader({
       text: 'text-sm',
       gap: 'gap-2',
       raceInfo: 'text-xl',
-      margin: 'm-3',
+      margin: 'm-0',
     },
     pc: {
       text: 'text-base',
       gap: 'gap-4',
       raceInfo: 'text-2xl',
-      margin: 'm-4',
+      margin: 'm-0',
     },
     responsive: {
       text: 'text-xs md:text-sm lg:text-base',

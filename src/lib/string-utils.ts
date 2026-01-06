@@ -172,3 +172,30 @@ export function normalizeString(str: string): string {
     convertFullWidthAlphanumericToHalfWidth(str),
   ).toLowerCase();
 }
+
+/**
+ * Truncate a string to a specified maximum length and append ellipsis if truncated
+ *
+ * @param str - String to truncate
+ * @param maxLength - Maximum length before truncation
+ * @param ellipsis - String to append when truncated (defaults to '...')
+ * @returns Truncated string with ellipsis if needed, or original string if within limit
+ *
+ * @example
+ * ```typescript
+ * truncateString('Hello World', 5); // returns 'Hello...'
+ * truncateString('Short', 10); // returns 'Short'
+ * truncateString('プレイヤー名前', 6); // returns 'プレイヤー名前...'
+ * truncateString('Test', 5, '…'); // returns 'Test'
+ * ```
+ */
+export function truncateString(
+  str: string,
+  maxLength: number,
+  ellipsis: string = '...',
+): string {
+  if (str.length <= maxLength) {
+    return str;
+  }
+  return str.slice(0, maxLength) + ellipsis;
+}

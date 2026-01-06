@@ -1,9 +1,9 @@
 import type { PlayMode } from '@/lib/karuta';
 import { DeckManager } from '@/lib/karuta/deck/deck-manager';
+import { getResponsiveStyles } from '@/lib/ui-utils';
 import type { Deck, GamePlayerState } from '@/models/karuta';
 import type { ScreenSize } from '@/types/screen-size';
 import type { NormalizedPrototype } from '@f88/promidas/types';
-import { getResponsiveStyles } from '@/lib/ui-utils';
 import { GameHeader } from './game-header';
 import { PlayerTatami } from './player-tatami';
 import { SharedTatami } from './shared-tatami';
@@ -52,74 +52,42 @@ export function TatamiViewPresentation({
     smartphone: {
       containerPadding: 'p-3',
       sectionSpacing: 'my-4 space-y-3',
-      playerGridGap: 'gap-2',
+      playerGridGap: 'gap-3',
     },
     tablet: {
       containerPadding: 'p-4',
       sectionSpacing: 'my-6 space-y-4',
-      playerGridGap: 'gap-3',
+      playerGridGap: 'gap-4',
     },
     pc: {
       containerPadding: 'p-6',
       sectionSpacing: 'my-8 space-y-6',
-      playerGridGap: 'gap-4',
+      playerGridGap: 'gap-6',
     },
     responsive: {
       containerPadding: 'p-3 md:p-4 lg:p-6',
       sectionSpacing:
         'my-4 md:my-6 lg:my-8 space-y-3 md:space-y-4 lg:space-y-6',
-      playerGridGap: 'gap-2 md:gap-3 lg:gap-4',
+      playerGridGap: 'gap-3 md:gap-4 lg:gap-6',
     },
   });
 
   const getPlayerGridCols = () => {
-    // Keyboard mode: grid layout based on player count
+    // Keyboard mode: always match player count
     if (playMode === 'keyboard') {
-      const smartphoneGridMap: Record<number, string> = {
-        1: 'grid-cols-1',
-        2: 'grid-cols-2',
-      };
-
-      const tabletGridMap: Record<number, string> = {
-        1: 'grid-cols-1',
-        2: 'grid-cols-2',
-        3: 'grid-cols-3',
-      };
-
-      const pcGridMap: Record<number, string> = {
-        1: 'grid-cols-1',
-        2: 'grid-cols-2',
-        3: 'grid-cols-3',
-        4: 'grid-cols-4',
-      };
-
-      const responsiveGridMap: Record<number, string> = {
-        1: 'grid-cols-1',
-        2: 'grid-cols-2 lg:grid-cols-2',
-        3: 'grid-cols-2 md:grid-cols-3',
-        4: 'grid-cols-2 md:grid-cols-3 lg:grid-cols-4',
-      };
-
-      const gridClasses = {
-        smartphone:
-          smartphoneGridMap[Math.min(playerCount, 2)] || 'grid-cols-2',
-        tablet: tabletGridMap[Math.min(playerCount, 3)] || 'grid-cols-3',
-        pc: pcGridMap[Math.min(playerCount, 4)] || 'grid-cols-4',
-        responsive:
-          responsiveGridMap[Math.min(playerCount, 4)] ||
-          'grid-cols-2 md:grid-cols-3 lg:grid-cols-4',
-      };
-      return getResponsiveStyles(screenSize, gridClasses);
+      if (playerCount === 1) return 'grid-cols-1';
+      if (playerCount === 2) return 'grid-cols-2';
+      if (playerCount === 3) return 'grid-cols-3';
+      if (playerCount === 4) return 'grid-cols-4';
+      return 'grid-cols-4'; // 5+ players: max 4 columns
     }
 
-    // Touch mode: simple layout (1 player = 1 column, 2+ players = 2 columns)
-    const gridClasses = {
-      smartphone: playerCount <= 1 ? 'grid-cols-1' : 'grid-cols-2',
-      tablet: playerCount <= 1 ? 'grid-cols-1' : 'grid-cols-2',
-      pc: playerCount <= 1 ? 'grid-cols-1' : 'grid-cols-2',
-      responsive: playerCount <= 1 ? 'grid-cols-1' : 'grid-cols-2',
-    };
-    return getResponsiveStyles(screenSize, gridClasses);
+    // Touch mode: simple layout
+    // 1 player: 1 column, 2+ players: 2 columns
+    if (playerCount <= 1) {
+      return 'grid-cols-1';
+    }
+    return 'grid-cols-2';
   };
 
   return (
@@ -137,7 +105,7 @@ export function TatamiViewPresentation({
           screenSize={screenSize}
         />
 
-        {/* Top section: Shared Tatami + YomiFuda (natural height) */}
+        {/*  Shared Tatami */}
         <div className={`shrink-0 ${styles.sectionSpacing}`}>
           {playMode !== 'touch' && (
             <SharedTatami
@@ -146,6 +114,10 @@ export function TatamiViewPresentation({
               screenSize={screenSize}
             />
           )}
+        </div>
+
+        {/* YomiFuda */}
+        <div className={`shrink-0 ${styles.sectionSpacing}`}>
           {/* <YomiFudaCard normalizedPrototype={yomiFuda} /> */}
           {/* <YomiFudaMarquee normalizedPrototype={yomiFuda} /> */}
           <Yomite

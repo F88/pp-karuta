@@ -17,15 +17,23 @@ export function SharedTatami({
   const styles = getResponsiveStyles(screenSize, {
     smartphone: {
       title: 'text-base',
+      padding: 'p-2',
+      border: 'border-x-0 border-y-6',
     },
     tablet: {
       title: 'text-lg',
+      padding: 'p-3',
+      border: 'border-x-0 border-y-10',
     },
     pc: {
       title: 'text-xl',
+      padding: 'p-4',
+      border: 'border-x-0 border-y-14',
     },
     responsive: {
       title: 'text-base md:text-lg lg:text-xl',
+      padding: 'p-2 md:p-3 lg:p-4',
+      border: 'border-x-0 border-y-12 md:border-y-4',
     },
   });
 
@@ -33,12 +41,14 @@ export function SharedTatami({
   const gridColsClass = 'grid-cols-4';
 
   return (
-    <div className="mb-6">
-      <h2
-        className={`mb-4 text-center font-bold text-gray-700 dark:text-gray-300 ${styles.title}`}
+    <div
+      className={`${styles.border} border-green-500 shadow-lg ${styles.padding}`}
+    >
+      {/* <h2
+        className={`text-foreground mb-4 text-center font-bold ${styles.title}`}
       >
         🎴 Shared Tatami (Reference Only)
-      </h2>
+      </h2> */}
       <div className={`grid gap-4 ${gridColsClass}`}>
         {tatamiCards.map((card, index) => (
           <ToriFudaCardTouch
