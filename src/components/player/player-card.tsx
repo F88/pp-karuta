@@ -14,12 +14,8 @@ export function PlayerCard({ player, className }: PlayerCardProps) {
           👤
         </div>
         <div className="flex-1">
-          <h3 className="font-semibold text-gray-900 dark:text-gray-100">
-            {player.name}
-          </h3>
-          <p className="text-xs text-gray-500 dark:text-gray-400">
-            ID: {player.id}
-          </p>
+          <h3 className="text-foreground font-semibold">{player.name}</h3>
+          <p className="text-muted-foreground text-xs">ID: {player.id}</p>
         </div>
       </CardContent>
     </Card>

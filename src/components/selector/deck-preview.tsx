@@ -24,10 +24,10 @@ export function DeckPreview({ deck, showDetails = false }: DeckPreviewProps) {
                 variant="outline"
                 className="bg-white text-xs dark:bg-gray-900"
               >
-                <span className="font-mono text-gray-500 dark:text-gray-400">
+                <span className="text-muted-foreground font-mono">
                   {prototype.id}
                 </span>
-                <span className="ml-1 text-gray-700 dark:text-gray-300">
+                <span className="text-foreground ml-1">
                   {prototype.prototypeNm}
                 </span>
               </Badge>
@@ -35,7 +35,7 @@ export function DeckPreview({ deck, showDetails = false }: DeckPreviewProps) {
           </div>
         )}
         {showDetails && deck.size > 30 && (
-          <div className="mt-2 text-xs text-gray-600 dark:text-gray-400">
+          <div className="text-muted-foreground mt-2 text-xs">
             他 {(deck.size - 30).toLocaleString()} 件
           </div>
         )}

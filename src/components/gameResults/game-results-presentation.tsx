@@ -225,9 +225,7 @@ export function GameResultsPresentation({
         {/* Player Rankings */}
         <Card className={styles.card.margin}>
           <CardHeader>
-            <h2
-              className={`font-bold text-gray-800 dark:text-gray-100 ${styles.title.size}`}
-            >
+            <h2 className={`text-foreground font-bold ${styles.title.size}`}>
               🏆 Player Rankings
             </h2>
           </CardHeader>
@@ -246,12 +244,12 @@ export function GameResultsPresentation({
                     </div>
                     <div>
                       <h3
-                        className={`font-bold text-gray-800 dark:text-gray-100 ${styles.ranking.name}`}
+                        className={`text-foreground font-bold ${styles.ranking.name}`}
                       >
                         {ps.player.name}
                       </h3>
                       <p
-                        className={`text-gray-600 dark:text-gray-400 ${styles.ranking.info}`}
+                        className={`text-muted-foreground ${styles.ranking.info}`}
                       >
                         {ps.mochiFuda.length} cards acquired
                       </p>
@@ -297,7 +295,7 @@ export function GameResultsPresentation({
                     {playerRanks[index]}
                   </div>
                   <h2
-                    className={`font-bold text-gray-800 dark:text-gray-100 ${styles.playerCard.title}`}
+                    className={`text-foreground font-bold ${styles.playerCard.title}`}
                   >
                     {ps.player.name} (
                     {playerMochiFudaCards.length.toLocaleString()} 枚)
@@ -306,9 +304,7 @@ export function GameResultsPresentation({
               </CardHeader>
               <CardContent>
                 {playerMochiFudaCards.length === 0 ? (
-                  <p className="text-center text-gray-500 dark:text-gray-400">
-                    NO FUDA
-                  </p>
+                  <p className="text-muted-foreground text-center">NO FUDA</p>
                 ) : (
                   <div className={`grid gap-4 ${styles.grid}`}>
                     {playerMochiFudaCards.map((card) => (

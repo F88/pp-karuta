@@ -78,7 +78,7 @@ export function PlayersSelector({
         />
       </div>
       {selectedPlayerIds.length >= GameManager.MAX_GAME_PLAYERS && (
-        <p className="text-center text-sm text-gray-500 dark:text-gray-400">
+        <p className="text-muted-foreground text-center text-sm">
           ゲームに参加できるのは最大{GameManager.MAX_GAME_PLAYERS}人までです
         </p>
       )}
