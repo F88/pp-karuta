@@ -73,38 +73,46 @@ export function TatamiViewPresentation({
   });
 
   const getPlayerGridCols = () => {
-    // Keyboard mode: always match player count
+    // Keyboard mode: grid layout based on player count
     if (playMode === 'keyboard') {
+      const smartphoneGridMap: Record<number, string> = {
+        1: 'grid-cols-1',
+        2: 'grid-cols-2',
+      };
+
+      const tabletGridMap: Record<number, string> = {
+        1: 'grid-cols-1',
+        2: 'grid-cols-2',
+        3: 'grid-cols-3',
+      };
+
+      const pcGridMap: Record<number, string> = {
+        1: 'grid-cols-1',
+        2: 'grid-cols-2',
+        3: 'grid-cols-3',
+        4: 'grid-cols-4',
+      };
+
+      const responsiveGridMap: Record<number, string> = {
+        1: 'grid-cols-1',
+        2: 'grid-cols-2 lg:grid-cols-2',
+        3: 'grid-cols-2 md:grid-cols-3',
+        4: 'grid-cols-2 md:grid-cols-3 lg:grid-cols-4',
+      };
+
       const gridClasses = {
-        smartphone: playerCount === 1 ? 'grid-cols-1' : 'grid-cols-2',
-        tablet:
-          Math.min(playerCount, 3) === 1
-            ? 'grid-cols-1'
-            : Math.min(playerCount, 3) === 2
-              ? 'grid-cols-2'
-              : 'grid-cols-3',
-        pc:
-          Math.min(playerCount, 4) === 1
-            ? 'grid-cols-1'
-            : Math.min(playerCount, 4) === 2
-              ? 'grid-cols-2'
-              : Math.min(playerCount, 4) === 3
-                ? 'grid-cols-3'
-                : 'grid-cols-4',
+        smartphone:
+          smartphoneGridMap[Math.min(playerCount, 2)] || 'grid-cols-2',
+        tablet: tabletGridMap[Math.min(playerCount, 3)] || 'grid-cols-3',
+        pc: pcGridMap[Math.min(playerCount, 4)] || 'grid-cols-4',
         responsive:
-          playerCount === 1
-            ? 'grid-cols-1'
-            : playerCount === 2
-              ? 'grid-cols-2 lg:grid-cols-2'
-              : playerCount === 3
-                ? 'grid-cols-2 md:grid-cols-3'
-                : 'grid-cols-2 md:grid-cols-3 lg:grid-cols-4',
+          responsiveGridMap[Math.min(playerCount, 4)] ||
+          'grid-cols-2 md:grid-cols-3 lg:grid-cols-4',
       };
       return getResponsiveStyles(screenSize, gridClasses);
     }
 
-    // Touch mode: simple layout
-    // 1 player: 1 column, 2+ players: 2 columns
+    // Touch mode: simple layout (1 player = 1 column, 2+ players = 2 columns)
     const gridClasses = {
       smartphone: playerCount <= 1 ? 'grid-cols-1' : 'grid-cols-2',
       tablet: playerCount <= 1 ? 'grid-cols-1' : 'grid-cols-2',

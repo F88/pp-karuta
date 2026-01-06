@@ -2,6 +2,92 @@ import { Badge } from '@/components/ui/badge';
 import type { ScreenSize } from '@/types/screen-size';
 import { getResponsiveStyles } from '@/lib/ui-utils';
 
+type StatisticItemProps = {
+  label: string;
+  value: string | number;
+  labelColor: string;
+  badgeColor: string;
+  screenSize?: ScreenSize;
+};
+
+function StatisticItem({
+  label,
+  value,
+  labelColor,
+  badgeColor,
+  screenSize,
+}: StatisticItemProps) {
+  return (
+    <>
+      {(!screenSize || screenSize !== 'smartphone') && (
+        <span className="text-muted-foreground">•</span>
+      )}
+      <span className="flex items-center gap-1 sm:gap-2">
+        <span className={`font-semibold ${labelColor}`}>{label}:</span>
+        <Badge variant="outline" className={badgeColor}>
+          {value}
+        </Badge>
+      </span>
+    </>
+  );
+}
+
+type StatisticsInfoProps = {
+  score: number;
+  mochiFudaCount: number;
+  stackCount: number;
+  tatamiCount: number;
+  screenSize?: ScreenSize;
+  styles: {
+    gap: string;
+    text: string;
+  };
+};
+
+function StatisticsInfo({
+  score,
+  mochiFudaCount,
+  stackCount,
+  tatamiCount,
+  screenSize,
+  styles,
+}: StatisticsInfoProps) {
+  return (
+    <div
+      className={`flex flex-wrap items-center justify-center ${styles.gap} ${styles.text}`}
+    >
+      <StatisticItem
+        label="Score"
+        value={`${score} pts`}
+        labelColor="text-yellow-600 dark:text-yellow-400"
+        badgeColor="bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-200"
+        screenSize={screenSize}
+      />
+      <StatisticItem
+        label="MochiFuda"
+        value={`${mochiFudaCount} cards`}
+        labelColor="text-pink-600 dark:text-pink-400"
+        badgeColor="bg-pink-100 text-pink-700 dark:bg-pink-900 dark:text-pink-200"
+        screenSize={screenSize}
+      />
+      <StatisticItem
+        label="Stack"
+        value={`${stackCount} remaining`}
+        labelColor="text-indigo-600 dark:text-indigo-400"
+        badgeColor="bg-indigo-100 text-indigo-700 dark:bg-indigo-900 dark:text-indigo-200"
+        screenSize={screenSize}
+      />
+      <StatisticItem
+        label="Tatami"
+        value={`${tatamiCount} cards`}
+        labelColor="text-green-600 dark:text-green-400"
+        badgeColor="bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-200"
+        screenSize={screenSize}
+      />
+    </div>
+  );
+}
+
 export type GameHeaderProps = {
   currentRace: number;
   totalRaces: number;
@@ -26,7 +112,7 @@ export function GameHeader({
       text: 'text-xs',
       gap: 'gap-1',
       raceInfo: 'text-lg',
-      margin: 'm-2',
+      margin: 'm-0',
     },
     tablet: {
       text: 'text-sm',
@@ -51,78 +137,21 @@ export function GameHeader({
   return (
     <div className={`text-center ${styles.margin}`}>
       {/* Race info  */}
-      <div
-        className={`font-bold text-gray-800 dark:text-gray-100 ${styles.raceInfo}`}
-      >
+      <div className={`text-foreground font-bold ${styles.raceInfo}`}>
         <span>
           {currentRace} / {totalRaces}
         </span>
       </div>
 
       {import.meta.env.VITE_DEBUG_MODE === 'true' && (
-        // Statistics info
-        <>
-          <div
-            className={`flex flex-wrap items-center justify-center ${styles.gap} ${styles.text}`}
-          >
-            {(!screenSize || screenSize !== 'smartphone') && (
-              <span className="text-gray-400 dark:text-gray-600">•</span>
-            )}
-            <span className="flex items-center gap-1 sm:gap-2">
-              <span className="font-semibold text-yellow-600 dark:text-yellow-400">
-                Score:
-              </span>
-              <Badge
-                variant="outline"
-                className="bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-200"
-              >
-                {score} pts
-              </Badge>
-            </span>
-            {(!screenSize || screenSize !== 'smartphone') && (
-              <span className="text-gray-400 dark:text-gray-600">•</span>
-            )}
-            <span className="flex items-center gap-1 sm:gap-2">
-              <span className="font-semibold text-pink-600 dark:text-pink-400">
-                MochiFuda:
-              </span>
-              <Badge
-                variant="outline"
-                className="bg-pink-100 text-pink-700 dark:bg-pink-900 dark:text-pink-200"
-              >
-                {mochiFudaCount} cards
-              </Badge>
-            </span>
-            {(!screenSize || screenSize !== 'smartphone') && (
-              <span className="text-gray-400 dark:text-gray-600">•</span>
-            )}
-            <span className="flex items-center gap-1 sm:gap-2">
-              <span className="font-semibold text-indigo-600 dark:text-indigo-400">
-                Stack:
-              </span>
-              <Badge
-                variant="outline"
-                className="bg-indigo-100 text-indigo-700 dark:bg-indigo-900 dark:text-indigo-200"
-              >
-                {stackCount} remaining
-              </Badge>
-            </span>
-            {(!screenSize || screenSize !== 'smartphone') && (
-              <span className="text-gray-400 dark:text-gray-600">•</span>
-            )}
-            <span className="flex items-center gap-1 sm:gap-2">
-              <span className="font-semibold text-green-600 dark:text-green-400">
-                Tatami:
-              </span>
-              <Badge
-                variant="outline"
-                className="bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-200"
-              >
-                {tatamiCount} cards
-              </Badge>
-            </span>
-          </div>
-        </>
+        <StatisticsInfo
+          score={score}
+          mochiFudaCount={mochiFudaCount}
+          stackCount={stackCount}
+          tatamiCount={tatamiCount}
+          screenSize={screenSize}
+          styles={styles}
+        />
       )}
     </div>
   );
