@@ -13,10 +13,6 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from '@/components/ui/collapsible';
-import {
-  useResponsiveGridColumns,
-  useResponsiveGap,
-} from '@/hooks/use-responsive-styles';
 import { getResponsiveStyles } from '@/lib/ui-utils';
 
 export type DeckRecipeSelectorProps = {
@@ -80,20 +76,10 @@ export function DeckRecipeSelector({
     }));
   };
 
-  const gridCols = useResponsiveGridColumns(screenSize, {
-    smartphone: 3,
-    tablet: 4,
-    pc: 6,
-  });
-
-  const gridGap = useResponsiveGap(screenSize, {
-    // smartphone: 2,
-    // tablet: 4,
-    // pc: 4,
-  });
-
-  const sizeStyles = getResponsiveStyles(screenSize, {
+  const styles = getResponsiveStyles(screenSize, {
     smartphone: {
+      gridCols: 'grid-cols-3',
+      gap: 'gap-2',
       trigger: {
         padding: 'px-2 py-1',
       },
@@ -107,6 +93,8 @@ export function DeckRecipeSelector({
       contentPadding: 'pt-1',
     },
     tablet: {
+      gridCols: 'grid-cols-4',
+      gap: 'gap-3',
       trigger: {
         padding: 'px-3 py-2',
       },
@@ -120,6 +108,8 @@ export function DeckRecipeSelector({
       contentPadding: 'pt-2',
     },
     pc: {
+      gridCols: 'grid-cols-6',
+      gap: 'gap-4',
       trigger: {
         padding: 'px-4 py-2',
       },
@@ -133,6 +123,8 @@ export function DeckRecipeSelector({
       contentPadding: 'py-4',
     },
     responsive: {
+      gridCols: 'grid-cols-3 md:grid-cols-4 lg:grid-cols-6',
+      gap: 'gap-2 md:gap-3 lg:gap-4',
       trigger: {
         padding: 'px-4 py-2.5',
       },
@@ -148,7 +140,7 @@ export function DeckRecipeSelector({
   });
 
   const renderRecipeCards = (recipes: DeckRecipe[]) => (
-    <div className={`grid ${gridGap} ${gridCols}`}>
+    <div className={`grid ${styles.gap} ${styles.gridCols}`}>
       {recipes.map((recipe) => (
         <DeckRecipeCard
           key={recipe.id}
@@ -173,7 +165,7 @@ export function DeckRecipeSelector({
         />
       )}
       {enableGrouping && groupedRecipes ? (
-        <div className={sizeStyles.spacing}>
+        <div className={styles.spacing}>
           {Object.entries(groupedRecipes).map(([category, recipes]) => (
             <Collapsible
               key={category}
@@ -181,18 +173,18 @@ export function DeckRecipeSelector({
               onOpenChange={() => toggleCategory(category)}
             >
               <CollapsibleTrigger
-                className={`border-border bg-background/50 hover:bg-accent hover:border-accent-foreground/20 flex w-full items-center justify-between rounded-md border transition-all ${sizeStyles.trigger.padding}`}
+                className={`border-border bg-background/50 hover:bg-accent hover:border-accent-foreground/20 flex w-full items-center justify-between rounded-md border transition-all ${styles.trigger.padding}`}
               >
-                <h3 className={`font-semibold ${sizeStyles.title.size}`}>
+                <h3 className={`font-semibold ${styles.title.size}`}>
                   {category}
                 </h3>
                 <ChevronDown
-                  className={`text-muted-foreground transition-transform duration-200 ${sizeStyles.icon.size} ${
+                  className={`text-muted-foreground transition-transform duration-200 ${styles.icon.size} ${
                     openCategories[category] ? 'rotate-180' : ''
                   }`}
                 />
               </CollapsibleTrigger>
-              <CollapsibleContent className={sizeStyles.contentPadding}>
+              <CollapsibleContent className={styles.contentPadding}>
                 {renderRecipeCards(recipes)}
               </CollapsibleContent>
             </Collapsible>

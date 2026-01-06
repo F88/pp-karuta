@@ -2,10 +2,7 @@ import type { Player } from '@/models/karuta';
 import type { ScreenSize } from '@/types/screen-size';
 import { GameManager } from '@/lib/karuta';
 import { SelectableCard } from '@/components/selector/selectable-card';
-import {
-  useResponsiveGridColumns,
-  useResponsiveGap,
-} from '@/hooks/use-responsive-styles';
+import { getResponsiveStyles } from '@/lib/ui-utils';
 import { User, UserPlus } from 'lucide-react';
 
 export type PlayersSelectorProps = {
@@ -25,20 +22,28 @@ export function PlayersSelector({
   isLoading,
   screenSize,
 }: PlayersSelectorProps) {
-  const gridCols = useResponsiveGridColumns(screenSize, {
-    smartphone: 2,
-    tablet: 3,
-    pc: 4,
-  });
-  const gridGap = useResponsiveGap(screenSize, {
-    // smartphone: 2,
-    // tablet: 3,
-    // pc: 4,
+  const styles = getResponsiveStyles(screenSize, {
+    smartphone: {
+      gridCols: 'grid-cols-2',
+      gap: 'gap-2',
+    },
+    tablet: {
+      gridCols: 'grid-cols-3',
+      gap: 'gap-3',
+    },
+    pc: {
+      gridCols: 'grid-cols-4',
+      gap: 'gap-4',
+    },
+    responsive: {
+      gridCols: 'grid-cols-2 md:grid-cols-3 lg:grid-cols-4',
+      gap: 'gap-2 md:gap-3 lg:gap-4',
+    },
   });
 
   return (
     <>
-      <div className={`grid ${gridGap} ${gridCols}`}>
+      <div className={`grid ${styles.gap} ${styles.gridCols}`}>
         {availablePlayers.map((player) => {
           const isSelected = selectedPlayerIds.includes(player.id);
           const maxPlayersReached =
