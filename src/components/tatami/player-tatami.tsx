@@ -5,6 +5,7 @@ import { getKeyForCard } from '@/lib/karuta/keyboard-bindings';
 import type { Player } from '@/models/karuta';
 import type { ScreenSize } from '@/types/screen-size';
 import type { NormalizedPrototype } from '@f88/promidas/types';
+import { getResponsiveStyles } from '@/lib/ui-utils';
 import { ToriFudaCard } from './tori-fuda-card';
 
 export type PlayerTatamiProps = {
@@ -34,40 +35,38 @@ export function PlayerTatami({
 }: PlayerTatamiProps) {
   const showImage = playMode === 'touch';
 
-  const titleSizeClass = screenSize
-    ? {
-        smartphone: 'text-sm',
-        tablet: 'text-base',
-        pc: 'text-lg',
-      }[screenSize]
-    : 'text-sm md:text-base lg:text-lg';
-
-  const paddingClass = screenSize
-    ? {
-        smartphone: 'p-2',
-        tablet: 'p-4',
-        pc: 'p-6',
-      }[screenSize]
-    : 'p-3 md:p-4 lg:p-6';
-
-  const gapClass = screenSize
-    ? {
-        smartphone: 'gap-2',
-        tablet: 'gap-3',
-        pc: 'gap-3',
-      }[screenSize]
-    : 'gap-2 md:gap-3';
+  const styles = getResponsiveStyles(screenSize, {
+    smartphone: {
+      title: 'text-sm',
+      padding: 'p-3',
+      gap: 'gap-2',
+    },
+    tablet: {
+      title: 'text-base',
+      padding: 'p-4',
+      gap: 'gap-3',
+    },
+    pc: {
+      title: 'text-lg',
+      padding: 'p-6',
+      gap: 'gap-4',
+    },
+    responsive: {
+      title: 'text-sm md:text-base lg:text-lg',
+      padding: 'p-3 md:p-4 lg:p-6',
+      gap: 'gap-2 md:gap-3 lg:gap-4',
+    },
+  });
 
   const gridColsClass =
     playMode === 'keyboard'
       ? 'grid-cols-4'
-      : screenSize
-        ? {
-            smartphone: 'grid-cols-2',
-            tablet: 'grid-cols-2',
-            pc: 'grid-cols-2',
-          }[screenSize]
-        : 'grid-cols-2 md:grid-cols-3 lg:grid-cols-4';
+      : getResponsiveStyles(screenSize, {
+          smartphone: 'grid-cols-2',
+          tablet: 'grid-cols-2',
+          pc: 'grid-cols-2',
+          responsive: 'grid-cols-2 md:grid-cols-3 lg:grid-cols-4',
+        });
 
   // Border style based on feedback state
   const borderClass = feedbackState
@@ -92,10 +91,10 @@ export function PlayerTatami({
     <Card
       className={`border-2 ${borderClass} ${shadowClass} ${animationClass} transition-all duration-300`}
     >
-      <CardHeader className={paddingClass}>
+      <CardHeader className={styles.padding}>
         <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
           <h3
-            className={`flex items-center gap-2 font-bold text-indigo-700 ${titleSizeClass}`}
+            className={`flex items-center gap-2 font-bold text-indigo-700 ${styles.title}`}
           >
             <span>👤</span>
             {player.name}
@@ -110,9 +109,9 @@ export function PlayerTatami({
           </div>
         </div>
       </CardHeader>
-      <CardContent className={paddingClass}>
+      <CardContent className={styles.padding}>
         {/* <ScrollArea className="h-[60vh]"> */}
-        <div className={`grid ${gapClass} ${gridColsClass}`}>
+        <div className={`grid ${styles.gap} ${gridColsClass}`}>
           {tatamiCards.map((card, index) => (
             <ToriFudaCard
               key={card.id}

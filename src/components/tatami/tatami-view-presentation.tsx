@@ -3,6 +3,7 @@ import { DeckManager } from '@/lib/karuta/deck/deck-manager';
 import type { Deck, GamePlayerState } from '@/models/karuta';
 import type { ScreenSize } from '@/types/screen-size';
 import type { NormalizedPrototype } from '@f88/promidas/types';
+import { getResponsiveStyles } from '@/lib/ui-utils';
 import { GameHeader } from './game-header';
 import { PlayerTatami } from './player-tatami';
 import { SharedTatami } from './shared-tatami';
@@ -47,54 +48,75 @@ export function TatamiViewPresentation({
   // Determine grid layout based on player count and screen size
   const playerCount = playerStates.length;
 
-  // Responsive padding class
-  const containerPadding = screenSize
-    ? {
-        smartphone: 'p-2',
-        tablet: 'p-4',
-        pc: 'p-6',
-      }[screenSize]
-    : 'p-2 md:p-3 lg:p-4';
-
-  // Responsive spacing between sections
-  const sectionSpacing = screenSize
-    ? {
-        smartphone: 'my-4 space-y-3',
-        tablet: 'my-6 space-y-4',
-        pc: 'my-8 space-y-6',
-      }[screenSize]
-    : 'my-4 md:my-6 lg:my-8 space-y-3 md:space-y-4 lg:space-y-6';
-
-  // Responsive gap for player grid
-  const playerGridGap = screenSize
-    ? {
-        smartphone: 'gap-2',
-        tablet: 'gap-3',
-        pc: 'gap-4',
-      }[screenSize]
-    : 'gap-2 md:gap-3 lg:gap-4';
+  const styles = getResponsiveStyles(screenSize, {
+    smartphone: {
+      containerPadding: 'p-3',
+      sectionSpacing: 'my-4 space-y-3',
+      playerGridGap: 'gap-2',
+    },
+    tablet: {
+      containerPadding: 'p-4',
+      sectionSpacing: 'my-6 space-y-4',
+      playerGridGap: 'gap-3',
+    },
+    pc: {
+      containerPadding: 'p-6',
+      sectionSpacing: 'my-8 space-y-6',
+      playerGridGap: 'gap-4',
+    },
+    responsive: {
+      containerPadding: 'p-3 md:p-4 lg:p-6',
+      sectionSpacing:
+        'my-4 md:my-6 lg:my-8 space-y-3 md:space-y-4 lg:space-y-6',
+      playerGridGap: 'gap-2 md:gap-3 lg:gap-4',
+    },
+  });
 
   const getPlayerGridCols = () => {
     // Keyboard mode: always match player count
     if (playMode === 'keyboard') {
-      if (playerCount === 1) return 'grid-cols-1';
-      if (playerCount === 2) return 'grid-cols-2';
-      if (playerCount === 3) return 'grid-cols-3';
-      if (playerCount === 4) return 'grid-cols-4';
-      return 'grid-cols-4'; // 5+ players: max 4 columns
+      const gridClasses = {
+        smartphone: playerCount === 1 ? 'grid-cols-1' : 'grid-cols-2',
+        tablet:
+          Math.min(playerCount, 3) === 1
+            ? 'grid-cols-1'
+            : Math.min(playerCount, 3) === 2
+              ? 'grid-cols-2'
+              : 'grid-cols-3',
+        pc:
+          Math.min(playerCount, 4) === 1
+            ? 'grid-cols-1'
+            : Math.min(playerCount, 4) === 2
+              ? 'grid-cols-2'
+              : Math.min(playerCount, 4) === 3
+                ? 'grid-cols-3'
+                : 'grid-cols-4',
+        responsive:
+          playerCount === 1
+            ? 'grid-cols-1'
+            : playerCount === 2
+              ? 'grid-cols-2 lg:grid-cols-2'
+              : playerCount === 3
+                ? 'grid-cols-2 md:grid-cols-3'
+                : 'grid-cols-2 md:grid-cols-3 lg:grid-cols-4',
+      };
+      return getResponsiveStyles(screenSize, gridClasses);
     }
 
     // Touch mode: simple layout
     // 1 player: 1 column, 2+ players: 2 columns
-    if (playerCount <= 1) {
-      return 'grid-cols-1';
-    }
-    return 'grid-cols-2';
+    const gridClasses = {
+      smartphone: playerCount <= 1 ? 'grid-cols-1' : 'grid-cols-2',
+      tablet: playerCount <= 1 ? 'grid-cols-1' : 'grid-cols-2',
+      pc: playerCount <= 1 ? 'grid-cols-1' : 'grid-cols-2',
+      responsive: playerCount <= 1 ? 'grid-cols-1' : 'grid-cols-2',
+    };
+    return getResponsiveStyles(screenSize, gridClasses);
   };
 
   return (
     <div
-      className={`flex h-screen flex-col bg-gradient-to-br from-green-50 to-teal-100 dark:from-gray-900 dark:to-gray-800 ${containerPadding}`}
+      className={`flex h-screen flex-col bg-linear-to-br from-green-50 to-teal-100 dark:from-gray-900 dark:to-gray-800 ${styles.containerPadding}`}
     >
       <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col overflow-hidden">
         <GameHeader
@@ -108,7 +130,7 @@ export function TatamiViewPresentation({
         />
 
         {/* Top section: Shared Tatami + YomiFuda (natural height) */}
-        <div className={`flex-shrink-0 ${sectionSpacing}`}>
+        <div className={`shrink-0 ${styles.sectionSpacing}`}>
           {playMode !== 'touch' && (
             <SharedTatami
               tatamiCards={sharedTatamiCards}
@@ -131,7 +153,9 @@ export function TatamiViewPresentation({
             🎮 Player Tatami Areas
           </h2> */}
           <div className="flex-1 overflow-y-auto">
-            <div className={`grid ${playerGridGap} ${getPlayerGridCols()}`}>
+            <div
+              className={`grid ${styles.playerGridGap} ${getPlayerGridCols()}`}
+            >
               {playerStates.map((playerState, playerIndex) => {
                 const playerTatamiCards = DeckManager.getByIds(
                   deck,

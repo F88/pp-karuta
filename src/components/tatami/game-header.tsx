@@ -1,5 +1,6 @@
 import { Badge } from '@/components/ui/badge';
 import type { ScreenSize } from '@/types/screen-size';
+import { getResponsiveStyles } from '@/lib/ui-utils';
 
 export type GameHeaderProps = {
   currentRace: number;
@@ -20,43 +21,38 @@ export function GameHeader({
   tatamiCount,
   screenSize,
 }: GameHeaderProps) {
-  const textSizeClass = screenSize
-    ? {
-        smartphone: 'text-xs',
-        tablet: 'text-sm',
-        pc: 'text-base',
-      }[screenSize]
-    : 'text-xs sm:text-sm md:text-base';
-
-  const gapClass = screenSize
-    ? {
-        smartphone: 'gap-1',
-        tablet: 'gap-2',
-        pc: 'gap-4',
-      }[screenSize]
-    : 'gap-1 sm:gap-2 md:gap-4';
-
-  const raceInfoSizeClass = screenSize
-    ? {
-        smartphone: 'text-lg',
-        tablet: 'text-xl',
-        pc: 'text-2xl',
-      }[screenSize]
-    : 'text-lg sm:text-xl md:text-2xl';
-
-  const marginClass = screenSize
-    ? {
-        smartphone: 'my-0',
-        tablet: 'my-2',
-        pc: 'my-4',
-      }[screenSize]
-    : 'my-2 sm:my-3 md:my-4';
+  const styles = getResponsiveStyles(screenSize, {
+    smartphone: {
+      text: 'text-xs',
+      gap: 'gap-1',
+      raceInfo: 'text-lg',
+      margin: 'm-2',
+    },
+    tablet: {
+      text: 'text-sm',
+      gap: 'gap-2',
+      raceInfo: 'text-xl',
+      margin: 'm-3',
+    },
+    pc: {
+      text: 'text-base',
+      gap: 'gap-4',
+      raceInfo: 'text-2xl',
+      margin: 'm-4',
+    },
+    responsive: {
+      text: 'text-xs md:text-sm lg:text-base',
+      gap: 'gap-1 sm:gap-2 md:gap-4',
+      raceInfo: 'text-lg md:text-xl lg:text-2xl',
+      margin: 'm-2 md:m-3 lg:m-4',
+    },
+  });
 
   return (
-    <div className={`text-center ${marginClass}`}>
+    <div className={`text-center ${styles.margin}`}>
       {/* Race info  */}
       <div
-        className={`font-bold text-gray-800 dark:text-gray-100 ${raceInfoSizeClass}`}
+        className={`font-bold text-gray-800 dark:text-gray-100 ${styles.raceInfo}`}
       >
         <span>
           {currentRace} / {totalRaces}
@@ -67,7 +63,7 @@ export function GameHeader({
         // Statistics info
         <>
           <div
-            className={`flex flex-wrap items-center justify-center ${gapClass} ${textSizeClass}`}
+            className={`flex flex-wrap items-center justify-center ${styles.gap} ${styles.text}`}
           >
             {(!screenSize || screenSize !== 'smartphone') && (
               <span className="text-gray-400 dark:text-gray-600">•</span>
