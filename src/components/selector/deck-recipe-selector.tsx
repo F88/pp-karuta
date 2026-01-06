@@ -92,32 +92,59 @@ export function DeckRecipeSelector({
     // pc: 4,
   });
 
-  const triggerPadding = getResponsiveStyles(screenSize, {
-    smartphone: 'px-3 py-2',
-    tablet: 'px-4 py-2.5',
-    pc: 'px-4 py-3',
-    responsive: 'px-4 py-2.5',
-  });
-
-  const titleSize = getResponsiveStyles(screenSize, {
-    smartphone: 'text-sm',
-    tablet: 'text-base',
-    pc: 'text-base',
-    responsive: 'text-base',
-  });
-
-  const iconSize = getResponsiveStyles(screenSize, {
-    smartphone: 'h-4 w-4',
-    tablet: 'h-4 w-4',
-    pc: 'h-5 w-5',
-    responsive: 'h-4 w-4',
-  });
-
-  const containerSpacing = getResponsiveStyles(screenSize, {
-    smartphone: 'space-y-2',
-    tablet: 'space-y-3',
-    pc: 'space-y-4',
-    responsive: 'space-y-3',
+  const sizeStyles = getResponsiveStyles(screenSize, {
+    smartphone: {
+      trigger: {
+        padding: 'px-2 py-1',
+      },
+      title: {
+        size: 'text-sm',
+      },
+      icon: {
+        size: 'h-4 w-4',
+      },
+      spacing: 'space-y-1',
+      contentPadding: 'pt-1',
+    },
+    tablet: {
+      trigger: {
+        padding: 'px-3 py-2',
+      },
+      title: {
+        size: 'text-sm',
+      },
+      icon: {
+        size: 'h-4 w-4',
+      },
+      spacing: 'space-y-2',
+      contentPadding: 'pt-2',
+    },
+    pc: {
+      trigger: {
+        padding: 'px-4 py-2',
+      },
+      title: {
+        size: 'text-base',
+      },
+      icon: {
+        size: 'h-6 w-6',
+      },
+      spacing: 'space-y-4',
+      contentPadding: 'py-4',
+    },
+    responsive: {
+      trigger: {
+        padding: 'px-4 py-2.5',
+      },
+      title: {
+        size: 'text-base',
+      },
+      icon: {
+        size: 'h-4 w-4',
+      },
+      spacing: 'space-y-3',
+      contentPadding: 'pt-4',
+    },
   });
 
   const renderRecipeCards = (recipes: DeckRecipe[]) => (
@@ -146,7 +173,7 @@ export function DeckRecipeSelector({
         />
       )}
       {enableGrouping && groupedRecipes ? (
-        <div className={containerSpacing}>
+        <div className={sizeStyles.spacing}>
           {Object.entries(groupedRecipes).map(([category, recipes]) => (
             <Collapsible
               key={category}
@@ -154,16 +181,18 @@ export function DeckRecipeSelector({
               onOpenChange={() => toggleCategory(category)}
             >
               <CollapsibleTrigger
-                className={`border-border bg-background/50 hover:bg-accent hover:border-accent-foreground/20 flex w-full items-center justify-between rounded-md border transition-all ${triggerPadding}`}
+                className={`border-border bg-background/50 hover:bg-accent hover:border-accent-foreground/20 flex w-full items-center justify-between rounded-md border transition-all ${sizeStyles.trigger.padding}`}
               >
-                <h3 className={`font-semibold ${titleSize}`}>{category}</h3>
+                <h3 className={`font-semibold ${sizeStyles.title.size}`}>
+                  {category}
+                </h3>
                 <ChevronDown
-                  className={`text-muted-foreground transition-transform duration-200 ${iconSize} ${
+                  className={`text-muted-foreground transition-transform duration-200 ${sizeStyles.icon.size} ${
                     openCategories[category] ? 'rotate-180' : ''
                   }`}
                 />
               </CollapsibleTrigger>
-              <CollapsibleContent className="pt-4">
+              <CollapsibleContent className={sizeStyles.contentPadding}>
                 {renderRecipeCards(recipes)}
               </CollapsibleContent>
             </Collapsible>
