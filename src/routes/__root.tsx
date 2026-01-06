@@ -9,6 +9,7 @@ import { AppHeader } from '@/components/layout/app-header';
 import { RepoSetup } from '@/components/layout/repo-setup';
 import { RepoSetupDialog } from '@/components/layout/repo-setup-dialog';
 import { ThemeProvider } from '@/components/theme-provider';
+import { UIDebugOverlay } from '@/components/ui-debug-overlay';
 import { ScreenSizeProvider } from '@/contexts/screen-size-provider';
 import { useScreenSizeContext } from '@/hooks/use-screen-size-context';
 import { PlayerManager } from '@/lib/karuta';
@@ -88,6 +89,10 @@ function RootLayout() {
         />
         <Outlet />
       </div>
+
+      {import.meta.env.VITE_UI_DEBUG === 'true' && (
+        <UIDebugOverlay screenSize={screenSize} />
+      )}
     </>
   );
 }
