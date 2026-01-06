@@ -1,5 +1,6 @@
 import { useCallback } from 'react';
 import type { GamePlayerState, Deck } from '@/models/karuta';
+import type { ScreenSize } from '@/types/screen-size';
 import { GameResultsPresentation } from './game-results-presentation';
 import { logger } from '@/lib/logger';
 
@@ -8,6 +9,7 @@ export type GameResultsContainerProps = {
   playerStates: GamePlayerState[];
   onBackToTop: () => void;
   onReplay: () => void;
+  screenSize?: ScreenSize;
 };
 
 export function GameResultsContainer({
@@ -15,6 +17,7 @@ export function GameResultsContainer({
   playerStates,
   onBackToTop,
   onReplay,
+  screenSize,
 }: GameResultsContainerProps) {
   const handleBackToTop = useCallback(() => {
     logger.debug('🏠 Back to TOP');
@@ -32,6 +35,7 @@ export function GameResultsContainer({
       deck={deck}
       onBackToTop={handleBackToTop}
       onReplay={handleReplay}
+      screenSize={screenSize}
     />
   );
 }
