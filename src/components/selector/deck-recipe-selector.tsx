@@ -13,6 +13,11 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from '@/components/ui/collapsible';
+import {
+  useResponsiveGridColumns,
+  useResponsiveGap,
+} from '@/hooks/use-responsive-styles';
+import { getResponsiveStyles } from '@/lib/ui-utils';
 
 export type DeckRecipeSelectorProps = {
   deckRecipes: DeckRecipe[];
@@ -75,56 +80,48 @@ export function DeckRecipeSelector({
     }));
   };
 
-  let triggerPadding: string;
-  let titleSize: string;
-  let iconSize: string;
-  let containerSpacing: string;
-  let grid: { cols: string; gap: string };
+  const gridCols = useResponsiveGridColumns(screenSize, {
+    smartphone: 3,
+    tablet: 4,
+    pc: 6,
+  });
 
-  switch (screenSize) {
-    case 'smartphone':
-      triggerPadding = 'px-3 py-2';
-      titleSize = 'text-sm';
-      iconSize = 'h-4 w-4';
-      containerSpacing = 'space-y-2';
-      grid = {
-        cols: 'grid-cols-2',
-        gap: 'gap-2',
-      };
-      break;
-    case 'tablet':
-      triggerPadding = 'px-4 py-2.5';
-      titleSize = 'text-base';
-      iconSize = 'h-4 w-4';
-      containerSpacing = 'space-y-3';
-      grid = {
-        cols: 'grid-cols-4',
-        gap: 'gap-4',
-      };
-      break;
-    case 'pc':
-      triggerPadding = 'px-4 py-3';
-      titleSize = 'text-base';
-      iconSize = 'h-5 w-5';
-      containerSpacing = 'space-y-4';
-      grid = {
-        cols: 'grid-cols-6',
-        gap: 'gap-4',
-      };
-      break;
-    default:
-      triggerPadding = 'px-4 py-2.5';
-      titleSize = 'text-base';
-      iconSize = 'h-4 w-4';
-      containerSpacing = 'space-y-3';
-      grid = {
-        cols: 'grid-cols-3',
-        gap: 'gap-4',
-      };
-  }
+  const gridGap = useResponsiveGap(screenSize, {
+    // smartphone: 2,
+    // tablet: 4,
+    // pc: 4,
+  });
+
+  const triggerPadding = getResponsiveStyles(screenSize, {
+    smartphone: 'px-3 py-2',
+    tablet: 'px-4 py-2.5',
+    pc: 'px-4 py-3',
+    responsive: 'px-4 py-2.5',
+  });
+
+  const titleSize = getResponsiveStyles(screenSize, {
+    smartphone: 'text-sm',
+    tablet: 'text-base',
+    pc: 'text-base',
+    responsive: 'text-base',
+  });
+
+  const iconSize = getResponsiveStyles(screenSize, {
+    smartphone: 'h-4 w-4',
+    tablet: 'h-4 w-4',
+    pc: 'h-5 w-5',
+    responsive: 'h-4 w-4',
+  });
+
+  const containerSpacing = getResponsiveStyles(screenSize, {
+    smartphone: 'space-y-2',
+    tablet: 'space-y-3',
+    pc: 'space-y-4',
+    responsive: 'space-y-3',
+  });
 
   const renderRecipeCards = (recipes: DeckRecipe[]) => (
-    <div className={`grid ${grid.gap} ${grid.cols}`}>
+    <div className={`grid ${gridGap} ${gridCols}`}>
       {recipes.map((recipe) => (
         <DeckRecipeCard
           key={recipe.id}

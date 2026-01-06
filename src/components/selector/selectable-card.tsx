@@ -1,5 +1,8 @@
 import type { ReactNode } from 'react';
 import type { ScreenSize } from '@/types/screen-size';
+import { getSelectableCardClasses, getResponsiveStyles } from '@/lib/ui-utils';
+import React from 'react';
+import { cn } from '@/lib/utils';
 
 /**
  * SelectableCard component for displaying selectable options with optional icons.
@@ -33,53 +36,48 @@ export function SelectableCard({
   alignment = 'center',
   screenSize,
 }: SelectableCardProps) {
+  const styles = getSelectableCardClasses(isSelected);
+
   // Size-specific styles
-  const sizeStyles = screenSize
-    ? {
-        smartphone: {
-          padding: 'p-2',
-          gap: 'gap-2',
-          iconSize: 'h-8 w-8',
-          textSize: 'text-sm',
-        },
-        tablet: {
-          padding: 'p-4',
-          gap: 'gap-3',
-          iconSize: 'h-12 w-12',
-          textSize: 'text-base',
-        },
-        pc: {
-          padding: 'p-4',
-          gap: 'gap-3',
-          iconSize: 'h-12 w-12',
-          textSize: 'text-xl',
-        },
-      }[screenSize]
-    : {
-        padding: 'p-2 md:p-4',
-        gap: 'gap-2 md:gap-3',
-        iconSize: 'h-8 w-8 md:h-12 md:w-12',
-        textSize: 'text-sm md:text-base lg:text-xl',
-      };
+  const sizeStyles = getResponsiveStyles(screenSize, {
+    smartphone: {
+      padding: 'p-2',
+      gap: 'gap-2',
+      iconContainerSize: 'h-6 w-6',
+      iconSize: 'h-4 w-4',
+      textSize: 'text-sm',
+    },
+    tablet: {
+      padding: 'p-2',
+      gap: 'gap-2',
+      iconContainerSize: 'h-8 w-8',
+      iconSize: 'h-5 w-5',
+      textSize: 'text-base',
+    },
+    pc: {
+      padding: 'p-2',
+      gap: 'gap-2',
+      iconContainerSize: 'h-10 w-10',
+      iconSize: 'h-6 w-6',
+      textSize: 'text-xl',
+    },
+    responsive: {
+      padding: 'p-2 md:p-4',
+      gap: 'gap-2 md:gap-3',
+      iconContainerSize: 'h-8 w-8 md:h-12 md:w-12',
+      iconSize: 'h-5 w-5 md:h-8 md:w-8',
+      textSize: 'text-sm md:text-base lg:text-xl',
+    },
+  });
 
   return (
     <div
       onClick={disabled ? undefined : onClick}
-      className={`group relative h-auto w-full overflow-hidden rounded-xl shadow-md transition-all duration-300 hover:scale-105 hover:shadow-lg active:scale-95 ${sizeStyles.padding} ${
-        disabled
-          ? 'cursor-not-allowed opacity-50'
-          : 'cursor-pointer hover:scale-105'
-      } ${
-        isSelected
-          ? 'bg-indigo-600 text-white dark:bg-indigo-500'
-          : 'bg-white dark:bg-gray-800'
-      } ${className}`}
+      className={`group relative flex h-full w-full flex-col justify-center overflow-hidden rounded-lg shadow-md ${styles.animation} ${sizeStyles.padding} ${
+        disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'
+      } ${styles.base} ${className}`}
     >
-      <div
-        className={`absolute inset-0 bg-linear-to-br from-blue-400 to-indigo-500 opacity-0 transition-opacity group-hover:opacity-10 ${
-          isSelected ? 'opacity-20' : ''
-        }`}
-      />
+      <div className={styles.gradient} />
       <div
         className={`relative flex items-center ${sizeStyles.gap} ${
           alignment === 'start' ? 'justify-start' : 'justify-center'
@@ -87,25 +85,28 @@ export function SelectableCard({
       >
         {icon && (
           <div
-            className={`flex shrink-0 items-center justify-center rounded-full ${sizeStyles.iconSize} ${
-              isSelected
-                ? 'bg-white/20 text-white'
-                : 'bg-indigo-100 dark:bg-indigo-900'
-            }`}
+            className={`flex shrink-0 items-center justify-center rounded-full ${sizeStyles.iconContainerSize} ${styles.iconBg}`}
           >
-            {icon}
+            {React.isValidElement(icon)
+              ? React.cloneElement(
+                  icon as React.ReactElement<{ className?: string }>,
+                  {
+                    className: cn(
+                      (icon as React.ReactElement<{ className?: string }>).props
+                        .className,
+                      sizeStyles.iconSize,
+                    ),
+                  },
+                )
+              : icon}
           </div>
         )}
         <div
-          className={`${alignment === 'start' ? 'w-full' : ''} ${alignment === 'start' && icon ? 'flex-1' : ''}`}
+          className={`flex items-center font-semibold ${sizeStyles.textSize} ${
+            alignment === 'start' ? 'w-full flex-1 text-left' : 'text-center'
+          } ${styles.title}`}
         >
-          <div
-            className={`${alignment === 'start' ? 'w-full' : ''} font-semibold ${sizeStyles.textSize} ${
-              alignment === 'start' ? 'text-left' : 'text-center'
-            } ${isSelected ? 'text-white' : 'text-gray-900 dark:text-gray-100'}`}
-          >
-            {label}
-          </div>
+          {label}
         </div>
       </div>
     </div>

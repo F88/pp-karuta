@@ -14,6 +14,7 @@ import { PlayersSelector } from './players-selector';
 import { SectionWrapper } from './section-wrapper';
 import { StackRecipeSelector } from './stack-recipe-selector';
 import { TatamiSizeSelector } from './tatami-size-selector';
+import { getResponsiveStyles } from '@/lib/ui-utils';
 
 export type IntegratedSelectorPresentationProps = {
   playMode: {
@@ -80,6 +81,73 @@ export function IntegratedSelectorPresentation({
   // onShowIntro,
   screenSize,
 }: IntegratedSelectorPresentationProps) {
+  const sizeStyles = getResponsiveStyles(screenSize, {
+    smartphone: {
+      padding: 'p-4',
+      titleMargin: 'mb-4',
+      title: {
+        size: 'text-2xl',
+      },
+      sectionSpacing: 'space-y-4',
+      buttonMargin: 'mt-4',
+      button: {
+        height: 'h-12',
+        padding: 'px-8',
+        text: 'text-base',
+      },
+      noteMargin: 'mt-4',
+      noteText: 'text-sm',
+    },
+    tablet: {
+      padding: 'p-4',
+      titleMargin: 'mb-4',
+      title: {
+        size: 'text-3xl',
+      },
+      sectionSpacing: 'space-y-6',
+      buttonMargin: 'mt-8',
+      button: {
+        height: 'h-14',
+        padding: 'px-10',
+        text: 'text-lg',
+      },
+      noteMargin: 'mt-4',
+      noteText: 'text-sm',
+    },
+    pc: {
+      padding: 'p-8',
+      titleMargin: 'mb-8',
+      title: {
+        size: 'text-4xl',
+      },
+      sectionSpacing: 'space-y-8',
+      buttonMargin: 'mt-8',
+      button: {
+        height: 'h-16',
+        padding: 'px-12',
+        text: 'text-xl',
+      },
+      noteMargin: 'mt-4',
+      noteText: 'text-sm',
+    },
+    responsive: {
+      padding: 'p-4',
+      titleMargin: 'mb-8',
+      title: {
+        size: 'text-2xl md:text-3xl lg:text-4xl',
+      },
+      sectionSpacing: 'space-y-6',
+      buttonMargin: 'mt-8',
+      button: {
+        height: 'h-12 md:h-14 lg:h-16',
+        padding: 'px-8 md:px-10 lg:px-12',
+        text: 'text-base md:text-lg lg:text-xl',
+      },
+      noteMargin: 'mt-4',
+      noteText: 'text-sm',
+    },
+  });
+
   // Calculate expected stack size (use actual if available)
   const stackSize = stackRecipe.generatedStack
     ? stackRecipe.generatedStack.length
@@ -90,11 +158,15 @@ export function IntegratedSelectorPresentation({
       : null;
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-indigo-50 to-purple-50 p-4 dark:from-gray-900 dark:to-gray-800">
+    <div
+      className={`min-h-screen bg-linear-to-br from-indigo-50 to-purple-50 dark:from-gray-900 dark:to-gray-800 ${sizeStyles.padding}`}
+    >
       <div className="mx-auto max-w-7xl">
         {/* Header */}
-        <div className="mb-8 text-center">
-          <h1 className="mb-2 text-2xl font-bold text-gray-800 md:text-3xl lg:text-4xl dark:text-gray-100">
+        <div className={`text-center ${sizeStyles.titleMargin}`}>
+          <h1
+            className={`mb-2 font-bold text-gray-800 dark:text-gray-100 ${sizeStyles.title.size}`}
+          >
             🎴 PP Karuta 26
           </h1>
           {/* <p className="text-lg text-gray-600 dark:text-gray-400">
@@ -113,7 +185,7 @@ export function IntegratedSelectorPresentation({
         )}
 
         {/* Sections displayed sequentially */}
-        <div className="space-y-6">
+        <div className={sizeStyles.sectionSpacing}>
           {/* Section: PlayMode */}
           <SectionWrapper
             title="入力方式"
@@ -206,26 +278,26 @@ export function IntegratedSelectorPresentation({
               />
             </SectionWrapper>
           )}
+
+          {/* Selection Summary */}
+          <GameSetupSummary
+            selectedPlayMode={playMode.selected}
+            selectedDeckRecipe={deckRecipe.selected}
+            generatedDeck={deckRecipe.generatedDeck}
+            selectedStackRecipe={stackRecipe.selected}
+            stackSize={stackSize}
+            selectedPlayerCount={players.selectedIds.length}
+            screenSize={screenSize}
+          />
         </div>
 
-        {/* Selection Summary */}
-        <GameSetupSummary
-          selectedPlayMode={playMode.selected}
-          selectedDeckRecipe={deckRecipe.selected}
-          generatedDeck={deckRecipe.generatedDeck}
-          selectedStackRecipe={stackRecipe.selected}
-          stackSize={stackSize}
-          selectedPlayerCount={players.selectedIds.length}
-          screenSize={screenSize}
-        />
-
         {/* Start Game Button */}
-        <div className="mt-8 flex justify-center">
+        <div className={`flex justify-center ${sizeStyles.buttonMargin}`}>
           <Button
             onClick={game.onStart}
             disabled={!game.canStart || state.isLoading}
             size="lg"
-            className="h-12 px-8 text-base font-bold md:h-14 md:px-10 md:text-lg lg:h-16 lg:px-12 lg:text-xl"
+            className={`font-bold ${sizeStyles.button.height} ${sizeStyles.button.padding} ${sizeStyles.button.text}`}
           >
             {state.isLoading ? (
               <>
@@ -239,7 +311,9 @@ export function IntegratedSelectorPresentation({
         </div>
 
         {!game.canStart && (
-          <p className="mt-4 text-center text-sm text-gray-500 dark:text-gray-400">
+          <p
+            className={`text-center text-gray-500 dark:text-gray-400 ${sizeStyles.noteMargin} ${sizeStyles.noteText}`}
+          >
             全ての項目を選択してください
           </p>
         )}

@@ -2,6 +2,7 @@ import type { DeckRecipe } from '@/models/karuta';
 import type { ScreenSize } from '@/types/screen-size';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { getSelectableCardClasses, getResponsiveStyles } from '@/lib/ui-utils';
 
 export type DeckRecipeCardProps = {
   recipe: DeckRecipe;
@@ -24,103 +25,77 @@ export function DeckRecipeCard({
   screenSize,
   showTags = false,
 }: DeckRecipeCardProps) {
-  const baseClass = isSelected
-    ? 'bg-indigo-600 text-white dark:bg-indigo-500'
-    : 'bg-white dark:bg-gray-800';
+  const styles = getSelectableCardClasses(isSelected);
 
-  const textClass = {
-    title: isSelected
-      ? 'text-white dark:text-white'
-      : 'text-gray-800 dark:text-gray-100',
-    description: isSelected
-      ? 'text-white/90 dark:text-white/90'
-      : 'text-gray-600 dark:text-gray-400',
-    label: isSelected
-      ? 'text-white/80 dark:text-white/80'
-      : 'text-gray-500 dark:text-gray-400',
-    content: isSelected
-      ? 'text-white/90 dark:text-white/90'
-      : 'text-gray-700 dark:text-gray-300',
-  };
-
-  const sizeStyles = screenSize
-    ? {
-        smartphone: {
-          padding: 'p-2',
-          title: {
-            size: 'text-lg',
-            margin: 'mb-1',
-          },
-          description: {
-            size: 'text-xs',
-            margin: 'mb-1',
-          },
-          label: {
-            size: 'text-xs',
-          },
-          content: {
-            size: 'text-xs',
-          },
-        },
-        tablet: {
-          padding: 'p-4',
-          title: {
-            size: 'text-xl',
-            margin: 'mb-2',
-          },
-          description: {
-            size: 'text-sm',
-            margin: 'mb-2',
-          },
-          label: {
-            size: 'text-sm',
-          },
-          content: {
-            size: 'text-sm',
-          },
-        },
-        pc: {
-          padding: 'p-6',
-          title: {
-            size: 'text-2xl',
-            margin: 'mb-3',
-          },
-          description: {
-            size: 'text-sm',
-            margin: 'mb-3',
-          },
-          label: {
-            size: 'text-sm',
-          },
-          content: {
-            size: 'text-sm',
-          },
-        },
-      }[screenSize]
-    : {
-        padding: 'p-4 md:p-6 lg:p-8',
-        title: {
-          size: 'text-lg md:text-xl lg:text-2xl',
-          margin: 'mb-1 md:mb-2 lg:mb-3',
-        },
-        description: {
-          size: 'text-xs md:text-sm',
-          margin: 'mb-1 md:mb-2 lg:mb-3',
-        },
-        label: {
-          size: 'text-xs md:text-sm',
-        },
-        content: {
-          size: 'text-xs md:text-sm',
-        },
-      };
+  const sizeStyles = getResponsiveStyles(screenSize, {
+    smartphone: {
+      padding: 'p-2',
+      title: {
+        size: 'text-base',
+      },
+      description: {
+        size: 'text-xs',
+      },
+      label: {
+        size: 'text-xs',
+      },
+      content: {
+        size: 'text-xs',
+      },
+    },
+    tablet: {
+      padding: 'p-3',
+      title: {
+        size: 'text-lg',
+      },
+      description: {
+        size: 'text-sm',
+      },
+      label: {
+        size: 'text-sm',
+      },
+      content: {
+        size: 'text-sm',
+      },
+    },
+    pc: {
+      padding: 'p-4',
+      title: {
+        size: 'text-xl',
+      },
+      description: {
+        size: 'text-sm',
+      },
+      label: {
+        size: 'text-sm',
+      },
+      content: {
+        size: 'text-sm',
+      },
+    },
+    responsive: {
+      padding: 'p-4 md:p-6 lg:p-8',
+      title: {
+        size: 'text-lg md:text-xl lg:text-2xl',
+      },
+      description: {
+        size: 'text-xs md:text-sm',
+      },
+      label: {
+        size: 'text-xs md:text-sm',
+      },
+      content: {
+        size: 'text-xs md:text-sm',
+      },
+    },
+  });
 
   return (
     <Button
       onClick={() => onSelect(recipe)}
       disabled={isLoading}
       variant={isSelected ? 'default' : 'outline'}
-      className={`group relative h-auto overflow-hidden rounded-2xl shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-2xl active:scale-95 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:scale-100 ${sizeStyles.padding} ${baseClass}`}
+      className={`group relative h-full overflow-hidden rounded-lg shadow-lg ${styles.animation} disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:scale-100 ${sizeStyles.padding} ${styles.base}`}
     >
       {isLoadingThisRecipe && (
         <div className="absolute inset-0 flex items-center justify-center bg-white/90 dark:bg-gray-800/90">
@@ -132,17 +107,17 @@ export function DeckRecipeCard({
           </div>
         </div>
       )}
-      <div className="absolute inset-0 bg-linear-to-br from-blue-400 to-indigo-500 opacity-0 transition-opacity group-hover:opacity-10" />
+      <div className={styles.gradient} />
       <div className="relative">
         <h2
-          className={`font-bold wrap-break-word whitespace-normal ${sizeStyles.title.size} ${sizeStyles.title.margin} ${textClass.title}`}
+          className={`font-bold wrap-break-word whitespace-normal ${sizeStyles.title.size} ${styles.title}`}
         >
           {recipe.title}
         </h2>
 
         {recipe.description && (
           <p
-            className={`wrap-break-word whitespace-normal ${sizeStyles.description.size} ${sizeStyles.description.margin} ${textClass.description}`}
+            className={`wrap-break-word whitespace-normal ${sizeStyles.description.size} ${styles.description}`}
           >
             {recipe.description}
           </p>
@@ -151,12 +126,12 @@ export function DeckRecipeCard({
         {import.meta.env.VITE_DEBUG_MODE === 'true' && (
           <div className="my-2 space-y-1">
             <div
-              className={`font-semibold ${sizeStyles.label.size} ${textClass.label}`}
+              className={`font-semibold ${sizeStyles.label.size} ${styles.label}`}
             >
               API Parameters:
             </div>
             <div
-              className={`space-y-0.5 ${sizeStyles.content.size} ${textClass.content}`}
+              className={`space-y-0.5 ${sizeStyles.content.size} ${styles.content}`}
             >
               {recipe.apiParams.limit && (
                 <div>

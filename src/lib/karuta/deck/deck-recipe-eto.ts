@@ -30,7 +30,7 @@ export const DECK_ETO_NE: DeckRecipe = {
   ...DECK_ETO_BASE,
   id: 'eto-ne',
   title: '🐁 子',
-  description: 'ねずみにちなんだ作品',
+  description: 'ねずみにちなむ',
   filter: createKeywordFilter([
     //
     '🐁',
@@ -58,7 +58,7 @@ export const DECK_ETO_USHI: DeckRecipe = {
   ...DECK_ETO_BASE,
   id: 'eto-ushi',
   title: '🐄 丑',
-  description: 'うしにちなんだ作品',
+  description: 'うしにちなむ',
   filter: createKeywordFilter([
     //
     '🐄',
@@ -83,7 +83,7 @@ export const DECK_ETO_TORA: DeckRecipe = {
   ...DECK_ETO_BASE,
   id: 'eto-tora',
   title: '🐅 寅',
-  description: 'とらにちなんだ作品',
+  description: 'とらにちなむ',
   filter: createKeywordFilter([
     '🐅',
     '🐯',
@@ -105,7 +105,7 @@ export const DECK_ETO_U: DeckRecipe = {
   ...DECK_ETO_BASE,
   id: 'eto-u',
   title: '🐇 卯',
-  description: 'うさぎにちなんだ作品',
+  description: 'うさぎにちなむ',
   filter: createKeywordFilter([
     '🐇',
     '🐰',
@@ -133,7 +133,7 @@ export const DECK_ETO_TATSU: DeckRecipe = {
   ...DECK_ETO_BASE,
   id: 'eto-tatsu',
   title: '🐉 辰',
-  description: 'りゅうにちなんだ作品',
+  description: 'りゅうにちなむ',
   filter: createKeywordFilter([
     '🐉',
     '🐲',
@@ -160,7 +160,7 @@ export const DECK_ETO_MI: DeckRecipe = {
   ...DECK_ETO_BASE,
   id: 'eto-mi',
   title: '🐍 巳',
-  description: 'へびにちなんだ作品',
+  description: 'へびにちなむ',
   filter: createKeywordFilter([
     '🐍',
     '巳',
@@ -183,7 +183,7 @@ export const DECK_ETO_UMA: DeckRecipe = {
   ...DECK_ETO_BASE,
   id: 'eto-uma',
   title: '🐴 午',
-  description: 'うまにちなんだ作品',
+  description: 'うまにちなむ',
   filter: createKeywordFilter([
     '🐴',
     '🎠',
@@ -211,7 +211,7 @@ export const DECK_ETO_HITSUJI: DeckRecipe = {
   ...DECK_ETO_BASE,
   id: 'eto-hitsuji',
   title: '🐏 未',
-  description: 'ひつじにちなんだ作品',
+  description: 'ひつじにちなむ',
   filter: createKeywordFilter([
     '🐏',
     '🐑',
@@ -235,7 +235,7 @@ export const DECK_ETO_SARU: DeckRecipe = {
   ...DECK_ETO_BASE,
   id: 'eto-saru',
   title: '🐒 申',
-  description: 'さるにちなんだ作品',
+  description: 'さるにちなむ',
   filter: createKeywordFilter([
     '🐒',
     '🐵',
@@ -268,7 +268,7 @@ export const DECK_ETO_TORI: DeckRecipe = {
   ...DECK_ETO_BASE,
   id: 'eto-tori',
   title: '🐓 酉',
-  description: 'とりにちなんだ作品',
+  description: 'とりにちなむ',
   filter: createKeywordFilter([
     '🐓',
     '🐔',
@@ -303,7 +303,7 @@ export const DECK_ETO_INU: DeckRecipe = {
   ...DECK_ETO_BASE,
   id: 'eto-inu',
   title: '🐕 戌',
-  description: 'いぬにちなんだ作品',
+  description: 'いぬにちなむ',
   filter: createKeywordFilter([
     '🐕',
     '🐶',
@@ -329,7 +329,7 @@ export const DECK_ETO_I: DeckRecipe = {
   ...DECK_ETO_BASE,
   id: 'eto-i',
   title: '🐗 亥',
-  description: 'いのししにちなんだ作品',
+  description: 'いのししにちなむ',
   filter: createKeywordFilter([
     '🐗',
     '🐖',

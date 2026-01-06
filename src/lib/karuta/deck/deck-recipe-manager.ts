@@ -86,7 +86,7 @@ function generateReleaseYearDecks(years: number[]): DeckRecipe[] {
   return years.map((year) => ({
     id: `rel-${year}`,
     title: `🎉 ${year}`,
-    description: `${year}年生まれ`,
+    description: `${year}年生`,
     apiParams: { ...ALL_PROTOTYPES },
     difficulty: 'intermediate',
     tags: [

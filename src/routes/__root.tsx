@@ -18,6 +18,7 @@ import type { RepositoryState } from '@/lib/repository/promidas-repository-manag
 import { promidasRepositoryManager } from '@/lib/repository/promidas-repository-manager';
 import { createRootRoute, Outlet } from '@tanstack/react-router';
 import { useEffect, useState } from 'react';
+import { getResponsiveStyles } from '@/lib/ui-utils';
 
 export const Route = createRootRoute({
   component: RootComponent,
@@ -55,13 +56,20 @@ function RootLayout() {
     });
   }, []);
 
-  const headerPadding = screenSize
-    ? {
-        smartphone: 'pt-12',
-        tablet: 'pt-14',
-        pc: 'pt-16',
-      }[screenSize]
-    : 'pt-12 md:pt-14 lg:pt-16';
+  const sizeStyles = getResponsiveStyles(screenSize, {
+    smartphone: {
+      headerPadding: 'pt-10',
+    },
+    tablet: {
+      headerPadding: 'pt-12',
+    },
+    pc: {
+      headerPadding: 'pt-14',
+    },
+    responsive: {
+      headerPadding: 'pt-12 md:pt-14 lg:pt-16',
+    },
+  });
 
   return (
     <>
@@ -74,7 +82,7 @@ function RootLayout() {
       </div>
 
       {/* Add padding-top to account for fixed header */}
-      <div className={headerPadding}>
+      <div className={sizeStyles.headerPadding}>
         {import.meta.env.VITE_DEBUG_MODE === 'true' && (
           <div className="flex items-center justify-center p-4">
             <RepoSetup screenSize={screenSize} />

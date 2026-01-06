@@ -3,6 +3,10 @@ import type { ScreenSize } from '@/types/screen-size';
 import type { Deck, StackRecipe } from '@/models/karuta';
 
 import { StackRecipeCard } from '@/components/recipe/stack-recipe-card';
+import {
+  useResponsiveGridColumns,
+  useResponsiveGap,
+} from '@/hooks/use-responsive-styles';
 
 export type StackRecipeSelectorProps = {
   stackRecipes: StackRecipe[];
@@ -23,6 +27,13 @@ export function StackRecipeSelector({
   generatedDeck,
   screenSize,
 }: StackRecipeSelectorProps) {
+  const gridCols = useResponsiveGridColumns(screenSize, {
+    smartphone: 4,
+    tablet: 4,
+    pc: 4,
+  });
+  const gridGap = useResponsiveGap(screenSize);
+
   const isDeckEmpty = generatedDeck !== null && generatedDeck.size === 0;
 
   if (isDeckEmpty) {
@@ -37,7 +48,7 @@ export function StackRecipeSelector({
 
   return (
     <>
-      <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
+      <div className={`grid ${gridGap} ${gridCols}`}>
         {stackRecipes.map((recipe) => (
           <StackRecipeCard
             key={recipe.id}

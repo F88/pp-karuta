@@ -1,6 +1,10 @@
 import { SelectableCard } from '@/components/selector/selectable-card';
 import type { TatamiSize } from '@/lib/karuta';
 import type { ScreenSize } from '@/types/screen-size';
+import {
+  useResponsiveGridColumns,
+  useResponsiveGap,
+} from '@/hooks/use-responsive-styles';
 
 export type TatamiSizeSelectorProps = {
   selectedTatamiSize: TatamiSize;
@@ -17,8 +21,15 @@ export function TatamiSizeSelector({
   isLoading,
   screenSize,
 }: TatamiSizeSelectorProps) {
+  const gridCols = useResponsiveGridColumns(screenSize, {
+    smartphone: 4,
+    tablet: 4,
+    pc: 4,
+  });
+  const gridGap = useResponsiveGap(screenSize);
+
   return (
-    <div className="grid grid-cols-4 gap-4">
+    <div className={`grid ${gridGap} ${gridCols}`}>
       {availableSizes.map((size) => {
         const isSelected = selectedTatamiSize === size;
         return (

@@ -2,6 +2,11 @@ import type { Player } from '@/models/karuta';
 import type { ScreenSize } from '@/types/screen-size';
 import { GameManager } from '@/lib/karuta';
 import { SelectableCard } from '@/components/selector/selectable-card';
+import {
+  useResponsiveGridColumns,
+  useResponsiveGap,
+} from '@/hooks/use-responsive-styles';
+import { User, UserPlus } from 'lucide-react';
 
 export type PlayersSelectorProps = {
   availablePlayers: Player[];
@@ -20,9 +25,20 @@ export function PlayersSelector({
   isLoading,
   screenSize,
 }: PlayersSelectorProps) {
+  const gridCols = useResponsiveGridColumns(screenSize, {
+    smartphone: 2,
+    tablet: 3,
+    pc: 4,
+  });
+  const gridGap = useResponsiveGap(screenSize, {
+    // smartphone: 2,
+    // tablet: 3,
+    // pc: 4,
+  });
+
   return (
     <>
-      <div className="grid grid-cols-2 items-start gap-4 md:grid-cols-3 lg:grid-cols-4">
+      <div className={`grid ${gridGap} ${gridCols}`}>
         {availablePlayers.map((player) => {
           const isSelected = selectedPlayerIds.includes(player.id);
           const maxPlayersReached =
@@ -33,7 +49,7 @@ export function PlayersSelector({
               isSelected={isSelected}
               onClick={() => onTogglePlayer(player.id)}
               disabled={isLoading || (!isSelected && maxPlayersReached)}
-              icon={isSelected ? '✓' : '👤'}
+              icon={<User />}
               label={player.name}
               alignment="start"
               screenSize={screenSize}
@@ -49,7 +65,7 @@ export function PlayersSelector({
             isLoading ||
             selectedPlayerIds.length >= GameManager.MAX_GAME_PLAYERS
           }
-          icon={<span className="text-4xl text-gray-400">+</span>}
+          icon={<UserPlus />}
           label=""
           className="bg-gray-50 hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700"
           alignment="center"

@@ -17,7 +17,7 @@ export class StackRecipeManager {
     {
       id: 'standard-10',
       title: '10',
-      description: '10組の札を使用',
+      description: '10組の札',
       tags: [],
       difficulty: 'beginner',
       sortMethod: 'random',
@@ -26,7 +26,7 @@ export class StackRecipeManager {
     {
       id: 'standard-20',
       title: '20',
-      description: '20組の札を使用',
+      description: '20組の札',
       tags: [],
       difficulty: 'beginner',
       sortMethod: 'random',
@@ -35,7 +35,7 @@ export class StackRecipeManager {
     {
       id: 'standard-30',
       title: '30',
-      description: '30組の札を使用',
+      description: '30組の札',
       tags: [],
       difficulty: 'beginner',
       sortMethod: 'random',
@@ -44,7 +44,7 @@ export class StackRecipeManager {
     {
       id: 'all-random',
       title: 'ALL',
-      description: '全ての札を使用',
+      description: '全ての札',
       tags: [],
       difficulty: 'advanced',
       sortMethod: 'random',
