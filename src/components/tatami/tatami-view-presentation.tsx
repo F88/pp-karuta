@@ -111,10 +111,21 @@ export function TatamiViewPresentation({
       return 'grid-cols-4'; // 5+ players: max 4 columns
     }
 
-    // Touch mode: simple layout
-    // 1 player: 1 column, 2+ players: 2 columns
-    if (playerCount <= 1) {
-      return 'grid-cols-1';
+    // Touch mode: screen size based layout
+    if (playMode === 'touch') {
+      if (screenSize === 'smartphone') {
+        if (playerCount <= 2) {
+          return 'grid-cols-1';
+        } else {
+          return 'grid-cols-2';
+        }
+      } else {
+        if (playerCount <= 1) {
+          return 'grid-cols-1';
+        } else {
+          return 'grid-cols-2';
+        }
+      }
     }
     return 'grid-cols-2';
   };
