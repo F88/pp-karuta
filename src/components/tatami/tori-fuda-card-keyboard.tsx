@@ -45,10 +45,10 @@ export function ToriFudaCardKeyboard({
   });
 
   const borderWidthClass = 'border-2';
-  const cardBaseClass = `@container aspect-video overflow-hidden rounded-none ${borderWidthClass} border-black bg-white shadow-none dark:border-white dark:bg-gray-950`;
+  const cardBaseClass = `@container overflow-hidden rounded-none ${borderWidthClass} border-black bg-white shadow-none dark:border-white dark:bg-gray-950`;
   const cardContentClass = 'flex h-full items-center justify-center p-0';
   const keyboardKeyClass =
-    'font-bold text-gray-700 dark:text-gray-300 @[60px]:text-base @[80px]:text-lg @[100px]:text-xl @[120px]:text-2xl @[140px]:text-3xl @[180px]:text-4xl @[220px]:text-5xl @[280px]:text-6xl';
+    'inline-flex min-h-8 min-w-8 items-center justify-center font-bold text-gray-700 dark:text-gray-300 @[60px]:text-base @[80px]:text-lg @[100px]:text-xl @[120px]:text-2xl @[140px]:text-3xl @[180px]:text-4xl @[220px]:text-5xl @[280px]:text-6xl';
   const indexBaseClass =
     'flex items-center justify-center rounded-full text-xs font-bold text-white';
 
