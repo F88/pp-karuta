@@ -13,8 +13,8 @@ export function DeckPreview({ deck, showDetails = false }: DeckPreviewProps) {
   return (
     <Alert className="border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-950">
       <AlertDescription className="text-green-800 dark:text-green-200">
-        <div className="mb-2 font-semibold">
-          ✓ デッキ: {deck.size.toLocaleString()} 枚
+        <div className="mb-0 font-semibold">
+          ✓ デッキ: {deck.size.toLocaleString()} 組
         </div>
         {showDetails && prototypes.length > 0 && (
           <div className="flex flex-wrap gap-1">

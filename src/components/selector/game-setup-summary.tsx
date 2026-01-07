@@ -146,7 +146,7 @@ export function GameSetupSummary({
           <span
             className={`${styles.text.size} font-semibold text-gray-700 dark:text-gray-300`}
           >
-            枚数:
+            札数:
           </span>
           <span
             className={`${styles.text.size} text-gray-900 dark:text-gray-100`}
