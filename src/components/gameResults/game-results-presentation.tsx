@@ -226,7 +226,7 @@ export function GameResultsPresentation({
         <Card className={styles.card.margin}>
           <CardHeader>
             <h2 className={`text-foreground font-bold ${styles.title.size}`}>
-              🏆 Player Rankings
+              🏆 結果
             </h2>
           </CardHeader>
           <CardContent>
