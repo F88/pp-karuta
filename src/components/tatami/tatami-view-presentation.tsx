@@ -102,7 +102,7 @@ export function TatamiViewPresentation({
 
   return (
     <div
-      className={`flex h-screen flex-col bg-linear-to-br from-green-50 to-teal-100 dark:from-gray-900 dark:to-gray-800 ${styles.containerPadding}`}
+      className={`flex h-screen flex-col bg-gradient-to-br from-green-50 to-teal-100 dark:from-gray-900 dark:to-gray-800 ${styles.containerPadding}`}
     >
       <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col overflow-hidden">
         <div className={`shrink-0 ${styles.sectionSpacing}`}>

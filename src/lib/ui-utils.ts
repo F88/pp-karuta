@@ -19,7 +19,7 @@ export function getSelectableCardClasses(isSelected: boolean) {
       : 'bg-indigo-100 dark:bg-indigo-900',
     animation:
       'transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl active:translate-y-0',
-    gradient: `absolute inset-0 bg-linear-to-br from-blue-400 to-indigo-500 opacity-0 transition-opacity group-hover:opacity-10 ${
+    gradient: `absolute inset-0 bg-gradient-to-br from-blue-400 to-indigo-500 opacity-0 transition-opacity group-hover:opacity-10 ${
       isSelected ? 'opacity-20' : ''
     }`,
   };

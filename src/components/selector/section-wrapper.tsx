@@ -62,7 +62,7 @@ export function SectionWrapper({
       className={`relative rounded-lg border-2 border-gray-200 dark:border-gray-700 ${sizeStyles.padding} ${className}`}
     >
       <h2
-        className={`absolute bg-linear-to-br from-indigo-50 to-purple-50 font-bold tracking-wider uppercase dark:from-gray-900 dark:to-gray-800 ${sizeStyles.titleSize} ${sizeStyles.titlePosition} ${variantStyles[variant]}`}
+        className={`absolute bg-gradient-to-br from-indigo-50 to-purple-50 font-bold tracking-wider uppercase dark:from-gray-900 dark:to-gray-800 ${sizeStyles.titleSize} ${sizeStyles.titlePosition} ${variantStyles[variant]}`}
       >
         {title}
       </h2>

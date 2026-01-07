@@ -159,7 +159,7 @@ export function IntegratedSelectorPresentation({
 
   return (
     <div
-      className={`min-h-screen bg-linear-to-br from-indigo-50 to-purple-50 dark:from-gray-900 dark:to-gray-800 ${sizeStyles.padding}`}
+      className={`min-h-screen bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-gray-900 dark:to-gray-800 ${sizeStyles.padding}`}
     >
       <div className="mx-auto max-w-7xl">
         {/* Header */}
