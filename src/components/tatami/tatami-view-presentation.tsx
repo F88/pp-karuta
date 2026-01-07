@@ -53,51 +53,61 @@ export function TatamiViewPresentation({
       // containerPadding: 'p-3',
       containerPadding: 'p-0',
       sectionSpacing: 'my-2',
+      sharedTatami: {
+        padding: 'px-4',
+      },
+      yomiFuda: {
+        padding: 'px-4',
+      },
       playerGrid: {
         gap: 'gap-2',
         margin: 'm-0',
         padding: 'px-2',
-      },
-      yomiFuda: {
-        padding: 'px-4',
       },
     },
     tablet: {
       // containerPadding: 'p-4',
       containerPadding: 'p-0',
       sectionSpacing: 'my-3',
+      sharedTatami: {
+        padding: 'px-12',
+      },
+      yomiFuda: {
+        padding: 'px-12',
+      },
       playerGrid: {
         gap: 'gap-2',
         margin: 'm-0',
         padding: 'px-2',
-      },
-      yomiFuda: {
-        padding: 'px-12',
       },
     },
     pc: {
       // containerPadding: 'p-6',
       containerPadding: 'p-0',
       sectionSpacing: 'my-4',
+      sharedTatami: {
+        padding: 'px-16',
+      },
+      yomiFuda: {
+        padding: 'px-16',
+      },
       playerGrid: {
         gap: 'gap-2',
         margin: 'm-0',
         padding: 'px-2',
-      },
-      yomiFuda: {
-        padding: 'px-16',
       },
     },
     responsive: {
       containerPadding: 'p-3 md:p-4 lg:p-6',
       sectionSpacing:
         'my-4 md:my-6 lg:my-8 space-y-3 md:space-y-4 lg:space-y-6',
+      sharedTatami: { padding: 'px-2 md:px-4 lg:px-6' },
+      yomiFuda: { padding: 'px-2 md:px-4 lg:px-6' },
       playerGrid: {
         gap: 'gap-3 md:gap-4 lg:gap-6',
         margin: 'm-0',
         padding: 'p-2',
       },
-      yomiFuda: { padding: 'px-2 md:px-4 lg:px-6' },
     },
   });
 
@@ -149,7 +159,9 @@ export function TatamiViewPresentation({
 
         {/*  Shared Tatami */}
         {playMode !== 'touch' && (
-          <div className={`shrink-0 ${styles.sectionSpacing}`}>
+          <div
+            className={`shrink-0 ${styles.sectionSpacing} ${styles.sharedTatami.padding}`}
+          >
             <SharedTatami
               tatamiCards={sharedTatamiCards}
               playMode={playMode}
