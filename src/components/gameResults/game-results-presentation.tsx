@@ -318,12 +318,14 @@ export function GameResultsPresentation({
         })}
 
         {/* Action Buttons - Bottom */}
-        <ActionButtons
-          onBackToTop={onBackToTop}
-          onReplay={onReplay}
-          buttonsGap={styles.buttons.gap}
-          buttonSize={styles.buttons.size}
-        />
+        <div className="mb-8">
+          <ActionButtons
+            onBackToTop={onBackToTop}
+            onReplay={onReplay}
+            buttonsGap={styles.buttons.gap}
+            buttonSize={styles.buttons.size}
+          />
+        </div>
       </div>
     </div>
   );
