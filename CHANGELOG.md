@@ -6,6 +6,28 @@ pp-karuta の主要な変更はこのファイルに記録されます。
 
 ## [Unreleased]
 
+### Added
+
+- コンポーネントマウント時の自動スクロール機能 (TatamiView, GameResults, IntegratedSelector)
+- Touch mode用のscreen sizeベースのグリッドレイアウト (smartphone: 1列 for ≤2プレイヤー, tablet/PC: 2列 for 2+プレイヤー)
+- SharedTatamiコンポーネント用のレスポンシブpadding設定
+- UIDebugOverlayにheaderHeightとcontentHeightの表示を追加
+
+### Changed
+
+- Yomiteアイコンを巻物 (📜) から吹き出し (💬) に変更
+- PlayerAreaを個別スクロール可能に変更 (max-h-full, overflow-y-auto)
+- TatamiViewPresentationの高さ指定をh-screenからh-fullに変更
+- keyboard modeのキー表示を改善 (min-h-8, min-w-8, inline-flex)
+- Start Game Buttonのbottom marginを増加 (全screen sizeでmb-8)
+
+### Fixed
+
+- 狭いviewport heightでのPlayerArea表示問題を修正
+- AppHeader高さを除外したコンテンツ領域の高さ計算を実装
+- keyboard mode 4プレイヤー横並びレイアウトでのキーサイズ問題を修正
+- ゲーム開始後のスクロール位置が最上部にならない問題を修正
+
 ## [2026.01.07] - 2026-01-07
 
 ### Added
