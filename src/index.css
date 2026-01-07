@@ -165,3 +165,139 @@
     @apply bg-background text-foreground;
   }
 }
+
+@layer components {
+  /* Tatami mat background patterns with screen size variants */
+  .tatami-bg-smartphone {
+    background-color: #d4c5a0;
+    background-image:
+      repeating-linear-gradient(
+        90deg,
+        rgba(0, 0, 0, 0.02) 0px,
+        rgba(0, 0, 0, 0.02) 1px,
+        transparent 1px,
+        transparent 2px
+      ),
+      repeating-linear-gradient(
+        0deg,
+        rgba(0, 0, 0, 0.04) 0px,
+        rgba(0, 0, 0, 0.04) 4px,
+        transparent 4px,
+        transparent 8px
+      ),
+      linear-gradient(180deg, #e8dcc0 0%, #d4c5a0 50%, #c9b88a 100%);
+  }
+
+  .tatami-bg-tablet {
+    background-color: #d4c5a0;
+    background-image:
+      repeating-linear-gradient(
+        90deg,
+        rgba(0, 0, 0, 0.025) 0px,
+        rgba(0, 0, 0, 0.025) 1px,
+        transparent 1px,
+        transparent 2px
+      ),
+      repeating-linear-gradient(
+        0deg,
+        rgba(0, 0, 0, 0.05) 0px,
+        rgba(0, 0, 0, 0.05) 3px,
+        transparent 3px,
+        transparent 6px
+      ),
+      linear-gradient(180deg, #e8dcc0 0%, #d4c5a0 50%, #c9b88a 100%);
+    box-shadow:
+      inset 0 2px 4px rgba(0, 0, 0, 0.05),
+      0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  .tatami-bg-pc {
+    background-color: #d4c5a0;
+    background-image:
+      repeating-linear-gradient(
+        90deg,
+        rgba(0, 0, 0, 0.025) 0px,
+        rgba(0, 0, 0, 0.025) 1px,
+        transparent 1px,
+        transparent 2px
+      ),
+      repeating-linear-gradient(
+        0deg,
+        rgba(0, 0, 0, 0.05) 0px,
+        rgba(0, 0, 0, 0.05) 3px,
+        transparent 3px,
+        transparent 6px
+      ),
+      linear-gradient(180deg, #e8dcc0 0%, #d4c5a0 50%, #c9b88a 100%);
+    box-shadow:
+      inset 0 2px 6px rgba(0, 0, 0, 0.08),
+      0 6px 16px rgba(0, 0, 0, 0.2);
+  }
+
+  /* Dark mode tatami variants */
+  .dark .tatami-bg-smartphone {
+    background-color: #8b7355;
+    background-image:
+      repeating-linear-gradient(
+        90deg,
+        rgba(0, 0, 0, 0.08) 0px,
+        rgba(0, 0, 0, 0.08) 1px,
+        transparent 1px,
+        transparent 2px
+      ),
+      repeating-linear-gradient(
+        0deg,
+        rgba(0, 0, 0, 0.15) 0px,
+        rgba(0, 0, 0, 0.15) 4px,
+        transparent 4px,
+        transparent 8px
+      ),
+      linear-gradient(180deg, #9a8268 0%, #8b7355 50%, #7a6449 100%);
+  }
+
+  .dark .tatami-bg-tablet {
+    background-color: #8b7355;
+    background-image:
+      repeating-linear-gradient(
+        90deg,
+        rgba(0, 0, 0, 0.1) 0px,
+        rgba(0, 0, 0, 0.1) 1px,
+        transparent 1px,
+        transparent 2px
+      ),
+      repeating-linear-gradient(
+        0deg,
+        rgba(0, 0, 0, 0.2) 0px,
+        rgba(0, 0, 0, 0.2) 3px,
+        transparent 3px,
+        transparent 6px
+      ),
+      linear-gradient(180deg, #9a8268 0%, #8b7355 50%, #7a6449 100%);
+    box-shadow:
+      inset 0 2px 4px rgba(0, 0, 0, 0.2),
+      0 4px 12px rgba(0, 0, 0, 0.4);
+  }
+
+  .dark .tatami-bg-pc {
+    background-color: #8b7355;
+    background-image:
+      repeating-linear-gradient(
+        90deg,
+        rgba(0, 0, 0, 0.12) 0px,
+        rgba(0, 0, 0, 0.12) 1px,
+        transparent 1px,
+        transparent 2px
+      ),
+      repeating-linear-gradient(
+        0deg,
+        rgba(0, 0, 0, 0.25) 0px,
+        rgba(0, 0, 0, 0.25) 2px,
+        transparent 2px,
+        transparent 4px
+      ),
+      linear-gradient(180deg, #9a8268 0%, #8b7355 50%, #7a6449 100%);
+    box-shadow:
+      inset 0 2px 6px rgba(0, 0, 0, 0.3),
+      0 6px 16px rgba(0, 0, 0, 0.5);
+  }
+}
