@@ -196,7 +196,7 @@ export function PlayerArea({
 
   return (
     <Card
-      className={`${cardBorder} ${cardShadow} ${cardAnimationClass} ${styles.card.background} $ ${styles.card.transition}`}
+      className={`${cardBorder} ${cardShadow} ${cardAnimationClass} ${styles.card.background} ${styles.card.transition}`}
     >
       <CardHeader className={styles.header.padding}>
         <PlayerInfo
