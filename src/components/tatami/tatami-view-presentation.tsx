@@ -50,25 +50,40 @@ export function TatamiViewPresentation({
 
   const styles = getResponsiveStyles(screenSize, {
     smartphone: {
-      containerPadding: 'p-3',
-      sectionSpacing: 'mb-4',
-      playerGridGap: 'gap-3',
+      // containerPadding: 'p-3',
+      containerPadding: 'p-0',
+      sectionSpacing: 'my-2',
+      playerGrid: {
+        gap: 'gap-2',
+        margin: 'm-0',
+        padding: 'px-2',
+      },
       yomiFuda: {
         padding: 'px-4',
       },
     },
     tablet: {
-      containerPadding: 'p-4',
-      sectionSpacing: 'mb-6',
-      playerGridGap: 'gap-4',
+      // containerPadding: 'p-4',
+      containerPadding: 'p-0',
+      sectionSpacing: 'my-3',
+      playerGrid: {
+        gap: 'gap-2',
+        margin: 'm-0',
+        padding: 'px-2',
+      },
       yomiFuda: {
         padding: 'px-12',
       },
     },
     pc: {
-      containerPadding: 'p-6',
-      sectionSpacing: 'mb-8',
-      playerGridGap: 'gap-6',
+      // containerPadding: 'p-6',
+      containerPadding: 'p-0',
+      sectionSpacing: 'my-4',
+      playerGrid: {
+        gap: 'gap-2',
+        margin: 'm-0',
+        padding: 'px-2',
+      },
       yomiFuda: {
         padding: 'px-16',
       },
@@ -77,7 +92,11 @@ export function TatamiViewPresentation({
       containerPadding: 'p-3 md:p-4 lg:p-6',
       sectionSpacing:
         'my-4 md:my-6 lg:my-8 space-y-3 md:space-y-4 lg:space-y-6',
-      playerGridGap: 'gap-3 md:gap-4 lg:gap-6',
+      playerGrid: {
+        gap: 'gap-3 md:gap-4 lg:gap-6',
+        margin: 'm-0',
+        padding: 'p-2',
+      },
       yomiFuda: { padding: 'px-2 md:px-4 lg:px-6' },
     },
   });
@@ -102,7 +121,7 @@ export function TatamiViewPresentation({
 
   return (
     <div
-      className={`flex h-screen flex-col bg-gradient-to-br from-green-50 to-teal-100 dark:from-gray-900 dark:to-gray-800 ${styles.containerPadding}`}
+      className={`flex h-full flex-col bg-gradient-to-br from-green-50 to-teal-100 dark:from-gray-900 dark:to-gray-800 ${styles.containerPadding}`}
     >
       <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col overflow-hidden">
         <div className={`shrink-0 ${styles.sectionSpacing}`}>
@@ -142,23 +161,22 @@ export function TatamiViewPresentation({
         </div>
 
         {/* Bottom section: Player Tatami Areas (takes remaining height) */}
-        <div className={`shrink-0 ${styles.sectionSpacing}`}>
-          <div className="flex flex-1 flex-col overflow-hidden">
+        <div className={`min-h-0 flex-1 ${styles.sectionSpacing}`}>
+          <div className="flex h-full flex-col">
             {/* <h2 className="mb-4 flex-shrink-0 text-center text-2xl font-bold text-gray-800 dark:text-gray-100">
             🎮 Player Tatami Areas
           </h2> */}
-            <div className="flex-1 overflow-y-auto">
-              <div
-                className={`grid ${styles.playerGridGap} ${getPlayerGridCols()}`}
-              >
-                {playerStates.map((playerState, playerIndex) => {
-                  const playerTatamiCards = DeckManager.getByIds(
-                    deck,
-                    playerState.tatami,
-                  );
-                  return (
+            <div
+              className={`grid h-full ${styles.playerGrid.gap} ${styles.playerGrid.margin} ${styles.playerGrid.padding} ${getPlayerGridCols()}`}
+            >
+              {playerStates.map((playerState, playerIndex) => {
+                const playerTatamiCards = DeckManager.getByIds(
+                  deck,
+                  playerState.tatami,
+                );
+                return (
+                  <div key={playerState.player.id} className="min-h-0">
                     <PlayerArea
-                      key={playerState.player.id}
                       player={playerState.player}
                       playerIndex={playerIndex}
                       playerCount={playerStates.length}
@@ -174,9 +192,9 @@ export function TatamiViewPresentation({
                       }
                       screenSize={screenSize}
                     />
-                  );
-                })}
-              </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </div>

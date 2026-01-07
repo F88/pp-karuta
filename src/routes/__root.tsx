@@ -59,15 +59,20 @@ function RootLayout() {
   const sizeStyles = getResponsiveStyles(screenSize, {
     smartphone: {
       headerPadding: 'pt-10',
+      contentHeight: 'h-[calc(100vh-2.5rem)]',
     },
     tablet: {
       headerPadding: 'pt-12',
+      contentHeight: 'h-[calc(100vh-3rem)]',
     },
     pc: {
       headerPadding: 'pt-14',
+      contentHeight: 'h-[calc(100vh-3.5rem)]',
     },
     responsive: {
       headerPadding: 'pt-12 md:pt-14 lg:pt-16',
+      contentHeight:
+        'h-[calc(100vh-3rem)] md:h-[calc(100vh-3.5rem)] lg:h-[calc(100vh-4rem)]',
     },
   });
 
@@ -81,8 +86,9 @@ function RootLayout() {
         />
       </div>
 
-      {/* Add padding-top to account for fixed header */}
-      <div className={sizeStyles.headerPadding}>
+      {/* Content area below fixed header */}
+      <div className={sizeStyles.headerPadding}></div>
+      <div className={sizeStyles.contentHeight}>
         {import.meta.env.VITE_DEBUG_MODE === 'true' && (
           <div className="flex items-center justify-center p-4">
             <RepoSetup screenSize={screenSize} />
@@ -99,7 +105,17 @@ function RootLayout() {
       </div>
 
       {import.meta.env.VITE_UI_DEBUG === 'true' && (
-        <UIDebugOverlay screenSize={screenSize} />
+        <UIDebugOverlay
+          screenSize={screenSize}
+          headerHeight={
+            screenSize === 'smartphone'
+              ? 'h-10 (2.5rem/40px)'
+              : screenSize === 'tablet'
+                ? 'h-12 (3rem/48px)'
+                : 'h-14 (3.5rem/56px)'
+          }
+          contentHeight={sizeStyles.contentHeight}
+        />
       )}
     </>
   );
