@@ -89,7 +89,7 @@ export function IntegratedSelectorPresentation({
         size: 'text-2xl',
       },
       sectionSpacing: 'space-y-4',
-      buttonMargin: 'mt-4',
+      buttonMargin: 'mt-4 mb-8',
       button: {
         height: 'h-12',
         padding: 'px-8',
@@ -105,7 +105,7 @@ export function IntegratedSelectorPresentation({
         size: 'text-3xl',
       },
       sectionSpacing: 'space-y-6',
-      buttonMargin: 'mt-8',
+      buttonMargin: 'mt-8 mb-8',
       button: {
         height: 'h-14',
         padding: 'px-10',
@@ -121,7 +121,7 @@ export function IntegratedSelectorPresentation({
         size: 'text-4xl',
       },
       sectionSpacing: 'space-y-8',
-      buttonMargin: 'mt-8',
+      buttonMargin: 'mt-8 mb-8',
       button: {
         height: 'h-16',
         padding: 'px-12',
@@ -137,7 +137,7 @@ export function IntegratedSelectorPresentation({
         size: 'text-2xl md:text-3xl lg:text-4xl',
       },
       sectionSpacing: 'space-y-6',
-      buttonMargin: 'mt-8',
+      buttonMargin: 'mt-8 mb-8',
       button: {
         height: 'h-12 md:h-14 lg:h-16',
         padding: 'px-8 md:px-10 lg:px-12',
@@ -305,7 +305,7 @@ export function IntegratedSelectorPresentation({
                 Loading...
               </>
             ) : (
-              'START'
+              'よろしくおねがいします'
             )}
           </Button>
         </div>
