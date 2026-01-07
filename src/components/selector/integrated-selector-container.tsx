@@ -18,6 +18,11 @@ export function IntegratedSelectorContainer({
 }: IntegratedSelectorContainerProps) {
   const screenSize = useScreenSizeContext();
 
+  // Scroll to top when component mounts
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  }, []);
+
   // Repository state
   const repoState = useRepositoryState();
 

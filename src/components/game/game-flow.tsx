@@ -34,7 +34,6 @@ export function GameFlow() {
     onGameStateCreated: (newGameState: GameState) => {
       logger.debug('🎮 Game started');
       setGameState(newGameState);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
     },
   });
 

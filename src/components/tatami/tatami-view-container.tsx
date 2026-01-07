@@ -5,7 +5,7 @@ import { logger } from '@/lib/logger';
 import type { GameState } from '@/models/karuta';
 import type { ScreenSize } from '@/types/screen-size';
 import type { NormalizedPrototype } from '@f88/promidas/types';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { TatamiViewPresentation } from './tatami-view-presentation';
 
 export type TatamiViewContainerProps = {
@@ -23,6 +23,11 @@ export function TatamiViewContainer({
   onIncorrectAnswer,
   screenSize,
 }: TatamiViewContainerProps) {
+  // Scroll to top when component mounts
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  }, []);
+
   // Calculate current race from total mochiFuda count across all players
   const totalMochiFuda = gameState.playerStates.reduce(
     (sum, ps) => sum + ps.mochiFuda.length,
