@@ -6,6 +6,8 @@ pp-karuta の主要な変更はこのファイルに記録されます。
 
 ## [Unreleased]
 
+## [2026.01.07] - 2026-01-07
+
 ### Added
 
 - 畳スタイル: 伝統的な和風畳マット外観 (CSS グラデーション、3 つの長方形構造)
@@ -24,6 +26,10 @@ pp-karuta の主要な変更はこのファイルに記録されます。
 - プレイヤー畳と共有畳のレスポンシブスタイルを改良
 - すべてのレスポンシブコンポーネントを `getResponsiveStyles` パターンに統一
 - `PlayerTatami` と `SharedTatami` をレスポンシブスタイルで強化
+
+### Fixed
+
+- Tailwind CSS のグラデーションクラス名を `bg-linear-to-br` から `bg-gradient-to-br` に修正
 
 ### Removed
 
@@ -83,7 +89,8 @@ pp-karuta の主要な変更はこのファイルに記録されます。
 
 初回リリース
 
-[unreleased]: https://github.com/F88/pp-karuta/compare/2026.01.05...HEAD
+[unreleased]: https://github.com/F88/pp-karuta/compare/2026.01.07...HEAD
+[2026.01.07]: https://github.com/F88/pp-karuta/compare/2026.01.05...2026.01.07
 [2026.01.05]: https://github.com/F88/pp-karuta/compare/2025.12.29...2026.01.05
 [2025.12.29]: https://github.com/F88/pp-karuta/compare/2025.12.26...2025.12.29
 [2025.12.26]: https://github.com/F88/pp-karuta/releases/tag/2025.12.26
