@@ -177,6 +177,7 @@ export function GameFlow() {
         playerStates={gameState.playerStates}
         onBackToTop={handleBackToTop}
         onReplay={handleReplay}
+        screenSize={screenSize}
       />
     );
   }

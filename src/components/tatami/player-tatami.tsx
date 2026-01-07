@@ -1,118 +1,83 @@
-import { Badge } from '@/components/ui/badge';
-import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import type { PlayMode } from '@/lib/karuta';
 import { getKeyForCard } from '@/lib/karuta/keyboard-bindings';
-import type { Player } from '@/models/karuta';
 import type { ScreenSize } from '@/types/screen-size';
 import type { NormalizedPrototype } from '@f88/promidas/types';
+import { getResponsiveStyles } from '@/lib/ui-utils';
 import { ToriFudaCard } from './tori-fuda-card';
 
 export type PlayerTatamiProps = {
-  player: Player;
-  playerIndex: number;
-  playerCount: number;
   tatamiCards: NormalizedPrototype[];
   onCardClick: (card: NormalizedPrototype) => void;
-  mochiFudaCount: number;
-  score: number;
   playMode: PlayMode;
-  feedbackState?: 'correct' | 'incorrect' | null;
+  playerIndex: number;
+  playerCount: number;
   screenSize?: ScreenSize;
 };
 
 export function PlayerTatami({
-  player,
-  playerIndex,
-  playerCount,
   tatamiCards,
   onCardClick,
-  mochiFudaCount,
-  score,
   playMode,
-  feedbackState = null,
+  playerIndex,
+  playerCount,
   screenSize = 'pc',
 }: PlayerTatamiProps) {
-  const showImage = playMode === 'touch';
+  const styles = getResponsiveStyles(screenSize, {
+    smartphone: {
+      gap: 'gap-2',
+      padding: 'p-2',
+      edgeBorder: 'h-2',
+      sideBorder: 'border-x',
+      background: 'tatami-bg-smartphone',
+    },
+    tablet: {
+      gap: 'gap-4',
+      padding: 'p-4',
+      edgeBorder: 'h-3',
+      sideBorder: 'border-x',
+      background: 'tatami-bg-tablet',
+    },
+    pc: {
+      gap: 'gap-6',
+      padding: 'p-6',
+      edgeBorder: 'h-4',
+      sideBorder: 'border-x',
+      background: 'tatami-bg-pc',
+    },
+    responsive: {
+      gap: 'gap-2 md:gap-3 lg:gap-4',
+      padding: 'p-2 md:p-4 lg:p-6',
+      edgeBorder: 'h-2 md:h-[10px] lg:h-3',
+      sideBorder: 'border-x',
+      background: 'tatami-bg-smartphone md:tatami-bg-tablet lg:tatami-bg-pc',
+    },
+  });
 
-  const titleSizeClass = screenSize
-    ? {
-        smartphone: 'text-sm',
-        tablet: 'text-base',
-        pc: 'text-lg',
-      }[screenSize]
-    : 'text-sm md:text-base lg:text-lg';
-
-  const paddingClass = screenSize
-    ? {
-        smartphone: 'p-2',
-        tablet: 'p-4',
-        pc: 'p-6',
-      }[screenSize]
-    : 'p-3 md:p-4 lg:p-6';
-
-  const gapClass = screenSize
-    ? {
-        smartphone: 'gap-2',
-        tablet: 'gap-3',
-        pc: 'gap-3',
-      }[screenSize]
-    : 'gap-2 md:gap-3';
+  // Common edge border styling
+  const edgeBorderClass = `${styles.edgeBorder} bg-indigo-950 dark:bg-indigo-900`;
 
   const gridColsClass =
     playMode === 'keyboard'
       ? 'grid-cols-4'
-      : screenSize
-        ? {
-            smartphone: 'grid-cols-2',
-            tablet: 'grid-cols-2',
-            pc: 'grid-cols-2',
-          }[screenSize]
-        : 'grid-cols-2 md:grid-cols-3 lg:grid-cols-4';
+      : getResponsiveStyles(screenSize, {
+          smartphone: 'grid-cols-2',
+          tablet: 'grid-cols-2',
+          pc: 'grid-cols-2',
+          responsive: 'grid-cols-2 md:grid-cols-3 lg:grid-cols-4',
+        });
 
-  // Border style based on feedback state
-  const borderClass = feedbackState
-    ? feedbackState === 'correct'
-      ? 'border-green-500'
-      : 'border-red-500'
-    : 'border-indigo-300';
-
-  const shadowClass = feedbackState
-    ? feedbackState === 'correct'
-      ? 'shadow-2xl shadow-green-500/70'
-      : 'shadow-2xl shadow-red-500/70'
-    : 'shadow-lg';
-
-  const animationClass = feedbackState
-    ? feedbackState === 'correct'
-      ? 'animate-[flash_0.6s_ease-in-out]'
-      : 'animate-[shake_0.5s_ease-in-out]'
-    : '';
+  const showImage = playMode === 'touch';
 
   return (
-    <Card
-      className={`border-2 ${borderClass} ${shadowClass} ${animationClass} transition-all duration-300`}
-    >
-      <CardHeader className={paddingClass}>
-        <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
-          <h3
-            className={`flex items-center gap-2 font-bold text-indigo-700 ${titleSizeClass}`}
-          >
-            <span>👤</span>
-            {player.name}
-          </h3>
-          <div className="flex gap-2">
-            <Badge variant="outline" className="bg-yellow-100 text-yellow-700">
-              {score.toLocaleString()} pts
-            </Badge>
-            <Badge variant="outline" className="bg-pink-100 text-pink-700">
-              {mochiFudaCount.toLocaleString()} 枚
-            </Badge>
-          </div>
-        </div>
-      </CardHeader>
-      <CardContent className={paddingClass}>
-        {/* <ScrollArea className="h-[60vh]"> */}
-        <div className={`grid ${gapClass} ${gridColsClass}`}>
+    <div className="flex flex-col">
+      {/* Top edge (border) */}
+      <div className={edgeBorderClass} />
+
+      {/* Main tatami body */}
+      <div
+        className={`${styles.padding} ${styles.sideBorder} ${styles.background} border-gray-300 dark:border-gray-600`}
+      >
+        <div className={`grid ${styles.gap} ${gridColsClass}`}>
           {tatamiCards.map((card, index) => (
             <ToriFudaCard
               key={card.id}
@@ -127,8 +92,10 @@ export function PlayerTatami({
             />
           ))}
         </div>
-        {/* </ScrollArea> */}
-      </CardContent>
-    </Card>
+      </div>
+
+      {/* Bottom edge (border) */}
+      <div className={edgeBorderClass} />
+    </div>
   );
 }

@@ -2,6 +2,7 @@ import type { PlayMode } from '@/lib/karuta';
 import type { ScreenSize } from '@/types/screen-size';
 import { SelectableCard } from '@/components/selector/selectable-card';
 import { Keyboard, Smartphone } from 'lucide-react';
+import { getResponsiveStyles } from '@/lib/ui-utils';
 
 export type PlayModeSelectorProps = {
   selectedPlayMode: PlayMode | null;
@@ -16,8 +17,27 @@ export function PlayModeSelector({
   isLoading,
   screenSize,
 }: PlayModeSelectorProps) {
+  const styles = getResponsiveStyles(screenSize, {
+    smartphone: {
+      gridCols: 'grid-cols-2',
+      gap: 'gap-2',
+    },
+    tablet: {
+      gridCols: 'grid-cols-2',
+      gap: 'gap-3',
+    },
+    pc: {
+      gridCols: 'grid-cols-2',
+      gap: 'gap-4',
+    },
+    responsive: {
+      gridCols: 'grid-cols-2',
+      gap: 'gap-2 md:gap-3 lg:gap-4',
+    },
+  });
+
   return (
-    <div className="grid grid-cols-2 gap-4">
+    <div className={`grid ${styles.gap} ${styles.gridCols}`}>
       <SelectableCard
         isSelected={selectedPlayMode === 'touch'}
         onClick={() => onSelectPlayMode('touch')}

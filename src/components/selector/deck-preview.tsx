@@ -13,8 +13,8 @@ export function DeckPreview({ deck, showDetails = false }: DeckPreviewProps) {
   return (
     <Alert className="border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-950">
       <AlertDescription className="text-green-800 dark:text-green-200">
-        <div className="mb-2 font-semibold">
-          ✓ デッキ: {deck.size.toLocaleString()} 枚
+        <div className="mb-0 font-semibold">
+          ✓ デッキ: {deck.size.toLocaleString()} 組
         </div>
         {showDetails && prototypes.length > 0 && (
           <div className="flex flex-wrap gap-1">
@@ -24,10 +24,10 @@ export function DeckPreview({ deck, showDetails = false }: DeckPreviewProps) {
                 variant="outline"
                 className="bg-white text-xs dark:bg-gray-900"
               >
-                <span className="font-mono text-gray-500 dark:text-gray-400">
+                <span className="text-muted-foreground font-mono">
                   {prototype.id}
                 </span>
-                <span className="ml-1 text-gray-700 dark:text-gray-300">
+                <span className="text-foreground ml-1">
                   {prototype.prototypeNm}
                 </span>
               </Badge>
@@ -35,7 +35,7 @@ export function DeckPreview({ deck, showDetails = false }: DeckPreviewProps) {
           </div>
         )}
         {showDetails && deck.size > 30 && (
-          <div className="mt-2 text-xs text-gray-600 dark:text-gray-400">
+          <div className="text-muted-foreground mt-2 text-xs">
             他 {(deck.size - 30).toLocaleString()} 件
           </div>
         )}

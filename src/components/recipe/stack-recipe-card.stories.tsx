@@ -27,7 +27,7 @@ const randomRecipe: StackRecipe = {
 const allCardsRecipe: StackRecipe = {
   id: 'all-cards',
   title: '全ての札',
-  description: 'デッキの全ての札を使用',
+  description: 'デッキの全ての札',
   difficulty: 'advanced',
   maxSize: 'all',
   sortMethod: 'random',

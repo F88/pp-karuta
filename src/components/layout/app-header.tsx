@@ -5,6 +5,7 @@ import { RepoStateIndicator } from './repo-state-indicator';
 import { AppHeaderPresentation } from './app-header-presentation';
 import type { RepositoryState } from '@/lib/repository/promidas-repository-manager';
 import type { ScreenSize } from '@/types/screen-size';
+import { getResponsiveStyles } from '@/lib/ui-utils';
 
 interface AppHeaderProps {
   repoState: RepositoryState;
@@ -18,6 +19,25 @@ export function AppHeader({
   screenSize,
 }: AppHeaderProps) {
   const navigate = useNavigate();
+
+  const sizeStyles = getResponsiveStyles(screenSize, {
+    smartphone: {
+      buttonText: 'text-xs',
+      iconText: 'text-base',
+    },
+    tablet: {
+      buttonText: 'text-sm',
+      iconText: 'text-lg',
+    },
+    pc: {
+      buttonText: 'text-base',
+      iconText: 'text-xl',
+    },
+    responsive: {
+      buttonText: 'text-xs md:text-sm lg:text-base',
+      iconText: 'text-base md:text-lg lg:text-xl',
+    },
+  });
 
   const handleHomeClick = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -34,10 +54,10 @@ export function AppHeader({
           size="sm"
           asChild
           aria-label="ホームに戻る"
-          className="text-xs md:text-sm lg:text-base"
+          className={sizeStyles.buttonText}
         >
           <Link to="/" onClick={handleHomeClick} title="ホームに戻る">
-            <span className="text-base md:text-lg lg:text-xl">🎴</span> MENU
+            <span className={sizeStyles.iconText}>🎴</span> MENU
           </Link>
         </Button>
       }
@@ -47,10 +67,10 @@ export function AppHeader({
           size="sm"
           asChild
           aria-label="プレイヤー管理"
-          className="text-xs md:text-sm lg:text-base"
+          className={sizeStyles.buttonText}
         >
           <Link to="/player" title="プレイヤー管理">
-            <span className="text-base md:text-lg lg:text-xl">🧙</span> PLAYER
+            <span className={sizeStyles.iconText}>🧙</span> PLAYER
           </Link>
         </Button>
       }
@@ -60,10 +80,10 @@ export function AppHeader({
           size="sm"
           asChild
           aria-label="掟を確認"
-          className="text-xs md:text-sm lg:text-base"
+          className={sizeStyles.buttonText}
         >
           <Link to="/intro" title="掟を確認">
-            <span className="text-base md:text-lg lg:text-xl">📜</span> 掟
+            <span className={sizeStyles.iconText}>📜</span> 掟
           </Link>
         </Button>
       }

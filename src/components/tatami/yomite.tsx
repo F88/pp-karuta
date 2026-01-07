@@ -1,6 +1,8 @@
 import type { NormalizedPrototype } from '@f88/promidas/types';
 import type { ScreenSize } from '@/types/screen-size';
-import { useTypewriter } from '@/hooks/use-typewriter';
+// import { useTypewriter } from '@/hooks/use-typewriter';
+import { getResponsiveStyles } from '@/lib/ui-utils';
+import { useYomibito } from '@/hooks/use-yomibito';
 
 export type YomiteProps = {
   normalizedPrototype: NormalizedPrototype;
@@ -9,28 +11,41 @@ export type YomiteProps = {
 
 export function Yomite({ normalizedPrototype, screenSize }: YomiteProps) {
   const seq =
-    '📜' +
+    // '📜' +
     (normalizedPrototype.prototypeNm ?? 'NO NAME') +
     ' - ' +
     (normalizedPrototype.summary || 'NO DESCRIPTION');
 
-  const { displayedText } = useTypewriter({ text: seq, speed: 200 });
+  // const { displayedText } = useTypewriter({ text: seq, speed: 200 });
+  const { displayedText: yomibitoText } = useYomibito({
+    // text:
+    //   'ふるいけやかわずとびこむみずのおと' +
+    //   'ほげほげほげげ' +
+    //   'ほげほげほげげ' +
+    //   'あいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめもやゆよらりるれろわをん',
+    text: seq,
+    speed: 200,
+    rhythmPause: 1_000,
+  });
 
-  const textSizeClass = screenSize
-    ? {
-        smartphone: 'text-base',
-        tablet: 'text-xl',
-        pc: 'text-2xl',
-      }[screenSize]
-    : 'text-base md:text-xl lg:text-2xl';
-
-  const paddingClass = screenSize
-    ? {
-        smartphone: 'px-3 py-2',
-        tablet: 'px-4 py-3',
-        pc: 'px-6 py-4',
-      }[screenSize]
-    : 'px-3 py-2 md:px-4 md:py-3 lg:px-6 lg:py-4';
+  const styles = getResponsiveStyles(screenSize, {
+    smartphone: {
+      text: 'text-lg',
+      padding: 'px-3 py-2',
+    },
+    tablet: {
+      text: 'text-xl',
+      padding: 'px-4 py-3',
+    },
+    pc: {
+      text: 'text-2xl',
+      padding: 'px-6 py-4',
+    },
+    responsive: {
+      text: 'text-lg md:text-xl lg:text-2xl',
+      padding: 'px-3 py-2 md:px-4 md:py-3 lg:px-6 lg:py-4',
+    },
+  });
 
   // Background color options - uncomment one to use
   const backgroundClass = 'bg-primary text-primary-foreground'; // Yellow/Orange theme
@@ -40,12 +55,21 @@ export function Yomite({ normalizedPrototype, screenSize }: YomiteProps) {
   // const backgroundClass = 'bg-card text-card-foreground'; // Card background theme
 
   return (
-    <div
-      className={`${backgroundClass} flex items-center gap-3 rounded-lg shadow-lg ${paddingClass}`}
-    >
-      <h2 className={`flex-1 font-bold tracking-widest ${textSizeClass}`}>
-        {displayedText || '\u00A0'}
-      </h2>
-    </div>
+    <>
+      {/* <div
+        className={`${backgroundClass} flex items-center gap-3 rounded-lg shadow-lg ${styles.padding}`}
+      >
+        <h2 className={`flex-1 font-bold tracking-widest ${styles.text}`}>
+          📜 {displayedText || '\u00A0'}
+        </h2>
+      </div> */}
+      <div
+        className={`${backgroundClass} flex items-center gap-3 rounded-lg shadow-lg ${styles.padding}`}
+      >
+        <h2 className={`flex-1 font-bold tracking-widest ${styles.text}`}>
+          📜 {yomibitoText || '\u00A0'}
+        </h2>
+      </div>
+    </>
   );
 }

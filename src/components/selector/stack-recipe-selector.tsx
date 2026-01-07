@@ -3,6 +3,7 @@ import type { ScreenSize } from '@/types/screen-size';
 import type { Deck, StackRecipe } from '@/models/karuta';
 
 import { StackRecipeCard } from '@/components/recipe/stack-recipe-card';
+import { getResponsiveStyles } from '@/lib/ui-utils';
 
 export type StackRecipeSelectorProps = {
   stackRecipes: StackRecipe[];
@@ -23,6 +24,25 @@ export function StackRecipeSelector({
   generatedDeck,
   screenSize,
 }: StackRecipeSelectorProps) {
+  const styles = getResponsiveStyles(screenSize, {
+    smartphone: {
+      gridCols: 'grid-cols-4',
+      gap: 'gap-2',
+    },
+    tablet: {
+      gridCols: 'grid-cols-4',
+      gap: 'gap-3',
+    },
+    pc: {
+      gridCols: 'grid-cols-4',
+      gap: 'gap-4',
+    },
+    responsive: {
+      gridCols: 'grid-cols-4',
+      gap: 'gap-2 md:gap-3 lg:gap-4',
+    },
+  });
+
   const isDeckEmpty = generatedDeck !== null && generatedDeck.size === 0;
 
   if (isDeckEmpty) {
@@ -37,7 +57,7 @@ export function StackRecipeSelector({
 
   return (
     <>
-      <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
+      <div className={`grid ${styles.gap} ${styles.gridCols}`}>
         {stackRecipes.map((recipe) => (
           <StackRecipeCard
             key={recipe.id}
@@ -49,16 +69,6 @@ export function StackRecipeSelector({
           />
         ))}
       </div>
-      {/* // Show generated stack info
-      {generatedStack && (
-        <Alert className="border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-950">
-          <AlertDescription className="text-green-800 dark:text-green-200">
-            ✓ 枚数: {generatedStack.length.toLocaleString()} 枚
-            {import.meta.env.VITE_DEBUG_MODE === 'true' &&
-              generatedStack.map((id) => ` ${id}`).join(',')}
-          </AlertDescription>
-        </Alert>
-      )} */}
     </>
   );
 }

@@ -27,7 +27,7 @@ describe('ETO Deck Recipes', () => {
     it('should have valid DECK_ETO_NE (Rat) structure', () => {
       expect(DECK_ETO_NE.id).toBe('eto-ne');
       expect(DECK_ETO_NE.title).toBe('🐁 子');
-      expect(DECK_ETO_NE.description).toBe('ねずみにちなんだ作品');
+      expect(DECK_ETO_NE.description).toBe('ねずみにちなむ');
       expect(DECK_ETO_NE.difficulty).toBe('intermediate');
       expect(DECK_ETO_NE.tags).toContain('干支');
       expect(DECK_ETO_NE.filter).toBeDefined();
@@ -37,7 +37,7 @@ describe('ETO Deck Recipes', () => {
     it('should have valid DECK_ETO_USHI (Ox) structure', () => {
       expect(DECK_ETO_USHI.id).toBe('eto-ushi');
       expect(DECK_ETO_USHI.title).toBe('🐄 丑');
-      expect(DECK_ETO_USHI.description).toBe('うしにちなんだ作品');
+      expect(DECK_ETO_USHI.description).toBe('うしにちなむ');
       expect(DECK_ETO_USHI.difficulty).toBe('intermediate');
       expect(DECK_ETO_USHI.tags).toContain('干支');
       expect(DECK_ETO_USHI.filter).toBeDefined();
@@ -46,7 +46,7 @@ describe('ETO Deck Recipes', () => {
     it('should have valid DECK_ETO_TORA (Tiger) structure', () => {
       expect(DECK_ETO_TORA.id).toBe('eto-tora');
       expect(DECK_ETO_TORA.title).toBe('🐅 寅');
-      expect(DECK_ETO_TORA.description).toBe('とらにちなんだ作品');
+      expect(DECK_ETO_TORA.description).toBe('とらにちなむ');
       expect(DECK_ETO_TORA.difficulty).toBe('intermediate');
       expect(DECK_ETO_TORA.tags).toContain('干支');
       expect(DECK_ETO_TORA.filter).toBeDefined();
@@ -55,7 +55,7 @@ describe('ETO Deck Recipes', () => {
     it('should have valid DECK_ETO_U (Rabbit) structure', () => {
       expect(DECK_ETO_U.id).toBe('eto-u');
       expect(DECK_ETO_U.title).toBe('🐇 卯');
-      expect(DECK_ETO_U.description).toBe('うさぎにちなんだ作品');
+      expect(DECK_ETO_U.description).toBe('うさぎにちなむ');
       expect(DECK_ETO_U.difficulty).toBe('intermediate');
       expect(DECK_ETO_U.tags).toContain('干支');
       expect(DECK_ETO_U.filter).toBeDefined();
@@ -64,7 +64,7 @@ describe('ETO Deck Recipes', () => {
     it('should have valid DECK_ETO_TATSU (Dragon) structure', () => {
       expect(DECK_ETO_TATSU.id).toBe('eto-tatsu');
       expect(DECK_ETO_TATSU.title).toBe('🐉 辰');
-      expect(DECK_ETO_TATSU.description).toBe('りゅうにちなんだ作品');
+      expect(DECK_ETO_TATSU.description).toBe('りゅうにちなむ');
       expect(DECK_ETO_TATSU.difficulty).toBe('intermediate');
       expect(DECK_ETO_TATSU.tags).toContain('干支');
       expect(DECK_ETO_TATSU.filter).toBeDefined();
@@ -73,7 +73,7 @@ describe('ETO Deck Recipes', () => {
     it('should have valid DECK_ETO_MI (Snake) structure', () => {
       expect(DECK_ETO_MI.id).toBe('eto-mi');
       expect(DECK_ETO_MI.title).toBe('🐍 巳');
-      expect(DECK_ETO_MI.description).toBe('へびにちなんだ作品');
+      expect(DECK_ETO_MI.description).toBe('へびにちなむ');
       expect(DECK_ETO_MI.difficulty).toBe('intermediate');
       expect(DECK_ETO_MI.tags).toContain('干支');
       expect(DECK_ETO_MI.filter).toBeDefined();
@@ -82,7 +82,7 @@ describe('ETO Deck Recipes', () => {
     it('should have valid DECK_ETO_UMA (Horse) structure', () => {
       expect(DECK_ETO_UMA.id).toBe('eto-uma');
       expect(DECK_ETO_UMA.title).toBe('🐴 午');
-      expect(DECK_ETO_UMA.description).toBe('うまにちなんだ作品');
+      expect(DECK_ETO_UMA.description).toBe('うまにちなむ');
       expect(DECK_ETO_UMA.difficulty).toBe('intermediate');
       expect(DECK_ETO_UMA.tags).toContain('干支');
       expect(DECK_ETO_UMA.filter).toBeDefined();
@@ -91,7 +91,7 @@ describe('ETO Deck Recipes', () => {
     it('should have valid DECK_ETO_HITSUJI (Sheep) structure', () => {
       expect(DECK_ETO_HITSUJI.id).toBe('eto-hitsuji');
       expect(DECK_ETO_HITSUJI.title).toBe('🐏 未');
-      expect(DECK_ETO_HITSUJI.description).toBe('ひつじにちなんだ作品');
+      expect(DECK_ETO_HITSUJI.description).toBe('ひつじにちなむ');
       expect(DECK_ETO_HITSUJI.difficulty).toBe('intermediate');
       expect(DECK_ETO_HITSUJI.tags).toContain('干支');
       expect(DECK_ETO_HITSUJI.filter).toBeDefined();
@@ -100,7 +100,7 @@ describe('ETO Deck Recipes', () => {
     it('should have valid DECK_ETO_SARU (Monkey) structure', () => {
       expect(DECK_ETO_SARU.id).toBe('eto-saru');
       expect(DECK_ETO_SARU.title).toBe('🐒 申');
-      expect(DECK_ETO_SARU.description).toBe('さるにちなんだ作品');
+      expect(DECK_ETO_SARU.description).toBe('さるにちなむ');
       expect(DECK_ETO_SARU.difficulty).toBe('intermediate');
       expect(DECK_ETO_SARU.tags).toContain('干支');
       expect(DECK_ETO_SARU.filter).toBeDefined();
@@ -109,7 +109,7 @@ describe('ETO Deck Recipes', () => {
     it('should have valid DECK_ETO_TORI (Rooster) structure', () => {
       expect(DECK_ETO_TORI.id).toBe('eto-tori');
       expect(DECK_ETO_TORI.title).toBe('🐓 酉');
-      expect(DECK_ETO_TORI.description).toBe('とりにちなんだ作品');
+      expect(DECK_ETO_TORI.description).toBe('とりにちなむ');
       expect(DECK_ETO_TORI.difficulty).toBe('intermediate');
       expect(DECK_ETO_TORI.tags).toContain('干支');
       expect(DECK_ETO_TORI.filter).toBeDefined();
@@ -118,7 +118,7 @@ describe('ETO Deck Recipes', () => {
     it('should have valid DECK_ETO_INU (Dog) structure', () => {
       expect(DECK_ETO_INU.id).toBe('eto-inu');
       expect(DECK_ETO_INU.title).toBe('🐕 戌');
-      expect(DECK_ETO_INU.description).toBe('いぬにちなんだ作品');
+      expect(DECK_ETO_INU.description).toBe('いぬにちなむ');
       expect(DECK_ETO_INU.difficulty).toBe('intermediate');
       expect(DECK_ETO_INU.tags).toContain('干支');
       expect(DECK_ETO_INU.filter).toBeDefined();
@@ -127,7 +127,7 @@ describe('ETO Deck Recipes', () => {
     it('should have valid DECK_ETO_I (Boar) structure', () => {
       expect(DECK_ETO_I.id).toBe('eto-i');
       expect(DECK_ETO_I.title).toBe('🐗 亥');
-      expect(DECK_ETO_I.description).toBe('いのししにちなんだ作品');
+      expect(DECK_ETO_I.description).toBe('いのししにちなむ');
       expect(DECK_ETO_I.difficulty).toBe('intermediate');
       expect(DECK_ETO_I.tags).toContain('干支');
       expect(DECK_ETO_I.filter).toBeDefined();

@@ -1,6 +1,7 @@
 import type { NormalizedPrototype } from '@f88/promidas/types';
 import type { PlayMode } from '@/lib/karuta';
 import type { ScreenSize } from '@/types/screen-size';
+import { getResponsiveStyles } from '@/lib/ui-utils';
 import { ToriFudaCardTouch } from './tori-fuda-card-touch';
 
 export type SharedTatamiProps = {
@@ -13,41 +14,77 @@ export function SharedTatami({
   tatamiCards,
   screenSize = 'pc',
 }: SharedTatamiProps) {
-  const titleSizeClass = screenSize
-    ? {
-        smartphone: 'text-base',
-        tablet: 'text-lg',
-        pc: 'text-xl',
-      }[screenSize]
-    : 'text-base md:text-lg lg:text-xl';
+  const styles = getResponsiveStyles(screenSize, {
+    smartphone: {
+      title: 'text-base',
+      gap: 'gap-2',
+      padding: 'p-2',
+      edgeBorder: 'h-2',
+      sideBorder: 'border-x',
+      background: 'tatami-bg-smartphone',
+    },
+    tablet: {
+      title: 'text-lg',
+      gap: 'gap-4',
+      padding: 'p-4',
+      edgeBorder: 'h-3',
+      sideBorder: 'border-x',
+      background: 'tatami-bg-tablet',
+    },
+    pc: {
+      title: 'text-xl',
+      gap: 'gap-6',
+      padding: 'p-6',
+      edgeBorder: 'h-4',
+      sideBorder: 'border-x',
+      background: 'tatami-bg-pc',
+    },
+    responsive: {
+      title: 'text-base md:text-lg lg:text-xl',
+      gap: 'gap-2 md:gap-3 lg:gap-4',
+      padding: 'p-3 md:p-4 lg:p-6',
+      edgeBorder: 'h-2 md:h-[10px] lg:h-3',
+      sideBorder: 'border-x',
+      background: 'tatami-bg-smartphone md:tatami-bg-tablet lg:tatami-bg-pc',
+    },
+  });
 
-  const gridColsClass = screenSize
-    ? {
-        smartphone: 'grid-cols-4',
-        tablet: 'grid-cols-4',
-        pc: 'grid-cols-4',
-      }[screenSize]
-    : 'grid-cols-4 md:grid-cols-4 lg:grid-cols-4';
+  // Common edge border styling
+  const edgeBorderClass = `${styles.edgeBorder} bg-indigo-950 dark:bg-indigo-900`;
+
+  // Always use 4 columns for shared tatami
+  const gridColsClass = 'grid-cols-4';
 
   return (
-    <div className="mb-6">
-      <h2
-        className={`mb-4 text-center font-bold text-gray-700 dark:text-gray-300 ${titleSizeClass}`}
+    <div className="flex flex-col">
+      {/* Top edge (border) */}
+      <div className={edgeBorderClass} />
+
+      {/* Main tatami body */}
+      <div
+        className={`${styles.padding} ${styles.sideBorder} ${styles.background} border-gray-300 dark:border-gray-600`}
       >
-        🎴 Shared Tatami (Reference Only)
-      </h2>
-      <div className={`grid gap-4 ${gridColsClass}`}>
-        {tatamiCards.map((card, index) => (
-          <ToriFudaCardTouch
-            key={card.id}
-            normalizedPrototype={card}
-            index={index}
-            isClickable={false}
-            showImage={true}
-            screenSize={screenSize}
-          />
-        ))}
+        {/* <h2
+          className={`text-foreground mb-4 text-center font-bold ${styles.title}`}
+        >
+          🎴 Shared Tatami (Reference Only)
+        </h2> */}
+        <div className={`grid ${styles.gap} ${gridColsClass}`}>
+          {tatamiCards.map((card, index) => (
+            <ToriFudaCardTouch
+              key={card.id}
+              normalizedPrototype={card}
+              index={index}
+              isClickable={false}
+              showImage={true}
+              screenSize={screenSize}
+            />
+          ))}
+        </div>
       </div>
+
+      {/* Bottom edge (border) */}
+      <div className={edgeBorderClass} />
     </div>
   );
 }

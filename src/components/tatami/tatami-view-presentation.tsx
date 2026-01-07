@@ -1,10 +1,11 @@
 import type { PlayMode } from '@/lib/karuta';
 import { DeckManager } from '@/lib/karuta/deck/deck-manager';
+import { getResponsiveStyles } from '@/lib/ui-utils';
 import type { Deck, GamePlayerState } from '@/models/karuta';
 import type { ScreenSize } from '@/types/screen-size';
 import type { NormalizedPrototype } from '@f88/promidas/types';
 import { GameHeader } from './game-header';
-import { PlayerTatami } from './player-tatami';
+import { PlayerArea } from './player-area';
 import { SharedTatami } from './shared-tatami';
 // import { YomiFudaCard } from './yomi-fuda-card';
 // import { YomiFudaMarquee } from './yomi-fuda-marquee';
@@ -47,32 +48,39 @@ export function TatamiViewPresentation({
   // Determine grid layout based on player count and screen size
   const playerCount = playerStates.length;
 
-  // Responsive padding class
-  const containerPadding = screenSize
-    ? {
-        smartphone: 'p-2',
-        tablet: 'p-4',
-        pc: 'p-6',
-      }[screenSize]
-    : 'p-2 md:p-3 lg:p-4';
-
-  // Responsive spacing between sections
-  const sectionSpacing = screenSize
-    ? {
-        smartphone: 'my-4 space-y-3',
-        tablet: 'my-6 space-y-4',
-        pc: 'my-8 space-y-6',
-      }[screenSize]
-    : 'my-4 md:my-6 lg:my-8 space-y-3 md:space-y-4 lg:space-y-6';
-
-  // Responsive gap for player grid
-  const playerGridGap = screenSize
-    ? {
-        smartphone: 'gap-2',
-        tablet: 'gap-3',
-        pc: 'gap-4',
-      }[screenSize]
-    : 'gap-2 md:gap-3 lg:gap-4';
+  const styles = getResponsiveStyles(screenSize, {
+    smartphone: {
+      containerPadding: 'p-3',
+      sectionSpacing: 'mb-4',
+      playerGridGap: 'gap-3',
+      yomiFuda: {
+        padding: 'px-4',
+      },
+    },
+    tablet: {
+      containerPadding: 'p-4',
+      sectionSpacing: 'mb-6',
+      playerGridGap: 'gap-4',
+      yomiFuda: {
+        padding: 'px-12',
+      },
+    },
+    pc: {
+      containerPadding: 'p-6',
+      sectionSpacing: 'mb-8',
+      playerGridGap: 'gap-6',
+      yomiFuda: {
+        padding: 'px-16',
+      },
+    },
+    responsive: {
+      containerPadding: 'p-3 md:p-4 lg:p-6',
+      sectionSpacing:
+        'my-4 md:my-6 lg:my-8 space-y-3 md:space-y-4 lg:space-y-6',
+      playerGridGap: 'gap-3 md:gap-4 lg:gap-6',
+      yomiFuda: { padding: 'px-2 md:px-4 lg:px-6' },
+    },
+  });
 
   const getPlayerGridCols = () => {
     // Keyboard mode: always match player count
@@ -94,28 +102,36 @@ export function TatamiViewPresentation({
 
   return (
     <div
-      className={`flex h-screen flex-col bg-gradient-to-br from-green-50 to-teal-100 dark:from-gray-900 dark:to-gray-800 ${containerPadding}`}
+      className={`flex h-screen flex-col bg-gradient-to-br from-green-50 to-teal-100 dark:from-gray-900 dark:to-gray-800 ${styles.containerPadding}`}
     >
       <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col overflow-hidden">
-        <GameHeader
-          currentRace={currentRace}
-          totalRaces={totalRaces}
-          score={totalScore}
-          mochiFudaCount={totalMochiFuda}
-          stackCount={stackCount}
-          tatamiCount={sharedTatamiCards.length}
-          screenSize={screenSize}
-        />
+        <div className={`shrink-0 ${styles.sectionSpacing}`}>
+          <GameHeader
+            currentRace={currentRace}
+            totalRaces={totalRaces}
+            score={totalScore}
+            mochiFudaCount={totalMochiFuda}
+            stackCount={stackCount}
+            tatamiCount={sharedTatamiCards.length}
+            screenSize={screenSize}
+          />
+        </div>
 
-        {/* Top section: Shared Tatami + YomiFuda (natural height) */}
-        <div className={`flex-shrink-0 ${sectionSpacing}`}>
-          {playMode !== 'touch' && (
+        {/*  Shared Tatami */}
+        {playMode !== 'touch' && (
+          <div className={`shrink-0 ${styles.sectionSpacing}`}>
             <SharedTatami
               tatamiCards={sharedTatamiCards}
               playMode={playMode}
               screenSize={screenSize}
             />
-          )}
+          </div>
+        )}
+
+        {/* YomiFuda */}
+        <div
+          className={`shrink-0 ${styles.sectionSpacing} ${styles.yomiFuda.padding}`}
+        >
           {/* <YomiFudaCard normalizedPrototype={yomiFuda} /> */}
           {/* <YomiFudaMarquee normalizedPrototype={yomiFuda} /> */}
           <Yomite
@@ -126,37 +142,41 @@ export function TatamiViewPresentation({
         </div>
 
         {/* Bottom section: Player Tatami Areas (takes remaining height) */}
-        <div className="flex flex-1 flex-col overflow-hidden">
-          {/* <h2 className="mb-4 flex-shrink-0 text-center text-2xl font-bold text-gray-800 dark:text-gray-100">
+        <div className={`shrink-0 ${styles.sectionSpacing}`}>
+          <div className="flex flex-1 flex-col overflow-hidden">
+            {/* <h2 className="mb-4 flex-shrink-0 text-center text-2xl font-bold text-gray-800 dark:text-gray-100">
             🎮 Player Tatami Areas
           </h2> */}
-          <div className="flex-1 overflow-y-auto">
-            <div className={`grid ${playerGridGap} ${getPlayerGridCols()}`}>
-              {playerStates.map((playerState, playerIndex) => {
-                const playerTatamiCards = DeckManager.getByIds(
-                  deck,
-                  playerState.tatami,
-                );
-                return (
-                  <PlayerTatami
-                    key={playerState.player.id}
-                    player={playerState.player}
-                    playerIndex={playerIndex}
-                    playerCount={playerStates.length}
-                    tatamiCards={playerTatamiCards}
-                    onCardClick={(card) =>
-                      onPlayerCardSelect(playerState.player.id, card)
-                    }
-                    mochiFudaCount={playerState.mochiFuda.length}
-                    score={playerState.score}
-                    playMode={playMode}
-                    feedbackState={
-                      playerFeedbackStates[playerState.player.id] ?? null
-                    }
-                    screenSize={screenSize}
-                  />
-                );
-              })}
+            <div className="flex-1 overflow-y-auto">
+              <div
+                className={`grid ${styles.playerGridGap} ${getPlayerGridCols()}`}
+              >
+                {playerStates.map((playerState, playerIndex) => {
+                  const playerTatamiCards = DeckManager.getByIds(
+                    deck,
+                    playerState.tatami,
+                  );
+                  return (
+                    <PlayerArea
+                      key={playerState.player.id}
+                      player={playerState.player}
+                      playerIndex={playerIndex}
+                      playerCount={playerStates.length}
+                      tatamiCards={playerTatamiCards}
+                      onCardClick={(card) =>
+                        onPlayerCardSelect(playerState.player.id, card)
+                      }
+                      mochiFudaCount={playerState.mochiFuda.length}
+                      score={playerState.score}
+                      playMode={playMode}
+                      feedbackState={
+                        playerFeedbackStates[playerState.player.id] ?? null
+                      }
+                      screenSize={screenSize}
+                    />
+                  );
+                })}
+              </div>
             </div>
           </div>
         </div>

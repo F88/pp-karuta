@@ -5,8 +5,8 @@ import type { ScreenSize } from '@/types/screen-size';
  * Detects the current screen size based on Tailwind CSS breakpoints.
  *
  * Breakpoints:
- * - smartphone: width < 768px (base)
- * - tablet: 768px <= width < 1024px (md)
+ * - smartphone: width < 640px (base)
+ * - tablet: 640px <= width < 1024px (sm ~ md)
  * - pc: width >= 1024px (lg)
  *
  * @returns {ScreenSize} The current screen size category
@@ -31,7 +31,7 @@ export function useScreenSize(): ScreenSize {
     if (width >= 1024) {
       return 'pc';
     }
-    if (width >= 768) {
+    if (width >= 640) {
       return 'tablet';
     }
     return 'smartphone';
