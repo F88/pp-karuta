@@ -1,7 +1,8 @@
 import type { NormalizedPrototype } from '@f88/promidas/types';
 import type { ScreenSize } from '@/types/screen-size';
-import { useTypewriter } from '@/hooks/use-typewriter';
+// import { useTypewriter } from '@/hooks/use-typewriter';
 import { getResponsiveStyles } from '@/lib/ui-utils';
+import { useYomibito } from '@/hooks/use-yomibito';
 
 export type YomiteProps = {
   normalizedPrototype: NormalizedPrototype;
@@ -10,12 +11,22 @@ export type YomiteProps = {
 
 export function Yomite({ normalizedPrototype, screenSize }: YomiteProps) {
   const seq =
-    '📜' +
+    // '📜' +
     (normalizedPrototype.prototypeNm ?? 'NO NAME') +
     ' - ' +
     (normalizedPrototype.summary || 'NO DESCRIPTION');
 
-  const { displayedText } = useTypewriter({ text: seq, speed: 200 });
+  // const { displayedText } = useTypewriter({ text: seq, speed: 200 });
+  const { displayedText: yomibitoText } = useYomibito({
+    // text:
+    //   'ふるいけやかわずとびこむみずのおと' +
+    //   'ほげほげほげげ' +
+    //   'ほげほげほげげ' +
+    //   'あいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめもやゆよらりるれろわをん',
+    text: seq,
+    speed: 200,
+    rhythmPause: 1_000,
+  });
 
   const styles = getResponsiveStyles(screenSize, {
     smartphone: {
@@ -44,12 +55,21 @@ export function Yomite({ normalizedPrototype, screenSize }: YomiteProps) {
   // const backgroundClass = 'bg-card text-card-foreground'; // Card background theme
 
   return (
-    <div
-      className={`${backgroundClass} flex items-center gap-3 rounded-lg shadow-lg ${styles.padding}`}
-    >
-      <h2 className={`flex-1 font-bold tracking-widest ${styles.text}`}>
-        {displayedText || '\u00A0'}
-      </h2>
-    </div>
+    <>
+      {/* <div
+        className={`${backgroundClass} flex items-center gap-3 rounded-lg shadow-lg ${styles.padding}`}
+      >
+        <h2 className={`flex-1 font-bold tracking-widest ${styles.text}`}>
+          📜 {displayedText || '\u00A0'}
+        </h2>
+      </div> */}
+      <div
+        className={`${backgroundClass} flex items-center gap-3 rounded-lg shadow-lg ${styles.padding}`}
+      >
+        <h2 className={`flex-1 font-bold tracking-widest ${styles.text}`}>
+          📜 {yomibitoText || '\u00A0'}
+        </h2>
+      </div>
+    </>
   );
 }
