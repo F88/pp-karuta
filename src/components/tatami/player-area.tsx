@@ -12,6 +12,7 @@ type PlayerInfoProps = {
   player: Player;
   mochiFudaCount: number;
   score: number;
+  playMode: PlayMode;
   screenSize?: ScreenSize;
 };
 
@@ -19,6 +20,7 @@ function PlayerInfo({
   player,
   mochiFudaCount,
   score,
+  playMode,
   screenSize = 'pc',
 }: PlayerInfoProps) {
   const styles = getResponsiveStyles(screenSize, {
@@ -44,18 +46,27 @@ function PlayerInfo({
     },
   });
 
+  const isKeyboardMode = playMode === 'keyboard';
+  const containerClass = isKeyboardMode
+    ? 'flex flex-col gap-1'
+    : 'flex flex-row justify-between gap-2';
+  const nameClass = isKeyboardMode
+    ? `text-foreground flex min-w-0 items-center justify-center gap-2 font-bold ${styles.title}`
+    : `text-foreground flex min-w-0 flex-1 items-center gap-2 font-bold ${styles.title}`;
+  const badgeContainerClass = isKeyboardMode
+    ? 'flex flex-wrap justify-center gap-1'
+    : 'flex flex-nowrap gap-2';
+
   return (
-    <div className="flex flex-row justify-between gap-2">
+    <div className={containerClass}>
       {/* Player's Name */}
-      <h3
-        className={`text-foreground flex min-w-0 flex-1 items-center gap-2 font-bold ${styles.title}`}
-      >
+      <h3 className={nameClass}>
         <User className={`shrink-0 ${styles.icon}`} />
         <span className="min-w-0 truncate">{player.name}</span>
       </h3>
 
       {/* Score and MochiFuda Count */}
-      <div className="flex flex-nowrap gap-2">
+      <div className={badgeContainerClass}>
         <Badge
           variant="outline"
           className={`shrink-0 bg-yellow-100 text-yellow-700 ${styles.badgeText}`}
@@ -192,6 +203,7 @@ export function PlayerArea({
           player={player}
           mochiFudaCount={mochiFudaCount}
           score={score}
+          playMode={playMode}
           screenSize={screenSize}
         />
       </CardHeader>
