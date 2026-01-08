@@ -34,7 +34,7 @@ export const DECK_RECIPE_ALL_PROTOTYPES: DeckRecipe = {
   title: '🌐 全作品',
   description: '全ての作品',
   apiParams: { ...ALL_PROTOTYPES },
-  difficulty: 'beginner',
+  difficulty: 'advanced',
   tags: [],
 };
 
@@ -43,10 +43,10 @@ export const DECK_RECIPE_ALL_PROTOTYPES: DeckRecipe = {
  */
 export const DECK_RECIPE_PROMIDAS: DeckRecipe = {
   id: 'promidase',
+  title: '🧰 PROMIDAS',
   apiParams: { offset: 5000, limit: 3000 },
   difficulty: 'beginner',
   tags: ['PROMIDAS'],
-  title: 'PROMIDAS',
   description: 'PROMIDAS利用',
   filter: createIdsFilter([
     7917 /*	🧰 PROMIDAS */, 7920 /* 🛝 PROMIDAS Playground */,
@@ -60,7 +60,7 @@ export const DECK_RECIPE_PROMIDAS: DeckRecipe = {
  */
 export const DECK_RECIPE_KARUTA: DeckRecipe = {
   id: 'karuta',
-  title: 'かるた',
+  title: '🎴 かるた',
   apiParams: { ...ALL_PROTOTYPES },
   difficulty: 'intermediate',
   tags: ['かるた'],
