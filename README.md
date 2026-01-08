@@ -64,6 +64,7 @@ Utilities to assist development using PROMIDAS
 - **vite-plugin-pwa** - Progressive Web App support
 - **Workbox** - Service Worker library (via vite-plugin-pwa)
 - **Web App Manifest** - A2HS (Add to Home Screen) support
+- **@vite-pwa/assets-generator** - PWA assets generator from single source image
 
 ### Deployment
 
