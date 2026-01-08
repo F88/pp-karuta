@@ -71,7 +71,7 @@ export function Yomite({ normalizedPrototype, screenSize }: YomiteProps) {
       >
         <h2 className={`flex-1 font-bold tracking-widest ${styles.text}`}>
           {/* 📜 */}
-          💬
+          {'💬' + ' '}
           {/* 🔊 */}
           {/* 🔈  */}
           {/* 🗣️ */}
