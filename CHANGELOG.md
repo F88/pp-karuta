@@ -17,7 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     - Web App Manifest による PWA 設定
     - @vite-pwa/assets-generator による PWA アイコン自動生成
     - pwa-assets.config.ts による minimal-2023 プリセット設定
-    - PWA メタタグ (theme-color, apple-mobile-web-app-*) を index.html に追加
+    - PWA メタタグ (theme-color, apple-mobile-web-app-\*) を index.html に追加
 
 ### Changed
 
