@@ -160,8 +160,8 @@ export function TatamiViewPresentation({
         </div>
 
         {/*  Shared Tatami */}
-        {(playMode !== 'touch' ||
-          import.meta.env.VITE_DEBUG_MODE === 'true') && (
+        {/* {(playMode !== 'touch' || import.meta.env.VITE_DEBUG_MODE === 'true') && ( */}
+        {playMode !== 'touch' && (
           <div
             className={`shrink-0 ${styles.sectionSpacing} ${styles.sharedTatami.padding}`}
           >

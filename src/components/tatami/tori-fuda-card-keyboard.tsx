@@ -67,9 +67,9 @@ export function ToriFudaCardKeyboard({
             </div>
 
             <h3 className={styles.title}>{card.prototypeNm}</h3>
-            <p className={styles.summary}>
+            {/* <p className={styles.summary}>
               {card.summary || 'No summary available'}
-            </p>
+            </p> */}
             <div className={styles.id}>ID: {card.id}</div>
           </>
         )}
