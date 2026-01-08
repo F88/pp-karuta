@@ -1,0 +1,1 @@
+if('serviceWorker' in navigator) {window.addEventListener('load', () => {navigator.serviceWorker.register('/pp-karuta/sw.js', { scope: '/pp-karuta/' })})}
