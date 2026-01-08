@@ -11,6 +11,7 @@ import { TatamiViewContainer } from '@/components/tatami/tatami-view-container';
 import { GameResultsContainer } from '@/components/gameResults/game-results-container';
 import type { GameState } from '@/models/karuta';
 import type { PlayMode } from '@/lib/karuta';
+import { GameManager } from '@/lib/karuta/game/game-manager';
 import { useGameSetup } from '@/hooks/use-game-setup';
 import { useRepositoryState } from '@/hooks/use-repository-state';
 import { useScreenSizeContext } from '@/hooks/use-screen-size-context';
@@ -62,59 +63,7 @@ export function GameFlow() {
 
       setGameState((prev) => {
         if (!prev) return prev;
-
-        // Update player states
-        const updatedPlayerStates = prev.playerStates.map((ps) => {
-          // Remove card from ALL players' tatami
-          const newPlayerTatami = ps.tatami.filter((id) => id !== cardId);
-
-          // Add next card from stack to ALL players' tatami
-          if (prev.stack.length > 0) {
-            newPlayerTatami.push(prev.stack[0]);
-          }
-
-          // Update mochiFuda and score only for the player who got it correct
-          if (ps.player.id === playerId) {
-            return {
-              ...ps,
-              tatami: newPlayerTatami,
-              mochiFuda: [...ps.mochiFuda, cardId],
-              score: ps.score + 1,
-            };
-          }
-
-          // For other players, only update tatami
-          return {
-            ...ps,
-            tatami: newPlayerTatami,
-          };
-        });
-
-        // Update shared tatami
-        const newSharedTatami = prev.tatami.filter((id) => id !== cardId);
-        const newStack = [...prev.stack];
-
-        // Add next card from stack to shared tatami
-        if (newStack.length > 0) {
-          const nextCard = newStack.shift();
-          if (nextCard !== undefined) {
-            newSharedTatami.push(nextCard);
-          }
-        }
-
-        logger.debug(
-          '🎴 Updated - SharedTatami:',
-          newSharedTatami,
-          'Stack:',
-          newStack,
-        );
-
-        return {
-          ...prev,
-          tatami: newSharedTatami,
-          stack: newStack,
-          playerStates: updatedPlayerStates,
-        };
+        return GameManager.processCorrectAnswer(prev, playerId, cardId);
       });
     },
     [],
@@ -123,20 +72,7 @@ export function GameFlow() {
   const handleIncorrectAnswer = useCallback((playerId: string) => {
     setGameState((prev) => {
       if (!prev) return prev;
-
-      const updatedPlayerStates = prev.playerStates.map((ps) => {
-        if (ps.player.id !== playerId) return ps;
-
-        return {
-          ...ps,
-          score: Math.max(0, ps.score - 1),
-        };
-      });
-
-      return {
-        ...prev,
-        playerStates: updatedPlayerStates,
-      };
+      return GameManager.processIncorrectAnswer(prev, playerId);
     });
   }, []);
 
@@ -156,17 +92,7 @@ export function GameFlow() {
   }, [navigate]);
 
   // Game is over when all cards are acquired
-  const totalMochiFuda =
-    gameState?.playerStates.reduce((sum, ps) => sum + ps.mochiFuda.length, 0) ||
-    0;
-  const isGameOver =
-    gameState && totalMochiFuda >= gameState.readingOrder.length;
-
-  logger.debug('📊 Game status:', {
-    totalMochiFuda,
-    readingOrderLength: gameState?.readingOrder.length,
-    isGameOver,
-  });
+  const isGameOver = gameState ? GameManager.isGameOver(gameState) : false;
 
   // Show results if game is over
   if (isGameOver && gameState) {
