@@ -11,52 +11,17 @@
  */
 
 import type { DeckRecipe } from '@/models/karuta';
-import type { ListPrototypesParams } from 'protopedia-api-v2-client';
+
+import {
+  ALL_PROTOTYPES,
+  DECK_RECIPE_ALL_PROTOTYPES,
+  DECK_RECIPE_KARUTA,
+  DECK_RECIPE_PROMIDAS,
+} from './deck-recipe';
 import { ETO_RECIPES } from './deck-recipe-eto';
-import { createIdsFilter, createReleaseDateYearFilter } from './filter-factory';
+import { SAIJI_RECIPES } from './deck-recipe-saiji';
 
-/**
- * Type for prototype window parameters (offset and limit)
- */
-type ROTOTYPES_WINDOW = Pick<ListPrototypesParams, 'offset' | 'limit'>;
-
-/**
- * Default parameters for fetching all prototypes
- * - offset: 0 (start from the beginning)
- * - limit: 10,000 (maximum number of prototypes to fetch)
- */
-const ALL_PROTOTYPES: ROTOTYPES_WINDOW = { offset: 0, limit: 10_000 };
-
-/**
- * Recipe for all prototypes without any filtering
- * This is the default deck that includes all available prototypes
- */
-const DECK_RECIPE_ALL_PROTOTYPES: DeckRecipe = {
-  id: 'all-prototypes',
-  title: '🌐 全作品',
-  description: '全ての作品',
-  apiParams: { ...ALL_PROTOTYPES },
-  difficulty: 'beginner',
-  tags: [],
-};
-
-/**
- * ETO recipe for Rat (子) themed prototypes
- * Filters prototypes containing rat/mouse-related keywords in Japanese and English
- */
-export const DECK_RECIPE_PROMIDAS: DeckRecipe = {
-  id: 'promidase',
-  apiParams: { offset: 5000, limit: 3000 },
-  difficulty: 'beginner',
-  tags: ['PROMIDAS'],
-  title: 'PROMIDAS',
-  description: 'PROMIDAS利用',
-  filter: createIdsFilter([
-    7917 /*	🧰 PROMIDAS */, 7920 /* 🛝 PROMIDAS Playground */,
-    7968 /* 🧰 PROMIDAS Utilities */,
-    7972 /* 🎴 怖露徒頁帝亜 狩流多 弐拾六式 馬耳闘風編 */,
-  ]),
-};
+import { createReleaseDateYearFilter } from './filter-factory';
 
 // ========================================
 // Section 0: Recipe Generation Helpers
@@ -115,11 +80,6 @@ function generateReleaseYearDecks(years: number[]): DeckRecipe[] {
   }));
 }
 
-// ========================================
-// Section 1: ETO (Chinese Zodiac) Recipes
-// ========================================
-// Moved to ./deck-recipe-eto.ts
-
 /**
  * RecipeManager - Centralized management for DeckRecipes
  * Handles recipe definitions, lookup, and factory methods
@@ -149,6 +109,10 @@ export class DeckRecipeManager {
   static readonly RECIPES: DeckRecipe[] = [
     // ETO
     ...ETO_RECIPES,
+    // Annual events (歳時)
+    ...SAIJI_RECIPES,
+    // Karuta themed
+    DECK_RECIPE_KARUTA,
     // Release year based
     ...this.releaseYearRecipes,
     // All-prototypes recipe

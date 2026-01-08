@@ -9,6 +9,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- 歳時記テーマのデッキレシピ (お正月、節分、バレンタインデー、敬老の日、ハロウィン、ヒーローズ・リーグ、クリスマス)
+
+### Changed
+
+- デッキレシピファイルをモジュール化 - 関心の分離と保守性向上のため専用ファイルに分割
+    - deck-recipe.ts: 個別レシピ
+    - deck-recipe-saiji.ts: 歳時記テーマレシピ
+    - deck-recipe-eto.ts: 干支テーマレシピ
+
 ## [2026.01.08] - 2026-01-08
 
 ### Added
