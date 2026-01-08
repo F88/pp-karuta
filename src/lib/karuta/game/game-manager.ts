@@ -140,14 +140,18 @@ export class GameManager {
     playerId: string,
     cardId: number,
   ): GameState {
+    const nextCardFromStack =
+      gameState.stack.length > 0 ? gameState.stack[0] : undefined;
+    const newStack = gameState.stack.slice(1);
+
     // Update player states
     const updatedPlayerStates = gameState.playerStates.map((ps) => {
       // Remove card from ALL players' tatami
       const newPlayerTatami = ps.tatami.filter((id) => id !== cardId);
 
       // Add next card from stack to ALL players' tatami
-      if (gameState.stack.length > 0) {
-        newPlayerTatami.push(gameState.stack[0]);
+      if (nextCardFromStack !== undefined) {
+        newPlayerTatami.push(nextCardFromStack);
       }
 
       // Update mochiFuda and score only for the player who got it correct
@@ -169,14 +173,8 @@ export class GameManager {
 
     // Update shared tatami
     const newSharedTatami = gameState.tatami.filter((id) => id !== cardId);
-    const newStack = [...gameState.stack];
-
-    // Add next card from stack to shared tatami
-    if (newStack.length > 0) {
-      const nextCard = newStack.shift();
-      if (nextCard !== undefined) {
-        newSharedTatami.push(nextCard);
-      }
+    if (nextCardFromStack !== undefined) {
+      newSharedTatami.push(nextCardFromStack);
     }
 
     return {
