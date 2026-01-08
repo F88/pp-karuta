@@ -1,8 +1,11 @@
+<!-- markdownlint-disable MD024 -->
+
 # Changelog
 
-pp-karuta の主要な変更はこのファイルに記録されます。
+All notable changes to this project will be documented in this file.
 
-フォーマットは [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) に基づいています。
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
@@ -15,6 +18,12 @@ pp-karuta の主要な変更はこのファイルに記録されます。
 
 ### Changed
 
+- ゲームロジックをGameManagerクラスに統合 - ゲーム状態管理の一元化
+- カード順序決定ロジックを改善 - StackRecipe.sortMethodを唯一の真実の源に設定
+- pickYomiFuda関数のシグネチャ変更 - tatami配列を引数に取り、cardIDのみを返却
+- VITE_SHUFFLE_TATAMIをVITE_RANDOM_YOMIFUDAにリネーム - より明確な命名
+- DECK_RECIPE_PROMIDASを開発環境専用に変更 - import.meta.env.DEVで制御
+- PROMIDAS recipe parameters更新 - apiParams: offset 5000, limit 3000に変更
 - Yomiteアイコンを巻物 (📜) から吹き出し (💬) に変更
 - PlayerAreaを個別スクロール可能に変更 (max-h-full, overflow-y-auto)
 - TatamiViewPresentationの高さ指定をh-screenからh-fullに変更
@@ -23,10 +32,20 @@ pp-karuta の主要な変更はこのファイルに記録されます。
 
 ### Fixed
 
+- deck-recipe-etoの循環依存問題を解決 - ALL_PROTOTYPESをローカル定義に変更
+- 3層の冗長なランダム化を削除 - createInitialStateからshuffle処理を削除
+- pickYomiFuda関数がレンダリング毎に呼ばれる問題を修正 - useMemo使用
+- GameState型からreadingOrderフィールドを削除 - 不要な状態管理を削減
 - 狭いviewport heightでのPlayerArea表示問題を修正
 - AppHeader高さを除外したコンテンツ領域の高さ計算を実装
 - keyboard mode 4プレイヤー横並びレイアウトでのキーサイズ問題を修正
 - ゲーム開始後のスクロール位置が最上部にならない問題を修正
+
+### Dependencies
+
+- @tanstack/react-router: ^1.145.7 → ^1.145.11
+- @tanstack/router-plugin: ^1.145.7 → ^1.145.11
+- vite: ^7.3.0 → ^7.3.1
 
 ## [2026.01.07] - 2026-01-07
 
