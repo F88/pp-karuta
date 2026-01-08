@@ -28,7 +28,7 @@ export function IntroPage({ onBack }: { onBack: () => void }) {
   useEffect(() => {
     // Use relative path from public directory
     const basePath = import.meta.env.BASE_URL || '/';
-    fetch(`${basePath}INTRO.txt`)
+    fetch(`${basePath}/data/INTRO.txt`)
       .then((response) => response.text())
       .then((text) => {
         // Remove front-matter (between --- and ---)
