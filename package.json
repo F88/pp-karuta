@@ -33,6 +33,7 @@
     "build-storybook": "storybook build",
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,css,md}\"",
     "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,css,md}\"",
+    "generate-pwa-assets": "pwa-assets-generator",
     "deploy": "npm run build && gh-pages -d dist"
   },
   "dependencies": {
@@ -71,6 +72,7 @@
     "@types/node": "^24.10.1",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
+    "@vite-pwa/assets-generator": "^1.0.2",
     "@vitejs/plugin-react": "^5.1.2",
     "@vitest/ui": "^4.0.16",
     "eslint": "^9.39.2",
