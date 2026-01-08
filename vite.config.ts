@@ -19,6 +19,7 @@ export default defineConfig({
         name: '🎴 PPK26 怖露徒頁帝亜 狩流多 弐拾六式 馬耳闘風編',
         short_name: '🎴PPK26',
         description: 'ProtoPediaで公開されている作品のかるた、画像のみを頼りに札を取る「愛と本能の闘争」',
+        id: '/pp-karuta/',
         theme_color: '#f5f5f5',
         background_color: '#f5f5f5',
         display: 'standalone',
