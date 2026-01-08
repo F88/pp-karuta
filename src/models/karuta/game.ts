@@ -9,7 +9,7 @@ import type { Tatami } from './tatami';
  */
 export type GamePlayerState = {
   player: Player; // Reference to the player
-  tatami: number[]; // Player's own Tatami (required for Touch mode)
+  tatami: Tatami; // Player's own Tatami (required for Touch mode)
   mochiFuda: number[]; // IDs of acquired cards
   score: number;
 };
@@ -22,7 +22,6 @@ export type GameState = {
   stack: Stack; // Remaining card IDs
   tatami: Tatami; // Shared Tatami card IDs (for Keyboard mode or reference)
   playerStates: GamePlayerState[];
-  readingOrder: number[]; // Order of cards to be read (YomiFuda sequence)
 };
 
 /**

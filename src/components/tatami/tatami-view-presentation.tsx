@@ -1,14 +1,16 @@
+import type { NormalizedPrototype } from '@f88/promidas/types';
+
+import type { Deck, GamePlayerState } from '@/models/karuta';
+
+import type { ScreenSize } from '@/types/screen-size';
+
 import type { PlayMode } from '@/lib/karuta';
 import { DeckManager } from '@/lib/karuta/deck/deck-manager';
 import { getResponsiveStyles } from '@/lib/ui-utils';
-import type { Deck, GamePlayerState } from '@/models/karuta';
-import type { ScreenSize } from '@/types/screen-size';
-import type { NormalizedPrototype } from '@f88/promidas/types';
+
 import { GameHeader } from './game-header';
 import { PlayerArea } from './player-area';
 import { SharedTatami } from './shared-tatami';
-// import { YomiFudaCard } from './yomi-fuda-card';
-// import { YomiFudaMarquee } from './yomi-fuda-marquee';
 import { Yomite } from './yomite';
 
 export type TatamiViewPresentationProps = {
@@ -158,7 +160,8 @@ export function TatamiViewPresentation({
         </div>
 
         {/*  Shared Tatami */}
-        {playMode !== 'touch' && (
+        {(playMode !== 'touch' ||
+          import.meta.env.VITE_DEBUG_MODE === 'true') && (
           <div
             className={`shrink-0 ${styles.sectionSpacing} ${styles.sharedTatami.padding}`}
           >

@@ -30,3 +30,4 @@ tools/prompts/*
 # Temporary ignore files
 vite.config.ts
 src/lib/karuta/deck/deck-recipe-manager.test.ts
+src/lib/karuta/game/game-manager.test.ts

@@ -6,7 +6,6 @@ import type {
 } from '@/models/karuta';
 import type { Player } from '@/models/karuta';
 import type { PlayMode } from '../playMode/play-mode-manager';
-import type { NormalizedPrototype } from '@f88/promidas/types';
 import { StackManager } from '../stack/stack-manager';
 import { PlayerManager } from '../player/player-manager';
 import { PlayModeManager } from '../playMode/play-mode-manager';
@@ -27,14 +26,18 @@ export class GameManager {
 
   /**
    * Create initial GameState from Deck, StackRecipe, and Players
-   * Generates Stack from Deck using StackRecipe, extracts first N for Tatami
-   * Initializes GamePlayerState for each Player
+   *
+   * The card order is determined by StackRecipe.sortMethod and preserved throughout initialization:
+   * 1. Generates Stack from Deck using StackRecipe (order determined by sortMethod: random/id-asc/id-desc)
+   * 2. Extracts first N cards from Stack for Tatami (preserving Stack order)
+   * 3. Initializes GamePlayerState for each Player
+   *
    * @param deck - Deck (Map of ID -> NormalizedPrototype)
    * @param players - Player array (1-4 players)
    * @param playMode - PlayMode (keyboard or touch)
-   * @param stackRecipe - StackRecipe defining Stack generation rules
+   * @param stackRecipe - StackRecipe defining Stack generation rules (including sort order)
    * @param initialTatamiSize - Initial Tatami size (default: 5)
-   * @returns Complete initial GameState
+   * @returns Complete initial GameState with cards ordered according to StackRecipe
    * @throws {Error} If Deck is empty, players validation fails, or playMode is invalid
    */
   static createInitialState(
@@ -55,6 +58,9 @@ export class GameManager {
     PlayModeManager.validatePlayMode(playMode);
 
     // Generate Stack from Deck using StackRecipe
+    // IMPORTANT: DO NOT shuffle or modify the order here!
+    // The stack order is determined by StackRecipe.sortMethod (random/id-asc/id-desc).
+    // Any additional shuffling would violate the intended sort order.
     const fullStack = StackManager.generate(deck, stackRecipe);
 
     // Extract first N (or less if stack is smaller) for tatami
@@ -75,7 +81,6 @@ export class GameManager {
       stack: stackIds,
       tatami: tatamiIds,
       playerStates,
-      readingOrder: fullStack, // Preserve the full reading order
     };
   }
 
@@ -84,42 +89,39 @@ export class GameManager {
   // ========================================
 
   /**
-   * Get total number of mochiFuda (acquired cards) across all players
-   * @param gameState - Current GameState
-   * @returns Total count of mochiFuda
-   */
-  static getTotalMochiFuda(gameState: GameState): number {
-    return gameState.playerStates.reduce(
-      (sum, ps) => sum + ps.mochiFuda.length,
-      0,
-    );
-  }
-
-  /**
    * Check if the game is over
-   * Game ends when all cards from readingOrder have been acquired
+   * Game ends when there are no more cards in tatami to read
    * @param gameState - Current GameState
    * @returns True if game is over
    */
   static isGameOver(gameState: GameState): boolean {
-    const totalMochiFuda = this.getTotalMochiFuda(gameState);
-    return totalMochiFuda >= gameState.readingOrder.length;
+    return gameState.tatami.length === 0;
   }
 
   /**
-   * Get the current YomiFuda (reading card) based on game progress
-   * @param gameState - Current GameState
-   * @returns Current YomiFuda prototype, or null if game is over
+   * Pick a YomiFuda (reading card) from tatami
+   *
+   * Selection behavior depends on VITE_RANDOM_YOMIFUDA environment variable:
+   * - false (default): Returns first card (tatami[0]) - sequential order as determined by StackRecipe
+   * - true: Returns randomly selected card from tatami - adds unpredictability to the game
+   *
+   * @param tatami - Array of card IDs in tatami
+   * @returns Picked card ID, or null if tatami is empty
    */
-  static getCurrentYomiFuda(gameState: GameState): NormalizedPrototype | null {
-    const completedRaces = this.getTotalMochiFuda(gameState);
-    const currentYomiFudaId = gameState.readingOrder[completedRaces];
-
-    if (currentYomiFudaId === undefined) {
+  static pickYomiFuda(tatami: number[]): number | null {
+    if (tatami.length === 0) {
       return null;
     }
 
-    return gameState.deck.get(currentYomiFudaId) ?? null;
+    // Check if random selection is enabled
+    if (import.meta.env.VITE_RANDOM_YOMIFUDA === 'true') {
+      // Randomly select a card from tatami
+      const randomIndex = Math.floor(Math.random() * tatami.length);
+      return tatami[randomIndex];
+    }
+
+    // Default: Pick first card (sequential order as determined by StackRecipe)
+    return tatami[0];
   }
 
   /**
