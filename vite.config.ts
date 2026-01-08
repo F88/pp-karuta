@@ -14,11 +14,12 @@ export default defineConfig({
     tailwindcss(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.ico', 'apple-touch-icon-180x180.png'],
+      includeAssets: ['icons/favicon.ico', 'icons/apple-touch-icon-180x180.png'],
       manifest: {
         name: '🎴 PPK26 怖露徒頁帝亜 狩流多 弐拾六式 馬耳闘風編',
         short_name: '🎴PPK26',
         description: 'ProtoPediaで公開されている作品のかるた、画像のみを頼りに札を取る「愛と本能の闘争」',
+        lang: 'ja',
         id: '/pp-karuta/',
         theme_color: '#f5f5f5',
         background_color: '#f5f5f5',
