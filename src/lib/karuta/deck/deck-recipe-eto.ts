@@ -11,13 +11,20 @@ import type { DeckRecipe } from '@/models/karuta';
 import { createKeywordFilter } from './filter-factory';
 
 /**
+ * Default parameters for fetching all prototypes
+ * - offset: 0 (start from the beginning)
+ * - limit: 10,000 (maximum number of prototypes to fetch)
+ */
+const ALL_PROTOTYPES = { offset: 0, limit: 10_000 };
+
+/**
  * Base configuration for ETO (Chinese zodiac) themed recipes
  * - Fetches all prototypes for filtering
  * - Intermediate difficulty level
  * - Tagged with '干支' (zodiac)
  */
 const DECK_ETO_BASE: Pick<DeckRecipe, 'apiParams' | 'difficulty' | 'tags'> = {
-  apiParams: { offset: 0, limit: 10_000 },
+  apiParams: { ...ALL_PROTOTYPES },
   difficulty: 'intermediate',
   tags: ['干支'],
 };

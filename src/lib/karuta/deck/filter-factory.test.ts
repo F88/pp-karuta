@@ -1,11 +1,137 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import {
+  createIdsFilter,
   createKeywordFilter,
   createReleaseDateYearFilter,
 } from './filter-factory';
 import type { NormalizedPrototype } from '@f88/promidas/types';
 
 describe('Filter Factory', () => {
+  describe('createIdsFilter', () => {
+    const mockPrototypes: NormalizedPrototype[] = [
+      {
+        id: 1,
+        prototypeNm: 'Snake Game',
+        users: ['User1'],
+        summary: 'A game about snakes',
+        freeComment: '',
+        systemDescription: '',
+        tags: [],
+        materials: [],
+        events: [],
+        awards: [],
+        teamNm: '',
+        releaseFlg: 1,
+        status: 1,
+        createDate: '2024-01-01T00:00:00.000Z',
+        mainUrl: 'https://example.com/1',
+        viewCount: 0,
+        goodCount: 0,
+        commentCount: 0,
+      },
+      {
+        id: 2,
+        prototypeNm: 'Horse Racing',
+        users: ['User2'],
+        summary: 'A racing game',
+        freeComment: '',
+        systemDescription: '',
+        tags: [],
+        materials: [],
+        events: [],
+        awards: [],
+        teamNm: '',
+        releaseFlg: 1,
+        status: 1,
+        createDate: '2024-01-02T00:00:00.000Z',
+        mainUrl: 'https://example.com/2',
+        viewCount: 0,
+        goodCount: 0,
+        commentCount: 0,
+      },
+      {
+        id: 3,
+        prototypeNm: 'Cat Simulator',
+        users: ['User3'],
+        summary: 'A game about cats',
+        freeComment: '',
+        systemDescription: '',
+        tags: [],
+        materials: [],
+        events: [],
+        awards: [],
+        teamNm: '',
+        releaseFlg: 1,
+        status: 1,
+        createDate: '2024-01-03T00:00:00.000Z',
+        mainUrl: 'https://example.com/3',
+        viewCount: 0,
+        goodCount: 0,
+        commentCount: 0,
+      },
+      {
+        id: 10,
+        prototypeNm: 'Dog Adventure',
+        users: ['User10'],
+        summary: 'Adventure with dogs',
+        freeComment: '',
+        systemDescription: '',
+        tags: [],
+        materials: [],
+        events: [],
+        awards: [],
+        teamNm: '',
+        releaseFlg: 1,
+        status: 1,
+        createDate: '2024-01-10T00:00:00.000Z',
+        mainUrl: 'https://example.com/10',
+        viewCount: 0,
+        goodCount: 0,
+        commentCount: 0,
+      },
+    ];
+
+    it('should filter prototypes by single ID', () => {
+      const filter = createIdsFilter([1]);
+      const filtered = filter(mockPrototypes);
+      expect(filtered.length).toBe(1);
+      expect(filtered.map((p) => p.id)).toEqual([1]);
+    });
+
+    it('should filter prototypes by multiple IDs', () => {
+      const filter = createIdsFilter([1, 3, 10]);
+      const filtered = filter(mockPrototypes);
+      expect(filtered.length).toBe(3);
+      expect(filtered.map((p) => p.id)).toEqual([1, 3, 10]);
+    });
+
+    it('should return empty array when no IDs match', () => {
+      const filter = createIdsFilter([99, 100]);
+      const filtered = filter(mockPrototypes);
+      expect(filtered).toEqual([]);
+    });
+
+    it('should handle empty ID array', () => {
+      const filter = createIdsFilter([]);
+      const filtered = filter(mockPrototypes);
+      expect(filtered).toEqual([]);
+    });
+
+    it('should filter all prototypes when all IDs provided', () => {
+      const filter = createIdsFilter([1, 2, 3, 10]);
+      const filtered = filter(mockPrototypes);
+      expect(filtered.length).toBe(4);
+      expect(filtered.map((p) => p.id)).toEqual([1, 2, 3, 10]);
+    });
+
+    it('should handle duplicate IDs in filter array', () => {
+      const filter = createIdsFilter([1, 1, 2, 2]);
+      const filtered = filter(mockPrototypes);
+      expect(filtered.length).toBe(2);
+      expect(filtered.map((p) => p.id)).toEqual([1, 2]);
+    });
+  });
+
   describe('createKeywordFilter', () => {
     const mockPrototypes: NormalizedPrototype[] = [
       {
