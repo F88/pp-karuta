@@ -1,8 +1,9 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
 import type { NormalizedPrototype } from '@f88/promidas/types';
 
 import { useKeyboardCardSelection } from '@/hooks/use-keyboard-card-selection';
+import { useScrollToTopOnMount } from '@/hooks/use-scroll-to-top-on-mount';
 
 import type { GameState } from '@/models/karuta';
 import type { ScreenSize } from '@/types/screen-size';
@@ -29,10 +30,7 @@ export function TatamiViewContainer({
   onIncorrectAnswer,
   screenSize,
 }: TatamiViewContainerProps) {
-  // Scroll to top when component mounts
-  useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'instant' });
-  }, []);
+  useScrollToTopOnMount();
 
   // Calculate current race from total mochiFuda count across all players
   const totalMochiFuda = gameState.playerStates.reduce(

@@ -1,8 +1,9 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback } from 'react';
 import type { GamePlayerState, Deck } from '@/models/karuta';
 import type { ScreenSize } from '@/types/screen-size';
 import { GameResultsPresentation } from './game-results-presentation';
 import { logger } from '@/lib/logger';
+import { useScrollToTopOnMount } from '@/hooks/use-scroll-to-top-on-mount';
 
 export type GameResultsContainerProps = {
   deck: Deck;
@@ -19,10 +20,7 @@ export function GameResultsContainer({
   onReplay,
   screenSize,
 }: GameResultsContainerProps) {
-  // Scroll to top when component mounts
-  useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'instant' });
-  }, []);
+  useScrollToTopOnMount();
 
   const handleBackToTop = useCallback(() => {
     logger.debug('🏠 Back to TOP');
