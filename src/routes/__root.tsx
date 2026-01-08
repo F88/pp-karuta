@@ -6,7 +6,7 @@
  * own standalone theme.
  */
 import { AppHeader } from '@/components/layout/app-header';
-import { RepoSetup } from '@/components/layout/repo-setup';
+
 import { RepoSetupDialog } from '@/components/layout/repo-setup-dialog';
 import { ThemeProvider } from '@/components/theme-provider';
 import { UIDebugOverlay } from '@/components/ui-debug-overlay';
@@ -89,11 +89,11 @@ function RootLayout() {
       {/* Content area below fixed header */}
       <div className={sizeStyles.headerPadding}></div>
       <div className={sizeStyles.contentHeight}>
-        {import.meta.env.VITE_DEBUG_MODE === 'true' && (
+        {/* {import.meta.env.VITE_DEBUG_MODE === 'true' && (
           <div className="flex items-center justify-center p-4">
             <RepoSetup screenSize={screenSize} />
           </div>
-        )}
+        )} */}
 
         <RepoSetupDialog
           open={openRepoSetupDialog}

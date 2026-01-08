@@ -155,6 +155,7 @@ export function TatamiViewPresentation({
             mochiFudaCount={totalMochiFuda}
             stackCount={stackCount}
             tatamiCount={sharedTatamiCards.length}
+            playerStates={playerStates}
             screenSize={screenSize}
           />
         </div>
