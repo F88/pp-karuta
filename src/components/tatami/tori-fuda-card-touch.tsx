@@ -91,9 +91,9 @@ export function ToriFudaCardTouch({
             </div>
             <div className={styles.id}>ID: {card.id}</div>
             <h3 className={styles.title}>{card.prototypeNm}</h3>
-            <p className={styles.summary}>
+            {/* <p className={styles.summary}>
               {card.summary || 'No summary available'}
-            </p>
+            </p> */}
           </>
         )}
       </CardContent>

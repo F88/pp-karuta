@@ -6,6 +6,7 @@ import { STACK_RECIPES } from '@/lib/karuta';
 import { DeckRecipeManager } from '@/lib/karuta/deck';
 import { useEffect } from 'react';
 import { IntegratedSelectorPresentation } from './integrated-selector-presentation';
+import { useScrollToTopOnMount } from '@/hooks/use-scroll-to-top-on-mount';
 
 export type IntegratedSelectorContainerProps = {
   setup: UseGameSetupReturn;
@@ -17,6 +18,7 @@ export function IntegratedSelectorContainer({
   onShowIntro,
 }: IntegratedSelectorContainerProps) {
   const screenSize = useScreenSizeContext();
+  useScrollToTopOnMount();
 
   // Repository state
   const repoState = useRepositoryState();

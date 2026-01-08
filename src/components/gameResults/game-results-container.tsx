@@ -3,6 +3,7 @@ import type { GamePlayerState, Deck } from '@/models/karuta';
 import type { ScreenSize } from '@/types/screen-size';
 import { GameResultsPresentation } from './game-results-presentation';
 import { logger } from '@/lib/logger';
+import { useScrollToTopOnMount } from '@/hooks/use-scroll-to-top-on-mount';
 
 export type GameResultsContainerProps = {
   deck: Deck;
@@ -19,6 +20,8 @@ export function GameResultsContainer({
   onReplay,
   screenSize,
 }: GameResultsContainerProps) {
+  useScrollToTopOnMount();
+
   const handleBackToTop = useCallback(() => {
     logger.debug('🏠 Back to TOP');
     onBackToTop();

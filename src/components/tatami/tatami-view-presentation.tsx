@@ -1,14 +1,16 @@
+import type { NormalizedPrototype } from '@f88/promidas/types';
+
+import type { Deck, GamePlayerState } from '@/models/karuta';
+
+import type { ScreenSize } from '@/types/screen-size';
+
 import type { PlayMode } from '@/lib/karuta';
 import { DeckManager } from '@/lib/karuta/deck/deck-manager';
 import { getResponsiveStyles } from '@/lib/ui-utils';
-import type { Deck, GamePlayerState } from '@/models/karuta';
-import type { ScreenSize } from '@/types/screen-size';
-import type { NormalizedPrototype } from '@f88/promidas/types';
+
 import { GameHeader } from './game-header';
 import { PlayerArea } from './player-area';
 import { SharedTatami } from './shared-tatami';
-// import { YomiFudaCard } from './yomi-fuda-card';
-// import { YomiFudaMarquee } from './yomi-fuda-marquee';
 import { Yomite } from './yomite';
 
 export type TatamiViewPresentationProps = {
@@ -50,35 +52,64 @@ export function TatamiViewPresentation({
 
   const styles = getResponsiveStyles(screenSize, {
     smartphone: {
-      containerPadding: 'p-3',
-      sectionSpacing: 'mb-4',
-      playerGridGap: 'gap-3',
+      // containerPadding: 'p-3',
+      containerPadding: 'p-0',
+      sectionSpacing: 'my-2',
+      sharedTatami: {
+        padding: 'px-4',
+      },
       yomiFuda: {
         padding: 'px-4',
       },
+      playerGrid: {
+        gap: 'gap-2',
+        margin: 'm-0',
+        padding: 'px-2',
+      },
     },
     tablet: {
-      containerPadding: 'p-4',
-      sectionSpacing: 'mb-6',
-      playerGridGap: 'gap-4',
+      // containerPadding: 'p-4',
+      containerPadding: 'p-0',
+      sectionSpacing: 'my-3',
+      sharedTatami: {
+        padding: 'px-12',
+      },
       yomiFuda: {
         padding: 'px-12',
       },
+      playerGrid: {
+        gap: 'gap-2',
+        margin: 'm-0',
+        padding: 'px-2',
+      },
     },
     pc: {
-      containerPadding: 'p-6',
-      sectionSpacing: 'mb-8',
-      playerGridGap: 'gap-6',
+      // containerPadding: 'p-6',
+      containerPadding: 'p-0',
+      sectionSpacing: 'my-4',
+      sharedTatami: {
+        padding: 'px-16',
+      },
       yomiFuda: {
         padding: 'px-16',
+      },
+      playerGrid: {
+        gap: 'gap-2',
+        margin: 'm-0',
+        padding: 'px-2',
       },
     },
     responsive: {
       containerPadding: 'p-3 md:p-4 lg:p-6',
       sectionSpacing:
         'my-4 md:my-6 lg:my-8 space-y-3 md:space-y-4 lg:space-y-6',
-      playerGridGap: 'gap-3 md:gap-4 lg:gap-6',
+      sharedTatami: { padding: 'px-2 md:px-4 lg:px-6' },
       yomiFuda: { padding: 'px-2 md:px-4 lg:px-6' },
+      playerGrid: {
+        gap: 'gap-3 md:gap-4 lg:gap-6',
+        margin: 'm-0',
+        padding: 'p-2',
+      },
     },
   });
 
@@ -92,17 +123,28 @@ export function TatamiViewPresentation({
       return 'grid-cols-4'; // 5+ players: max 4 columns
     }
 
-    // Touch mode: simple layout
-    // 1 player: 1 column, 2+ players: 2 columns
-    if (playerCount <= 1) {
-      return 'grid-cols-1';
+    // Touch mode: screen size based layout
+    if (playMode === 'touch') {
+      if (screenSize === 'smartphone') {
+        if (playerCount <= 2) {
+          return 'grid-cols-1';
+        } else {
+          return 'grid-cols-2';
+        }
+      } else {
+        if (playerCount <= 1) {
+          return 'grid-cols-1';
+        } else {
+          return 'grid-cols-2';
+        }
+      }
     }
     return 'grid-cols-2';
   };
 
   return (
     <div
-      className={`flex h-screen flex-col bg-gradient-to-br from-green-50 to-teal-100 dark:from-gray-900 dark:to-gray-800 ${styles.containerPadding}`}
+      className={`flex h-full flex-col bg-gradient-to-br from-green-50 to-teal-100 dark:from-gray-900 dark:to-gray-800 ${styles.containerPadding}`}
     >
       <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col overflow-hidden">
         <div className={`shrink-0 ${styles.sectionSpacing}`}>
@@ -118,8 +160,11 @@ export function TatamiViewPresentation({
         </div>
 
         {/*  Shared Tatami */}
+        {/* {(playMode !== 'touch' || import.meta.env.VITE_DEBUG_MODE === 'true') && ( */}
         {playMode !== 'touch' && (
-          <div className={`shrink-0 ${styles.sectionSpacing}`}>
+          <div
+            className={`shrink-0 ${styles.sectionSpacing} ${styles.sharedTatami.padding}`}
+          >
             <SharedTatami
               tatamiCards={sharedTatamiCards}
               playMode={playMode}
@@ -142,23 +187,22 @@ export function TatamiViewPresentation({
         </div>
 
         {/* Bottom section: Player Tatami Areas (takes remaining height) */}
-        <div className={`shrink-0 ${styles.sectionSpacing}`}>
-          <div className="flex flex-1 flex-col overflow-hidden">
+        <div className={`min-h-0 flex-1 ${styles.sectionSpacing}`}>
+          <div className="flex h-full flex-col">
             {/* <h2 className="mb-4 flex-shrink-0 text-center text-2xl font-bold text-gray-800 dark:text-gray-100">
             🎮 Player Tatami Areas
           </h2> */}
-            <div className="flex-1 overflow-y-auto">
-              <div
-                className={`grid ${styles.playerGridGap} ${getPlayerGridCols()}`}
-              >
-                {playerStates.map((playerState, playerIndex) => {
-                  const playerTatamiCards = DeckManager.getByIds(
-                    deck,
-                    playerState.tatami,
-                  );
-                  return (
+            <div
+              className={`grid h-full ${styles.playerGrid.gap} ${styles.playerGrid.margin} ${styles.playerGrid.padding} ${getPlayerGridCols()}`}
+            >
+              {playerStates.map((playerState, playerIndex) => {
+                const playerTatamiCards = DeckManager.getByIds(
+                  deck,
+                  playerState.tatami,
+                );
+                return (
+                  <div key={playerState.player.id} className="min-h-0">
                     <PlayerArea
-                      key={playerState.player.id}
                       player={playerState.player}
                       playerIndex={playerIndex}
                       playerCount={playerStates.length}
@@ -174,9 +218,9 @@ export function TatamiViewPresentation({
                       }
                       screenSize={screenSize}
                     />
-                  );
-                })}
-              </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </div>

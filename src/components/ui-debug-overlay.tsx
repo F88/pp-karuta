@@ -4,9 +4,15 @@ import { useEffect, useState } from 'react';
 
 interface UIDebugOverlayProps {
   screenSize: ScreenSize;
+  headerHeight?: string;
+  contentHeight?: string;
 }
 
-export function UIDebugOverlay({ screenSize }: UIDebugOverlayProps) {
+export function UIDebugOverlay({
+  screenSize,
+  headerHeight,
+  contentHeight,
+}: UIDebugOverlayProps) {
   const [windowSize, setWindowSize] = useState({
     width: window.innerWidth,
     height: window.innerHeight,
@@ -91,6 +97,16 @@ export function UIDebugOverlay({ screenSize }: UIDebugOverlayProps) {
           <div className="text-gray-600 dark:text-gray-400">
             Pixel Ratio: {devicePixelRatio}x
           </div>
+          {headerHeight && (
+            <div className="text-gray-600 dark:text-gray-400">
+              Header: {headerHeight}
+            </div>
+          )}
+          {contentHeight && (
+            <div className="text-gray-600 dark:text-gray-400">
+              Content: {contentHeight}
+            </div>
+          )}
         </div>
 
         {/* Device & Environment */}

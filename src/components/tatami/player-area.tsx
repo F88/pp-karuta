@@ -196,9 +196,9 @@ export function PlayerArea({
 
   return (
     <Card
-      className={`${cardBorder} ${cardShadow} ${cardAnimationClass} ${styles.card.background} ${styles.card.transition}`}
+      className={`flex max-h-full flex-col ${cardBorder} ${cardShadow} ${cardAnimationClass} ${styles.card.background} ${styles.card.transition}`}
     >
-      <CardHeader className={styles.header.padding}>
+      <CardHeader className={`shrink-0 ${styles.header.padding}`}>
         <PlayerInfo
           player={player}
           mochiFudaCount={mochiFudaCount}
@@ -207,7 +207,9 @@ export function PlayerArea({
           screenSize={screenSize}
         />
       </CardHeader>
-      <CardContent className={styles.content.padding}>
+      <CardContent
+        className={`min-h-0 flex-1 overflow-y-auto ${styles.content.padding}`}
+      >
         <PlayerTatami
           tatamiCards={tatamiCards}
           onCardClick={onCardClick}

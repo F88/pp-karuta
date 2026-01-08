@@ -1,11 +1,18 @@
+import { useCallback, useMemo, useState } from 'react';
+
+import type { NormalizedPrototype } from '@f88/promidas/types';
+
 import { useKeyboardCardSelection } from '@/hooks/use-keyboard-card-selection';
-import type { PlayMode } from '@/lib/karuta';
-import { DeckManager } from '@/lib/karuta/deck/deck-manager';
-import { logger } from '@/lib/logger';
+import { useScrollToTopOnMount } from '@/hooks/use-scroll-to-top-on-mount';
+
 import type { GameState } from '@/models/karuta';
 import type { ScreenSize } from '@/types/screen-size';
-import type { NormalizedPrototype } from '@f88/promidas/types';
-import { useCallback, useState } from 'react';
+
+import type { PlayMode } from '@/lib/karuta';
+import { DeckManager } from '@/lib/karuta/deck/deck-manager';
+import { GameManager } from '@/lib/karuta/game/game-manager';
+import { logger } from '@/lib/logger';
+
 import { TatamiViewPresentation } from './tatami-view-presentation';
 
 export type TatamiViewContainerProps = {
@@ -23,6 +30,8 @@ export function TatamiViewContainer({
   onIncorrectAnswer,
   screenSize,
 }: TatamiViewContainerProps) {
+  useScrollToTopOnMount();
+
   // Calculate current race from total mochiFuda count across all players
   const totalMochiFuda = gameState.playerStates.reduce(
     (sum, ps) => sum + ps.mochiFuda.length,
@@ -36,11 +45,11 @@ export function TatamiViewContainer({
     Record<string, 'correct' | 'incorrect' | null>
   >({});
 
-  // Get current YomiFuda from reading order
-  const currentYomiFudaId = gameState.readingOrder[completedRaces];
-  const currentYomiFuda = currentYomiFudaId
-    ? gameState.deck.get(currentYomiFudaId)
-    : null;
+  // Pick YomiFuda from tatami (memoized to prevent re-selection on every render)
+  const currentYomiFuda = useMemo(() => {
+    const cardId = GameManager.pickYomiFuda(gameState.tatami);
+    return cardId !== null ? (gameState.deck.get(cardId) ?? null) : null;
+  }, [gameState.tatami, gameState.deck]);
 
   // Get Shared Tatami cards
   const sharedTatamiCards = DeckManager.getByIds(
@@ -94,20 +103,9 @@ export function TatamiViewContainer({
   });
 
   // Check if game is complete
-  if (completedRaces >= gameState.readingOrder.length) {
+  if (!currentYomiFuda) {
     logger.debug('🎉 All cards acquired! Game complete.');
     return <div>Loading results...</div>;
-  }
-
-  // Safety check
-  if (!currentYomiFuda) {
-    logger.error(
-      'Current YomiFuda not found in deck:',
-      currentYomiFudaId,
-      'at index',
-      completedRaces,
-    );
-    return <div>Error: YomiFuda not found</div>;
   }
 
   return (
@@ -117,7 +115,7 @@ export function TatamiViewContainer({
       playerStates={gameState.playerStates}
       deck={gameState.deck}
       currentRace={currentRace}
-      totalRaces={gameState.readingOrder.length}
+      totalRaces={gameState.deck.size}
       stackCount={gameState.stack.length}
       playMode={playMode}
       onPlayerCardSelect={handlePlayerCardSelect}

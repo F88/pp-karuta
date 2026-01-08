@@ -1,10 +1,45 @@
+<!-- markdownlint-disable MD024 -->
+
 # Changelog
 
-pp-karuta の主要な変更はこのファイルに記録されます。
+All notable changes to this project will be documented in this file.
 
-フォーマットは [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) に基づいています。
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+### Added
+
+- コンポーネントマウント時の自動スクロール機能 (TatamiView, GameResults, IntegratedSelector)
+- Touch mode用のscreen sizeベースのグリッドレイアウト (smartphone: 1列 for ≤2プレイヤー, tablet/PC: 2列 for 2+プレイヤー)
+- SharedTatamiコンポーネント用のレスポンシブpadding設定
+- UIDebugOverlayにheaderHeightとcontentHeightの表示を追加
+
+### Changed
+
+- ゲームロジックをGameManagerクラスに統合 - ゲーム状態管理の一元化
+- カード順序決定ロジックを改善 - StackRecipe.sortMethodを唯一の真実の源に設定
+- Yomiteアイコンを巻物 (📜) から吹き出し (💬) に変更
+- pickYomiFuda関数のシグネチャ変更 - tatami配列を引数に取り、cardIDのみを返却
+- PlayerAreaを個別スクロール可能に変更 (max-h-full, overflow-y-auto)
+- TatamiViewPresentationの高さ指定をh-screenからh-fullに変更
+- keyboard modeのキー表示を改善 (min-h-8, min-w-8, inline-flex)
+- Start Game Buttonのbottom marginを増加 (全screen sizeでmb-8)
+
+### Fixed
+
+- GameState型からreadingOrderフィールドを削除 - 不要な状態管理を削減
+- 狭いviewport heightでのPlayerArea表示問題を修正
+- AppHeader高さを除外したコンテンツ領域の高さ計算を実装
+- keyboard mode 4プレイヤー横並びレイアウトでのキーサイズ問題を修正
+- ゲーム開始後のスクロール位置が最上部にならない問題を修正
+
+### Dependencies
+
+- @tanstack/react-router: ^1.145.7 → ^1.145.11
+- @tanstack/router-plugin: ^1.145.7 → ^1.145.11
+- vite: ^7.3.0 → ^7.3.1
 
 ## [2026.01.07] - 2026-01-07
 

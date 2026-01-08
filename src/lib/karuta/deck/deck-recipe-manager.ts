@@ -13,7 +13,7 @@
 import type { DeckRecipe } from '@/models/karuta';
 import type { ListPrototypesParams } from 'protopedia-api-v2-client';
 import { ETO_RECIPES } from './deck-recipe-eto';
-import { createReleaseDateYearFilter } from './filter-factory';
+import { createIdsFilter, createReleaseDateYearFilter } from './filter-factory';
 
 /**
  * Type for prototype window parameters (offset and limit)
@@ -38,6 +38,24 @@ const DECK_RECIPE_ALL_PROTOTYPES: DeckRecipe = {
   apiParams: { ...ALL_PROTOTYPES },
   difficulty: 'beginner',
   tags: [],
+};
+
+/**
+ * ETO recipe for Rat (子) themed prototypes
+ * Filters prototypes containing rat/mouse-related keywords in Japanese and English
+ */
+export const DECK_RECIPE_PROMIDAS: DeckRecipe = {
+  id: 'promidase',
+  apiParams: { offset: 5000, limit: 3000 },
+  difficulty: 'beginner',
+  tags: ['PROMIDAS'],
+  title: 'PROMIDAS',
+  description: 'PROMIDAS利用',
+  filter: createIdsFilter([
+    7917 /*	🧰 PROMIDAS */, 7920 /* 🛝 PROMIDAS Playground */,
+    7968 /* 🧰 PROMIDAS Utilities */,
+    7972 /* 🎴 怖露徒頁帝亜 狩流多 弐拾六式 馬耳闘風編 */,
+  ]),
 };
 
 // ========================================
@@ -137,6 +155,8 @@ export class DeckRecipeManager {
     DECK_RECIPE_ALL_PROTOTYPES,
     // Range-based recipes
     ...this.rangeRecipes,
+    // Development only: PROMIDAS recipe
+    ...(import.meta.env.DEV ? [DECK_RECIPE_PROMIDAS] : []),
   ];
 
   // ========================================

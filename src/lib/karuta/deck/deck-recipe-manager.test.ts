@@ -30,7 +30,9 @@ describe('DeckRecipeManager', () => {
       const recipes = DeckRecipeManager.getAll();
       expect(recipes.length).toBeGreaterThan(0);
       // 12 ETO + 14 releaseYears + 1 all-prototypes + 7 range-based = 34
-      expect(recipes.length).toBe(34);
+      // In DEV mode, +1 PROMIDAS = 35
+      const expectedCount = import.meta.env.DEV ? 35 : 34;
+      expect(recipes.length).toBe(expectedCount);
     });
 
     it('should return a new array instance', () => {
@@ -49,7 +51,9 @@ describe('DeckRecipeManager', () => {
         expect(recipe.difficulty).toBe('beginner');
       });
       // 1 all-prototypes + 7 range-based = 8
-      expect(recipes.length).toBe(8);
+      // In DEV mode, +1 PROMIDAS = 9
+      const expectedCount = import.meta.env.DEV ? 9 : 8;
+      expect(recipes.length).toBe(expectedCount);
     });
 
     it('should filter intermediate recipes', () => {

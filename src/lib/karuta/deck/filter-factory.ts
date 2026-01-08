@@ -12,6 +12,30 @@ import { logger } from '@/lib/logger';
 import { normalizeString } from '@/lib/string-utils';
 
 /**
+ * Create a filter function for ID-based filtering
+ * Filters prototypes by matching IDs
+ * @param ids - Array of prototype IDs to include
+ * @returns Filter function for DeckRecipe
+ */
+export function createIdsFilter(ids: number[]) {
+  const idSet = new Set(ids);
+
+  return (prototypes: NormalizedPrototype[]) => {
+    return prototypes.filter((e) => {
+      const matched = idSet.has(e.id);
+
+      if (matched) {
+        logger.debug(
+          `✅ DeckRecipe id filter matched: ${e.id} - ${e.prototypeNm}`,
+        );
+      }
+
+      return matched;
+    });
+  };
+}
+
+/**
  * Create a filter function for keyword-based filtering
  * Filters prototypes by matching keywords against prototypeNm and summary (case-insensitive)
  * Half-width and full-width katakana/alphanumeric are treated as equivalent

@@ -63,11 +63,20 @@ export function Yomite({ normalizedPrototype, screenSize }: YomiteProps) {
           📜 {displayedText || '\u00A0'}
         </h2>
       </div> */}
+      {import.meta.env.VITE_DEBUG_MODE === 'true' && (
+        <>ID: {normalizedPrototype.id}</>
+      )}
       <div
         className={`${backgroundClass} flex items-center gap-3 rounded-lg shadow-lg ${styles.padding}`}
       >
         <h2 className={`flex-1 font-bold tracking-widest ${styles.text}`}>
-          📜 {yomibitoText || '\u00A0'}
+          {/* 📜 */}
+          {'💬' + ' '}
+          {/* 🔊 */}
+          {/* 🔈  */}
+          {/* 🗣️ */}
+          {/* 🐱 */}
+          {yomibitoText || '\u00A0'}
         </h2>
       </div>
     </>
