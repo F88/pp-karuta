@@ -12,6 +12,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - 歳時記テーマのデッキレシピ (お正月、節分、バレンタインデー、敬老の日、ハロウィン、ヒーローズ・リーグ、クリスマス)
+- PWA (Progressive Web App) 対応 - Add to Home Screen (A2HS) 機能
+    - vite-plugin-pwa による Service Worker 自動生成
+    - Web App Manifest による PWA 設定
+    - @vite-pwa/assets-generator による PWA アイコン自動生成
+    - pwa-assets.config.ts による minimal-2023 プリセット設定
+    - PWA メタタグ (theme-color, apple-mobile-web-app-*) を index.html に追加
 
 ### Changed
 
