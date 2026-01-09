@@ -9,6 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- SEO対策の実装
+    - `public/robots.txt` - 検索エンジンクローラー向けのディレクティブ
+    - `public/sitemap.xml` - サイト構造を定義するサイトマップ
+    - `index.html` に SEO メタタグ (keywords, author, canonical) を追加
+    - JSON-LD 構造化データ (Schema.org WebApplication 形式) を追加
+
 ### Changed
 
 - Replace deprecated TanStackRouterVite with tanstackRouter in vite.config.ts
