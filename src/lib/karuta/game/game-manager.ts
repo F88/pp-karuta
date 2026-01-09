@@ -63,6 +63,9 @@ export class GameManager {
     // Any additional shuffling would violate the intended sort order.
     const fullStack = StackManager.generate(deck, stackRecipe);
 
+    // Calculate total races (fixed value for the entire game)
+    const totalRaces = fullStack.length;
+
     // Extract first N (or less if stack is smaller) for tatami
     const actualTatamiSize = Math.min(initialTatamiSize, fullStack.length);
     const tatamiIds = fullStack.slice(0, actualTatamiSize);
@@ -81,6 +84,7 @@ export class GameManager {
       stack: stackIds,
       tatami: tatamiIds,
       playerStates,
+      totalRaces,
     };
   }
 

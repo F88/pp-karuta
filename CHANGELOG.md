@@ -9,6 +9,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- 歳時記テーマのデッキレシピ (お正月、節分、バレンタインデー、敬老の日、ハロウィン、ヒーローズ・リーグ、クリスマス)
+- PWA (Progressive Web App) 対応 - Add to Home Screen (A2HS) 機能
+    - vite-plugin-pwa による Service Worker 自動生成
+    - Web App Manifest による PWA 設定
+    - @vite-pwa/assets-generator による PWA アイコン自動生成
+    - pwa-assets.config.ts による minimal-2023 プリセット設定
+    - PWA メタタグ (theme-color, apple-mobile-web-app-\*) を index.html に追加
+- GameProgressBar コンポーネント - プレイヤー進捗の可視化
+    - Race info (currentRace/totalRaces) と Stacked bar の横並び表示
+    - プレイヤーごとの獲得カード数を色分けされた積み上げバーで表示
+    - 残りカード数のグレーバー表示
+    - 複数プレイヤー時の凡例表示 (プレイヤー名と獲得枚数)
+    - レスポンシブ対応 (スマホ/タブレット/PC で異なる高さとテキストサイズ)
+    - プレイヤー数に応じた凡例アイテムの動的な幅調整
+
+### Changed
+
+- デッキレシピファイルをモジュール化 - 関心の分離と保守性向上のため専用ファイルに分割
+    - deck-recipe.ts: 個別レシピ
+    - deck-recipe-saiji.ts: 歳時記テーマレシピ
+    - deck-recipe-eto.ts: 干支テーマレシピ
+- GameState に totalRaces フィールドを追加 - ゲーム作成時に固定値として保持
+- GameHeader に GameProgressBar を統合
+- StatisticsInfo に totalRaces 情報を追加
+
 ## [2026.01.08] - 2026-01-08
 
 ### Added

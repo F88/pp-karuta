@@ -114,8 +114,8 @@ export function TatamiViewContainer({
       sharedTatamiCards={sharedTatamiCards}
       playerStates={gameState.playerStates}
       deck={gameState.deck}
+      totalRaces={gameState.totalRaces}
       currentRace={currentRace}
-      totalRaces={gameState.deck.size}
       stackCount={gameState.stack.length}
       playMode={playMode}
       onPlayerCardSelect={handlePlayerCardSelect}

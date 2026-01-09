@@ -18,8 +18,8 @@ export type TatamiViewPresentationProps = {
   sharedTatamiCards: NormalizedPrototype[];
   playerStates: GamePlayerState[];
   deck: Deck;
-  currentRace: number;
   totalRaces: number;
+  currentRace: number;
   stackCount: number;
   playMode: PlayMode;
   onPlayerCardSelect: (playerId: string, card: NormalizedPrototype) => void;
@@ -32,8 +32,8 @@ export function TatamiViewPresentation({
   sharedTatamiCards,
   playerStates,
   deck,
-  currentRace,
   totalRaces,
+  currentRace,
   stackCount,
   playMode,
   onPlayerCardSelect,
@@ -155,6 +155,7 @@ export function TatamiViewPresentation({
             mochiFudaCount={totalMochiFuda}
             stackCount={stackCount}
             tatamiCount={sharedTatamiCards.length}
+            playerStates={playerStates}
             screenSize={screenSize}
           />
         </div>

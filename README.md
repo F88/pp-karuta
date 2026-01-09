@@ -59,6 +59,13 @@ Utilities to assist development using PROMIDAS
 - **PROMIDAS** - ProtoPedia API data management library
 - **PROMIDAS Utilities** - Utilities to assist development using PROMIDAS
 
+### PWA
+
+- **vite-plugin-pwa** - Progressive Web App support
+- **Workbox** - Service Worker library (via vite-plugin-pwa)
+- **Web App Manifest** - A2HS (Add to Home Screen) support
+- **@vite-pwa/assets-generator** - PWA assets generator from single source image
+
 ### Deployment
 
 - **GitHub Pages** - Static hosting

@@ -254,7 +254,14 @@ export function IntegratedSelectorPresentation({
                 screenSize={screenSize}
                 // enableGrouping={false}
                 initialOpenCategories={
-                  deckRecipe.selected ? deckRecipe.selected.tags : ['干支']
+                  deckRecipe.selected
+                    ? deckRecipe.selected.tags
+                    : [
+                        //
+                        '干支',
+                        '歳時',
+                        'PROMIDAS',
+                      ]
                 }
               />
             )}

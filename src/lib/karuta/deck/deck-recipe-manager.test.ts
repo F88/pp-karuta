@@ -29,9 +29,8 @@ describe('DeckRecipeManager', () => {
     it('should return all recipes', () => {
       const recipes = DeckRecipeManager.getAll();
       expect(recipes.length).toBeGreaterThan(0);
-      // 12 ETO + 14 releaseYears + 1 all-prototypes + 7 range-based = 34
-      // In DEV mode, +1 PROMIDAS = 35
-      const expectedCount = import.meta.env.DEV ? 35 : 34;
+      // 12 ETO + 7 SAIJI + 1 KARUTA + 14 releaseYears + 1 all-prototypes + 7 range-based = 42 + 1 PROMIDAS(DEV) + 1 ALL(advanced) = 43(PROD)/44(DEV)
+      const expectedCount = import.meta.env.DEV ? 44 : 43;
       expect(recipes.length).toBe(expectedCount);
     });
 
@@ -50,9 +49,9 @@ describe('DeckRecipeManager', () => {
       recipes.forEach((recipe) => {
         expect(recipe.difficulty).toBe('beginner');
       });
-      // 1 all-prototypes + 7 range-based = 8
-      // In DEV mode, +1 PROMIDAS = 9
-      const expectedCount = import.meta.env.DEV ? 9 : 8;
+      // 7 range-based
+      // In DEV mode, +1 PROMIDAS = 8
+      const expectedCount = import.meta.env.DEV ? 8 : 7;
       expect(recipes.length).toBe(expectedCount);
     });
 
@@ -62,13 +61,16 @@ describe('DeckRecipeManager', () => {
       recipes.forEach((recipe) => {
         expect(recipe.difficulty).toBe('intermediate');
       });
-      // 12 ETO recipes + 14 releaseYears = 26
-      expect(recipes.length).toBe(26);
+      // 12 ETO recipes + 7 SAIJI recipes + 1 KARUTA + 14 releaseYears + 1 ALL(now intermediate) = 35
+      expect(recipes.length).toBe(35);
     });
 
-    it('should return empty array for advanced difficulty', () => {
+    it('should return array with advanced recipes', () => {
       const recipes = DeckRecipeManager.filterByDifficulty('advanced');
-      expect(recipes).toEqual([]);
+      expect(recipes.length).toBe(1);
+      recipes.forEach((recipe) => {
+        expect(recipe.difficulty).toBe('advanced');
+      });
     });
   });
 
@@ -97,7 +99,7 @@ describe('DeckRecipeManager', () => {
       expect(recipe?.title).toBe('🌐 全作品');
       expect(recipe?.description).toBe('全ての作品');
       expect(recipe?.apiParams).toEqual({ offset: 0, limit: 10000 });
-      expect(recipe?.difficulty).toBe('beginner');
+      expect(recipe?.difficulty).toBe('advanced');
       expect(recipe?.tags).toEqual([]);
       expect(recipe?.filter).toBeUndefined();
     });

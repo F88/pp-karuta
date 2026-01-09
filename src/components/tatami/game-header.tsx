@@ -1,6 +1,8 @@
 import { Badge } from '@/components/ui/badge';
+import type { GamePlayerState } from '@/models/karuta';
 import type { ScreenSize } from '@/types/screen-size';
 import { getResponsiveStyles } from '@/lib/ui-utils';
+import { GameProgressBar } from './game-progress-bar';
 
 type StatisticItemProps = {
   label: string;
@@ -37,6 +39,7 @@ type StatisticsInfoProps = {
   mochiFudaCount: number;
   stackCount: number;
   tatamiCount: number;
+  totalRaces: number;
   screenSize?: ScreenSize;
   styles: {
     gap: string;
@@ -49,6 +52,7 @@ function StatisticsInfo({
   mochiFudaCount,
   stackCount,
   tatamiCount,
+  totalRaces,
   screenSize,
   styles,
 }: StatisticsInfoProps) {
@@ -57,12 +61,20 @@ function StatisticsInfo({
       className={`flex flex-wrap items-center justify-center ${styles.gap} ${styles.text}`}
     >
       <StatisticItem
+        label="Tatami"
+        value={`${tatamiCount} cards`}
+        labelColor="text-green-600 dark:text-green-400"
+        badgeColor="bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-200"
+        screenSize={screenSize}
+      />
+      <StatisticItem
         label="Score"
         value={`${score} pts`}
         labelColor="text-yellow-600 dark:text-yellow-400"
         badgeColor="bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-200"
         screenSize={screenSize}
       />
+
       <StatisticItem
         label="MochiFuda"
         value={`${mochiFudaCount} cards`}
@@ -77,11 +89,12 @@ function StatisticsInfo({
         badgeColor="bg-indigo-100 text-indigo-700 dark:bg-indigo-900 dark:text-indigo-200"
         screenSize={screenSize}
       />
+
       <StatisticItem
-        label="Tatami"
-        value={`${tatamiCount} cards`}
-        labelColor="text-green-600 dark:text-green-400"
-        badgeColor="bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-200"
+        label="TotalRaces"
+        value={`${totalRaces} races`}
+        labelColor="text-blue-600 dark:text-blue-400"
+        badgeColor="bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-200"
         screenSize={screenSize}
       />
     </div>
@@ -95,6 +108,7 @@ export type GameHeaderProps = {
   mochiFudaCount: number;
   stackCount: number;
   tatamiCount: number;
+  playerStates: GamePlayerState[];
   screenSize?: ScreenSize;
 };
 
@@ -105,6 +119,7 @@ export function GameHeader({
   mochiFudaCount,
   stackCount,
   tatamiCount,
+  playerStates,
   screenSize,
 }: GameHeaderProps) {
   const styles = getResponsiveStyles(screenSize, {
@@ -135,13 +150,21 @@ export function GameHeader({
   });
 
   return (
-    <div className={`text-center ${styles.margin}`}>
+    <div className={`text-center ${styles.margin} space-y-2`}>
       {/* Race info  */}
-      <div className={`text-foreground font-bold ${styles.raceInfo}`}>
+      {/* <div className={`text-foreground font-bold ${styles.raceInfo}`}>
         <span>
           {currentRace} / {totalRaces}
         </span>
-      </div>
+      </div> */}
+
+      {/* Progress Bar */}
+      <GameProgressBar
+        totalRaces={totalRaces}
+        currentRace={currentRace}
+        playerStates={playerStates}
+        screenSize={screenSize}
+      />
 
       {import.meta.env.VITE_DEBUG_MODE === 'true' && (
         <StatisticsInfo
@@ -149,6 +172,7 @@ export function GameHeader({
           mochiFudaCount={mochiFudaCount}
           stackCount={stackCount}
           tatamiCount={tatamiCount}
+          totalRaces={totalRaces}
           screenSize={screenSize}
           styles={styles}
         />
