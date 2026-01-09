@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2026.01.09] - 2026-01-09
+
 ### Added
 
 - 歳時記テーマのデッキレシピ (お正月、節分、バレンタインデー、敬老の日、ハロウィン、ヒーローズ・リーグ、クリスマス)
@@ -156,7 +158,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 初回リリース
 
-[unreleased]: https://github.com/F88/pp-karuta/compare/2026.01.07...HEAD
+[unreleased]: https://github.com/F88/pp-karuta/compare/2026.01.09...HEAD
+[2026.01.09]: https://github.com/F88/pp-karuta/compare/2026.01.08...2026.01.09
+[2026.01.08]: https://github.com/F88/pp-karuta/compare/2026.01.07...2026.01.08
 [2026.01.07]: https://github.com/F88/pp-karuta/compare/2026.01.05...2026.01.07
 [2026.01.05]: https://github.com/F88/pp-karuta/compare/2025.12.29...2026.01.05
 [2025.12.29]: https://github.com/F88/pp-karuta/compare/2025.12.26...2025.12.29
