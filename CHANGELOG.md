@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Replace deprecated TanStackRouterVite with tanstackRouter in vite.config.ts
+
 ## [2026.01.09] - 2026-01-09
 
 ### Added
