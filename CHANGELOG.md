@@ -18,6 +18,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     - @vite-pwa/assets-generator による PWA アイコン自動生成
     - pwa-assets.config.ts による minimal-2023 プリセット設定
     - PWA メタタグ (theme-color, apple-mobile-web-app-\*) を index.html に追加
+- OGP (Open Graph Protocol) / Twitter Card メタタグを index.html に追加
+- OGP用の画像 (1200x630) を public/images に追加
 - GameProgressBar コンポーネント - プレイヤー進捗の可視化
     - Race info (currentRace/totalRaces) と Stacked bar の横並び表示
     - プレイヤーごとの獲得カード数を色分けされた積み上げバーで表示
@@ -32,6 +34,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     - deck-recipe.ts: 個別レシピ
     - deck-recipe-saiji.ts: 歳時記テーマレシピ
     - deck-recipe-eto.ts: 干支テーマレシピ
+- Workboxのprecache対象から public/images/\*\* を除外
 - GameState に totalRaces フィールドを追加 - ゲーム作成時に固定値として保持
 - GameHeader に GameProgressBar を統合
 - StatisticsInfo に totalRaces 情報を追加
