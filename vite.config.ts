@@ -89,7 +89,12 @@ export default defineConfig({
         clientsClaim: true,
         cleanupOutdatedCaches: true,
         globPatterns: ['**/*.{js,css,html,ico,png,jpg,jpeg,svg}'],
-        globIgnores: ['**/faker-vendor-*.js', '**/ppk26-icon-*.png'],
+        globIgnores: [
+          '**/faker-vendor-*.js',
+          '**/ppk26-icon-*.png',
+          'images/**',
+          'sss/**',
+        ],
         maximumFileSizeToCacheInBytes: 3 * 1024 * 1024,
       },
     }),
