@@ -61,7 +61,10 @@ async function fetchPrototypeData(
 ) {
   console.log(`\n🌐 Fetching prototypes (offset=${offset}, limit=${limit})...`);
   const startTime = performance.now();
-  const result = await repository.setupSnapshot({ offset, limit });
+  const result = await repository.setupSnapshot({
+    offset,
+    limit,
+  });
   const elapsed = performance.now() - startTime;
   if (!result.ok) {
     console.error('\n❌ Snapshot setup failed:');
@@ -70,8 +73,7 @@ async function fetchPrototypeData(
     console.error(`\n📜 ${parsed?.localizedMessage}`);
     process.exit(1);
   }
-  console.log(`✓ Fetched ${result.stats.size} prototypes in ${elapsed.toFixed(0)}ms,
-  Data size: ${(result.stats.dataSizeBytes / 1024).toFixed(1)} KB
+  console.log(`✓ Fetched ${result.stats.size} prototypes in ${elapsed.toFixed(0)}ms, Data size: ${(result.stats.dataSizeBytes / 1024).toFixed(1)} KB
 `);
   return result.stats;
 }
@@ -139,6 +141,7 @@ async function main() {
 
   // Fetch prototype data from API
   await fetchPrototypeData(repository, OFFSET, LIMIT);
+  console.log(repository.analyzePrototypes());
 
   // Save snapshot to file
   const outputPath = saveSnapshotToFile(repository);
