@@ -4,20 +4,16 @@ import type {
   PrototypeInMemoryStoreConfig,
 } from '@f88/promidas';
 import type { NormalizedPrototype } from '@f88/promidas/types';
-import type { ListPrototypesParams } from 'protopedia-api-v2-client';
 import { EventEmitter } from 'events';
+import type { ListPrototypesParams } from 'protopedia-api-v2-client';
 
 import { logger } from '@/lib/logger';
 import type {
-  SnapshotOperationSuccess,
-  SnapshotOperationFailure,
+  PrototypeAnalysisResult,
+  SerializableSnapshot,
+  SnapshotOperationResult,
 } from '@f88/promidas/repository/types';
-import type { PrototypeAnalysisResult } from '@f88/promidas/repository/types';
 import { generateDummyPrototypes } from './dummy-data';
-
-type SnapshotOperationResult =
-  | SnapshotOperationSuccess
-  | SnapshotOperationFailure;
 
 /**
  * Dummy implementation of ProtopediaInMemoryRepository for development
@@ -45,6 +41,16 @@ export class DummyRepository implements ProtopediaInMemoryRepository {
       `[DummyRepository] Generated 10000 prototypes in ${elapsedMs.toFixed(2)}ms`,
     );
     logger.info('[DummyRepository] Initialized with 10000 dummy prototypes');
+  }
+
+  getSerializableSnapshot(): SerializableSnapshot {
+    throw new Error('Method not implemented.');
+  }
+  setupSnapshotFromSerializedData(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    _data: SerializableSnapshot,
+  ): SnapshotOperationResult {
+    throw new Error('Method not implemented.');
   }
 
   getConfig(): Omit<Required<PrototypeInMemoryStoreConfig>, 'logger'> {
