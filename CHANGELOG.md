@@ -22,6 +22,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - ログレベル制御機能 (`VITE_LOG_LEVEL`)
     - `debug` / `info` (default) / `warn` / `error` のレベルでコンソール出力を制御
 - `index.html` に `<meta name="mobile-web-app-capable" content="yes">` を追加 (deprecated 警告対応)
+- キーボードモード: 畳サイズに応じたキーバインディング変更機能
+    - `GameState` に `tatamiSize` フィールドを追加 (初期設定値を保持)
+    - `getPlayerKeyBindings()` / `getKeyForCard()`: `tatamiSize` パラメータ追加
+    - プレイヤー数2人以下 & 畳サイズ4/8 → 8キーレイアウト
+    - プレイヤー数2人以下 & 畳サイズ12/16 → 16キーレイアウト
+    - プレイヤー数3人以上 → 常に8キーレイアウト
+    - 全てのプレイヤー数(1-4) × 畳サイズ(4,8,12,16)の組み合わせをテスト
 
 ### Changed
 

@@ -12,6 +12,7 @@ export type PlayerTatamiProps = {
   playerIndex: number;
   playerCount: number;
   screenSize?: ScreenSize;
+  tatamiSize: number;
 };
 
 export function PlayerTatami({
@@ -21,6 +22,7 @@ export function PlayerTatami({
   playerIndex,
   playerCount,
   screenSize = 'pc',
+  tatamiSize,
 }: PlayerTatamiProps) {
   const styles = getResponsiveStyles(screenSize, {
     smartphone: {
@@ -87,7 +89,12 @@ export function PlayerTatami({
               playMode={playMode}
               showImage={showImage}
               onClick={onCardClick}
-              keyboardKey={getKeyForCard(playerIndex, index, playerCount)}
+              keyboardKey={getKeyForCard(
+                playerIndex,
+                index,
+                playerCount,
+                tatamiSize,
+              )}
               screenSize={screenSize}
             />
           ))}
