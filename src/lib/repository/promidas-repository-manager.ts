@@ -2,14 +2,13 @@
  * @fileoverview Singleton manager for PROMIDAS repository lifecycle and token validation.
  *
  * Provides centralized management of ProtopediaInMemoryRepository instance with comprehensive
- * token validation state tracking. Supports both production API mode and development dummy data mode.
+ * token validation state tracking.
  *
  * Key Features:
  * - Singleton pattern ensuring only one repository instance exists
  * - Four-state lifecycle management (not-created → validating → created-token-valid/token-invalid)
  * - Automatic token validation using minimal API calls
  * - Request deduplication for concurrent repository access
- * - Dummy data mode support via VITE_USE_DUMMY_DATA environment variable
  * - Dependency injection for token storage (testability)
  *
  * State Machine:
@@ -42,7 +41,6 @@ import type { ListPrototypesParams } from 'protopedia-api-v2-client';
 
 import { logger } from '@/lib/logger';
 import { tokenStorage as defaultTokenStorage } from '@/lib/token-storage';
-import { createDummyRepository } from './dummy-repository';
 
 /**
  * Repository state as a discriminated union.
@@ -93,12 +91,10 @@ export type RepositoryState =
  * Architecture:
  * - **Singleton Pattern**: Ensures only one repository instance exists globally
  * - **State Machine**: Manages 4-state lifecycle (not-created → validating → created-token-valid/token-invalid)
- * - **Dual Mode Support**: Seamlessly switches between real API and dummy data modes
  * - **Request Deduplication**: Prevents multiple concurrent initialization attempts
  *
  * Features:
  * - **Token Validation**: Validates API tokens using minimal setupSnapshot({ limit: 0 }) calls
- * - **Dummy Mode**: Development mode with auto-generated test data (VITE_USE_DUMMY_DATA=true)
  * - **Dependency Injection**: Supports custom token storage for testing
  * - **Error Handling**: Provides localized error messages for token validation failures
  * - **Type Safety**: Uses discriminated unions for compile-time state verification
@@ -198,24 +194,9 @@ export class PromidasRepositoryManager {
   }
 
   /**
-   * Checks if dummy data mode is enabled.
-   *
-   * Dummy mode is activated by setting the VITE_USE_DUMMY_DATA environment variable to 'true'.
-   * In dummy mode, the manager creates a DummyRepository with auto-generated test data
-   * instead of connecting to the real ProtoPedia API.
-   *
-   * @returns `true` if VITE_USE_DUMMY_DATA environment variable equals 'true', `false` otherwise
-   * @private
-   */
-  private isDummyMode(): boolean {
-    return import.meta.env.VITE_USE_DUMMY_DATA === 'true';
-  }
-
-  /**
    * Get the current repository state as a discriminated union
    *
-   * Works for both dummy mode and normal mode. State is determined by
-   * internal repository existence and tokenStatus fields.
+   * State is determined by internal repository existence and tokenStatus fields.
    *
    * State determination based on internal state:
    * - `repository === null && tokenStatus === 'not-validated'` → `not-created`
@@ -386,42 +367,18 @@ export class PromidasRepositoryManager {
    * - `this.tokenStatus`: Set to 'valid' (dummy mode skips token validation)
    *
    * **Note**: Dummy mode doesn't require token validation as it uses local test data.
-   *
-   * @returns Cached or newly created DummyRepository instance
-   * @private
-   */
-  private getDummyRepository(): ProtopediaInMemoryRepository {
-    if (!this.repository) {
-      this.repository = createDummyRepository();
-      this.tokenStatus = 'valid';
-      logger.info(
-        '[PromidasRepositoryManager] Created dummy repository (VITE_USE_DUMMY_DATA=true)',
-      );
-    }
-    return this.repository;
-  }
-
   /**
    * Gets or creates a validated repository instance.
    *
    * Returns a cached repository if already validated, otherwise retrieves the token
    * from storage, creates a repository, and validates it through a minimal API call.
    *
-   * Mode Determination:
-   * - **Dummy Mode** (VITE_USE_DUMMY_DATA=true): Returns DummyRepository with test data
-   * - **Normal Mode**: Creates real repository and validates token via ProtoPedia API
-   *
    * Request Deduplication:
    * Concurrent calls to this method receive the same Promise, preventing duplicate
    * initialization attempts and redundant API calls. The `initPromise` field caches
    * the ongoing operation.
    *
-   * Dummy Mode Process:
-   * 1. Check if dummy repository exists → return cached instance
-   * 2. Create DummyRepository and set `tokenStatus = 'valid'`
-   * 3. Return repository immediately (no API validation needed)
-   *
-   * Normal Mode Process:
+   * Process:
    * 1. Check if repository is valid → return cached instance
    * 2. Check if initialization is in progress → return existing promise
    * 3. Retrieve token from storage (throws if missing)
@@ -476,10 +433,6 @@ export class PromidasRepositoryManager {
    */
 
   async getRepository(): Promise<ProtopediaInMemoryRepository> {
-    if (this.isDummyMode()) {
-      return this.getDummyRepository();
-    }
-
     const state = this.getState();
 
     // Return cached repository if already valid

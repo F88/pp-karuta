@@ -17,7 +17,6 @@ export interface PromidasRepoDashboardPresentationProps {
   repoError: string | null;
   storeState: StoreState;
   storeStats: PrototypeInMemoryStats | null;
-  useDummyData: boolean;
   screenSize: ScreenSize;
 }
 
@@ -26,7 +25,6 @@ export function PromidasRepoDashboardPresentation({
   repoError,
   storeState,
   storeStats,
-  useDummyData,
   screenSize,
 }: PromidasRepoDashboardPresentationProps) {
   const styles = getResponsiveStyles(screenSize, {
@@ -134,27 +132,6 @@ export function PromidasRepoDashboardPresentation({
     }
     return `${seconds}秒`;
   };
-
-  if (useDummyData) {
-    return (
-      <Card className="w-full max-w-md">
-        <CardHeader className={styles.padding}>
-          <CardTitle className={styles.title.size}>
-            PROMIDAS Repository
-          </CardTitle>
-          <CardDescription className={styles.text.size}>
-            ダミーデータモード
-          </CardDescription>
-        </CardHeader>
-        <CardContent className={styles.padding}>
-          <p className={`text-muted-foreground ${styles.text.size}`}>
-            環境変数 VITE_USE_DUMMY_DATA=true のため、
-            実際のRepositoryは使用されていません。
-          </p>
-        </CardContent>
-      </Card>
-    );
-  }
 
   return (
     <Card className="w-full max-w-md">

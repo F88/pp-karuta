@@ -95,6 +95,7 @@ export type PlayerAreaProps = {
   playMode: PlayMode;
   feedbackState?: 'correct' | 'incorrect' | null;
   screenSize?: ScreenSize;
+  tatamiSize: number;
 };
 
 export function PlayerArea({
@@ -108,6 +109,7 @@ export function PlayerArea({
   playMode,
   feedbackState = null,
   screenSize = 'pc',
+  tatamiSize,
 }: PlayerAreaProps) {
   const styles = getResponsiveStyles(screenSize, {
     smartphone: {
@@ -217,6 +219,7 @@ export function PlayerArea({
           playerIndex={playerIndex}
           playerCount={playerCount}
           screenSize={screenSize}
+          tatamiSize={tatamiSize}
         />
       </CardContent>
     </Card>

@@ -18,23 +18,11 @@ const meta = {
       control: 'select',
       options: ['not-stored', 'stored', 'expired'],
     },
-    useDummyData: { control: 'boolean' },
   },
 } satisfies Meta<typeof PromidasRepoDashboardPresentation>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
-
-export const DummyMode: Story = {
-  args: {
-    screenSize: 'pc',
-    repoState: { type: 'not-created' },
-    repoError: null,
-    storeState: 'not-stored',
-    storeStats: null,
-    useDummyData: true,
-  },
-};
 
 export const NotCreated: Story = {
   args: {
@@ -43,7 +31,6 @@ export const NotCreated: Story = {
     repoError: null,
     storeState: 'not-stored',
     storeStats: null,
-    useDummyData: false,
   },
 };
 
@@ -57,7 +44,6 @@ export const TokenInvalid: Story = {
     repoError: 'Invalid token',
     storeState: 'not-stored',
     storeStats: null,
-    useDummyData: false,
   },
 };
 
@@ -68,7 +54,6 @@ export const ValidWithNotStored: Story = {
     repoError: null,
     storeState: 'not-stored',
     storeStats: null,
-    useDummyData: false,
   },
 };
 
@@ -86,7 +71,6 @@ export const ValidWithStored: Story = {
       isExpired: false,
       refreshInFlight: false,
     },
-    useDummyData: false,
   },
 };
 
@@ -104,7 +88,6 @@ export const ValidWithExpired: Story = {
       isExpired: true,
       refreshInFlight: false,
     },
-    useDummyData: false,
   },
 };
 
@@ -122,7 +105,6 @@ export const LargeDataset: Story = {
       isExpired: false,
       refreshInFlight: false,
     },
-    useDummyData: false,
   },
 };
 
@@ -140,6 +122,5 @@ export const ShortRemainingTime: Story = {
       isExpired: false,
       refreshInFlight: false,
     },
-    useDummyData: false,
   },
 };

@@ -114,3 +114,4 @@ storybook-static
 # Development
 .coverage
 coverage/
+scripts/dev/*

@@ -126,53 +126,116 @@ describe('keyboard-bindings', () => {
   });
 
   describe('getPlayerKeyBindings', () => {
-    it('should return 16-key bindings for 1 player', () => {
-      const bindings = getPlayerKeyBindings(0, 1);
-      expect(bindings).toEqual(PLAYER_KEY_BINDINGS_16[0]);
-      expect(bindings).toHaveLength(16);
-    });
-
-    it('should return 16-key bindings for 2 players', () => {
-      const bindings0 = getPlayerKeyBindings(0, 2);
-      const bindings1 = getPlayerKeyBindings(1, 2);
-      expect(bindings0).toEqual(PLAYER_KEY_BINDINGS_16[0]);
-      expect(bindings1).toEqual(PLAYER_KEY_BINDINGS_16[1]);
-      expect(bindings0).toHaveLength(16);
-      expect(bindings1).toHaveLength(16);
-    });
-
-    it('should return 8-key bindings for 3 players', () => {
-      const bindings0 = getPlayerKeyBindings(0, 3);
-      const bindings1 = getPlayerKeyBindings(1, 3);
-      const bindings2 = getPlayerKeyBindings(2, 3);
-      expect(bindings0).toEqual(PLAYER_KEY_BINDINGS_8[0]);
-      expect(bindings1).toEqual(PLAYER_KEY_BINDINGS_8[1]);
-      expect(bindings2).toEqual(PLAYER_KEY_BINDINGS_8[2]);
-      expect(bindings0).toHaveLength(8);
-      expect(bindings1).toHaveLength(8);
-      expect(bindings2).toHaveLength(8);
-    });
-
-    it('should return 8-key bindings for 4 players', () => {
-      const bindings0 = getPlayerKeyBindings(0, 4);
-      const bindings1 = getPlayerKeyBindings(1, 4);
-      const bindings2 = getPlayerKeyBindings(2, 4);
-      const bindings3 = getPlayerKeyBindings(3, 4);
-      expect(bindings0).toEqual(PLAYER_KEY_BINDINGS_8[0]);
-      expect(bindings1).toEqual(PLAYER_KEY_BINDINGS_8[1]);
-      expect(bindings2).toEqual(PLAYER_KEY_BINDINGS_8[2]);
-      expect(bindings3).toEqual(PLAYER_KEY_BINDINGS_8[3]);
-      expect(bindings0).toHaveLength(8);
-      expect(bindings1).toHaveLength(8);
-      expect(bindings2).toHaveLength(8);
-      expect(bindings3).toHaveLength(8);
-    });
-
-    it('should default to 2 players (16 keys) when playerCount is not provided', () => {
-      const bindings = getPlayerKeyBindings(0);
-      expect(bindings).toEqual(PLAYER_KEY_BINDINGS_16[0]);
-      expect(bindings).toHaveLength(16);
-    });
+    // Parameterized test for all combinations of playerCount (1,2,3,4) and tatamiSize (4,8,12,16)
+    it.each([
+      // playerCount 1
+      {
+        playerCount: 1,
+        tatamiSize: 4,
+        expectedLayout: '8-key',
+        expectedBindings: PLAYER_KEY_BINDINGS_8,
+      },
+      {
+        playerCount: 1,
+        tatamiSize: 8,
+        expectedLayout: '8-key',
+        expectedBindings: PLAYER_KEY_BINDINGS_8,
+      },
+      {
+        playerCount: 1,
+        tatamiSize: 12,
+        expectedLayout: '16-key',
+        expectedBindings: PLAYER_KEY_BINDINGS_16,
+      },
+      {
+        playerCount: 1,
+        tatamiSize: 16,
+        expectedLayout: '16-key',
+        expectedBindings: PLAYER_KEY_BINDINGS_16,
+      },
+      // playerCount 2
+      {
+        playerCount: 2,
+        tatamiSize: 4,
+        expectedLayout: '8-key',
+        expectedBindings: PLAYER_KEY_BINDINGS_8,
+      },
+      {
+        playerCount: 2,
+        tatamiSize: 8,
+        expectedLayout: '8-key',
+        expectedBindings: PLAYER_KEY_BINDINGS_8,
+      },
+      {
+        playerCount: 2,
+        tatamiSize: 12,
+        expectedLayout: '16-key',
+        expectedBindings: PLAYER_KEY_BINDINGS_16,
+      },
+      {
+        playerCount: 2,
+        tatamiSize: 16,
+        expectedLayout: '16-key',
+        expectedBindings: PLAYER_KEY_BINDINGS_16,
+      },
+      // playerCount 3 (always 8-key regardless of tatamiSize)
+      {
+        playerCount: 3,
+        tatamiSize: 4,
+        expectedLayout: '8-key',
+        expectedBindings: PLAYER_KEY_BINDINGS_8,
+      },
+      {
+        playerCount: 3,
+        tatamiSize: 8,
+        expectedLayout: '8-key',
+        expectedBindings: PLAYER_KEY_BINDINGS_8,
+      },
+      {
+        playerCount: 3,
+        tatamiSize: 12,
+        expectedLayout: '8-key',
+        expectedBindings: PLAYER_KEY_BINDINGS_8,
+      },
+      {
+        playerCount: 3,
+        tatamiSize: 16,
+        expectedLayout: '8-key',
+        expectedBindings: PLAYER_KEY_BINDINGS_8,
+      },
+      // playerCount 4 (always 8-key regardless of tatamiSize)
+      {
+        playerCount: 4,
+        tatamiSize: 4,
+        expectedLayout: '8-key',
+        expectedBindings: PLAYER_KEY_BINDINGS_8,
+      },
+      {
+        playerCount: 4,
+        tatamiSize: 8,
+        expectedLayout: '8-key',
+        expectedBindings: PLAYER_KEY_BINDINGS_8,
+      },
+      {
+        playerCount: 4,
+        tatamiSize: 12,
+        expectedLayout: '8-key',
+        expectedBindings: PLAYER_KEY_BINDINGS_8,
+      },
+      {
+        playerCount: 4,
+        tatamiSize: 16,
+        expectedLayout: '8-key',
+        expectedBindings: PLAYER_KEY_BINDINGS_8,
+      },
+    ])(
+      'should return $expectedLayout bindings for playerCount=$playerCount, tatamiSize=$tatamiSize',
+      ({ playerCount, tatamiSize, expectedBindings }) => {
+        const bindings = getPlayerKeyBindings(0, playerCount, tatamiSize);
+        expect(bindings).toEqual(expectedBindings[0]);
+        expect(bindings).toHaveLength(expectedBindings[0].length);
+      },
+    );
 
     it('should return undefined for invalid player index', () => {
       expect(getPlayerKeyBindings(10, 2)).toBeUndefined();
@@ -181,13 +244,13 @@ describe('keyboard-bindings', () => {
   });
 
   describe('getKeyForCard', () => {
-    it('should return correct key for 16-key layout (2 players)', () => {
-      expect(getKeyForCard(0, 0, 2)).toBe('7');
-      expect(getKeyForCard(0, 4, 2)).toBe('u');
-      expect(getKeyForCard(0, 15, 2)).toBe('/');
-      expect(getKeyForCard(1, 0, 2)).toBe('1');
-      expect(getKeyForCard(1, 8, 2)).toBe('a');
-      expect(getKeyForCard(1, 15, 2)).toBe('v');
+    it('should return correct key for 16-key layout (2 players, tatamiSize=16)', () => {
+      expect(getKeyForCard(0, 0, 2, 16)).toBe('7');
+      expect(getKeyForCard(0, 4, 2, 16)).toBe('u');
+      expect(getKeyForCard(0, 15, 2, 16)).toBe('/');
+      expect(getKeyForCard(1, 0, 2, 16)).toBe('1');
+      expect(getKeyForCard(1, 8, 2, 16)).toBe('a');
+      expect(getKeyForCard(1, 15, 2, 16)).toBe('v');
     });
 
     it('should return correct key for 8-key layout (4 players)', () => {
@@ -201,9 +264,9 @@ describe('keyboard-bindings', () => {
       expect(getKeyForCard(3, 7, 4)).toBe('r');
     });
 
-    it('should default to 2 players (16 keys) when playerCount is not provided', () => {
-      expect(getKeyForCard(0, 0)).toBe('7');
-      expect(getKeyForCard(0, 15)).toBe('/');
+    it('should default to 2 players with tatamiSize=8 when parameters are not provided', () => {
+      expect(getKeyForCard(0, 0)).toBe('j');
+      expect(getKeyForCard(0, 7)).toBe('/');
     });
 
     it('should return undefined for invalid card index', () => {

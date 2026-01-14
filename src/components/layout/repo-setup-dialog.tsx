@@ -29,9 +29,6 @@ export function RepoSetupDialog({
   useEffect(() => {
     if (!open || !autoCloseOnValid) return;
 
-    const useDummyData = import.meta.env.VITE_USE_DUMMY_DATA === 'true';
-    if (useDummyData) return;
-
     const intervalId = setInterval(() => {
       const repoState = promidasRepositoryManager.getState();
       logger.debug('[RepoSetupDialog] Checking repo state:', repoState);

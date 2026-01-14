@@ -9,6 +9,7 @@ type UseKeyboardCardSelectionProps = {
   playerStates: GamePlayerState[];
   deck: Map<number, NormalizedPrototype>;
   onCardSelect: (playerId: string, card: NormalizedPrototype) => void;
+  tatamiSize: number;
 };
 
 export function useKeyboardCardSelection({
@@ -16,6 +17,7 @@ export function useKeyboardCardSelection({
   playerStates,
   deck,
   onCardSelect,
+  tatamiSize,
 }: UseKeyboardCardSelectionProps) {
   useEffect(() => {
     if (!enabled) return;
@@ -28,7 +30,7 @@ export function useKeyboardCardSelection({
 
       const key = event.key.toLowerCase();
 
-      // Player count determines key bindings (1-2: 16 keys, 3-4: 8 keys)
+// For 1-2 players, key bindings depend on tatamiSize. For 3+ players, an 8-key layout is always used.
       const playerCount = playerStates.length;
 
       // Find which player and card index this key corresponds to
@@ -38,7 +40,11 @@ export function useKeyboardCardSelection({
         playerIndex++
       ) {
         const playerState = playerStates[playerIndex];
-        const keyBindings = getPlayerKeyBindings(playerIndex, playerCount);
+        const keyBindings = getPlayerKeyBindings(
+          playerIndex,
+          playerCount,
+          tatamiSize,
+        );
 
         if (!keyBindings) continue;
 
@@ -67,5 +73,5 @@ export function useKeyboardCardSelection({
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
     };
-  }, [enabled, playerStates, deck, onCardSelect]);
+  }, [enabled, playerStates, deck, onCardSelect, tatamiSize]);
 }

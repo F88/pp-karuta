@@ -20,6 +20,7 @@ export type GamePlayerState = {
 export type GameState = {
   deck: Deck; // ID -> Prototype map
   totalRaces: number; // Total number of races in this game (fixed at creation)
+  tatamiSize: number; // Initial tatami size setting (fixed at creation, used for keyboard bindings)
   stack: Stack; // Remaining card IDs
   tatami: Tatami; // Shared Tatami card IDs (for Keyboard mode or reference)
   playerStates: GamePlayerState[];

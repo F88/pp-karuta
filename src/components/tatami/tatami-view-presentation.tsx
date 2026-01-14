@@ -25,6 +25,7 @@ export type TatamiViewPresentationProps = {
   onPlayerCardSelect: (playerId: string, card: NormalizedPrototype) => void;
   playerFeedbackStates: Record<string, 'correct' | 'incorrect' | null>;
   screenSize?: ScreenSize;
+  tatamiSize: number;
 };
 
 export function TatamiViewPresentation({
@@ -39,6 +40,7 @@ export function TatamiViewPresentation({
   onPlayerCardSelect,
   playerFeedbackStates,
   screenSize,
+  tatamiSize,
 }: TatamiViewPresentationProps) {
   // Calculate total stats from all players
   const totalScore = playerStates.reduce((sum, ps) => sum + ps.score, 0);
@@ -218,6 +220,7 @@ export function TatamiViewPresentation({
                         playerFeedbackStates[playerState.player.id] ?? null
                       }
                       screenSize={screenSize}
+                      tatamiSize={tatamiSize}
                     />
                   </div>
                 );

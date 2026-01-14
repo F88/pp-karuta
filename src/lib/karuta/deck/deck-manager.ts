@@ -14,6 +14,7 @@ import type {
 } from '@/models/karuta';
 import type { ProtopediaInMemoryRepository } from '@f88/promidas';
 import type { SnapshotOperationResult } from '@f88/promidas/repository';
+import type { SerializableSnapshot } from '@f88/promidas/repository/types';
 import type { NormalizedPrototype } from '@f88/promidas/types';
 
 /**
@@ -28,25 +29,122 @@ import type { NormalizedPrototype } from '@f88/promidas/types';
  * All methods are static as this class serves as a utility namespace.
  */
 export class DeckManager {
-  // ==================== Generation ====================
+  /**
+   * Loads snapshot from development snapshot file.
+   *
+   * Reads the snapshot file path from VITE_DEV_SNAPSHOT_PATH environment variable,
+   * uses Vite's import.meta.glob to locate available snapshot files, and dynamically
+   * imports the matching JSON file to set up the repository with serialized data.
+   *
+   * This is a development-only utility for offline development without API access.
+   *
+   * **Path Resolution:**
+   * - Requires project-root relative path (e.g., `/scripts/dev/snapshot.json` or `scripts/dev/snapshot.json`)
+   * - Path is normalized (leading `/` added if missing) and matched exactly against glob results
+   * - File-name-only paths are NOT supported for safety reasons
+   *
+   * **Important**: This method loads the entire snapshot file content regardless of
+   * recipe.apiParams. Any filtering parameters (offset, limit, tags, etc.) specified
+   * in the recipe are ignored. The snapshot file determines what data is loaded.
+   *
+   * @param repository - ProtopediaInMemoryRepository instance to load snapshot into
+   * @returns SnapshotOperationResult indicating success/failure with stats or error details
+   * @throws {Error} If VITE_DEV_SNAPSHOT_PATH is not set or empty
+   * @throws {Error} If snapshot file path does not match any available files
+   * @throws {Error} If snapshot file cannot be loaded or validation fails
+   * @private
+   */
+  private static async loadSnapshotFromFile(
+    repository: ProtopediaInMemoryRepository,
+  ): Promise<SnapshotOperationResult> {
+    const snapshotPath = import.meta.env.VITE_DEV_SNAPSHOT_PATH;
+    if (!snapshotPath || snapshotPath.trim() === '') {
+      throw new Error(
+        'VITE_DEV_SNAPSHOT_PATH is not set or empty. Please specify snapshot file path.',
+      );
+    }
+    logger.info(`[DEV] Loading snapshot from: ${snapshotPath}`);
+
+    try {
+      // 1. Identify available snapshot files using Vite's glob import
+      // Vite cannot analyze fully dynamic imports like `import(variable)`.
+      // We must use import.meta.glob to explicitly tell Vite which files to include in the bundle/server.
+      // Note: import.meta.glob always bundles matched files regardless of eagerness.
+      // To completely exclude snapshots from production builds, ensure VITE_USE_DEV_SNAPSHOT=false
+      const snapshots = import.meta.glob('/scripts/dev/*.json');
+
+      // 2. Normalize user-provided path to match Vite's glob keys
+      // Glob keys are typically root-relative (e.g., "/scripts/dev/foo.json").
+      const lookupPath = snapshotPath.startsWith('/')
+        ? snapshotPath
+        : `/${snapshotPath}`;
+
+      // 3. Find exact match
+      const loader = snapshots[lookupPath];
+      if (!loader) {
+        // No match found in available glob results
+        throw new Error(
+          `Snapshot file not found: ${lookupPath}. Available files: ${Object.keys(snapshots).join(', ')}`,
+        );
+      }
+
+      // 4. Import and load the snapshot
+      const module = (await loader()) as { default: unknown };
+      const snapshot = module.default;
+
+      const result = repository.setupSnapshotFromSerializedData(
+        snapshot as unknown as SerializableSnapshot,
+      );
+
+      if (!result.ok) {
+        logger.error(`[DEV] Snapshot validation failed: ${result.message}`);
+        throw new Error(`Snapshot validation failed: ${result.message}`);
+      }
+
+      logger.info(
+        `[DEV] Snapshot loaded successfully: ${result.stats.size} prototypes`,
+      );
+
+      return result;
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      logger.error(`[DEV] Failed to load snapshot: ${message}`);
+      throw new Error(
+        `Failed to load snapshot from ${snapshotPath}: ${message}`,
+      );
+    }
+  }
 
   /**
-   * Sets up repository snapshot from DeckRecipe without fetching data.
+   * Sets up repository snapshot from DeckRecipe or development snapshot file.
    *
-   * Prepares the repository snapshot using the recipe's API parameters
+   * In development snapshot mode (VITE_USE_DEV_SNAPSHOT=true), loads pre-generated
+   * snapshot from local file specified in VITE_DEV_SNAPSHOT_PATH.
+   * In normal mode, prepares the repository snapshot using the recipe's API parameters
    * but does not retrieve the actual prototype data. This is useful for
    * staged loading or when you want to verify API parameters before fetching.
    *
    * @param recipe - DeckRecipe containing apiParams for repository query
    * @param repository - ProtopediaInMemoryRepository instance for snapshot setup
    * @returns SnapshotOperationResult indicating success/failure with stats or error details
-   * @throws {Error} If recipe is invalid or missing apiParams
+   * @throws {Error} If recipe is invalid or missing apiParams (normal mode)
+   * @throws {Error} If snapshot file cannot be loaded (dev snapshot mode)
    * @private
    */
   private static async setupSnapshotFromRecipe(
     recipe: DeckRecipe,
     repository: ProtopediaInMemoryRepository,
   ): Promise<SnapshotOperationResult> {
+    // Development snapshot mode: Load from pre-generated file
+    // Note: recipe.apiParams are ignored in snapshot mode - entire snapshot is loaded
+    if (import.meta.env.VITE_USE_DEV_SNAPSHOT === 'true') {
+      logger.info(
+        '[DEV] Snapshot mode enabled - loading from file (recipe.apiParams will be ignored)',
+      );
+      return this.loadSnapshotFromFile(repository);
+    }
+
+    // Normal mode: Fetch from API using recipe
     // Validation: Recipe
     if (!recipe || !recipe.apiParams) {
       throw new Error(`Invalid recipe: apiParams is required`);

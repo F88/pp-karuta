@@ -85,6 +85,7 @@ export class GameManager {
       tatami: tatamiIds,
       playerStates,
       totalRaces,
+      tatamiSize: initialTatamiSize,
     };
   }
 

@@ -91,8 +91,8 @@ export default defineConfig({
         cleanupOutdatedCaches: true,
         globPatterns: ['**/*.{js,css,html,ico,png,jpg,jpeg,svg}'],
         globIgnores: [
-          '**/faker-vendor-*.js',
           '**/ppk26-icon-*.png',
+          '**/dev-snapshot-*.js',
           'images/**',
           'sss/**',
         ],
@@ -111,23 +111,28 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks: (id) => {
+          // Debug: Log module IDs containing promidas
+          // if (id.includes('promidas')) {
+            // console.log('Module ID:', id);
+          // }
+
           // Vendor chunks
           if (id.includes('node_modules')) {
             // TanStack Router
             if (id.includes('@tanstack/react-router')) {
               return 'tanstack-router';
             }
+            // Promidas utilities (separate from main promidas)
+            if (id.includes('/@f88/promidas-utils/')) {
+              return 'promidas-utils';
+            }
             // Promidas (large library)
-            if (id.includes('@f88/promidas')) {
+            if (id.includes('/@f88/promidas/')) {
               return 'promidas';
             }
             // API client
             if (id.includes('protopedia-api-v2-client')) {
               return 'api-vendor';
-            }
-            // Faker.js (large dev dependency mistakenly in production)
-            if (id.includes('@faker-js/faker')) {
-              return 'faker-vendor';
             }
             // React core and scheduler (must be together)
             if (

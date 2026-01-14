@@ -100,6 +100,7 @@ export function TatamiViewContainer({
     playerStates: gameState.playerStates,
     deck: gameState.deck,
     onCardSelect: handlePlayerCardSelect,
+    tatamiSize: gameState.tatamiSize,
   });
 
   // Check if game is complete
@@ -121,6 +122,7 @@ export function TatamiViewContainer({
       onPlayerCardSelect={handlePlayerCardSelect}
       playerFeedbackStates={playerFeedbackStates}
       screenSize={screenSize}
+      tatamiSize={gameState.tatamiSize}
     />
   );
 }

@@ -16,12 +16,34 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     - `public/sitemap.xml` - サイト構造を定義するサイトマップ
     - `index.html` に SEO メタタグ (keywords, author, canonical) を追加
     - JSON-LD 構造化データ (Schema.org WebApplication 形式) を追加
+- 開発用スナップショット機能 (`VITE_USE_DEV_SNAPSHOT`)
+    - `scripts/generate-snapshot.ts`: デッキレシピからリポジトリデータ(JSON)を生成するスクリプト
+    - `DeckManager`: 生成されたJSONファイルからデータを読み込む機能 (`import.meta.glob`利用)
+- ログレベル制御機能 (`VITE_LOG_LEVEL`)
+    - `debug` / `info` (default) / `warn` / `error` のレベルでコンソール出力を制御
+- `index.html` に `<meta name="mobile-web-app-capable" content="yes">` を追加 (deprecated 警告対応)
+- キーボードモード: 畳サイズに応じたキーバインディング変更機能
+    - `GameState` に `tatamiSize` フィールドを追加 (初期設定値を保持)
+    - `getPlayerKeyBindings()` / `getKeyForCard()`: `tatamiSize` パラメータ追加
+    - プレイヤー数2人以下 & 畳サイズ4/8 → 8キーレイアウト
+    - プレイヤー数2人以下 & 畳サイズ12/16 → 16キーレイアウト
+    - プレイヤー数3人以上 → 常に8キーレイアウト
+    - 全てのプレイヤー数(1-4) × 畳サイズ(4,8,12,16)の組み合わせをテスト
 
 ### Changed
 
 - Upgrade dependencies: `@f88/promidas` from v1.0.0 to v1.1.0
 - Upgrade dependencies: `@f88/promidas-utils` from v0.3.0 to v1.0.0
 - Replace deprecated TanStackRouterVite with tanstackRouter in vite.config.ts
+- Logger (`src/lib/logger.ts`) の実装を刷新
+    - `VITE_DEBUG_MODE` (boolean) への依存を廃止し、`VITE_LOG_LEVEL` (string) に変更
+    - `logger.info` を標準出力に変更 (以前は debug モード時のみ出力)
+- 開発環境設定
+    - `.env.example` に `VITE_LOG_LEVEL` と `VITE_DEV_SNAPSHOT_PATH` の設定例を追加
+
+### Removed
+
+- `VITE_USE_DUMMY_DATA` フラグと関連機能を削除 (Promidas の仕組みへ移行のため)
 
 ## [2026.01.09] - 2026-01-09
 

@@ -22,103 +22,39 @@ describe('logger', () => {
     consoleWarnSpy.mockRestore();
     consoleErrorSpy.mockRestore();
     vi.resetModules();
+    vi.unstubAllEnvs();
   });
 
-  describe('with DEBUG_MODE enabled', () => {
-    beforeEach(async () => {
-      vi.stubEnv('VITE_DEBUG_MODE', 'true');
-      // Reimport logger to pick up the new env value
-      await vi.importActual('@/lib/logger');
+  const loadLogger = async () => {
+    // Force re-import to pick up new env
+    await vi.importActual('@/lib/logger');
+    const { logger } = await import('@/lib/logger');
+    return logger;
+  };
+
+  describe('with LOG_LEVEL = debug', () => {
+    beforeEach(() => {
+      vi.stubEnv('VITE_LOG_LEVEL', 'debug');
     });
 
-    afterEach(() => {
-      vi.unstubAllEnvs();
-    });
+    it('should output all logs', async () => {
+      const logger = await loadLogger();
 
-    it('should output debug logs with [DEBUG] prefix', async () => {
-      const { logger } = await import('@/lib/logger');
-      logger.debug('test message', { foo: 'bar' });
-      expect(consoleDebugSpy).toHaveBeenCalledWith('[DEBUG]', 'test message', {
-        foo: 'bar',
-      });
-    });
+      logger.debug('debug');
+      expect(consoleDebugSpy).toHaveBeenCalledWith('[DEBUG]', 'debug');
 
-    it('should output info logs with [INFO] prefix', async () => {
-      const { logger } = await import('@/lib/logger');
-      logger.info('info message', 123);
-      expect(consoleInfoSpy).toHaveBeenCalledWith(
-        '[INFO]',
-        'info message',
-        123,
-      );
-    });
-  });
+      logger.info('info');
+      expect(consoleInfoSpy).toHaveBeenCalledWith('[INFO]', 'info');
 
-  describe('with DEBUG_MODE disabled', () => {
-    beforeEach(async () => {
-      vi.stubEnv('VITE_DEBUG_MODE', 'false');
-      await vi.importActual('@/lib/logger');
-    });
+      logger.warn('warn');
+      expect(consoleWarnSpy).toHaveBeenCalledWith('[WARN]', 'warn');
 
-    afterEach(() => {
-      vi.unstubAllEnvs();
-    });
-
-    it('should not output debug logs when DEBUG_MODE is false', async () => {
-      const { logger } = await import('@/lib/logger');
-      logger.debug('test message');
-      expect(consoleDebugSpy).not.toHaveBeenCalled();
-    });
-
-    it('should not output info logs when DEBUG_MODE is false', async () => {
-      const { logger } = await import('@/lib/logger');
-      logger.info('info message');
-      expect(consoleInfoSpy).not.toHaveBeenCalled();
-    });
-  });
-
-  describe('always enabled logs', () => {
-    it('should output log messages with [LOG] prefix', async () => {
-      const { logger } = await import('@/lib/logger');
-      logger.log('log message', 'data');
-      expect(consoleLogSpy).toHaveBeenCalledWith(
-        '[LOG]',
-        'log message',
-        'data',
-      );
-    });
-
-    it('should output warn messages with [WARN] prefix', async () => {
-      const { logger } = await import('@/lib/logger');
-      logger.warn('warning message', { code: 404 });
-      expect(consoleWarnSpy).toHaveBeenCalledWith('[WARN]', 'warning message', {
-        code: 404,
-      });
-    });
-
-    it('should output error messages with [ERROR] prefix', async () => {
-      const { logger } = await import('@/lib/logger');
-      logger.error('error message', new Error('test'));
-      expect(consoleErrorSpy).toHaveBeenCalledWith(
-        '[ERROR]',
-        'error message',
-        expect.any(Error),
-      );
-    });
-  });
-
-  describe('multiple arguments', () => {
-    beforeEach(async () => {
-      vi.stubEnv('VITE_DEBUG_MODE', 'true');
-      await vi.importActual('@/lib/logger');
-    });
-
-    afterEach(() => {
-      vi.unstubAllEnvs();
+      logger.error('error');
+      expect(consoleErrorSpy).toHaveBeenCalledWith('[ERROR]', 'error');
     });
 
     it('should handle multiple arguments in debug', async () => {
-      const { logger } = await import('@/lib/logger');
+      const logger = await loadLogger();
       logger.debug('arg1', 'arg2', 'arg3', { obj: true });
       expect(consoleDebugSpy).toHaveBeenCalledWith(
         '[DEBUG]',
@@ -128,15 +64,28 @@ describe('logger', () => {
         { obj: true },
       );
     });
+  });
 
-    it('should handle no arguments', async () => {
-      const { logger } = await import('@/lib/logger');
-      logger.log();
-      expect(consoleLogSpy).toHaveBeenCalledWith('[LOG]');
+  describe('with LOG_LEVEL = info (default)', () => {
+    beforeEach(() => {
+      vi.stubEnv('VITE_LOG_LEVEL', 'info');
+    });
+
+    it('should output info and above, but NOT debug', async () => {
+      const logger = await loadLogger();
+
+      logger.debug('debug');
+      expect(consoleDebugSpy).not.toHaveBeenCalled();
+
+      logger.info('info');
+      expect(consoleInfoSpy).toHaveBeenCalledWith('[INFO]', 'info');
+
+      logger.warn('warn');
+      expect(consoleWarnSpy).toHaveBeenCalledWith('[WARN]', 'warn');
     });
 
     it('should handle complex objects', async () => {
-      const { logger } = await import('@/lib/logger');
+      const logger = await loadLogger();
       const complexObj = {
         nested: { deep: { value: 123 } },
         array: [1, 2, 3],
@@ -148,6 +97,50 @@ describe('logger', () => {
         'complex',
         complexObj,
       );
+    });
+  });
+
+  describe('with LOG_LEVEL = warn', () => {
+    beforeEach(() => {
+      vi.stubEnv('VITE_LOG_LEVEL', 'warn');
+    });
+
+    it('should output warn and above, but NOT info/debug', async () => {
+      const logger = await loadLogger();
+
+      logger.debug('debug');
+      expect(consoleDebugSpy).not.toHaveBeenCalled();
+
+      logger.info('info');
+      expect(consoleInfoSpy).not.toHaveBeenCalled();
+
+      logger.warn('warn');
+      expect(consoleWarnSpy).toHaveBeenCalledWith('[WARN]', 'warn');
+
+      logger.error('error');
+      expect(consoleErrorSpy).toHaveBeenCalledWith('[ERROR]', 'error');
+    });
+  });
+
+  describe('with LOG_LEVEL = error', () => {
+    beforeEach(() => {
+      vi.stubEnv('VITE_LOG_LEVEL', 'error');
+    });
+
+    it('should output only error', async () => {
+      const logger = await loadLogger();
+
+      logger.debug('debug');
+      expect(consoleDebugSpy).not.toHaveBeenCalled();
+
+      logger.info('info');
+      expect(consoleInfoSpy).not.toHaveBeenCalled();
+
+      logger.warn('warn');
+      expect(consoleWarnSpy).not.toHaveBeenCalled();
+
+      logger.error('error');
+      expect(consoleErrorSpy).toHaveBeenCalledWith('[ERROR]', 'error');
     });
   });
 });
