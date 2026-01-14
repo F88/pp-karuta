@@ -30,7 +30,7 @@ export function useKeyboardCardSelection({
 
       const key = event.key.toLowerCase();
 
-      // Player count for backward compatibility (not used for key selection anymore)
+// For 1-2 players, key bindings depend on tatamiSize. For 3+ players, an 8-key layout is always used.
       const playerCount = playerStates.length;
 
       // Find which player and card index this key corresponds to
