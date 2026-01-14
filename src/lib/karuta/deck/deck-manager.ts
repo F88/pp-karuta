@@ -33,9 +33,15 @@ export class DeckManager {
    * Loads snapshot from development snapshot file.
    *
    * Reads the snapshot file path from VITE_DEV_SNAPSHOT_PATH environment variable,
-   * dynamically imports the JSON file, and sets up the repository with the serialized data.
+   * uses Vite's import.meta.glob to locate available snapshot files, and dynamically
+   * imports the matching JSON file to set up the repository with serialized data.
    *
    * This is a development-only utility for offline development without API access.
+   *
+   * **Path Resolution:**
+   * - Requires project-root relative path (e.g., `/scripts/dev/snapshot.json` or `scripts/dev/snapshot.json`)
+   * - Path is normalized (leading `/` added if missing) and matched exactly against glob results
+   * - File-name-only paths are NOT supported for safety reasons
    *
    * **Important**: This method loads the entire snapshot file content regardless of
    * recipe.apiParams. Any filtering parameters (offset, limit, tags, etc.) specified
@@ -43,8 +49,9 @@ export class DeckManager {
    *
    * @param repository - ProtopediaInMemoryRepository instance to load snapshot into
    * @returns SnapshotOperationResult indicating success/failure with stats or error details
-   * @throws {Error} If VITE_DEV_SNAPSHOT_PATH is not set
-   * @throws {Error} If snapshot file cannot be loaded or parsed
+   * @throws {Error} If VITE_DEV_SNAPSHOT_PATH is not set or empty
+   * @throws {Error} If snapshot file path does not match any available files
+   * @throws {Error} If snapshot file cannot be loaded or validation fails
    * @private
    */
   private static async loadSnapshotFromFile(
@@ -70,53 +77,16 @@ export class DeckManager {
         ? snapshotPath
         : `/${snapshotPath}`;
 
-      // 3. Try to find an exact match first
+      // 3. Find exact match
       const loader = snapshots[lookupPath];
-
       if (!loader) {
-        // 4. Fallback search (Fuzzy matching)
-        // If exact match fails, search for a key that ends with the provided path.
-        // This handles cases where:
-        // - User provided "scripts/dev/foo.json" but key is "/scripts/dev/foo.json"
-        // - User provided relative path "dev-snapshot-xxx.json"
-        const foundKey = Object.keys(snapshots).find(
-          (key) =>
-            key.endsWith(snapshotPath) ||
-            key === snapshotPath ||
-            key === `/${snapshotPath}`,
-        );
-
-        if (foundKey) {
-          logger.info(`[DEV] Resolved snapshot path to: ${foundKey}`);
-
-          // Execute the loader to import the JSON module
-          const module = (await snapshots[foundKey]()) as { default: unknown };
-          const snapshot = module.default;
-
-          // Initialize repository with loaded data
-          // Cast is necessary because dynamically imported JSON is 'unknown'
-          const result = repository.setupSnapshotFromSerializedData(
-            snapshot as unknown as SerializableSnapshot,
-          );
-
-          if (!result.ok) {
-            logger.error(`[DEV] Snapshot validation failed: ${result.message}`);
-            throw new Error(`Snapshot validation failed: ${result.message}`);
-          }
-
-          logger.info(
-            `[DEV] Snapshot loaded successfully: ${result.stats.size} prototypes`,
-          );
-          return result;
-        }
-
         // No match found in available glob results
         throw new Error(
-          `Snapshot file not found in glob results. Available: ${Object.keys(snapshots).join(', ')}`,
+          `Snapshot file not found: ${lookupPath}. Available files: ${Object.keys(snapshots).join(', ')}`,
         );
       }
 
-      // 5. Exact match found - Import and load
+      // 4. Import and load the snapshot
       const module = (await loader()) as { default: unknown };
       const snapshot = module.default;
 
