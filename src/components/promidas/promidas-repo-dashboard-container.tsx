@@ -20,8 +20,6 @@ export function PromidasRepoDashboard({
   const [repoError, setRepoError] = useState<string | null>(null);
   const { storeState, stats } = usePromidasStoreState();
 
-  const useDummyData = import.meta.env.VITE_USE_DUMMY_DATA === 'true';
-
   useEffect(() => {
     const updateRepoState = () => {
       const status = promidasRepositoryManager.getState();
@@ -42,7 +40,6 @@ export function PromidasRepoDashboard({
       repoError={repoError}
       storeState={storeState}
       storeStats={stats}
-      useDummyData={useDummyData}
       screenSize={screenSize}
     />
   );
