@@ -29,8 +29,6 @@ import type { NormalizedPrototype } from '@f88/promidas/types';
  * All methods are static as this class serves as a utility namespace.
  */
 export class DeckManager {
-  // ==================== Generation ====================
-
   /**
    * Loads snapshot from development snapshot file.
    *
@@ -61,21 +59,26 @@ export class DeckManager {
     logger.info(`[DEV] Loading snapshot from: ${snapshotPath}`);
 
     try {
-      // Use import.meta.glob to allow Vite to bundle/serve these files correctly
-      // This is safer than fully dynamic imports which can fail in Vite
+      // 1. Identify available snapshot files using Vite's glob import
+      // Vite cannot analyze fully dynamic imports like `import(variable)`.
+      // We must use import.meta.glob to explicitly tell Vite which files to include in the bundle/server.
       const snapshots = import.meta.glob('/scripts/dev/*.json');
 
-      // Normalize path to match glob keys (ensure leading /)
+      // 2. Normalize user-provided path to match Vite's glob keys
+      // Glob keys are typically root-relative (e.g., "/scripts/dev/foo.json").
       const lookupPath = snapshotPath.startsWith('/')
         ? snapshotPath
         : `/${snapshotPath}`;
 
+      // 3. Try to find an exact match first
       const loader = snapshots[lookupPath];
 
       if (!loader) {
-        // Fallback: try fuzzier match if exact match fails
-        // e.g. if user supplied 'scripts/dev/foo.json' but key is '/scripts/dev/foo.json'
-        // or relative paths
+        // 4. Fallback search (Fuzzy matching)
+        // If exact match fails, search for a key that ends with the provided path.
+        // This handles cases where:
+        // - User provided "scripts/dev/foo.json" but key is "/scripts/dev/foo.json"
+        // - User provided relative path "dev-snapshot-xxx.json"
         const foundKey = Object.keys(snapshots).find(
           (key) =>
             key.endsWith(snapshotPath) ||
@@ -85,8 +88,13 @@ export class DeckManager {
 
         if (foundKey) {
           logger.info(`[DEV] Resolved snapshot path to: ${foundKey}`);
+
+          // Execute the loader to import the JSON module
           const module = (await snapshots[foundKey]()) as { default: unknown };
           const snapshot = module.default;
+
+          // Initialize repository with loaded data
+          // Cast is necessary because dynamically imported JSON is 'unknown'
           const result = repository.setupSnapshotFromSerializedData(
             snapshot as unknown as SerializableSnapshot,
           );
@@ -102,11 +110,13 @@ export class DeckManager {
           return result;
         }
 
+        // No match found in available glob results
         throw new Error(
           `Snapshot file not found in glob results. Available: ${Object.keys(snapshots).join(', ')}`,
         );
       }
 
+      // 5. Exact match found - Import and load
       const module = (await loader()) as { default: unknown };
       const snapshot = module.default;
 
