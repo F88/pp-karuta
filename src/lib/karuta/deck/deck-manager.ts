@@ -69,6 +69,8 @@ export class DeckManager {
       // 1. Identify available snapshot files using Vite's glob import
       // Vite cannot analyze fully dynamic imports like `import(variable)`.
       // We must use import.meta.glob to explicitly tell Vite which files to include in the bundle/server.
+      // Note: import.meta.glob always bundles matched files regardless of eagerness.
+      // To completely exclude snapshots from production builds, ensure VITE_USE_DEV_SNAPSHOT=false
       const snapshots = import.meta.glob('/scripts/dev/*.json');
 
       // 2. Normalize user-provided path to match Vite's glob keys
