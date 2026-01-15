@@ -107,8 +107,8 @@ export class GameManager {
    * Pick a YomiFuda (reading card) from tatami
    *
    * Selection behavior depends on VITE_RANDOM_YOMIFUDA environment variable:
-   * - false (default): Returns first card (tatami[0]) - sequential order as determined by StackRecipe
-   * - true: Returns randomly selected card from tatami - adds unpredictability to the game
+   * - true (default): Returns randomly selected card from tatami - adds unpredictability to the game
+   * - false: Returns first card (tatami[0]) - sequential order as determined by StackRecipe
    *
    * @param tatami - Array of card IDs in tatami
    * @returns Picked card ID, or null if tatami is empty
@@ -118,14 +118,16 @@ export class GameManager {
       return null;
     }
 
-    // Check if random selection is enabled
-    if (import.meta.env.VITE_RANDOM_YOMIFUDA === 'true') {
+    // Determine if random selection is enabled (default: true)
+    const isRandomEnabled = import.meta.env.VITE_RANDOM_YOMIFUDA !== 'false';
+
+    if (isRandomEnabled) {
       // Randomly select a card from tatami
       const randomIndex = Math.floor(Math.random() * tatami.length);
       return tatami[randomIndex];
     }
 
-    // Default: Pick first card (sequential order as determined by StackRecipe)
+    // Sequential mode: Pick first card (sequential order as determined by StackRecipe)
     return tatami[0];
   }
 

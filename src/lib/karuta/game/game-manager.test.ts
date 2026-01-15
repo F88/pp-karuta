@@ -427,6 +427,42 @@ describe('GameManager', () => {
         expect(results.size).toBeGreaterThan(1);
       });
     });
+
+    describe('default mode (VITE_RANDOM_YOMIFUDA undefined)', () => {
+      beforeEach(() => {
+        delete import.meta.env.VITE_RANDOM_YOMIFUDA;
+      });
+
+      it('should behave as random mode when env var is not set', () => {
+        const tatami = [5, 3, 7, 1, 9];
+        const cardId = GameManager.pickYomiFuda(tatami);
+
+        expect(cardId).not.toBeNull();
+        expect(tatami).toContain(cardId!);
+      });
+
+      it('should return null for empty tatami', () => {
+        const tatami: number[] = [];
+        const cardId = GameManager.pickYomiFuda(tatami);
+        expect(cardId).toBeNull();
+      });
+
+      it('should potentially return different cards (default randomness)', () => {
+        const tatami = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+        const results = new Set<number>();
+
+        // Pick 50 times, should get variety
+        for (let i = 0; i < 50; i++) {
+          const cardId = GameManager.pickYomiFuda(tatami);
+          if (cardId !== null) {
+            results.add(cardId);
+          }
+        }
+
+        // With 50 picks from 10 cards, we should see multiple different cards
+        expect(results.size).toBeGreaterThan(1);
+      });
+    });
   });
 
   describe('processCorrectAnswer', () => {
