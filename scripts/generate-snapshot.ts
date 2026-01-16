@@ -22,7 +22,6 @@ import { dirname, resolve } from 'node:path';
 
 // Load environment variables from .env.local
 import { config } from 'dotenv';
-
 // Promidas modules
 import { createPromidasForLocal, ProtopediaInMemoryRepository } from 'promidas';
 import { parseSnapshotOperationFailure } from 'promidas-utils/repository';
