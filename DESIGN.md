@@ -357,7 +357,7 @@ UIは以下の3つの画面サイズを意識したレスポンシブデザイ�
 ```mermaid
 graph TD
     Manager[RepositoryManager]
-    External[External: @f88/promidas]
+    External[External: promidas]
     Recipe[DeckRecipe]
     Deck[Model: Deck]
     Player[Model: Player]
