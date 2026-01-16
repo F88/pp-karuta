@@ -1,12 +1,15 @@
-import { logger } from '@/lib/logger';
+import { useEffect } from 'react';
+
 import { useRepositoryState } from '@/hooks/use-repository-state';
 import { useScreenSizeContext } from '@/hooks/use-screen-size-context';
-import type { UseGameSetupReturn } from '@/hooks/use-game-setup';
+import { useScrollToTopOnMount } from '@/hooks/use-scroll-to-top-on-mount';
 import { STACK_RECIPES } from '@/lib/karuta';
 import { DeckRecipeManager } from '@/lib/karuta/deck';
-import { useEffect } from 'react';
+import { logger } from '@/lib/logger';
+
 import { IntegratedSelectorPresentation } from './integrated-selector-presentation';
-import { useScrollToTopOnMount } from '@/hooks/use-scroll-to-top-on-mount';
+
+import type { UseGameSetupReturn } from '@/hooks/use-game-setup';
 
 export type IntegratedSelectorContainerProps = {
   setup: UseGameSetupReturn;

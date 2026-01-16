@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest';
+
 import {
   PLAYER_KEY_BINDINGS_16,
   PLAYER_KEY_BINDINGS_8,

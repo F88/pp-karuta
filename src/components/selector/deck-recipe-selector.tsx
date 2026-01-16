@@ -1,10 +1,5 @@
-import { useState } from 'react';
-
-import type { ScreenSize } from '@/types/screen-size';
-
-import type { Deck, DeckRecipe } from '@/models/karuta';
-
 import { ChevronDown } from 'lucide-react';
+import { useState } from 'react';
 
 import { DeckRecipeCard } from '@/components/recipe/deck-recipe-card';
 import { DeckPreview } from '@/components/selector/deck-preview';
@@ -14,6 +9,9 @@ import {
   CollapsibleTrigger,
 } from '@/components/ui/collapsible';
 import { getResponsiveStyles } from '@/lib/ui-utils';
+
+import type { Deck, DeckRecipe } from '@/models/karuta';
+import type { ScreenSize } from '@/types/screen-size';
 
 export type DeckRecipeSelectorProps = {
   deckRecipes: DeckRecipe[];

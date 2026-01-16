@@ -1,6 +1,7 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { ToriFudaCardTouch } from './tori-fuda-card-touch';
-import type { NormalizedPrototype } from '@f88/promidas/types';
+
+import type { Meta, StoryObj } from '@storybook/react-vite';
+import type { NormalizedPrototype } from 'promidas/types';
 
 const meta = {
   title: 'Game/ToriFudaCardTouch',

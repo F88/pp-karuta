@@ -1,6 +1,8 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
-import { GameSetupSummary } from './game-setup-summary';
 import { generateDummyPrototypes } from '@/lib/repository/dummy-data';
+
+import { GameSetupSummary } from './game-setup-summary';
+
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta = {
   title: 'Selector/GameSetupSummary',

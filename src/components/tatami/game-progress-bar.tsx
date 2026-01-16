@@ -1,6 +1,7 @@
+import { getResponsiveStyles } from '@/lib/ui-utils';
+
 import type { GamePlayerState } from '@/models/karuta';
 import type { ScreenSize } from '@/types/screen-size';
-import { getResponsiveStyles } from '@/lib/ui-utils';
 
 type GameProgressBarProps = {
   totalRaces: number;

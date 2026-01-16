@@ -1,5 +1,6 @@
-import type { ScreenSize } from '@/types/screen-size';
 import { getResponsiveStyles } from '@/lib/ui-utils';
+
+import type { ScreenSize } from '@/types/screen-size';
 
 interface AppHeaderPresentationProps {
   screenSize: ScreenSize;

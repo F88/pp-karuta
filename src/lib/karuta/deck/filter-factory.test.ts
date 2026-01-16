@@ -1,10 +1,12 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+
 import {
   createIdsFilter,
   createKeywordFilter,
   createReleaseDateYearFilter,
 } from './filter-factory';
-import type { NormalizedPrototype } from '@f88/promidas/types';
+
+import type { NormalizedPrototype } from 'promidas/types';
 
 describe('Filter Factory', () => {
   describe('createIdsFilter', () => {

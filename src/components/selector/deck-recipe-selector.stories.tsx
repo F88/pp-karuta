@@ -1,7 +1,9 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
-import type { Deck } from '@/models/karuta';
-import { DeckRecipeSelector } from './deck-recipe-selector';
 import { DeckRecipeManager, generateDummyPrototypes } from '@/lib/karuta';
+
+import { DeckRecipeSelector } from './deck-recipe-selector';
+
+import type { Deck } from '@/models/karuta';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta = {
   title: 'Selector/DeckRecipeSelector',

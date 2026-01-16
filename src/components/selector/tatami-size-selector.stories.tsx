@@ -1,6 +1,8 @@
 import { TATAMI_SIZES } from '@/lib/karuta';
-import type { Meta, StoryObj } from '@storybook/react-vite';
+
 import { TatamiSizeSelector } from './tatami-size-selector';
+
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta = {
   title: 'Selector/TatamiSizeSelector',

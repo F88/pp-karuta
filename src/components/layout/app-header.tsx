@@ -1,11 +1,14 @@
 import { Link, useNavigate } from '@tanstack/react-router';
+
 import { ThemeIndicator } from '@/components/theme-indicator';
 import { Button } from '@/components/ui/button';
-import { RepoStateIndicator } from './repo-state-indicator';
+import { getResponsiveStyles } from '@/lib/ui-utils';
+
 import { AppHeaderPresentation } from './app-header-presentation';
+import { RepoStateIndicator } from './repo-state-indicator';
+
 import type { RepositoryState } from '@/lib/repository/promidas-repository-manager';
 import type { ScreenSize } from '@/types/screen-size';
-import { getResponsiveStyles } from '@/lib/ui-utils';
 
 interface AppHeaderProps {
   repoState: RepositoryState;

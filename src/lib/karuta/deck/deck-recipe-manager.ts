@@ -10,8 +10,6 @@
  * @module DeckRecipeManager
  */
 
-import type { DeckRecipe } from '@/models/karuta';
-
 import {
   ALL_PROTOTYPES,
   DECK_RECIPE_ALL_PROTOTYPES,
@@ -20,8 +18,9 @@ import {
 } from './deck-recipe';
 import { ETO_RECIPES } from './deck-recipe-eto';
 import { SAIJI_RECIPES } from './deck-recipe-saiji';
-
 import { createReleaseDateYearFilter } from './filter-factory';
+
+import type { DeckRecipe } from '@/models/karuta';
 
 // ========================================
 // Section 0: Recipe Generation Helpers

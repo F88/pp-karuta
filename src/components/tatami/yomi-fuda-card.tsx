@@ -1,6 +1,7 @@
-import type { NormalizedPrototype } from '@f88/promidas/types';
-import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
+
+import type { NormalizedPrototype } from 'promidas/types';
 
 export type YomiFudaCardProps = {
   normalizedPrototype: NormalizedPrototype;

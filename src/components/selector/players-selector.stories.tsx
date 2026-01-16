@@ -1,7 +1,9 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
-import type { Player } from '@/models/karuta';
-import { PlayersSelector } from './players-selector';
 import { PlayerManager } from '@/lib/karuta';
+
+import { PlayersSelector } from './players-selector';
+
+import type { Player } from '@/models/karuta';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta = {
   title: 'Selector/PlayersSelector',

@@ -5,6 +5,7 @@
  * screens use the common theme, while `/intro` remains theme-isolated.
  */
 import { createFileRoute } from '@tanstack/react-router';
+
 import { GameFlow } from '@/components/game/game-flow';
 
 type IndexSearch = {

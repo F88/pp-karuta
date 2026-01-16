@@ -1,7 +1,9 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
-import { SelectableCard } from './selectable-card';
 import { Smartphone, Keyboard } from 'lucide-react';
 import { useState } from 'react';
+
+import { SelectableCard } from './selectable-card';
+
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta = {
   title: 'Selector/SelectableCard',

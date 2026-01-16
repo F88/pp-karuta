@@ -1,4 +1,4 @@
-import type { NormalizedPrototype } from '@f88/promidas/types';
+import type { NormalizedPrototype } from 'promidas/types';
 import type { ListPrototypesParams } from 'protopedia-api-v2-client';
 
 /**

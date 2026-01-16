@@ -1,6 +1,7 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
-import type { StackRecipe } from '@/models/karuta';
 import { StackRecipeCard } from './stack-recipe-card';
+
+import type { StackRecipe } from '@/models/karuta';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta = {
   title: 'Recipe/StackRecipeCard',

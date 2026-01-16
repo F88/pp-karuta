@@ -1,5 +1,6 @@
-import type { Player } from '@/models/karuta';
 import { Badge } from '@/components/ui/badge';
+
+import type { Player } from '@/models/karuta';
 
 interface PlayerBadgeProps {
   player: Player;

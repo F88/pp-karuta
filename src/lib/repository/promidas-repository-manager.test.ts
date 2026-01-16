@@ -1,20 +1,22 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
+
 import { PromidasRepositoryManager } from './promidas-repository-manager';
+
+import type { tokenStorage } from '@/lib/token-storage';
 import type {
   ProtopediaInMemoryRepository,
   PrototypeInMemoryStats,
-} from '@f88/promidas';
-import type { tokenStorage } from '@/lib/token-storage';
+} from 'promidas';
 
 type TokenStorage = typeof tokenStorage;
 
 // Mock the promidas module
-vi.mock('@f88/promidas', () => ({
+vi.mock('promidas', () => ({
   createPromidasForLocal: vi.fn(),
 }));
 
 // Mock promidas-utils repository module
-vi.mock('@f88/promidas-utils/repository', () => ({
+vi.mock('promidas-utils/repository', () => ({
   parseSnapshotOperationFailure: vi.fn((failure) => ({
     ...failure,
     localizedMessage: failure.message || 'スナップショット操作に失敗しました。',
@@ -22,7 +24,7 @@ vi.mock('@f88/promidas-utils/repository', () => ({
 }));
 
 // Mock promidas-utils builder module
-vi.mock('@f88/promidas-utils/builder', () => ({
+vi.mock('promidas-utils/builder', () => ({
   toErrorMessage: vi.fn((err) => String(err)),
 }));
 
@@ -99,7 +101,7 @@ describe('PromidasRepositoryManager', () => {
 
     it('returns validating when repository exists but token not validated', async () => {
       mockStorage.get.mockResolvedValue('valid-token');
-      const { createPromidasForLocal } = await import('@f88/promidas');
+      const { createPromidasForLocal } = await import('promidas');
       vi.mocked(createPromidasForLocal).mockReturnValue(mockRepository);
 
       // Create a promise that we can control for validation
@@ -133,7 +135,7 @@ describe('PromidasRepositoryManager', () => {
 
     it('returns token-invalid when token validation fails', async () => {
       mockStorage.get.mockResolvedValue('invalid-token');
-      const { createPromidasForLocal } = await import('@f88/promidas');
+      const { createPromidasForLocal } = await import('promidas');
       vi.mocked(createPromidasForLocal).mockImplementation(() => {
         throw new Error('Invalid token');
       });
@@ -155,7 +157,7 @@ describe('PromidasRepositoryManager', () => {
   describe('reset', () => {
     it('clears all state', async () => {
       mockStorage.get.mockResolvedValue('valid-token');
-      const { createPromidasForLocal } = await import('@f88/promidas');
+      const { createPromidasForLocal } = await import('promidas');
       vi.mocked(createPromidasForLocal).mockReturnValue(mockRepository);
       vi.mocked(mockRepository.setupSnapshot).mockResolvedValue(
         mockSuccessResult,
@@ -189,7 +191,7 @@ describe('PromidasRepositoryManager', () => {
       import.meta.env.VITE_PROMIDAS_LOG_LEVEL = 'info';
 
       mockStorage.get.mockResolvedValue('valid-token');
-      const { createPromidasForLocal } = await import('@f88/promidas');
+      const { createPromidasForLocal } = await import('promidas');
       vi.mocked(createPromidasForLocal).mockReturnValue(mockRepository);
       vi.mocked(mockRepository.setupSnapshot).mockResolvedValue(
         mockSuccessResult,
@@ -209,7 +211,7 @@ describe('PromidasRepositoryManager', () => {
 
     it('returns cached repository on subsequent calls', async () => {
       mockStorage.get.mockResolvedValue('valid-token');
-      const { createPromidasForLocal } = await import('@f88/promidas');
+      const { createPromidasForLocal } = await import('promidas');
       vi.mocked(createPromidasForLocal).mockReturnValue(mockRepository);
       vi.mocked(mockRepository.setupSnapshot).mockResolvedValue(
         mockSuccessResult,
@@ -225,7 +227,7 @@ describe('PromidasRepositoryManager', () => {
 
     it('handles concurrent calls with request deduplication', async () => {
       mockStorage.get.mockResolvedValue('valid-token');
-      const { createPromidasForLocal } = await import('@f88/promidas');
+      const { createPromidasForLocal } = await import('promidas');
       vi.mocked(createPromidasForLocal).mockReturnValue(mockRepository);
       vi.mocked(mockRepository.setupSnapshot).mockResolvedValue(
         mockSuccessResult,
@@ -245,7 +247,7 @@ describe('PromidasRepositoryManager', () => {
 
     it('throws error when repository creation fails', async () => {
       mockStorage.get.mockResolvedValue('valid-token');
-      const { createPromidasForLocal } = await import('@f88/promidas');
+      const { createPromidasForLocal } = await import('promidas');
       vi.mocked(createPromidasForLocal).mockImplementation(() => {
         throw new Error('Configuration error');
       });
@@ -260,7 +262,7 @@ describe('PromidasRepositoryManager', () => {
 
     it('throws error when token validation fails', async () => {
       mockStorage.get.mockResolvedValue('invalid-token');
-      const { createPromidasForLocal } = await import('@f88/promidas');
+      const { createPromidasForLocal } = await import('promidas');
       vi.mocked(createPromidasForLocal).mockReturnValue(mockRepository);
       vi.mocked(mockRepository.setupSnapshot).mockResolvedValue(
         mockFailureResult('Authentication failed'),
@@ -274,7 +276,7 @@ describe('PromidasRepositoryManager', () => {
 
     it('allows retry after failed validation', async () => {
       mockStorage.get.mockResolvedValue('invalid-token');
-      const { createPromidasForLocal } = await import('@f88/promidas');
+      const { createPromidasForLocal } = await import('promidas');
       vi.mocked(createPromidasForLocal).mockReturnValue(mockRepository);
 
       // First call fails
@@ -300,7 +302,7 @@ describe('PromidasRepositoryManager', () => {
       import.meta.env.VITE_PROMIDAS_LOG_LEVEL = 'debug';
 
       mockStorage.get.mockResolvedValue('valid-token');
-      const { createPromidasForLocal } = await import('@f88/promidas');
+      const { createPromidasForLocal } = await import('promidas');
       vi.mocked(createPromidasForLocal).mockReturnValue(mockRepository);
       vi.mocked(mockRepository.setupSnapshot).mockResolvedValue(
         mockSuccessResult,
@@ -320,7 +322,7 @@ describe('PromidasRepositoryManager', () => {
   describe('state transitions', () => {
     it('transitions through states correctly during successful initialization', async () => {
       mockStorage.get.mockResolvedValue('valid-token');
-      const { createPromidasForLocal } = await import('@f88/promidas');
+      const { createPromidasForLocal } = await import('promidas');
       vi.mocked(createPromidasForLocal).mockReturnValue(mockRepository);
 
       // Create a promise that we can control for validation
@@ -356,7 +358,7 @@ describe('PromidasRepositoryManager', () => {
 
     it('transitions to token-invalid on validation failure', async () => {
       mockStorage.get.mockResolvedValue('invalid-token');
-      const { createPromidasForLocal } = await import('@f88/promidas');
+      const { createPromidasForLocal } = await import('promidas');
       vi.mocked(createPromidasForLocal).mockReturnValue(mockRepository);
       vi.mocked(mockRepository.setupSnapshot).mockResolvedValue(
         mockFailureResult('Invalid token'),
@@ -377,7 +379,7 @@ describe('PromidasRepositoryManager', () => {
   describe('edge cases and error recovery', () => {
     it('handles reset during ongoing initialization', async () => {
       mockStorage.get.mockResolvedValue('valid-token');
-      const { createPromidasForLocal } = await import('@f88/promidas');
+      const { createPromidasForLocal } = await import('promidas');
       vi.mocked(createPromidasForLocal).mockReturnValue(mockRepository);
 
       let resolveSetup: (value: unknown) => void;
@@ -405,7 +407,7 @@ describe('PromidasRepositoryManager', () => {
 
     it('allows new initialization after reset during ongoing operation', async () => {
       mockStorage.get.mockResolvedValue('token1');
-      const { createPromidasForLocal } = await import('@f88/promidas');
+      const { createPromidasForLocal } = await import('promidas');
       vi.mocked(createPromidasForLocal).mockReturnValue(mockRepository);
 
       let resolveSetup: (value: unknown) => void;
@@ -442,7 +444,7 @@ describe('PromidasRepositoryManager', () => {
     });
 
     it('handles multiple sequential failures', async () => {
-      const { createPromidasForLocal } = await import('@f88/promidas');
+      const { createPromidasForLocal } = await import('promidas');
       vi.mocked(createPromidasForLocal).mockReturnValue(mockRepository);
 
       // First failure
@@ -476,7 +478,7 @@ describe('PromidasRepositoryManager', () => {
 
     it('preserves error state after failed initialization', async () => {
       mockStorage.get.mockResolvedValue('invalid-token');
-      const { createPromidasForLocal } = await import('@f88/promidas');
+      const { createPromidasForLocal } = await import('promidas');
       vi.mocked(createPromidasForLocal).mockReturnValue(mockRepository);
       vi.mocked(mockRepository.setupSnapshot).mockResolvedValue(
         mockFailureResult('Custom error message'),
@@ -512,7 +514,7 @@ describe('PromidasRepositoryManager', () => {
 
     it('clears initPromise on successful completion', async () => {
       mockStorage.get.mockResolvedValue('valid-token');
-      const { createPromidasForLocal } = await import('@f88/promidas');
+      const { createPromidasForLocal } = await import('promidas');
       vi.mocked(createPromidasForLocal).mockReturnValue(mockRepository);
       vi.mocked(mockRepository.setupSnapshot).mockResolvedValue(
         mockSuccessResult,
@@ -531,7 +533,7 @@ describe('PromidasRepositoryManager', () => {
     });
 
     it('clears initPromise on failure', async () => {
-      const { createPromidasForLocal } = await import('@f88/promidas');
+      const { createPromidasForLocal } = await import('promidas');
 
       // First failure
       mockStorage.get.mockResolvedValue('bad-token');
@@ -560,7 +562,7 @@ describe('PromidasRepositoryManager', () => {
       delete import.meta.env.VITE_PROMIDAS_LOG_LEVEL;
 
       mockStorage.get.mockResolvedValue('valid-token');
-      const { createPromidasForLocal } = await import('@f88/promidas');
+      const { createPromidasForLocal } = await import('promidas');
       vi.mocked(createPromidasForLocal).mockReturnValue(mockRepository);
       vi.mocked(mockRepository.setupSnapshot).mockResolvedValue(
         mockSuccessResult,
@@ -588,7 +590,7 @@ describe('PromidasRepositoryManager', () => {
 
         import.meta.env.VITE_PROMIDAS_LOG_LEVEL = level;
         mockStorage.get.mockResolvedValue('valid-token');
-        const { createPromidasForLocal } = await import('@f88/promidas');
+        const { createPromidasForLocal } = await import('promidas');
         vi.mocked(createPromidasForLocal).mockReturnValue(mockRepository);
         vi.mocked(mockRepository.setupSnapshot).mockResolvedValue(
           mockSuccessResult,
@@ -615,7 +617,7 @@ describe('PromidasRepositoryManager', () => {
 
     it('returns created-token-valid with repository after successful init', async () => {
       mockStorage.get.mockResolvedValue('valid-token');
-      const { createPromidasForLocal } = await import('@f88/promidas');
+      const { createPromidasForLocal } = await import('promidas');
       vi.mocked(createPromidasForLocal).mockReturnValue(mockRepository);
       vi.mocked(mockRepository.setupSnapshot).mockResolvedValue(
         mockSuccessResult,

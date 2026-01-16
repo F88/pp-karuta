@@ -4,9 +4,9 @@
  * Creates the TanStack Router instance and configures `basepath` for GitHub
  * Pages deployment under `/pp-karuta`.
  */
+import { RouterProvider, createRouter } from '@tanstack/react-router';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import { RouterProvider, createRouter } from '@tanstack/react-router';
 import './index.css';
 
 // Import the generated route tree

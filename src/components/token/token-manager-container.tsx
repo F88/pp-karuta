@@ -1,12 +1,15 @@
 import { useState, useEffect } from 'react';
+
 import { useToken } from '@/hooks/use-token';
+import { logger } from '@/lib/logger';
 import {
   promidasRepositoryManager,
   type RepositoryState,
 } from '@/lib/repository/promidas-repository-manager';
-import type { ScreenSize } from '@/types/screen-size';
+
 import { TokenManagerPresentation } from './token-manager-presentation';
-import { logger } from '@/lib/logger';
+
+import type { ScreenSize } from '@/types/screen-size';
 
 interface TokenManagerContainerProps {
   screenSize: ScreenSize;

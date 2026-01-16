@@ -1,6 +1,7 @@
+import { ConfigManager } from 'promidas-utils/config';
+
 import type { Player } from '@/models/karuta';
-import { ConfigManager } from '@f88/promidas-utils/config';
-import type { ConfigStorage } from '@f88/promidas-utils/config';
+import type { ConfigStorage } from 'promidas-utils/config';
 
 /**
  * PlayerManager - Centralized management for Player operations

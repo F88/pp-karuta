@@ -1,9 +1,12 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { GameManager } from './game-manager';
+
 import { StackManager } from '../stack/stack-manager';
-import type { Deck, Player, StackRecipe } from '@/models/karuta';
-import type { NormalizedPrototype } from '@f88/promidas/types';
+
+import { GameManager } from './game-manager';
+
 import type { PlayMode } from '../playMode/play-mode-manager';
+import type { Deck, Player, StackRecipe } from '@/models/karuta';
+import type { NormalizedPrototype } from 'promidas/types';
 
 // ========================================
 // Mock Data Factories

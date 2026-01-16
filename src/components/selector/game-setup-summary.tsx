@@ -1,7 +1,8 @@
-import type { DeckRecipe, StackRecipe, Deck } from '@/models/karuta';
-import type { PlayMode } from '@/lib/karuta';
-import type { ScreenSize } from '@/types/screen-size';
 import { getResponsiveStyles } from '@/lib/ui-utils';
+
+import type { PlayMode } from '@/lib/karuta';
+import type { DeckRecipe, StackRecipe, Deck } from '@/models/karuta';
+import type { ScreenSize } from '@/types/screen-size';
 
 export type GameSetupSummaryProps = {
   selectedPlayMode: PlayMode | null;

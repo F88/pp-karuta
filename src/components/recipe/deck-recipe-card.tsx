@@ -1,8 +1,9 @@
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { getSelectableCardClasses, getResponsiveStyles } from '@/lib/ui-utils';
+
 import type { DeckRecipe } from '@/models/karuta';
 import type { ScreenSize } from '@/types/screen-size';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { getSelectableCardClasses, getResponsiveStyles } from '@/lib/ui-utils';
 
 export type DeckRecipeCardProps = {
   recipe: DeckRecipe;

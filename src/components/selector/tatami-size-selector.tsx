@@ -1,7 +1,8 @@
 import { SelectableCard } from '@/components/selector/selectable-card';
+import { getResponsiveStyles } from '@/lib/ui-utils';
+
 import type { TatamiSize } from '@/lib/karuta';
 import type { ScreenSize } from '@/types/screen-size';
-import { getResponsiveStyles } from '@/lib/ui-utils';
 
 export type TatamiSizeSelectorProps = {
   selectedTatamiSize: TatamiSize;

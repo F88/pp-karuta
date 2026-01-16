@@ -6,10 +6,10 @@
  * @module FilterFactory
  */
 
-import type { NormalizedPrototype } from '@f88/promidas/types';
-
 import { logger } from '@/lib/logger';
 import { normalizeString } from '@/lib/string-utils';
+
+import type { NormalizedPrototype } from 'promidas/types';
 
 /**
  * Create a filter function for ID-based filtering

@@ -1,11 +1,13 @@
-import type { NormalizedPrototype } from '@f88/promidas/types';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { getResponsiveStyles } from '@/lib/ui-utils';
+
+import { MochiFudaCard } from './mochi-fuda-card';
+
 import type { GamePlayerState, Deck } from '@/models/karuta';
 import type { ScreenSize } from '@/types/screen-size';
-import { Card, CardContent, CardHeader } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { getResponsiveStyles } from '@/lib/ui-utils';
-import { MochiFudaCard } from './mochi-fuda-card';
+import type { NormalizedPrototype } from 'promidas/types';
 
 type ActionButtonsProps = {
   onBackToTop: () => void;

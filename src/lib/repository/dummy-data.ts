@@ -1,5 +1,6 @@
 import { faker } from '@faker-js/faker';
-import type { NormalizedPrototype } from '@f88/promidas/types';
+
+import type { NormalizedPrototype } from 'promidas/types';
 
 /**
  * Generate dummy NormalizedPrototype data for development

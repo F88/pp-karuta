@@ -31,16 +31,17 @@
  * @module PromidasRepositoryManager
  */
 
-import type { ProtopediaInMemoryRepository } from '@f88/promidas';
-import { createPromidasForLocal } from '@f88/promidas';
-import { toErrorMessage } from '@f88/promidas-utils/builder';
-import { parseSnapshotOperationFailure } from '@f88/promidas-utils/repository';
-import type { LogLevel } from '@f88/promidas/logger';
-import type { SnapshotOperationResult } from '@f88/promidas/repository';
-import type { ListPrototypesParams } from 'protopedia-api-v2-client';
+import { createPromidasForLocal } from 'promidas';
+import { toErrorMessage } from 'promidas-utils/builder';
+import { parseSnapshotOperationFailure } from 'promidas-utils/repository';
 
 import { logger } from '@/lib/logger';
 import { tokenStorage as defaultTokenStorage } from '@/lib/token-storage';
+
+import type { ProtopediaInMemoryRepository } from 'promidas';
+import type { LogLevel } from 'promidas/logger';
+import type { SnapshotOperationResult } from 'promidas/repository';
+import type { ListPrototypesParams } from 'protopedia-api-v2-client';
 
 /**
  * Repository state as a discriminated union.

@@ -1,6 +1,8 @@
 import { describe, it, expect } from 'vitest';
+
 import { DeckManager } from './deck-manager';
-import type { NormalizedPrototype } from '@f88/promidas/types';
+
+import type { NormalizedPrototype } from 'promidas/types';
 
 describe('DeckManager', () => {
   describe('createDeckWithFilter', () => {

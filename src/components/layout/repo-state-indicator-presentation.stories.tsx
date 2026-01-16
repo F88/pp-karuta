@@ -1,6 +1,7 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
-import type { ProtopediaInMemoryRepository } from '@f88/promidas';
 import { RepoStateIndicatorPresentation } from './repo-state-indicator-presentation';
+
+import type { Meta, StoryObj } from '@storybook/react-vite';
+import type { ProtopediaInMemoryRepository } from 'promidas';
 
 const meta = {
   title: 'Layout/RepoStateIndicatorPresentation',

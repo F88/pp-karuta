@@ -1,5 +1,6 @@
-import { cn } from '@/lib/utils';
 import Marquee from 'react-fast-marquee';
+
+import { cn } from '@/lib/utils';
 
 interface MarqueeProps {
   className?: string;
