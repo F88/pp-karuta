@@ -38,8 +38,6 @@
     "deploy": "npm run build && gh-pages -d dist"
   },
   "dependencies": {
-    "promidas": "^2.0.0",
-    "promidas-utils": "^2.0.0",
     "@radix-ui/react-accordion": "^1.2.12",
     "@radix-ui/react-collapsible": "^1.1.12",
     "@radix-ui/react-dialog": "^1.1.15",
@@ -51,6 +49,8 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "lucide-react": "^0.562.0",
+    "promidas": "^2.0.0",
+    "promidas-utils": "^2.0.0",
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
     "react-fast-marquee": "^1.6.5",
@@ -78,6 +78,8 @@
     "@vitest/ui": "^4.0.17",
     "dotenv": "^17.2.3",
     "eslint": "^9.39.2",
+    "eslint-import-resolver-typescript": "^4.4.4",
+    "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-react-refresh": "^0.4.26",
     "eslint-plugin-storybook": "^10.1.11",
