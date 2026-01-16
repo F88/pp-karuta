@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2026.01.16] - 2026-01-16
+
 ### Changed
 
 - Migrate dependencies from GitHub packages to npm
@@ -23,6 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     - `eslint-plugin-import` - Import statement linting and auto-fixing
     - `eslint-import-resolver-typescript` - TypeScript path alias resolution
     - Configured import ordering, newline rules, and duplicate detection
+- ESLint configuration for .storybook folder
 
 ## [2026.01.14] - 2026-01-14
 
