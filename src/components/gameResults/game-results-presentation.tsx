@@ -2,11 +2,11 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { getResponsiveStyles } from '@/lib/ui-utils';
+import type { GamePlayerState, Deck } from '@/models/karuta';
+import type { ScreenSize } from '@/types/screen-size';
 
 import { MochiFudaCard } from './mochi-fuda-card';
 
-import type { GamePlayerState, Deck } from '@/models/karuta';
-import type { ScreenSize } from '@/types/screen-size';
 import type { NormalizedPrototype } from 'promidas/types';
 
 type ActionButtonsProps = {

@@ -1,10 +1,11 @@
+import type { PlayMode } from '@/lib/karuta';
 import { getKeyForCard } from '@/lib/karuta/keyboard-bindings';
 import { getResponsiveStyles } from '@/lib/ui-utils';
+import type { ScreenSize } from '@/types/screen-size';
 
 import { ToriFudaCard } from './tori-fuda-card';
 
-import type { PlayMode } from '@/lib/karuta';
-import type { ScreenSize } from '@/types/screen-size';
+
 import type { NormalizedPrototype } from 'promidas/types';
 
 export type PlayerTatamiProps = {

@@ -9,10 +9,10 @@ import {
 } from '@/components/ui/dialog';
 import { logger } from '@/lib/logger';
 import { promidasRepositoryManager } from '@/lib/repository/promidas-repository-manager';
+import type { ScreenSize } from '@/types/screen-size';
 
 import { RepoSetup } from './repo-setup';
 
-import type { ScreenSize } from '@/types/screen-size';
 
 interface RepoSetupDialogProps {
   open: boolean;

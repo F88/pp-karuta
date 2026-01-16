@@ -13,10 +13,9 @@ import { TatamiViewContainer } from '@/components/tatami/tatami-view-container';
 import { useGameSetup } from '@/hooks/use-game-setup';
 import { useRepositoryState } from '@/hooks/use-repository-state';
 import { useScreenSizeContext } from '@/hooks/use-screen-size-context';
+import type { PlayMode } from '@/lib/karuta';
 import { GameManager } from '@/lib/karuta/game/game-manager';
 import { logger } from '@/lib/logger';
-
-import type { PlayMode } from '@/lib/karuta';
 import type { GameState } from '@/models/karuta';
 
 export function GameFlow() {

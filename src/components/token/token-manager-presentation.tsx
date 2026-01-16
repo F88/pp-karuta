@@ -17,7 +17,6 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-
 import type { RepositoryState } from '@/lib/repository/promidas-repository-manager';
 import type { ScreenSize } from '@/types/screen-size';
 

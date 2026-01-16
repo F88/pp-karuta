@@ -9,7 +9,6 @@ import {
   CollapsibleTrigger,
 } from '@/components/ui/collapsible';
 import { getResponsiveStyles } from '@/lib/ui-utils';
-
 import type { Deck, DeckRecipe } from '@/models/karuta';
 import type { ScreenSize } from '@/types/screen-size';
 

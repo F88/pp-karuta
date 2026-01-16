@@ -1,6 +1,7 @@
+import type { RepositoryState } from '@/lib/repository/promidas-repository-manager';
+
 import { RepoStateIndicatorPresentation } from './repo-state-indicator-presentation';
 
-import type { RepositoryState } from '@/lib/repository/promidas-repository-manager';
 
 interface RepoStateIndicatorProps {
   state: RepositoryState;

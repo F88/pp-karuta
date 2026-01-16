@@ -7,7 +7,6 @@
 import { useState, useEffect } from 'react';
 
 import { promidasRepositoryManager } from '@/lib/repository/promidas-repository-manager';
-
 import type { RepositoryState } from '@/lib/repository/promidas-repository-manager';
 
 /**

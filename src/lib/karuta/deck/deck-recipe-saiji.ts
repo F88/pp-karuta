@@ -6,10 +6,11 @@
  * @module DeckRecipeSaiji
  */
 
+import type { DeckRecipe } from '@/models/karuta';
+
 import { ALL_PROTOTYPES } from './deck-recipe';
 import { createKeywordFilter } from './filter-factory';
 
-import type { DeckRecipe } from '@/models/karuta';
 
 /**
  * Annual events themed deck recipes (歳時記)

@@ -1,8 +1,3 @@
-import { PlayerManager } from '../player/player-manager';
-import { PlayModeManager } from '../playMode/play-mode-manager';
-import { StackManager } from '../stack/stack-manager';
-
-import type { PlayMode } from '../playMode/play-mode-manager';
 import type {
   Deck,
   GameState,
@@ -10,6 +5,12 @@ import type {
   StackRecipe,
   Player,
 } from '@/models/karuta';
+
+import { PlayerManager } from '../player/player-manager';
+import { PlayModeManager } from '../playMode/play-mode-manager';
+import { StackManager } from '../stack/stack-manager';
+
+import type { PlayMode } from '../playMode/play-mode-manager';
 
 /**
  * GameManager - Centralized management for GameState and game logic

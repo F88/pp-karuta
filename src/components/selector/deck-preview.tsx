@@ -1,6 +1,5 @@
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
-
 import type { Deck } from '@/models/karuta';
 
 export type DeckPreviewProps = {

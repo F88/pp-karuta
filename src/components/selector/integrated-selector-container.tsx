@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 
+import type { UseGameSetupReturn } from '@/hooks/use-game-setup';
 import { useRepositoryState } from '@/hooks/use-repository-state';
 import { useScreenSizeContext } from '@/hooks/use-screen-size-context';
 import { useScrollToTopOnMount } from '@/hooks/use-scroll-to-top-on-mount';
@@ -9,7 +10,6 @@ import { logger } from '@/lib/logger';
 
 import { IntegratedSelectorPresentation } from './integrated-selector-presentation';
 
-import type { UseGameSetupReturn } from '@/hooks/use-game-setup';
 
 export type IntegratedSelectorContainerProps = {
   setup: UseGameSetupReturn;

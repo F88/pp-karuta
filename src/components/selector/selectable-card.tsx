@@ -2,8 +2,8 @@ import React from 'react';
 
 import { getSelectableCardClasses, getResponsiveStyles } from '@/lib/ui-utils';
 import { cn } from '@/lib/utils';
-
 import type { ScreenSize } from '@/types/screen-size';
+
 import type { ReactNode } from 'react';
 
 /**

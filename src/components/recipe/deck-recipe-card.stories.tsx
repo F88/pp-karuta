@@ -1,6 +1,7 @@
+import type { DeckRecipe } from '@/models/karuta';
+
 import { DeckRecipeCard } from './deck-recipe-card';
 
-import type { DeckRecipe } from '@/models/karuta';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta = {

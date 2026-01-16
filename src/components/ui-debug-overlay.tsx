@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 
 import { Badge } from '@/components/ui/badge';
-
 import type { ScreenSize } from '@/types/screen-size';
 
 interface UIDebugOverlayProps {

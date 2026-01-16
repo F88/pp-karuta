@@ -1,7 +1,7 @@
 import { useYomibito } from '@/hooks/use-yomibito';
 import { getResponsiveStyles } from '@/lib/ui-utils';
-
 import type { ScreenSize } from '@/types/screen-size';
+
 import type { NormalizedPrototype } from 'promidas/types';
 
 // import { useTypewriter } from '@/hooks/use-typewriter';

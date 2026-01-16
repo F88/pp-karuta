@@ -1,8 +1,9 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 
+import type { tokenStorage } from '@/lib/token-storage';
+
 import { PromidasRepositoryManager } from './promidas-repository-manager';
 
-import type { tokenStorage } from '@/lib/token-storage';
 import type {
   ProtopediaInMemoryRepository,
   PrototypeInMemoryStats,

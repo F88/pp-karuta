@@ -1,6 +1,6 @@
 import { getResponsiveStyles } from '@/lib/ui-utils';
-
 import type { ScreenSize } from '@/types/screen-size';
+
 import type { ReactNode } from 'react';
 
 export type SectionWrapperProps = {

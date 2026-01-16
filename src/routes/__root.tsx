@@ -17,9 +17,9 @@ import { useScreenSizeContext } from '@/hooks/use-screen-size-context';
 import { PlayerManager } from '@/lib/karuta';
 import { logger } from '@/lib/logger';
 import { promidasRepositoryManager } from '@/lib/repository/promidas-repository-manager';
+import type { RepositoryState } from '@/lib/repository/promidas-repository-manager';
 import { getResponsiveStyles } from '@/lib/ui-utils';
 
-import type { RepositoryState } from '@/lib/repository/promidas-repository-manager';
 
 export const Route = createRootRoute({
   component: RootComponent,

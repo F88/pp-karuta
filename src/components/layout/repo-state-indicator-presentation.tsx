@@ -1,7 +1,6 @@
 import { CloudCog, CloudSync, CloudCheck, CloudAlert } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
-
 import type { RepositoryState } from '@/lib/repository/promidas-repository-manager';
 
 interface RepoStateIndicatorPresentationProps {

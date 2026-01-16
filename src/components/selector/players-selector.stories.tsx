@@ -1,8 +1,8 @@
 import { PlayerManager } from '@/lib/karuta';
+import type { Player } from '@/models/karuta';
 
 import { PlayersSelector } from './players-selector';
 
-import type { Player } from '@/models/karuta';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta = {

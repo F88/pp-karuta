@@ -2,8 +2,8 @@ import { useEffect } from 'react';
 
 import { DeckManager } from '@/lib/karuta/deck/deck-manager';
 import { getPlayerKeyBindings } from '@/lib/karuta/keyboard-bindings';
-
 import type { GamePlayerState } from '@/models/karuta';
+
 import type { NormalizedPrototype } from 'promidas/types';
 
 type UseKeyboardCardSelectionProps = {

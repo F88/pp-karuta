@@ -49,7 +49,7 @@ export class DummyRepository implements ProtopediaInMemoryRepository {
     throw new Error('Method not implemented.');
   }
   setupSnapshotFromSerializedData(
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+     
     _data: SerializableSnapshot,
   ): SnapshotOperationResult {
     throw new Error('Method not implemented.');

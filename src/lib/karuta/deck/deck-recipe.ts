@@ -9,9 +9,10 @@
  * @module DeckRecipe
  */
 
+import type { DeckRecipe } from '@/models/karuta';
+
 import { createIdsFilter, createKeywordFilter } from './filter-factory';
 
-import type { DeckRecipe } from '@/models/karuta';
 import type { ListPrototypesParams } from 'protopedia-api-v2-client';
 
 /**

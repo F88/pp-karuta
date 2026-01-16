@@ -2,13 +2,13 @@ import { User } from 'lucide-react';
 
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import type { PlayMode } from '@/lib/karuta';
 import { getResponsiveStyles } from '@/lib/ui-utils';
+import type { Player } from '@/models/karuta';
+import type { ScreenSize } from '@/types/screen-size';
 
 import { PlayerTatami } from './player-tatami';
 
-import type { PlayMode } from '@/lib/karuta';
-import type { Player } from '@/models/karuta';
-import type { ScreenSize } from '@/types/screen-size';
 import type { NormalizedPrototype } from 'promidas/types';
 
 type PlayerInfoProps = {

@@ -6,10 +6,10 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { getResponsiveStyles } from '@/lib/ui-utils';
-
 import type { RepositoryState } from '@/lib/repository/promidas-repository-manager';
+import { getResponsiveStyles } from '@/lib/ui-utils';
 import type { ScreenSize } from '@/types/screen-size';
+
 import type { PrototypeInMemoryStats } from 'promidas';
 import type { StoreState } from 'promidas-utils/store';
 

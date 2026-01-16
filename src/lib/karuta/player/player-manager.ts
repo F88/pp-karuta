@@ -1,6 +1,7 @@
 import { ConfigManager } from 'promidas-utils/config';
 
 import type { Player } from '@/models/karuta';
+
 import type { ConfigStorage } from 'promidas-utils/config';
 
 /**

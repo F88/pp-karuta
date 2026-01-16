@@ -6,10 +6,10 @@ import {
   promidasRepositoryManager,
   type RepositoryState,
 } from '@/lib/repository/promidas-repository-manager';
+import type { ScreenSize } from '@/types/screen-size';
 
 import { TokenManagerPresentation } from './token-manager-presentation';
 
-import type { ScreenSize } from '@/types/screen-size';
 
 interface TokenManagerContainerProps {
   screenSize: ScreenSize;

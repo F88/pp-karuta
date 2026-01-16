@@ -1,7 +1,10 @@
 import { RepoSetup } from '@/components/layout/repo-setup';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
+import type { PlayMode, TatamiSize } from '@/lib/karuta';
 import { getResponsiveStyles } from '@/lib/ui-utils';
+import type { Deck, DeckRecipe, Player, StackRecipe } from '@/models/karuta';
+import type { ScreenSize } from '@/types/screen-size';
 
 import { DeckRecipeSelector } from './deck-recipe-selector';
 import { GameSetupSummary } from './game-setup-summary';
@@ -11,9 +14,6 @@ import { SectionWrapper } from './section-wrapper';
 import { StackRecipeSelector } from './stack-recipe-selector';
 import { TatamiSizeSelector } from './tatami-size-selector';
 
-import type { PlayMode, TatamiSize } from '@/lib/karuta';
-import type { Deck, DeckRecipe, Player, StackRecipe } from '@/models/karuta';
-import type { ScreenSize } from '@/types/screen-size';
 
 export type IntegratedSelectorPresentationProps = {
   playMode: {

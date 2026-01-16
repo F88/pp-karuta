@@ -1,8 +1,8 @@
 import { StackRecipeManager, generateDummyPrototypes } from '@/lib/karuta';
+import type { Deck } from '@/models/karuta';
 
 import { StackRecipeSelector } from './stack-recipe-selector';
 
-import type { Deck } from '@/models/karuta';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta = {

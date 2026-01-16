@@ -1,6 +1,5 @@
-import { getResponsiveStyles } from '@/lib/ui-utils';
-
 import type { PlayMode } from '@/lib/karuta';
+import { getResponsiveStyles } from '@/lib/ui-utils';
 import type { DeckRecipe, StackRecipe, Deck } from '@/models/karuta';
 import type { ScreenSize } from '@/types/screen-size';
 

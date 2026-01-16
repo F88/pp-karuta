@@ -5,10 +5,10 @@ import {
   promidasRepositoryManager,
   type RepositoryState,
 } from '@/lib/repository/promidas-repository-manager';
+import type { ScreenSize } from '@/types/screen-size';
 
 import { PromidasRepoDashboardPresentation } from './promidas-repo-dashboard-presentation';
 
-import type { ScreenSize } from '@/types/screen-size';
 
 interface PromidasRepoDashboardProps {
   screenSize: ScreenSize;
