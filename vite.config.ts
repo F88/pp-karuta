@@ -1,11 +1,12 @@
 /// <reference types="vitest" />
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
+import path from 'path';
+
 import tailwindcss from '@tailwindcss/vite';
 import { tanstackRouter } from '@tanstack/router-plugin/vite';
-import { VitePWA } from 'vite-plugin-pwa';
+import react from '@vitejs/plugin-react';
 import { visualizer } from 'rollup-plugin-visualizer';
-import path from 'path';
+import { defineConfig } from 'vite';
+import { VitePWA } from 'vite-plugin-pwa';
 
 export default defineConfig({
   plugins: [
@@ -14,11 +15,15 @@ export default defineConfig({
     tailwindcss(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['icons/favicon.ico', 'icons/apple-touch-icon-180x180.png'],
+      includeAssets: [
+        'icons/favicon.ico',
+        'icons/apple-touch-icon-180x180.png',
+      ],
       manifest: {
         name: '🎴 PPK26 怖露徒頁帝亜 狩流多 弐拾六式 馬耳闘風編',
         short_name: '🎴PPK26',
-        description: 'ProtoPediaで公開されている作品のかるた、画像のみを頼りに札を取る「愛と本能の闘争」',
+        description:
+          'ProtoPediaで公開されている作品のかるた、画像のみを頼りに札を取る「愛と本能の闘争」',
         lang: 'ja',
         id: '/pp-karuta/',
         theme_color: '#f5f5f5',
@@ -113,7 +118,7 @@ export default defineConfig({
         manualChunks: (id) => {
           // Debug: Log module IDs containing promidas
           // if (id.includes('promidas')) {
-            // console.log('Module ID:', id);
+          // console.log('Module ID:', id);
           // }
 
           // Vendor chunks
