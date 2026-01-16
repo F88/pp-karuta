@@ -24,11 +24,8 @@ import { dirname, resolve } from 'node:path';
 import { config } from 'dotenv';
 
 // Promidas modules
-import {
-  createPromidasForLocal,
-  ProtopediaInMemoryRepository,
-} from '@f88/promidas';
-import { parseSnapshotOperationFailure } from '@f88/promidas-utils/repository';
+import { createPromidasForLocal, ProtopediaInMemoryRepository } from 'promidas';
+import { parseSnapshotOperationFailure } from 'promidas-utils/repository';
 
 // Load .env.local (overrides .env if exists)
 config({
