@@ -11,14 +11,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [2026.01.16] - 2026-01-16
 
-### Changed
-
-- Migrate dependencies from GitHub packages to npm
-    - `@f88/promidas` (github:F88/promidas#v1.1.0) → `promidas` (^2.0.0)
-    - `@f88/promidas-utils` (github:F88/promidas-utils#v1.0.0) → `promidas-utils` (^2.0.0)
-    - Update all import statements across the codebase
-    - Update vite.config.ts path references
-
 ### Added
 
 - ESLint import management
@@ -26,6 +18,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     - `eslint-import-resolver-typescript` - TypeScript path alias resolution
     - Configured import ordering, newline rules, and duplicate detection
 - ESLint configuration for .storybook folder
+
+### Changed
+
+- Migrate dependencies from GitHub packages to npm
+    - `@f88/promidas` (github:F88/promidas#v1.1.0) → `promidas` (^2.0.0)
+    - `@f88/promidas-utils` (github:F88/promidas-utils#v1.0.0) → `promidas-utils` (^2.0.0)
+    - Update all import statements across the codebase
+    - Update vite.config.ts path references
 
 ## [2026.01.14] - 2026-01-14
 
