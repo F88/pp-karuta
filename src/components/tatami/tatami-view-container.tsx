@@ -1,19 +1,17 @@
 import { useCallback, useMemo, useState } from 'react';
 
-import type { NormalizedPrototype } from '@f88/promidas/types';
-
 import { useKeyboardCardSelection } from '@/hooks/use-keyboard-card-selection';
 import { useScrollToTopOnMount } from '@/hooks/use-scroll-to-top-on-mount';
-
-import type { GameState } from '@/models/karuta';
-import type { ScreenSize } from '@/types/screen-size';
-
-import type { PlayMode } from '@/lib/karuta';
 import { DeckManager } from '@/lib/karuta/deck/deck-manager';
 import { GameManager } from '@/lib/karuta/game/game-manager';
 import { logger } from '@/lib/logger';
 
 import { TatamiViewPresentation } from './tatami-view-presentation';
+
+import type { PlayMode } from '@/lib/karuta';
+import type { GameState } from '@/models/karuta';
+import type { ScreenSize } from '@/types/screen-size';
+import type { NormalizedPrototype } from 'promidas/types';
 
 export type TatamiViewContainerProps = {
   gameState: GameState;

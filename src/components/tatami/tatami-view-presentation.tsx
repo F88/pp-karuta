@@ -1,10 +1,3 @@
-import type { NormalizedPrototype } from '@f88/promidas/types';
-
-import type { Deck, GamePlayerState } from '@/models/karuta';
-
-import type { ScreenSize } from '@/types/screen-size';
-
-import type { PlayMode } from '@/lib/karuta';
 import { DeckManager } from '@/lib/karuta/deck/deck-manager';
 import { getResponsiveStyles } from '@/lib/ui-utils';
 
@@ -12,6 +5,11 @@ import { GameHeader } from './game-header';
 import { PlayerArea } from './player-area';
 import { SharedTatami } from './shared-tatami';
 import { Yomite } from './yomite';
+
+import type { PlayMode } from '@/lib/karuta';
+import type { Deck, GamePlayerState } from '@/models/karuta';
+import type { ScreenSize } from '@/types/screen-size';
+import type { NormalizedPrototype } from 'promidas/types';
 
 export type TatamiViewPresentationProps = {
   yomiFuda: NormalizedPrototype;

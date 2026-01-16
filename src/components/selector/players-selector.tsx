@@ -1,9 +1,11 @@
+import { User, UserPlus } from 'lucide-react';
+
+import { SelectableCard } from '@/components/selector/selectable-card';
+import { GameManager } from '@/lib/karuta';
+import { getResponsiveStyles } from '@/lib/ui-utils';
+
 import type { Player } from '@/models/karuta';
 import type { ScreenSize } from '@/types/screen-size';
-import { GameManager } from '@/lib/karuta';
-import { SelectableCard } from '@/components/selector/selectable-card';
-import { getResponsiveStyles } from '@/lib/ui-utils';
-import { User, UserPlus } from 'lucide-react';
 
 export type PlayersSelectorProps = {
   availablePlayers: Player[];

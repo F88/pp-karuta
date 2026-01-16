@@ -1,8 +1,10 @@
 import { Badge } from '@/components/ui/badge';
+import { getResponsiveStyles } from '@/lib/ui-utils';
+
+import { GameProgressBar } from './game-progress-bar';
+
 import type { GamePlayerState } from '@/models/karuta';
 import type { ScreenSize } from '@/types/screen-size';
-import { getResponsiveStyles } from '@/lib/ui-utils';
-import { GameProgressBar } from './game-progress-bar';
 
 type StatisticItemProps = {
   label: string;

@@ -5,11 +5,13 @@
  * Automatically polls for state changes to detect expiration.
  */
 
+import { getStoreState } from 'promidas-utils/store';
 import { useState, useEffect } from 'react';
-import { getStoreState } from '@f88/promidas-utils/store';
-import type { StoreState } from '@f88/promidas-utils/store';
-import type { PrototypeInMemoryStats } from '@f88/promidas';
+
 import { promidasRepositoryManager } from '@/lib/repository/promidas-repository-manager';
+
+import type { PrototypeInMemoryStats } from 'promidas';
+import type { StoreState } from 'promidas-utils/store';
 
 /**
  * Result object returned by the usePromidasStoreState hook.

@@ -5,6 +5,7 @@
  */
 
 import { logger } from '@/lib/logger';
+
 import type {
   Deck,
   DeckIdentifier,
@@ -12,10 +13,10 @@ import type {
   DeckMetaData,
   DeckRecipe,
 } from '@/models/karuta';
-import type { ProtopediaInMemoryRepository } from '@f88/promidas';
-import type { SnapshotOperationResult } from '@f88/promidas/repository';
-import type { SerializableSnapshot } from '@f88/promidas/repository/types';
-import type { NormalizedPrototype } from '@f88/promidas/types';
+import type { ProtopediaInMemoryRepository } from 'promidas';
+import type { SnapshotOperationResult } from 'promidas/repository';
+import type { SerializableSnapshot } from 'promidas/repository/types';
+import type { NormalizedPrototype } from 'promidas/types';
 
 /**
  * Centralized manager for all Deck-related operations.

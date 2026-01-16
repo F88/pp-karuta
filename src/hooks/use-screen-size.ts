@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+
 import type { ScreenSize } from '@/types/screen-size';
 
 /**

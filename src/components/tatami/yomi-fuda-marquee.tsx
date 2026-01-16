@@ -1,5 +1,6 @@
-import type { NormalizedPrototype } from '@f88/promidas/types';
 import { MarqueeComponent } from '@/components/ui/marquee';
+
+import type { NormalizedPrototype } from 'promidas/types';
 
 export type YomiFudaMarqueeProps = {
   normalizedPrototype: NormalizedPrototype;

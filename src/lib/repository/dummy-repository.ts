@@ -1,19 +1,21 @@
+import { EventEmitter } from 'events';
+
+import { logger } from '@/lib/logger';
+
+import { generateDummyPrototypes } from './dummy-data';
+
 import type {
   ProtopediaInMemoryRepository,
   PrototypeInMemoryStats,
   PrototypeInMemoryStoreConfig,
-} from '@f88/promidas';
-import type { NormalizedPrototype } from '@f88/promidas/types';
-import { EventEmitter } from 'events';
-import type { ListPrototypesParams } from 'protopedia-api-v2-client';
-
-import { logger } from '@/lib/logger';
+} from 'promidas';
 import type {
   PrototypeAnalysisResult,
   SerializableSnapshot,
   SnapshotOperationResult,
-} from '@f88/promidas/repository/types';
-import { generateDummyPrototypes } from './dummy-data';
+} from 'promidas/repository/types';
+import type { NormalizedPrototype } from 'promidas/types';
+import type { ListPrototypesParams } from 'protopedia-api-v2-client';
 
 /**
  * Dummy implementation of ProtopediaInMemoryRepository for development

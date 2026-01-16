@@ -4,7 +4,8 @@
  * with session storage integration for state restoration across page reloads.
  */
 
-import type { PlayMode, TatamiSize } from '@/lib/karuta';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+
 import {
   DeckManager,
   DeckRecipeManager,
@@ -21,11 +22,12 @@ import {
   type TatamiSize8,
 } from '@/lib/karuta/tatami/tatami-size';
 import { logger } from '@/lib/logger';
+
+import type { PlayMode, TatamiSize } from '@/lib/karuta';
 import type { Deck, DeckRecipe, Player, StackRecipe } from '@/models/karuta';
-import type { ProtopediaInMemoryRepository } from '@f88/promidas';
-import type { NormalizedPrototype } from '@f88/promidas/types';
+import type { ProtopediaInMemoryRepository } from 'promidas';
+import type { NormalizedPrototype } from 'promidas/types';
 import type { ListPrototypesParams } from 'protopedia-api-v2-client';
-import { useCallback, useEffect, useMemo, useState } from 'react';
 
 const SESSION_STORAGE_KEY = 'pp-karuta-deck-setup';
 

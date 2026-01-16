@@ -4,8 +4,6 @@
 
 import { describe, expect, it } from 'vitest';
 
-import type { NormalizedPrototype } from '@f88/promidas/types';
-
 import {
   DECK_ETO_I,
   DECK_ETO_INU,
@@ -21,6 +19,8 @@ import {
   DECK_ETO_HITSUJI,
   ETO_RECIPES,
 } from './deck-recipe-eto';
+
+import type { NormalizedPrototype } from 'promidas/types';
 
 describe('ETO Deck Recipes', () => {
   describe('Recipe structure validation', () => {

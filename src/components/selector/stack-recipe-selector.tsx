@@ -1,9 +1,8 @@
-import type { ScreenSize } from '@/types/screen-size';
-
-import type { Deck, StackRecipe } from '@/models/karuta';
-
 import { StackRecipeCard } from '@/components/recipe/stack-recipe-card';
 import { getResponsiveStyles } from '@/lib/ui-utils';
+
+import type { Deck, StackRecipe } from '@/models/karuta';
+import type { ScreenSize } from '@/types/screen-size';
 
 export type StackRecipeSelectorProps = {
   stackRecipes: StackRecipe[];

@@ -1,7 +1,8 @@
 import { Card, CardContent } from '@/components/ui/card';
-import type { ScreenSize } from '@/types/screen-size';
-import type { NormalizedPrototype } from '@f88/promidas/types';
 import { getResponsiveStyles } from '@/lib/ui-utils';
+
+import type { ScreenSize } from '@/types/screen-size';
+import type { NormalizedPrototype } from 'promidas/types';
 
 export type ToriFudaCardKeyboardProps = {
   normalizedPrototype: NormalizedPrototype;

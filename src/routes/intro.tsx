@@ -5,6 +5,7 @@
  * It must not be wrapped by the shared shadcn/ui theme provider.
  */
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
+
 import { IntroPage } from '@/components/intro/intro-page';
 
 export const Route = createFileRoute('/intro')({

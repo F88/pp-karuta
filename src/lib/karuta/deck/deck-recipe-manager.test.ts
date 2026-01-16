@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest';
+
 import { DeckRecipeManager } from './deck-recipe-manager';
 
 describe('DeckRecipeManager', () => {

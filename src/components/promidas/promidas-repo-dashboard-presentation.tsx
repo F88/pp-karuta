@@ -1,7 +1,4 @@
-import type { RepositoryState } from '@/lib/repository/promidas-repository-manager';
-import type { StoreState } from '@f88/promidas-utils/store';
-import type { PrototypeInMemoryStats } from '@f88/promidas';
-import type { ScreenSize } from '@/types/screen-size';
+import { Badge } from '@/components/ui/badge';
 import {
   Card,
   CardContent,
@@ -9,8 +6,12 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 import { getResponsiveStyles } from '@/lib/ui-utils';
+
+import type { RepositoryState } from '@/lib/repository/promidas-repository-manager';
+import type { ScreenSize } from '@/types/screen-size';
+import type { PrototypeInMemoryStats } from 'promidas';
+import type { StoreState } from 'promidas-utils/store';
 
 export interface PromidasRepoDashboardPresentationProps {
   repoState: RepositoryState;

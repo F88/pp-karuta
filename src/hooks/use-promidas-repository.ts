@@ -4,8 +4,10 @@
  */
 
 import { useState, useEffect } from 'react';
-import type { ProtopediaInMemoryRepository } from '@f88/promidas';
+
 import { promidasRepositoryManager } from '@/lib/repository/promidas-repository-manager';
+
+import type { ProtopediaInMemoryRepository } from 'promidas';
 
 /**
  * Result object returned by the usePromidasRepository hook.

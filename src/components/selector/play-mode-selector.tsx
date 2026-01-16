@@ -1,8 +1,10 @@
+import { Keyboard, Smartphone } from 'lucide-react';
+
+import { SelectableCard } from '@/components/selector/selectable-card';
+import { getResponsiveStyles } from '@/lib/ui-utils';
+
 import type { PlayMode } from '@/lib/karuta';
 import type { ScreenSize } from '@/types/screen-size';
-import { SelectableCard } from '@/components/selector/selectable-card';
-import { Keyboard, Smartphone } from 'lucide-react';
-import { getResponsiveStyles } from '@/lib/ui-utils';
 
 export type PlayModeSelectorProps = {
   selectedPlayMode: PlayMode | null;

@@ -1,8 +1,10 @@
-import type { ReactNode } from 'react';
-import type { ScreenSize } from '@/types/screen-size';
-import { getSelectableCardClasses, getResponsiveStyles } from '@/lib/ui-utils';
 import React from 'react';
+
+import { getSelectableCardClasses, getResponsiveStyles } from '@/lib/ui-utils';
 import { cn } from '@/lib/utils';
+
+import type { ScreenSize } from '@/types/screen-size';
+import type { ReactNode } from 'react';
 
 /**
  * SelectableCard component for displaying selectable options with optional icons.

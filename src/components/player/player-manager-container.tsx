@@ -1,8 +1,11 @@
 import { useState, useEffect, useCallback } from 'react';
-import { logger } from '@/lib/logger';
+
 import { PlayerManager } from '@/lib/karuta';
-import type { Player } from '@/models/karuta';
+import { logger } from '@/lib/logger';
+
 import { PlayerManagerPresentation } from './player-manager-presentation';
+
+import type { Player } from '@/models/karuta';
 
 export function PlayerManagerContainer() {
   const [players, setPlayers] = useState<Player[]>([]);

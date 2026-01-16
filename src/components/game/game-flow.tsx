@@ -4,18 +4,20 @@
  * This component can be used in any route, making it easy to reassign
  * the game flow to different routes in the future (e.g., `/game`, `/play`, etc.)
  */
-import { useState, useCallback, useEffect } from 'react';
 import { useNavigate, useSearch } from '@tanstack/react-router';
+import { useState, useCallback, useEffect } from 'react';
+
+import { GameResultsContainer } from '@/components/gameResults/game-results-container';
 import { IntegratedSelectorContainer } from '@/components/selector/integrated-selector-container';
 import { TatamiViewContainer } from '@/components/tatami/tatami-view-container';
-import { GameResultsContainer } from '@/components/gameResults/game-results-container';
-import type { GameState } from '@/models/karuta';
-import type { PlayMode } from '@/lib/karuta';
-import { GameManager } from '@/lib/karuta/game/game-manager';
 import { useGameSetup } from '@/hooks/use-game-setup';
 import { useRepositoryState } from '@/hooks/use-repository-state';
 import { useScreenSizeContext } from '@/hooks/use-screen-size-context';
+import { GameManager } from '@/lib/karuta/game/game-manager';
 import { logger } from '@/lib/logger';
+
+import type { PlayMode } from '@/lib/karuta';
+import type { GameState } from '@/models/karuta';
 
 export function GameFlow() {
   const navigate = useNavigate();

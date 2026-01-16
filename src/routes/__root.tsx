@@ -5,8 +5,10 @@
  * shadcn/ui theme provider is NOT applied here so that `/intro` can enforce its
  * own standalone theme.
  */
-import { AppHeader } from '@/components/layout/app-header';
+import { createRootRoute, Outlet } from '@tanstack/react-router';
+import { useEffect, useState } from 'react';
 
+import { AppHeader } from '@/components/layout/app-header';
 import { RepoSetupDialog } from '@/components/layout/repo-setup-dialog';
 import { ThemeProvider } from '@/components/theme-provider';
 import { UIDebugOverlay } from '@/components/ui-debug-overlay';
@@ -14,11 +16,10 @@ import { ScreenSizeProvider } from '@/contexts/screen-size-provider';
 import { useScreenSizeContext } from '@/hooks/use-screen-size-context';
 import { PlayerManager } from '@/lib/karuta';
 import { logger } from '@/lib/logger';
-import type { RepositoryState } from '@/lib/repository/promidas-repository-manager';
 import { promidasRepositoryManager } from '@/lib/repository/promidas-repository-manager';
-import { createRootRoute, Outlet } from '@tanstack/react-router';
-import { useEffect, useState } from 'react';
 import { getResponsiveStyles } from '@/lib/ui-utils';
+
+import type { RepositoryState } from '@/lib/repository/promidas-repository-manager';
 
 export const Route = createRootRoute({
   component: RootComponent,

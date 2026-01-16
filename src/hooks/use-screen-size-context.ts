@@ -1,4 +1,5 @@
 import { useContext } from 'react';
+
 import { ScreenSizeContext } from '@/contexts/screen-size-context';
 
 export function useScreenSizeContext() {

@@ -1,8 +1,9 @@
-import type { PlayMode } from '@/lib/karuta';
-import type { ScreenSize } from '@/types/screen-size';
-import type { NormalizedPrototype } from '@f88/promidas/types';
 import { ToriFudaCardKeyboard } from './tori-fuda-card-keyboard';
 import { ToriFudaCardTouch } from './tori-fuda-card-touch';
+
+import type { PlayMode } from '@/lib/karuta';
+import type { ScreenSize } from '@/types/screen-size';
+import type { NormalizedPrototype } from 'promidas/types';
 
 export type ToriFudaCardProps = {
   normalizedPrototype: NormalizedPrototype;

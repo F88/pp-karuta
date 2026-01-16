@@ -1,6 +1,7 @@
-import type { NormalizedPrototype } from '@f88/promidas/types';
-import { buildPrototypeLink } from '@/lib/prototype-utils';
 import { Card, CardContent } from '@/components/ui/card';
+import { buildPrototypeLink } from '@/lib/prototype-utils';
+
+import type { NormalizedPrototype } from 'promidas/types';
 
 export type MochiFudaCardProps = {
   card: NormalizedPrototype;

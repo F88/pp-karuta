@@ -1,8 +1,10 @@
-import type { NormalizedPrototype } from '@f88/promidas/types';
+import { getResponsiveStyles } from '@/lib/ui-utils';
+
+import { ToriFudaCardTouch } from './tori-fuda-card-touch';
+
 import type { PlayMode } from '@/lib/karuta';
 import type { ScreenSize } from '@/types/screen-size';
-import { getResponsiveStyles } from '@/lib/ui-utils';
-import { ToriFudaCardTouch } from './tori-fuda-card-touch';
+import type { NormalizedPrototype } from 'promidas/types';
 
 export type SharedTatamiProps = {
   tatamiCards: NormalizedPrototype[];
