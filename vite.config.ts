@@ -123,16 +123,16 @@ export default defineConfig({
               return 'tanstack-router';
             }
             // Promidas utilities (separate from main promidas)
-            if (id.includes('/@f88/promidas-utils/')) {
+            if (id.includes('/promidas-utils/')) {
               return 'promidas-utils';
             }
             // Promidas (large library)
-            if (id.includes('/@f88/promidas/')) {
+            if (id.includes('/promidas/')) {
               return 'promidas';
             }
             // API client
             if (id.includes('protopedia-api-v2-client')) {
-              return 'api-vendor';
+              return 'protopedia-api-v2-client';
             }
             // React core and scheduler (must be together)
             if (
