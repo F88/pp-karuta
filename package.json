@@ -48,7 +48,7 @@
     "@tanstack/react-router": "^1.150.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
-    "lucide-react": "^0.562.0",
+    "lucide-react": "^0.563.0",
     "promidas": "^2.0.0",
     "promidas-utils": "^2.0.0",
     "react": "^19.2.3",
