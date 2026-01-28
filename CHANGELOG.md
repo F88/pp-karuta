@@ -1,13 +1,21 @@
-<!-- markdownlint-disable MD024 -->
-
 # Changelog
+
+<!-- markdownlint-disable MD024 -->
 
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+and this project adheres to [CalVer](https://calver.org/).
 
 ## [Unreleased]
+
+## [2026.01.28] - 2026-01-28
+
+### Changed
+
+- Update `promidas` to `^3.0.0`
+- Update `promidas-utils` to `^3.0.0` (compatible with promidas v3)
+- Update various devDependencies (@storybook/*, @tanstack/*, @testing-library/*, etc.)
 
 ## [2026.01.16] - 2026-01-16
 
