@@ -1,0 +1,1956 @@
+{
+  "version": "2.8",
+  "children": [
+    {
+      "type": "frame",
+      "id": "9AEtx",
+      "x": 0,
+      "y": 0,
+      "name": "1. Game Setup",
+      "width": 402,
+      "height": 874,
+      "fill": "#FFFFFF",
+      "layout": "vertical",
+      "children": [
+        {
+          "type": "frame",
+          "id": "xWpdZ",
+          "name": "Header",
+          "width": "fill_container",
+          "height": 64,
+          "fill": "#8B5CF6",
+          "gap": 12,
+          "children": [
+            {
+              "type": "text",
+              "id": "0Xesi",
+              "name": "headerTitle",
+              "fill": "#FFFFFF",
+              "content": "PPK かるた",
+              "fontFamily": "Plus Jakarta Sans",
+              "fontSize": 20,
+              "fontWeight": "700"
+            },
+            {
+              "type": "frame",
+              "id": "yIi7V",
+              "name": "Spacer",
+              "width": "fill_container",
+              "height": 1,
+              "fill": "#00000000"
+            },
+            {
+              "type": "icon_font",
+              "id": "aI7fx",
+              "name": "headerIcon",
+              "width": 0,
+              "height": 0,
+              "iconFontFamily": "Material Symbols Rounded"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "Dzao9",
+          "name": "Content",
+          "width": "fill_container",
+          "height": "fill_container",
+          "fill": "#F4F4F5",
+          "layout": "vertical",
+          "gap": 16,
+          "children": [
+            {
+              "type": "frame",
+              "id": "zuiSl",
+              "name": "Deck Section",
+              "width": "fill_container",
+              "fill": "#FFFFFF",
+              "cornerRadius": 16,
+              "layout": "vertical",
+              "gap": 12,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "XdMu7",
+                  "name": "deckLabel",
+                  "fill": "#71717A",
+                  "content": "デッキレシピ",
+                  "fontFamily": "Inter",
+                  "fontSize": 12,
+                  "fontWeight": "600"
+                },
+                {
+                  "type": "text",
+                  "id": "DUZV2",
+                  "name": "deckTitle",
+                  "fill": "#18181B",
+                  "content": "ProtoPedia プロジェクト",
+                  "fontFamily": "Plus Jakarta Sans",
+                  "fontSize": 17,
+                  "fontWeight": "700"
+                },
+                {
+                  "type": "frame",
+                  "id": "8mll5",
+                  "name": "Deck Row",
+                  "width": "fill_container",
+                  "gap": 8,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "698z9",
+                      "name": "Chip Active",
+                      "fill": "#8B5CF620",
+                      "cornerRadius": 20,
+                      "gap": 6,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "NUXLe",
+                          "name": "deckChip1Text",
+                          "fill": "#8B5CF6",
+                          "content": "えと",
+                          "fontFamily": "Inter",
+                          "fontSize": 13,
+                          "fontWeight": "600"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "EdjXo",
+                      "name": "Chip",
+                      "fill": "#F4F4F5",
+                      "cornerRadius": 20,
+                      "gap": 6,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "LV5tj",
+                          "name": "deckChip2Text",
+                          "fill": "#71717A",
+                          "content": "さいじ",
+                          "fontFamily": "Inter",
+                          "fontSize": 13,
+                          "fontWeight": "600"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "cOvXq",
+                      "name": "Chip Custom",
+                      "fill": "#F4F4F5",
+                      "cornerRadius": 20,
+                      "gap": 6,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "V1OaG",
+                          "name": "deckChip3Text",
+                          "fill": "#71717A",
+                          "content": "カスタム",
+                          "fontFamily": "Inter",
+                          "fontSize": 13,
+                          "fontWeight": "600"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "b0iPL",
+              "name": "Stack Section",
+              "width": "fill_container",
+              "fill": "#FFFFFF",
+              "cornerRadius": 16,
+              "layout": "vertical",
+              "gap": 12,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "MIOnY",
+                  "name": "stackLabel",
+                  "fill": "#71717A",
+                  "content": "スタックレシピ",
+                  "fontFamily": "Inter",
+                  "fontSize": 12,
+                  "fontWeight": "600"
+                },
+                {
+                  "type": "frame",
+                  "id": "qK3rf",
+                  "name": "Stack Row",
+                  "width": "fill_container",
+                  "gap": 8,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "khFAS",
+                      "name": "Stack Chip Active",
+                      "fill": "#14B8A620",
+                      "cornerRadius": 20,
+                      "gap": 6,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "zBJOz",
+                          "name": "stChip1T",
+                          "fill": "#14B8A6",
+                          "content": "50枚",
+                          "fontFamily": "Inter",
+                          "fontSize": 13,
+                          "fontWeight": "600"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "0Gmg9",
+                      "name": "Stack Chip 2",
+                      "fill": "#F4F4F5",
+                      "cornerRadius": 20,
+                      "gap": 6,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "bKkXm",
+                          "name": "stChip2T",
+                          "fill": "#71717A",
+                          "content": "30枚",
+                          "fontFamily": "Inter",
+                          "fontSize": 13,
+                          "fontWeight": "600"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "VILdq",
+                      "name": "Stack Chip 3",
+                      "fill": "#F4F4F5",
+                      "cornerRadius": 20,
+                      "gap": 6,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "ASDrb",
+                          "name": "stChip3T",
+                          "fill": "#71717A",
+                          "content": "10枚",
+                          "fontFamily": "Inter",
+                          "fontSize": 13,
+                          "fontWeight": "600"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "XsoKP",
+              "name": "Players Section",
+              "width": "fill_container",
+              "fill": "#FFFFFF",
+              "cornerRadius": 16,
+              "layout": "vertical",
+              "gap": 12,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "81XQ4",
+                  "name": "playersLabel",
+                  "fill": "#71717A",
+                  "content": "プレイヤー",
+                  "fontFamily": "Inter",
+                  "fontSize": 12,
+                  "fontWeight": "600"
+                },
+                {
+                  "type": "frame",
+                  "id": "gy7uX",
+                  "name": "Players Row",
+                  "width": "fill_container",
+                  "gap": 8,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "dIbKd",
+                      "name": "1P Active",
+                      "fill": "#8B5CF620",
+                      "cornerRadius": 20,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "imvtw",
+                          "name": "p1ChipT",
+                          "fill": "#8B5CF6",
+                          "content": "1人",
+                          "fontFamily": "Inter",
+                          "fontSize": 13,
+                          "fontWeight": "600"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "4ZoEd",
+                      "name": "2P",
+                      "fill": "#F4F4F5",
+                      "cornerRadius": 20,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "V4zTG",
+                          "name": "p2ChipT",
+                          "fill": "#71717A",
+                          "content": "2人",
+                          "fontFamily": "Inter",
+                          "fontSize": 13,
+                          "fontWeight": "600"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "LzoPd",
+                      "name": "3P",
+                      "fill": "#F4F4F5",
+                      "cornerRadius": 20,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "JjRlX",
+                          "name": "p3ChipT",
+                          "fill": "#71717A",
+                          "content": "3人",
+                          "fontFamily": "Inter",
+                          "fontSize": 13,
+                          "fontWeight": "600"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "56DHe",
+                      "name": "4P",
+                      "fill": "#F4F4F5",
+                      "cornerRadius": 20,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "nHXeJ",
+                          "name": "p4ChipT",
+                          "fill": "#71717A",
+                          "content": "4人",
+                          "fontFamily": "Inter",
+                          "fontSize": 13,
+                          "fontWeight": "600"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "owJz1",
+              "name": "Play Mode Section",
+              "width": "fill_container",
+              "fill": "#FFFFFF",
+              "cornerRadius": 16,
+              "layout": "vertical",
+              "gap": 12,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "v1uwh",
+                  "name": "modeLabelT",
+                  "fill": "#71717A",
+                  "content": "プレイモード",
+                  "fontFamily": "Inter",
+                  "fontSize": 12,
+                  "fontWeight": "600"
+                },
+                {
+                  "type": "frame",
+                  "id": "c45uZ",
+                  "name": "Mode Row",
+                  "width": "fill_container",
+                  "gap": 8,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "M8rBZ",
+                      "name": "Touch Mode Active",
+                      "fill": "#F472B620",
+                      "cornerRadius": 20,
+                      "gap": 6,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "10Lh7",
+                          "name": "touchModeT",
+                          "fill": "#F472B6",
+                          "content": "タッチ",
+                          "fontFamily": "Inter",
+                          "fontSize": 13,
+                          "fontWeight": "600"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "RmUW3",
+                      "name": "Keyboard Mode",
+                      "fill": "#F4F4F5",
+                      "cornerRadius": 20,
+                      "gap": 6,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "hIGSm",
+                          "name": "keyModeT",
+                          "fill": "#71717A",
+                          "content": "キーボード",
+                          "fontFamily": "Inter",
+                          "fontSize": 13,
+                          "fontWeight": "600"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "FUS03",
+              "name": "Tatami Size Section",
+              "width": "fill_container",
+              "fill": "#FFFFFF",
+              "cornerRadius": 16,
+              "layout": "vertical",
+              "gap": 12,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "USfu8",
+                  "name": "tatamiLabel",
+                  "fill": "#71717A",
+                  "content": "畳サイズ",
+                  "fontFamily": "Inter",
+                  "fontSize": 12,
+                  "fontWeight": "600"
+                },
+                {
+                  "type": "frame",
+                  "id": "GabUV",
+                  "name": "Tatami Row",
+                  "width": "fill_container",
+                  "gap": 8,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "lo2dc",
+                      "name": "S Active",
+                      "fill": "#14B8A620",
+                      "cornerRadius": 20,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "xOf9w",
+                          "name": "ts1T",
+                          "fill": "#14B8A6",
+                          "content": "S (3x5)",
+                          "fontFamily": "Inter",
+                          "fontSize": 13,
+                          "fontWeight": "600"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "x99BF",
+                      "name": "M",
+                      "fill": "#F4F4F5",
+                      "cornerRadius": 20,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "nUwm7",
+                          "name": "ts2T",
+                          "fill": "#71717A",
+                          "content": "M (4x6)",
+                          "fontFamily": "Inter",
+                          "fontSize": 13,
+                          "fontWeight": "600"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "CrUNR",
+                      "name": "L",
+                      "fill": "#F4F4F5",
+                      "cornerRadius": 20,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "7qfhm",
+                          "name": "ts3T",
+                          "fill": "#71717A",
+                          "content": "L (5x7)",
+                          "fontFamily": "Inter",
+                          "fontSize": 13,
+                          "fontWeight": "600"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "zaTEN",
+              "name": "Summary Section",
+              "width": "fill_container",
+              "fill": "#8B5CF6",
+              "cornerRadius": 16,
+              "layout": "vertical",
+              "gap": 8,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "IvKlO",
+                  "name": "summaryTitle",
+                  "fill": "#FFFFFFCC",
+                  "content": "ゲーム設定",
+                  "fontFamily": "Inter",
+                  "fontSize": 14,
+                  "fontWeight": "600"
+                },
+                {
+                  "type": "text",
+                  "id": "GM6Jv",
+                  "name": "summaryText",
+                  "fill": "#FFFFFF",
+                  "content": "えと デッキ  •  50枚  •  1人プレイ  •  タッチ",
+                  "fontFamily": "Plus Jakarta Sans",
+                  "fontSize": 15,
+                  "fontWeight": "700"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "JmzhR",
+              "name": "Flex Spacer",
+              "width": "fill_container",
+              "height": "fill_container",
+              "fill": "#00000000"
+            },
+            {
+              "type": "frame",
+              "id": "O42B5",
+              "name": "Start Button",
+              "width": "fill_container",
+              "fill": "#8B5CF6",
+              "cornerRadius": 24,
+              "gap": 8,
+              "children": [
+                {
+                  "type": "icon_font",
+                  "id": "RcEzM",
+                  "name": "startBtnIcon",
+                  "width": 0,
+                  "height": 0,
+                  "iconFontFamily": "Material Symbols Rounded",
+                  "fill": "#FFFFFF"
+                },
+                {
+                  "type": "frame",
+                  "id": "jbrJz",
+                  "name": "Spacer",
+                  "width": "fill_container",
+                  "height": 1,
+                  "fill": "#00000000"
+                },
+                {
+                  "type": "text",
+                  "id": "C3LrI",
+                  "name": "startBtnText",
+                  "fill": "#FFFFFF",
+                  "content": "ゲーム開始",
+                  "fontFamily": "Plus Jakarta Sans",
+                  "fontSize": 18,
+                  "fontWeight": "700"
+                },
+                {
+                  "type": "frame",
+                  "id": "iDP3c",
+                  "name": "Spacer2",
+                  "width": 20,
+                  "height": 20,
+                  "fill": "#00000000"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "I7VAn",
+      "x": 462,
+      "y": 0,
+      "name": "2. Game Play",
+      "width": 402,
+      "height": 874,
+      "fill": "#F4F4F5",
+      "layout": "vertical",
+      "children": [
+        {
+          "type": "frame",
+          "id": "pq9uN",
+          "name": "Game Header",
+          "width": "fill_container",
+          "fill": "#FFFFFF",
+          "layout": "vertical",
+          "gap": 8,
+          "children": [
+            {
+              "type": "frame",
+              "id": "hvOoE",
+              "name": "Progress Row",
+              "width": "fill_container",
+              "gap": 8,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "EPJ6h",
+                  "name": "progressLabel",
+                  "fill": "#71717A",
+                  "content": "12 / 50枚",
+                  "fontFamily": "Inter",
+                  "fontSize": 13,
+                  "fontWeight": "600"
+                },
+                {
+                  "type": "frame",
+                  "id": "eIl2i",
+                  "name": "Spacer",
+                  "width": "fill_container",
+                  "height": 1,
+                  "fill": "#00000000"
+                },
+                {
+                  "type": "frame",
+                  "id": "OWjJZ",
+                  "name": "Score Chip",
+                  "fill": "#8B5CF620",
+                  "cornerRadius": 12,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "dHKzR",
+                      "name": "scoreText",
+                      "fill": "#8B5CF6",
+                      "content": "あなた: 5 枚",
+                      "fontFamily": "Inter",
+                      "fontSize": 12,
+                      "fontWeight": "600"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "H6F68",
+              "name": "Progress Bar BG",
+              "width": "fill_container",
+              "height": 6,
+              "fill": "#E4E4E7",
+              "cornerRadius": 3,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "ZXhb8",
+                  "name": "Progress Fill",
+                  "width": 88,
+                  "height": "fill_container",
+                  "fill": "#8B5CF6",
+                  "cornerRadius": 3
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "AqPzl",
+          "name": "Yomi Fuda Area",
+          "width": "fill_container",
+          "fill": "#FFFFFF",
+          "layout": "vertical",
+          "gap": 10,
+          "children": [
+            {
+              "type": "frame",
+              "id": "g9xi5",
+              "name": "Yomi Label Row",
+              "width": "fill_container",
+              "gap": 6,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "L9gyl",
+                  "name": "Yomi Badge",
+                  "fill": "#F472B620",
+                  "cornerRadius": 12,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "gmHMg",
+                      "name": "yomiBadgeT",
+                      "fill": "#F472B6",
+                      "content": "読み札",
+                      "fontFamily": "Inter",
+                      "fontSize": 11,
+                      "fontWeight": "600"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "S2csY",
+              "name": "Yomi Fuda Card",
+              "width": "fill_container",
+              "fill": "#F4F4F5",
+              "cornerRadius": 16,
+              "layout": "vertical",
+              "gap": 8,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "dKPAe",
+                  "name": "Category Badge",
+                  "fill": "#8B5CF620",
+                  "cornerRadius": 12,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "3rnjZ",
+                      "name": "yomiFudaCategoryT",
+                      "fill": "#8B5CF6",
+                      "content": "えと",
+                      "fontFamily": "Inter",
+                      "fontSize": 11,
+                      "fontWeight": "600"
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "id": "0leAS",
+                  "name": "yomiFudaText",
+                  "fill": "#18181B",
+                  "content": "IoTデバイスとクラウドを連携させた\n農業向けセンサー管理プラットフォーム",
+                  "lineHeight": 1.5,
+                  "fontFamily": "Plus Jakarta Sans",
+                  "fontSize": 16,
+                  "fontWeight": "600"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "FaYga",
+          "name": "Tori Fuda Area",
+          "width": "fill_container",
+          "height": "fill_container",
+          "fill": "#F4F4F5",
+          "layout": "vertical",
+          "gap": 12,
+          "children": [
+            {
+              "type": "frame",
+              "id": "Dp3VD",
+              "name": "Tori Label Row",
+              "width": "fill_container",
+              "gap": 6,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "RZ3WW",
+                  "name": "Tori Badge",
+                  "fill": "#14B8A620",
+                  "cornerRadius": 12,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "gpiKA",
+                      "name": "toriBadgeT",
+                      "fill": "#14B8A6",
+                      "content": "取り札",
+                      "fontFamily": "Inter",
+                      "fontSize": 11,
+                      "fontWeight": "600"
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "id": "HMjr3",
+                  "name": "toriCount",
+                  "fill": "#A1A1AA",
+                  "content": "15枚",
+                  "fontFamily": "Inter",
+                  "fontSize": 11,
+                  "fontWeight": "500"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "gzpR8",
+              "name": "Tori Grid",
+              "width": "fill_container",
+              "height": "fill_container",
+              "layout": "vertical",
+              "gap": 8,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "Jv0s2",
+                  "name": "Row 1",
+                  "width": "fill_container",
+                  "gap": 8,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "gsHN4",
+                      "name": "Tori Card 1 - Correct",
+                      "width": "fill_container",
+                      "height": 90,
+                      "fill": "#FFFFFF",
+                      "cornerRadius": 12,
+                      "layout": "vertical",
+                      "gap": 4,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "tVmRR",
+                          "name": "Badge",
+                          "fill": "#8B5CF620",
+                          "cornerRadius": 8,
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "Wykfb",
+                              "name": "tc1BadgeT",
+                              "fill": "#8B5CF6",
+                              "content": "子",
+                              "fontFamily": "Plus Jakarta Sans",
+                              "fontSize": 11,
+                              "fontWeight": "700"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "kVkWr",
+                          "name": "tc1Title",
+                          "fill": "#18181B",
+                          "content": "スマート農場センサー",
+                          "lineHeight": 1.3,
+                          "fontFamily": "Inter",
+                          "fontSize": 11,
+                          "fontWeight": "600"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "hAkdY",
+                      "name": "Tori Card 2",
+                      "width": "fill_container",
+                      "height": 90,
+                      "fill": "#FFFFFF",
+                      "cornerRadius": 12,
+                      "layout": "vertical",
+                      "gap": 4,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "aE1Cf",
+                          "name": "Badge",
+                          "fill": "#F4F4F5",
+                          "cornerRadius": 8,
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "LF2x7",
+                              "name": "tc2BadgeT",
+                              "fill": "#71717A",
+                              "content": "丑",
+                              "fontFamily": "Plus Jakarta Sans",
+                              "fontSize": 11,
+                              "fontWeight": "700"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "3FeNe",
+                          "name": "tc2Title",
+                          "fill": "#18181B",
+                          "content": "AR工場ライン管理",
+                          "lineHeight": 1.3,
+                          "fontFamily": "Inter",
+                          "fontSize": 11,
+                          "fontWeight": "600"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "EOhf9",
+                      "name": "Tori Card 3",
+                      "width": "fill_container",
+                      "height": 90,
+                      "fill": "#FFFFFF",
+                      "cornerRadius": 12,
+                      "layout": "vertical",
+                      "gap": 4,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "11Qwy",
+                          "name": "Badge",
+                          "fill": "#F4F4F5",
+                          "cornerRadius": 8,
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "uic3a",
+                              "name": "tc3BadgeT",
+                              "fill": "#71717A",
+                              "content": "寅",
+                              "fontFamily": "Plus Jakarta Sans",
+                              "fontSize": 11,
+                              "fontWeight": "700"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "m39LI",
+                          "name": "tc3Title",
+                          "fill": "#18181B",
+                          "content": "医療AI診断支援",
+                          "lineHeight": 1.3,
+                          "fontFamily": "Inter",
+                          "fontSize": 11,
+                          "fontWeight": "600"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "9mSUB",
+                  "name": "Row 2",
+                  "width": "fill_container",
+                  "gap": 8,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "zxZrk",
+                      "name": "Tori Card 4",
+                      "width": "fill_container",
+                      "height": 90,
+                      "fill": "#FFFFFF",
+                      "cornerRadius": 12,
+                      "layout": "vertical",
+                      "gap": 4,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "sL4D6",
+                          "name": "Badge",
+                          "fill": "#F4F4F5",
+                          "cornerRadius": 8,
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "WuP8l",
+                              "name": "tc4BadgeT",
+                              "fill": "#71717A",
+                              "content": "卯",
+                              "fontFamily": "Plus Jakarta Sans",
+                              "fontSize": 11,
+                              "fontWeight": "700"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "WM12a",
+                          "name": "tc4Title",
+                          "fill": "#18181B",
+                          "content": "スマートミラー美容相談",
+                          "lineHeight": 1.3,
+                          "fontFamily": "Inter",
+                          "fontSize": 11,
+                          "fontWeight": "600"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "SWhdZ",
+                      "name": "Tori Card 5",
+                      "width": "fill_container",
+                      "height": 90,
+                      "fill": "#FFFFFF",
+                      "cornerRadius": 12,
+                      "layout": "vertical",
+                      "gap": 4,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "csFJg",
+                          "name": "Badge",
+                          "fill": "#F4F4F5",
+                          "cornerRadius": 8,
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "nWMG2",
+                              "name": "tc5BadgeT",
+                              "fill": "#71717A",
+                              "content": "辰",
+                              "fontFamily": "Plus Jakarta Sans",
+                              "fontSize": 11,
+                              "fontWeight": "700"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "e7Asb",
+                          "name": "tc5Title",
+                          "fill": "#18181B",
+                          "content": "VRリハビリ訓練システム",
+                          "lineHeight": 1.3,
+                          "fontFamily": "Inter",
+                          "fontSize": 11,
+                          "fontWeight": "600"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "8K8pj",
+                      "name": "Tori Card 6",
+                      "width": "fill_container",
+                      "height": 90,
+                      "fill": "#FFFFFF",
+                      "cornerRadius": 12,
+                      "layout": "vertical",
+                      "gap": 4,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "R89Yd",
+                          "name": "Badge",
+                          "fill": "#F4F4F5",
+                          "cornerRadius": 8,
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "T4Qls",
+                              "name": "tc6BadgeT",
+                              "fill": "#71717A",
+                              "content": "巳",
+                              "fontFamily": "Plus Jakarta Sans",
+                              "fontSize": 11,
+                              "fontWeight": "700"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "H1KZj",
+                          "name": "tc6Title",
+                          "fill": "#18181B",
+                          "content": "ブロックチェーン真贋証明",
+                          "lineHeight": 1.3,
+                          "fontFamily": "Inter",
+                          "fontSize": 11,
+                          "fontWeight": "600"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "Fy6FV",
+                  "name": "Row 3",
+                  "width": "fill_container",
+                  "gap": 8,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "5v1d0",
+                      "name": "Tori Card 7",
+                      "width": "fill_container",
+                      "height": 90,
+                      "fill": "#FFFFFF",
+                      "cornerRadius": 12,
+                      "layout": "vertical",
+                      "gap": 4,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "cQfsw",
+                          "name": "Badge",
+                          "fill": "#F4F4F5",
+                          "cornerRadius": 8,
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "G80gB",
+                              "name": "tc7BadgeT",
+                              "fill": "#71717A",
+                              "content": "午",
+                              "fontFamily": "Plus Jakarta Sans",
+                              "fontSize": 11,
+                              "fontWeight": "700"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "NCRea",
+                          "name": "tc7Title",
+                          "fill": "#18181B",
+                          "content": "自律走行配送ロボット",
+                          "lineHeight": 1.3,
+                          "fontFamily": "Inter",
+                          "fontSize": 11,
+                          "fontWeight": "600"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "oByUm",
+                      "name": "Tori Card 8",
+                      "width": "fill_container",
+                      "height": 90,
+                      "fill": "#FFFFFF",
+                      "cornerRadius": 12,
+                      "layout": "vertical",
+                      "gap": 4,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "yk1Ae",
+                          "name": "Badge",
+                          "fill": "#F4F4F5",
+                          "cornerRadius": 8,
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "GXVXQ",
+                              "name": "tc8BadgeT",
+                              "fill": "#71717A",
+                              "content": "未",
+                              "fontFamily": "Plus Jakarta Sans",
+                              "fontSize": 11,
+                              "fontWeight": "700"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "SADkO",
+                          "name": "tc8Title",
+                          "fill": "#18181B",
+                          "content": "音声AI議事録生成",
+                          "lineHeight": 1.3,
+                          "fontFamily": "Inter",
+                          "fontSize": 11,
+                          "fontWeight": "600"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "7T4k1",
+                      "name": "Tori Card 9",
+                      "width": "fill_container",
+                      "height": 90,
+                      "fill": "#FFFFFF",
+                      "cornerRadius": 12,
+                      "layout": "vertical",
+                      "gap": 4,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "Kl2x2",
+                          "name": "Badge",
+                          "fill": "#F4F4F5",
+                          "cornerRadius": 8,
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "TTVEv",
+                              "name": "tc9BadgeT",
+                              "fill": "#71717A",
+                              "content": "申",
+                              "fontFamily": "Plus Jakarta Sans",
+                              "fontSize": 11,
+                              "fontWeight": "700"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "PD3d5",
+                          "name": "tc9Title",
+                          "fill": "#18181B",
+                          "content": "量子暗号通信プラットフォーム",
+                          "lineHeight": 1.3,
+                          "fontFamily": "Inter",
+                          "fontSize": 11,
+                          "fontWeight": "600"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "YOQjb",
+      "x": 924,
+      "y": 0,
+      "name": "3. Game Results",
+      "width": 402,
+      "height": 874,
+      "fill": "#F4F4F5",
+      "layout": "vertical",
+      "children": [
+        {
+          "type": "frame",
+          "id": "Ly4o7",
+          "name": "Results Header",
+          "width": "fill_container",
+          "fill": "#8B5CF6",
+          "layout": "vertical",
+          "gap": 12,
+          "children": [
+            {
+              "type": "frame",
+              "id": "4WCwT",
+              "name": "Hero Row",
+              "width": "fill_container",
+              "gap": 12,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "AryvY",
+                  "name": "resEmoji",
+                  "fill": "#FFFFFF",
+                  "content": "🎉",
+                  "fontFamily": "Inter",
+                  "fontSize": 40,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "frame",
+                  "id": "J7AeP",
+                  "name": "Spacer",
+                  "width": "fill_container",
+                  "height": 1,
+                  "fill": "#00000000"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "id": "zDCkL",
+              "name": "resTitle",
+              "fill": "#FFFFFF",
+              "content": "ゲーム終了!",
+              "lineHeight": 1.1,
+              "fontFamily": "Plus Jakarta Sans",
+              "fontSize": 28,
+              "fontWeight": "700"
+            },
+            {
+              "type": "text",
+              "id": "J2g8p",
+              "name": "resSubtitle",
+              "fill": "#FFFFFFCC",
+              "content": "50枚 全て読み上げました",
+              "fontFamily": "Inter",
+              "fontSize": 14,
+              "fontWeight": "500"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "fc63B",
+          "name": "Results Content",
+          "width": "fill_container",
+          "height": "fill_container",
+          "fill": "#F4F4F5",
+          "layout": "vertical",
+          "gap": 16,
+          "children": [
+            {
+              "type": "text",
+              "id": "uiN06",
+              "name": "rankingTitle",
+              "fill": "#71717A",
+              "content": "スコアランキング",
+              "fontFamily": "Inter",
+              "fontSize": 12,
+              "fontWeight": "600"
+            },
+            {
+              "type": "frame",
+              "id": "tqGAC",
+              "name": "Rank 1 Card",
+              "width": "fill_container",
+              "fill": "#FFFFFF",
+              "cornerRadius": 16,
+              "gap": 12,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "QA6rr",
+                  "name": "Rank Badge Gold",
+                  "fill": "#F472B6",
+                  "cornerRadius": 20,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "VV5FE",
+                      "name": "rank1BadgeTxt",
+                      "fill": "#FFFFFF",
+                      "content": "1st",
+                      "fontFamily": "Plus Jakarta Sans",
+                      "fontSize": 13,
+                      "fontWeight": "700"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "YlC1I",
+                  "name": "Player Info",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 2,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "jZREn",
+                      "name": "rank1Name",
+                      "fill": "#18181B",
+                      "content": "プレイヤー 1",
+                      "fontFamily": "Plus Jakarta Sans",
+                      "fontSize": 16,
+                      "fontWeight": "700"
+                    },
+                    {
+                      "type": "text",
+                      "id": "DVEzv",
+                      "name": "rank1Sub",
+                      "fill": "#71717A",
+                      "content": "正解率 76%",
+                      "fontFamily": "Inter",
+                      "fontSize": 12,
+                      "fontWeight": "500"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "w2lI7",
+                  "name": "Score",
+                  "layout": "vertical",
+                  "gap": 2,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "s9cVt",
+                      "name": "rank1ScoreVal",
+                      "fill": "#8B5CF6",
+                      "content": "38",
+                      "fontFamily": "Plus Jakarta Sans",
+                      "fontSize": 28,
+                      "fontWeight": "800"
+                    },
+                    {
+                      "type": "text",
+                      "id": "zz0xD",
+                      "name": "rank1ScoreUnit",
+                      "fill": "#71717A",
+                      "content": "枚",
+                      "fontFamily": "Inter",
+                      "fontSize": 12,
+                      "fontWeight": "500"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "qjvw0",
+              "name": "Rank 2 Card",
+              "width": "fill_container",
+              "fill": "#FFFFFF",
+              "cornerRadius": 16,
+              "gap": 12,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "T7bZL",
+                  "name": "Rank Badge",
+                  "fill": "#14B8A6",
+                  "cornerRadius": 20,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "lrLwE",
+                      "name": "rank2BadgeTxt",
+                      "fill": "#FFFFFF",
+                      "content": "2nd",
+                      "fontFamily": "Plus Jakarta Sans",
+                      "fontSize": 13,
+                      "fontWeight": "700"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "aDYS9",
+                  "name": "Player Info",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 2,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "PACHM",
+                      "name": "rank2Name",
+                      "fill": "#18181B",
+                      "content": "プレイヤー 2",
+                      "fontFamily": "Plus Jakarta Sans",
+                      "fontSize": 16,
+                      "fontWeight": "700"
+                    },
+                    {
+                      "type": "text",
+                      "id": "zBovn",
+                      "name": "rank2Sub",
+                      "fill": "#71717A",
+                      "content": "正解率 24%",
+                      "fontFamily": "Inter",
+                      "fontSize": 12,
+                      "fontWeight": "500"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "IDY45",
+                  "name": "Score",
+                  "layout": "vertical",
+                  "gap": 2,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "IyVcz",
+                      "name": "rank2ScoreVal",
+                      "fill": "#14B8A6",
+                      "content": "12",
+                      "fontFamily": "Plus Jakarta Sans",
+                      "fontSize": 28,
+                      "fontWeight": "800"
+                    },
+                    {
+                      "type": "text",
+                      "id": "0k4Ka",
+                      "name": "rank2ScoreUnit",
+                      "fill": "#71717A",
+                      "content": "枚",
+                      "fontFamily": "Inter",
+                      "fontSize": 12,
+                      "fontWeight": "500"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "id": "OR4in",
+              "name": "mochiTitle",
+              "fill": "#71717A",
+              "content": "もち札 (取れなかった札)",
+              "fontFamily": "Inter",
+              "fontSize": 12,
+              "fontWeight": "600"
+            },
+            {
+              "type": "frame",
+              "id": "CYAP3",
+              "name": "Mochi Row",
+              "width": "fill_container",
+              "gap": 8,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "wNvku",
+                  "name": "Mochi Card 1",
+                  "width": 112,
+                  "fill": "#FFFFFF",
+                  "cornerRadius": 12,
+                  "layout": "vertical",
+                  "gap": 4,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "eZfRl",
+                      "name": "Badge",
+                      "fill": "#F4F4F5",
+                      "cornerRadius": 8,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "ZzBmh",
+                          "name": "mochi1BadgeT",
+                          "fill": "#71717A",
+                          "content": "卯",
+                          "fontFamily": "Plus Jakarta Sans",
+                          "fontSize": 11,
+                          "fontWeight": "700"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "LAgiL",
+                      "name": "mochi1Title",
+                      "fill": "#A1A1AA",
+                      "content": "スマートミラー美容相談",
+                      "lineHeight": 1.3,
+                      "fontFamily": "Inter",
+                      "fontSize": 11,
+                      "fontWeight": "600"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "b2wI5",
+                  "name": "Mochi Card 2",
+                  "width": 112,
+                  "fill": "#FFFFFF",
+                  "cornerRadius": 12,
+                  "layout": "vertical",
+                  "gap": 4,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "BBV3i",
+                      "name": "Badge",
+                      "fill": "#F4F4F5",
+                      "cornerRadius": 8,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "q6WdA",
+                          "name": "mochi2BadgeT",
+                          "fill": "#71717A",
+                          "content": "午",
+                          "fontFamily": "Plus Jakarta Sans",
+                          "fontSize": 11,
+                          "fontWeight": "700"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "UlQal",
+                      "name": "mochi2Title",
+                      "fill": "#A1A1AA",
+                      "content": "自律走行配送ロボット",
+                      "lineHeight": 1.3,
+                      "fontFamily": "Inter",
+                      "fontSize": 11,
+                      "fontWeight": "600"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "jCFQV",
+                  "name": "Mochi Card 3",
+                  "width": 112,
+                  "fill": "#FFFFFF",
+                  "cornerRadius": 12,
+                  "layout": "vertical",
+                  "gap": 4,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "Hi3GS",
+                      "name": "Badge",
+                      "fill": "#F4F4F5",
+                      "cornerRadius": 8,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "FZPtG",
+                          "name": "mochi3BadgeT",
+                          "fill": "#71717A",
+                          "content": "申",
+                          "fontFamily": "Plus Jakarta Sans",
+                          "fontSize": 11,
+                          "fontWeight": "700"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "0z87I",
+                      "name": "mochi3Title",
+                      "fill": "#A1A1AA",
+                      "content": "量子暗号通信プラットフォーム",
+                      "lineHeight": 1.3,
+                      "fontFamily": "Inter",
+                      "fontSize": 11,
+                      "fontWeight": "600"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "Qu2ww",
+              "name": "Flex Spacer",
+              "width": "fill_container",
+              "height": "fill_container",
+              "fill": "#00000000"
+            },
+            {
+              "type": "frame",
+              "id": "PhDDX",
+              "name": "Retry Button",
+              "width": "fill_container",
+              "fill": "#8B5CF6",
+              "cornerRadius": 24,
+              "gap": 8,
+              "children": [
+                {
+                  "type": "icon_font",
+                  "id": "rLREA",
+                  "name": "retryIcon",
+                  "width": 0,
+                  "height": 0,
+                  "iconFontFamily": "Material Symbols Rounded",
+                  "fill": "#FFFFFF"
+                },
+                {
+                  "type": "frame",
+                  "id": "zn8hR",
+                  "name": "Spacer",
+                  "width": "fill_container",
+                  "height": 1,
+                  "fill": "#00000000"
+                },
+                {
+                  "type": "text",
+                  "id": "CU58v",
+                  "name": "retryBtnTxt",
+                  "fill": "#FFFFFF",
+                  "content": "もう一度プレイ",
+                  "fontFamily": "Plus Jakarta Sans",
+                  "fontSize": 18,
+                  "fontWeight": "700"
+                },
+                {
+                  "type": "frame",
+                  "id": "TheBA",
+                  "name": "Spacer2",
+                  "width": 20,
+                  "height": 20,
+                  "fill": "#00000000"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "cvoTy",
+              "name": "Home Button",
+              "width": "fill_container",
+              "fill": "#FFFFFF",
+              "cornerRadius": 24,
+              "gap": 8,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "PdDXg",
+                  "name": "Spacer",
+                  "width": "fill_container",
+                  "height": 1,
+                  "fill": "#00000000"
+                },
+                {
+                  "type": "text",
+                  "id": "p5ngG",
+                  "name": "homeBtnTxt",
+                  "fill": "#71717A",
+                  "content": "設定に戻る",
+                  "fontFamily": "Plus Jakarta Sans",
+                  "fontSize": 16,
+                  "fontWeight": "600"
+                },
+                {
+                  "type": "frame",
+                  "id": "M7u1w",
+                  "name": "Spacer2",
+                  "width": 20,
+                  "height": 20,
+                  "fill": "#00000000"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "e4XWG",
+      "x": 0,
+      "y": 934,
+      "name": "GameHeader",
+      "reusable": true,
+      "width": 600,
+      "layout": "vertical",
+      "gap": 4,
+      "padding": [
+        8,
+        48
+      ],
+      "children": [
+        {
+          "type": "frame",
+          "id": "ft46Y",
+          "name": "Legend",
+          "width": "fill_container",
+          "gap": 12,
+          "justifyContent": "center",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "frame",
+              "id": "wnfnx",
+              "name": "Legend Item 1",
+              "gap": 4,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "BgoFY",
+                  "name": "leg1dot",
+                  "width": 12,
+                  "height": 12,
+                  "fill": "#3b82f6",
+                  "cornerRadius": 2
+                },
+                {
+                  "type": "text",
+                  "id": "FujXI",
+                  "name": "leg1text",
+                  "fill": "#71717a",
+                  "content": "Player 1: 3",
+                  "fontFamily": "Inter",
+                  "fontSize": 14,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "IgzpD",
+              "name": "Legend Item 2",
+              "gap": 4,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "GHBsd",
+                  "name": "leg2dot",
+                  "width": 12,
+                  "height": 12,
+                  "fill": "#22c55e",
+                  "cornerRadius": 2
+                },
+                {
+                  "type": "text",
+                  "id": "a2ffz",
+                  "name": "leg2text",
+                  "fill": "#71717a",
+                  "content": "Player 2: 2",
+                  "fontFamily": "Inter",
+                  "fontSize": 14,
+                  "fontWeight": "normal"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "0iYr1",
+          "name": "Race Info + Bar",
+          "width": "fill_container",
+          "gap": 8,
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "tf4ad",
+              "name": "raceInfo",
+              "fill": "#1a1a2e",
+              "content": "3 / 10",
+              "fontFamily": "Inter",
+              "fontSize": 20,
+              "fontWeight": "700"
+            },
+            {
+              "type": "frame",
+              "id": "gnp5N",
+              "name": "Stacked Bar",
+              "clip": true,
+              "width": "fill_container",
+              "height": 32,
+              "fill": "#d4d4d8",
+              "cornerRadius": 4,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "dP5Tg",
+                  "name": "Player 1",
+                  "width": 150,
+                  "height": "fill_container",
+                  "fill": "#3b82f6",
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "cVT37",
+                      "name": "seg1label",
+                      "fill": "#ffffff",
+                      "content": "3",
+                      "fontFamily": "Inter",
+                      "fontSize": 14,
+                      "fontWeight": "600"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "o56NC",
+                  "name": "Player 2",
+                  "width": 100,
+                  "height": "fill_container",
+                  "fill": "#22c55e",
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "Grfvc",
+                      "name": "seg2label",
+                      "fill": "#ffffff",
+                      "content": "2",
+                      "fontFamily": "Inter",
+                      "fontSize": 14,
+                      "fontWeight": "600"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "MMyKE",
+                  "name": "Remaining",
+                  "width": "fill_container",
+                  "height": "fill_container",
+                  "fill": "#d4d4d8",
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "N8Ogg",
+                      "name": "segRemLabel",
+                      "fill": "#71717a",
+                      "content": "5",
+                      "fontFamily": "Inter",
+                      "fontSize": 14,
+                      "fontWeight": "500"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "note",
+      "id": "jAJlN",
+      "x": -125,
+      "y": -451,
+      "width": 250,
+      "height": 219,
+      "content": "コードから pen ファイルを生成してみたが、かなりいまいちだった。\n\nPencil の使いどころは個人開発だとなかなか無いかな...\n"
+    }
+  ]
+}
