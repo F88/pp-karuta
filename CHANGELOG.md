@@ -9,6 +9,42 @@ and this project adheres to [CalVer](https://calver.org/).
 
 ## [Unreleased]
 
+## [2026.08.24] - 2026-08-24
+
+### Changed
+
+- Apply prettier formatting across the repository. The tree had drifted because
+  CI ran the auto-fixing `npm run format` and discarded its result.
+- Exclude the generated `src/routeTree.gen.ts` from prettier. TanStack Router
+  overwrites it on every route change, and the file itself asks to be excluded
+  from linters and formatters.
+- CI now verifies formatting with `npm run format:check` instead of running
+  `npm run format`, which rewrote files and exited 0 without ever failing.
+
+### Fixed
+
+- `npm run build-storybook` no longer fails. Storybook inherited VitePWA from
+  the project's Vite config, and its manager bundle exceeded the workbox
+  precache limit, which vite-plugin-pwa reports as a build error rather than a
+  warning.
+
+### Security
+
+- Add a Content Security Policy. Production delivers it through a
+  `<meta http-equiv>` tag injected at build time, since GitHub Pages cannot set
+  response headers; the dev server delivers the same policy as a response
+  header. `connect-src` limits the destinations the API token can reach to
+  `protopedia.net` alone, which downgrades silent, unlimited exfiltration to a
+  single visible page navigation.
+- Drop the `VITE_` prefix from the ProtoPedia API token variable
+  (`VITE_PROTOPEDIA_API_V2_TOKEN` → `PROTOPEDIA_API_V2_TOKEN`). Vite exposes
+  every `VITE_`-prefixed variable to the browser, and the dev server embedded
+  the whole `import.meta.env` object into any module that read it, serving the
+  token in plain text. No client code had read the variable since the Token UI
+  replaced it; only `npm run generate-snapshot` uses it, through `process.env`.
+
+## [2026.07.21] - 2026-07-21
+
 ### Added
 
 - Intro page: add a ProtoPedia data source / CC BY 4.0 attribution line below
@@ -17,6 +53,8 @@ and this project adheres to [CalVer](https://calver.org/).
   ProtoPedia data retrieved through the ProtoPedia API (v2), and that ProtoPedia
   applies the CC BY 4.0 license to registered work information by default
   (English and Japanese).
+- Design: add Pencil design files (`pp-karuta.pen`, `pp-karuta-ds.pen`) covering
+  the design system and screen mockups.
 
 ## [2026.01.28] - 2026-01-28
 
