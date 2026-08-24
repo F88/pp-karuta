@@ -10,7 +10,12 @@ import globals from 'globals';
 import tseslint from 'typescript-eslint';
 
 export default defineConfig([
-  globalIgnores(['dist', 'src/routeTree.gen.ts', '!.storybook']),
+  globalIgnores([
+    'dist',
+    'storybook-static',
+    'src/routeTree.gen.ts',
+    '!.storybook',
+  ]),
   js.configs.recommended,
   ...tseslint.configs.recommended,
   {
