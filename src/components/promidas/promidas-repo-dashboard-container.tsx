@@ -9,7 +9,6 @@ import type { ScreenSize } from '@/types/screen-size';
 
 import { PromidasRepoDashboardPresentation } from './promidas-repo-dashboard-presentation';
 
-
 interface PromidasRepoDashboardProps {
   screenSize: ScreenSize;
 }

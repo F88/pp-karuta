@@ -9,7 +9,6 @@ import { PlayerArea } from './player-area';
 import { SharedTatami } from './shared-tatami';
 import { Yomite } from './yomite';
 
-
 import type { NormalizedPrototype } from 'promidas/types';
 
 export type TatamiViewPresentationProps = {

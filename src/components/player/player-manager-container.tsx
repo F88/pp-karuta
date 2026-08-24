@@ -6,7 +6,6 @@ import type { Player } from '@/models/karuta';
 
 import { PlayerManagerPresentation } from './player-manager-presentation';
 
-
 export function PlayerManagerContainer() {
   const [players, setPlayers] = useState<Player[]>([]);
   const [isLoading, setIsLoading] = useState(true);

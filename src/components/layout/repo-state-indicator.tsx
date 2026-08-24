@@ -2,7 +2,6 @@ import type { RepositoryState } from '@/lib/repository/promidas-repository-manag
 
 import { RepoStateIndicatorPresentation } from './repo-state-indicator-presentation';
 
-
 interface RepoStateIndicatorProps {
   state: RepositoryState;
   onClick?: () => void;

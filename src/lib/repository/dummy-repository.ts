@@ -49,7 +49,6 @@ export class DummyRepository implements ProtopediaInMemoryRepository {
     throw new Error('Method not implemented.');
   }
   setupSnapshotFromSerializedData(
-     
     _data: SerializableSnapshot,
   ): SnapshotOperationResult {
     throw new Error('Method not implemented.');

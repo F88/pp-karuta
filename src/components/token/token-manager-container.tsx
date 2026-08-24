@@ -10,7 +10,6 @@ import type { ScreenSize } from '@/types/screen-size';
 
 import { TokenManagerPresentation } from './token-manager-presentation';
 
-
 interface TokenManagerContainerProps {
   screenSize: ScreenSize;
 }

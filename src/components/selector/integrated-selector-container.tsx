@@ -10,7 +10,6 @@ import { logger } from '@/lib/logger';
 
 import { IntegratedSelectorPresentation } from './integrated-selector-presentation';
 
-
 export type IntegratedSelectorContainerProps = {
   setup: UseGameSetupReturn;
   onShowIntro?: () => void;
