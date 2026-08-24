@@ -14,7 +14,6 @@ import { SectionWrapper } from './section-wrapper';
 import { StackRecipeSelector } from './stack-recipe-selector';
 import { TatamiSizeSelector } from './tatami-size-selector';
 
-
 export type IntegratedSelectorPresentationProps = {
   playMode: {
     selected: PlayMode | null;

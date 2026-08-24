@@ -12,7 +12,6 @@ import type { DeckRecipe } from '@/models/karuta';
 import { ALL_PROTOTYPES } from './deck-recipe';
 import { createKeywordFilter } from './filter-factory';
 
-
 /**
  * Base configuration for ETO (Chinese zodiac) themed recipes
  * - Fetches all prototypes for filtering

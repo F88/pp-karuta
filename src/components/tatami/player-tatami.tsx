@@ -5,7 +5,6 @@ import type { ScreenSize } from '@/types/screen-size';
 
 import { ToriFudaCard } from './tori-fuda-card';
 
-
 import type { NormalizedPrototype } from 'promidas/types';
 
 export type PlayerTatamiProps = {

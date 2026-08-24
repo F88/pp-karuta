@@ -18,6 +18,11 @@ node_modules/
 # Storybook build
 storybook-static/
 
+# Generated files
+# TanStack Router overwrites this on every route change, and the file itself
+# asks to be excluded from linters and formatters. eslint already ignores it.
+src/routeTree.gen.ts
+
 # Misc
 package-lock.json
 renovate.json

@@ -9,7 +9,6 @@ import type { ScreenSize } from '@/types/screen-size';
 import { AppHeaderPresentation } from './app-header-presentation';
 import { RepoStateIndicator } from './repo-state-indicator';
 
-
 interface AppHeaderProps {
   repoState: RepositoryState;
   onRepoIndicatorClick: () => void;

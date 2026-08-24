@@ -11,7 +11,6 @@ import type { DeckRecipe } from '@/models/karuta';
 import { ALL_PROTOTYPES } from './deck-recipe';
 import { createKeywordFilter } from './filter-factory';
 
-
 /**
  * Annual events themed deck recipes (歳時記)
  */

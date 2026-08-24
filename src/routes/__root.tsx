@@ -20,7 +20,6 @@ import { promidasRepositoryManager } from '@/lib/repository/promidas-repository-
 import type { RepositoryState } from '@/lib/repository/promidas-repository-manager';
 import { getResponsiveStyles } from '@/lib/ui-utils';
 
-
 export const Route = createRootRoute({
   component: RootComponent,
 });

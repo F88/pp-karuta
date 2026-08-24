@@ -5,7 +5,6 @@ import type { Deck, Player, StackRecipe } from '@/models/karuta';
 import { GameManager } from './game-manager';
 import { StackManager } from '../stack/stack-manager';
 
-
 import type { PlayMode } from '../playMode/play-mode-manager';
 import type { NormalizedPrototype } from 'promidas/types';
 

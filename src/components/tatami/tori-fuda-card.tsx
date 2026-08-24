@@ -4,7 +4,6 @@ import type { ScreenSize } from '@/types/screen-size';
 import { ToriFudaCardKeyboard } from './tori-fuda-card-keyboard';
 import { ToriFudaCardTouch } from './tori-fuda-card-touch';
 
-
 import type { NormalizedPrototype } from 'promidas/types';
 
 export type ToriFudaCardProps = {

@@ -13,7 +13,6 @@ import type { ScreenSize } from '@/types/screen-size';
 
 import { RepoSetup } from './repo-setup';
 
-
 interface RepoSetupDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
