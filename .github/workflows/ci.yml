@@ -39,10 +39,11 @@ jobs:
         # run: npm --loglevel debug list
         # run: npm --loglevel silly list
 
-      # - name: Run format check
-      #   run: npm run format:check
-      - name: Run format check and auto-fix
-        run: npm run format
+      # Verify formatting rather than auto-fixing it: `npm run format`
+      # rewrites files and exits 0, so unformatted code passed CI and the
+      # corrected files were discarded with the runner.
+      - name: Run format check
+        run: npm run format:check
 
       - name: Run lint
         run: npm run lint
