@@ -10,7 +10,7 @@
  *   npm run generate-snapshot
  *
  * Environment:
- *   VITE_PROTOPEDIA_API_V2_TOKEN - Required API token
+ *   PROTOPEDIA_API_V2_TOKEN - Required API token
  *
  * Output:
  *   scripts/dev-snapshot-{timestamp}-{count}.json - Serialized snapshot data
@@ -124,7 +124,7 @@ async function main() {
 `);
 
   // Get API token from environment
-  const token = process.env.VITE_PROTOPEDIA_API_V2_TOKEN ?? 'no-token';
+  const token = process.env.PROTOPEDIA_API_V2_TOKEN ?? 'no-token';
 
   // Create repository
   console.log('⚙️ Creating repository...');
