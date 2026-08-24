@@ -24,7 +24,7 @@ and this project adheres to [CalVer](https://calver.org/).
 
 - Update `promidas` to `^3.0.0`
 - Update `promidas-utils` to `^3.0.0` (compatible with promidas v3)
-- Update various devDependencies (@storybook/*, @tanstack/*, @testing-library/*, etc.)
+- Update various devDependencies (`@storybook/*`, `@tanstack/*`, `@testing-library/*`, etc.)
 
 ## [2026.01.16] - 2026-01-16
 
