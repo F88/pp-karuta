@@ -9,6 +9,16 @@ and this project adheres to [CalVer](https://calver.org/).
 
 ## [Unreleased]
 
+### Changed
+
+- Update `promidas` and `promidas-utils` from 3.0.0 to 5.0.0.
+- List `protopedia-api-v2-client` as a direct dependency at `^5.2.0`. Its types
+  are imported directly, but it was only installed as a peer of `promidas`.
+- Fetching prototypes now times out after 90 seconds, and the limit includes
+  receiving the response body.
+- Failure messages for token validation and fetching may differ, because
+  `promidas` 5 changes how failures are classified.
+
 ### Removed
 
 - The `deploy` script and the `gh-pages` package. The site is published by the
