@@ -35,6 +35,13 @@ and this project adheres to [CalVer](https://calver.org/).
   exports `Route`.
 - List `tsx` as a direct dev dependency. `npm run generate-snapshot` needs it,
   and it was only installed through another package.
+- Update the token input and the repository state during render instead of in
+  effects in the token manager.
+- Replace `__dirname` with `import.meta.dirname` in `vite.config.ts`, for the
+  native config loader that Vite plans to make the default.
+- Update the GitHub Actions used by CI and deployment: `actions/checkout` and
+  `actions/setup-node` to 7, `actions/upload-pages-artifact` and
+  `actions/deploy-pages` to 5.
 
 ### Removed
 
