@@ -34,8 +34,7 @@
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,css,md}\"",
     "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,css,md}\"",
     "generate-snapshot": "tsx scripts/generate-snapshot.ts",
-    "generate-pwa-assets": "pwa-assets-generator",
-    "deploy": "npm run build && gh-pages -d dist"
+    "generate-pwa-assets": "pwa-assets-generator"
   },
   "dependencies": {
     "@radix-ui/react-accordion": "^1.2.12",
@@ -84,7 +83,6 @@
     "eslint-plugin-react-refresh": "^0.4.26",
     "eslint-plugin-storybook": "^10.2.1",
     "eslint-plugin-unused-imports": "^4.3.0",
-    "gh-pages": "^6.3.0",
     "globals": "^17.2.0",
     "jsdom": "^27.4.0",
     "prettier": "^3.8.1",

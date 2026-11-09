@@ -9,6 +9,12 @@ and this project adheres to [CalVer](https://calver.org/).
 
 ## [Unreleased]
 
+### Removed
+
+- The `deploy` script and the `gh-pages` package. The site is published by the
+  deploy workflow on push to `main`, and the Pages source is now GitHub Actions
+  instead of the `gh-pages` branch.
+
 ## [2026.08.24] - 2026-08-24
 
 ### Changed
