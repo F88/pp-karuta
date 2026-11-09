@@ -87,7 +87,7 @@
     "globals": "^17.2.0",
     "jsdom": "^27.4.0",
     "prettier": "^3.8.1",
-    "prettier-plugin-tailwindcss": "^0.7.2",
+    "prettier-plugin-tailwindcss": "^0.8.0",
     "rollup-plugin-visualizer": "^6.0.5",
     "storybook": "^10.2.1",
     "typescript": "~5.9.3",
