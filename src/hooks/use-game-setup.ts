@@ -316,6 +316,14 @@ export function useGameSetup({
   // Track last used apiParams to avoid redundant API calls
   const [lastApiParams, setLastApiParams] =
     useState<ListPrototypesParams | null>(null);
+  const [prevRepository, setPrevRepository] = useState(repository);
+
+  // A new repository starts with its own snapshot, so the last apiParams no
+  // longer describe what it holds
+  if (repository !== prevRepository) {
+    setPrevRepository(repository);
+    setLastApiParams(null);
+  }
 
   // Stack state - 生成済みStackを保持（正確な枚数表示のため）
   const [generatedStack, setGeneratedStack] = useState<number[] | null>(null);
