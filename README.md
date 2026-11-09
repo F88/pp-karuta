@@ -69,7 +69,7 @@ Utilities to assist development using PROMIDAS
 ### Deployment
 
 - **GitHub Pages** - Static hosting
-- **gh-pages** - Deploy `dist/` to GitHub Pages
+- **GitHub Actions** - Deploy `dist/` to GitHub Pages on push to `main` (`.github/workflows/deploy.yml`)
 
 ### Testing and Documentation
 
