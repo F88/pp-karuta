@@ -112,6 +112,7 @@ export class DeckManager {
       logger.error(`[DEV] Failed to load snapshot: ${message}`);
       throw new Error(
         `Failed to load snapshot from ${snapshotPath}: ${message}`,
+        { cause: error },
       );
     }
   }
