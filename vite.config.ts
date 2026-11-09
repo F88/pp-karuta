@@ -15,7 +15,7 @@ import { VitePWA } from 'vite-plugin-pwa';
  * guard cannot silently fail open if path normalisation ever changes. A
  * missing CSP breaks nothing observable, so there would be no symptom.
  */
-const APP_INDEX_HTML = path.resolve(__dirname, 'index.html');
+const APP_INDEX_HTML = path.resolve(import.meta.dirname, 'index.html');
 
 /**
  * Builds the Content Security Policy for the given environment.
@@ -281,7 +281,7 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, './src'),
+      '@': path.resolve(import.meta.dirname, './src'),
     },
   },
   test: {
