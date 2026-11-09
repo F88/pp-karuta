@@ -13,24 +13,21 @@ export function PlayerManagerContainer() {
 
   // Load players on mount
   useEffect(() => {
+    const loadPlayers = async () => {
+      try {
+        const loadedPlayers = await PlayerManager.initialize();
+        setPlayers(loadedPlayers);
+      } catch (err) {
+        const errorMessage =
+          err instanceof Error ? err.message : 'Failed to load players';
+        setError(errorMessage);
+        logger.error('Failed to load players:', err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
     loadPlayers();
   }, []);
-
-  const loadPlayers = async () => {
-    try {
-      setIsLoading(true);
-      setError(null);
-      const loadedPlayers = await PlayerManager.initialize();
-      setPlayers(loadedPlayers);
-    } catch (err) {
-      const errorMessage =
-        err instanceof Error ? err.message : 'Failed to load players';
-      setError(errorMessage);
-      logger.error('Failed to load players:', err);
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   const handleAddPlayer = useCallback(() => {
     if (players.length >= PlayerManager.MAX_PLAYERS) {

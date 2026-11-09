@@ -495,6 +495,8 @@ export function useGameSetup({
           '🔄 Restoring deck recipe from sessionStorage:',
           recipe.id,
         );
+        // Fetching the deck once the repository is ready is this effect's purpose
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         void selectDeckRecipe(recipe);
       } else {
         logger.warn(
@@ -516,6 +518,8 @@ export function useGameSetup({
         '🔄 Repository became available, regenerating deck for recipe:',
         selectedDeckRecipe.id,
       );
+      // Fetching the deck once the repository is ready is this effect's purpose
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       void selectDeckRecipe(selectedDeckRecipe);
     }
     // selectDeckRecipe is intentionally not in dependencies to avoid infinite loops
