@@ -18,6 +18,10 @@ and this project adheres to [CalVer](https://calver.org/).
   receiving the response body.
 - Failure messages for token validation and fetching may differ, because
   `promidas` 5 changes how failures are classified.
+- Update dependencies within their existing version ranges. This removes every
+  critical and high `npm audit` finding.
+- Hold `eslint-plugin-react-hooks` at `~7.0.1`. Version 7.1.1 reports new errors
+  in existing code, which should be handled separately from this update.
 
 ### Removed
 
