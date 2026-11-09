@@ -22,6 +22,10 @@ and this project adheres to [CalVer](https://calver.org/).
   critical and high `npm audit` finding.
 - Hold `eslint-plugin-react-hooks` at `~7.0.1`. Version 7.1.1 reports new errors
   in existing code, which should be handled separately from this update.
+- Raise `package.json` ranges to the versions already installed.
+- Update `vitest` and `@vitest/ui` to 5, `jsdom` to 31,
+  `@testing-library/jest-dom` to 7, `dotenv` to 18, `rollup-plugin-visualizer`
+  to 7, and `prettier-plugin-tailwindcss` to 0.8.
 
 ### Removed
 
