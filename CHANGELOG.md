@@ -9,6 +9,8 @@ and this project adheres to [CalVer](https://calver.org/).
 
 ## [Unreleased]
 
+## [2026.11.09] - 2026-11-09
+
 ### Changed
 
 - Update `promidas` and `promidas-utils` from 3.0.0 to 5.0.0.
@@ -31,6 +33,8 @@ and this project adheres to [CalVer](https://calver.org/).
   ESLint 10 and is replaced by `eslint-plugin-import-x`.
 - Move the components out of the route files, so each file in `src/routes` only
   exports `Route`.
+- List `tsx` as a direct dev dependency. `npm run generate-snapshot` needs it,
+  and it was only installed through another package.
 
 ### Removed
 
