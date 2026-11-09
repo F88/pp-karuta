@@ -187,6 +187,7 @@ export class PlayerManager {
     } catch (error) {
       throw new Error(
         `Failed to load players from storage: ${error instanceof Error ? error.message : 'Unknown error'}`,
+        { cause: error },
       );
     }
   }

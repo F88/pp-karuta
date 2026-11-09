@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 import { useToken } from '@/hooks/use-token';
 import { logger } from '@/lib/logger';
@@ -25,22 +25,22 @@ export function TokenManagerContainer({
     type: 'not-created',
   });
 
+  const [prevToken, setPrevToken] = useState(token);
+  const [prevHasToken, setPrevHasToken] = useState(hasToken);
+
   // Sync inputValue with token
-  useEffect(() => {
+  if (token !== prevToken) {
+    setPrevToken(token);
     setInputValue(token || '');
-  }, [token]);
+  }
 
   // Update repo state when token changes
-  useEffect(() => {
-    if (!hasToken) {
-      setRepoState({ type: 'not-created' });
-      return;
-    }
-
-    // Check current repo state
-    const status = promidasRepositoryManager.getState();
-    setRepoState(status);
-  }, [hasToken]);
+  if (hasToken !== prevHasToken) {
+    setPrevHasToken(hasToken);
+    setRepoState(
+      hasToken ? promidasRepositoryManager.getState() : { type: 'not-created' },
+    );
+  }
 
   const handleSave = async () => {
     if (!inputValue.trim()) return;

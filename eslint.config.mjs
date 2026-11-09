@@ -1,6 +1,6 @@
 // For more info, see https://github.com/storybookjs/eslint-plugin-storybook#configuration-flat-config-format
 import js from '@eslint/js';
-import importPlugin from 'eslint-plugin-import';
+import importX from 'eslint-plugin-import-x';
 import reactHooks from 'eslint-plugin-react-hooks';
 import reactRefresh from 'eslint-plugin-react-refresh';
 import storybook from 'eslint-plugin-storybook';
@@ -23,7 +23,7 @@ export default defineConfig([
     plugins: {
       'react-hooks': reactHooks,
       'react-refresh': reactRefresh,
-      import: importPlugin,
+      'import-x': importX,
       'unused-imports': unusedImports,
     },
     languageOptions: {
@@ -31,7 +31,7 @@ export default defineConfig([
       globals: globals.browser,
     },
     settings: {
-      'import/resolver': {
+      'import-x/resolver': {
         typescript: true,
         node: true,
       },
@@ -51,7 +51,7 @@ export default defineConfig([
           ignoreRestSiblings: true,
         },
       ],
-      'import/order': [
+      'import-x/order': [
         'error',
         {
           groups: [
@@ -75,10 +75,10 @@ export default defineConfig([
           alphabetize: { order: 'asc', caseInsensitive: true },
         },
       ],
-      'import/newline-after-import': 'error',
-      'import/no-duplicates': 'error',
-      'import/first': 'error',
-      'import/no-unresolved': ['error', { ignore: ['^virtual:'] }],
+      'import-x/newline-after-import': 'error',
+      'import-x/no-duplicates': 'error',
+      'import-x/first': 'error',
+      'import-x/no-unresolved': ['error', { ignore: ['^virtual:'] }],
     },
   },
   ...storybook.configs['flat/recommended'],

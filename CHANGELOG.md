@@ -20,8 +20,17 @@ and this project adheres to [CalVer](https://calver.org/).
   `promidas` 5 changes how failures are classified.
 - Update dependencies within their existing version ranges. This removes every
   critical and high `npm audit` finding.
-- Hold `eslint-plugin-react-hooks` at `~7.0.1`. Version 7.1.1 reports new errors
-  in existing code, which should be handled separately from this update.
+- Raise `package.json` ranges to the versions already installed.
+- Update `vitest` and `@vitest/ui` to 5, `jsdom` to 31,
+  `@testing-library/jest-dom` to 7, `dotenv` to 18, `rollup-plugin-visualizer`
+  to 7, and `prettier-plugin-tailwindcss` to 0.8.
+- Update `vite` to 8, `@vitejs/plugin-react` to 6, `vite-plugin-pwa` and
+  `@vite-pwa/assets-generator` to 2, and `lucide-react` to 1.
+- Update `eslint` and `@eslint/js` to 10, `eslint-plugin-react-hooks` to 7.1, and
+  `eslint-plugin-react-refresh` to 0.5. `eslint-plugin-import` does not support
+  ESLint 10 and is replaced by `eslint-plugin-import-x`.
+- Move the components out of the route files, so each file in `src/routes` only
+  exports `Route`.
 
 ### Removed
 

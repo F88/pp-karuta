@@ -486,7 +486,7 @@ export class PromidasRepositoryManager {
             this.tokenStatus = 'invalid';
             this.error = errorMessage;
           }
-          throw new Error(errorMessage);
+          throw new Error(errorMessage, { cause: err });
         }
 
         // Step 2: Validate token by testing API access
