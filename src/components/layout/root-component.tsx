@@ -1,0 +1,117 @@
+/**
+ * Root component rendered by the root route.
+ *
+ * It lives outside `src/routes` so the route file only exports `Route`, which
+ * keeps Fast Refresh working for these components.
+ */
+import { Outlet } from '@tanstack/react-router';
+import { useEffect, useState } from 'react';
+
+import { AppHeader } from '@/components/layout/app-header';
+import { RepoSetupDialog } from '@/components/layout/repo-setup-dialog';
+import { ThemeProvider } from '@/components/theme-provider';
+import { UIDebugOverlay } from '@/components/ui-debug-overlay';
+import { ScreenSizeProvider } from '@/contexts/screen-size-provider';
+import { useScreenSizeContext } from '@/hooks/use-screen-size-context';
+import { PlayerManager } from '@/lib/karuta';
+import { logger } from '@/lib/logger';
+import { promidasRepositoryManager } from '@/lib/repository/promidas-repository-manager';
+import type { RepositoryState } from '@/lib/repository/promidas-repository-manager';
+import { getResponsiveStyles } from '@/lib/ui-utils';
+
+export function RootComponent() {
+  return (
+    <ThemeProvider defaultTheme="system" storageKey="pp-karuta-theme">
+      <ScreenSizeProvider>
+        <RootLayout />
+      </ScreenSizeProvider>
+    </ThemeProvider>
+  );
+}
+
+function RootLayout() {
+  const screenSize = useScreenSizeContext();
+  const [repoState, setRepoState] = useState<RepositoryState>(() =>
+    promidasRepositoryManager.getState(),
+  );
+  const [openRepoSetupDialog, setOpenRepoSetupDialog] = useState(false);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setRepoState(promidasRepositoryManager.getState());
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  // Initialize players on app startup
+  useEffect(() => {
+    PlayerManager.initialize().catch((error) => {
+      logger.error('Failed to initialize players:', error);
+    });
+  }, []);
+
+  const sizeStyles = getResponsiveStyles(screenSize, {
+    smartphone: {
+      headerPadding: 'pt-10',
+      contentHeight: 'h-[calc(100vh-2.5rem)]',
+    },
+    tablet: {
+      headerPadding: 'pt-12',
+      contentHeight: 'h-[calc(100vh-3rem)]',
+    },
+    pc: {
+      headerPadding: 'pt-14',
+      contentHeight: 'h-[calc(100vh-3.5rem)]',
+    },
+    responsive: {
+      headerPadding: 'pt-12 md:pt-14 lg:pt-16',
+      contentHeight:
+        'h-[calc(100vh-3rem)] md:h-[calc(100vh-3.5rem)] lg:h-[calc(100vh-4rem)]',
+    },
+  });
+
+  return (
+    <>
+      <div className="fixed top-0 right-0 left-0 z-50">
+        <AppHeader
+          repoState={repoState}
+          onRepoIndicatorClick={() => setOpenRepoSetupDialog(true)}
+          screenSize={screenSize}
+        />
+      </div>
+
+      {/* Content area below fixed header */}
+      <div className={sizeStyles.headerPadding}></div>
+      <div className={sizeStyles.contentHeight}>
+        {/* {import.meta.env.VITE_DEBUG_MODE === 'true' && (
+          <div className="flex items-center justify-center p-4">
+            <RepoSetup screenSize={screenSize} />
+          </div>
+        )} */}
+
+        <RepoSetupDialog
+          open={openRepoSetupDialog}
+          onOpenChange={() => setOpenRepoSetupDialog(false)}
+          autoCloseOnValid={false}
+          screenSize={screenSize}
+        />
+        <Outlet />
+      </div>
+
+      {import.meta.env.VITE_UI_DEBUG === 'true' && (
+        <UIDebugOverlay
+          screenSize={screenSize}
+          headerHeight={
+            screenSize === 'smartphone'
+              ? 'h-10 (2.5rem/40px)'
+              : screenSize === 'tablet'
+                ? 'h-12 (3rem/48px)'
+                : 'h-14 (3.5rem/56px)'
+          }
+          contentHeight={sizeStyles.contentHeight}
+        />
+      )}
+    </>
+  );
+}

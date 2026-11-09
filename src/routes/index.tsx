@@ -13,14 +13,10 @@ type IndexSearch = {
 };
 
 export const Route = createFileRoute('/')({
-  component: Index,
+  component: GameFlow,
   validateSearch: (search: Record<string, unknown>): IndexSearch => {
     return {
       reset: typeof search.reset === 'string' ? search.reset : undefined,
     };
   },
 });
-
-function Index() {
-  return <GameFlow />;
-}
