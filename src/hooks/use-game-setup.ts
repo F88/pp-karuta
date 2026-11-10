@@ -537,7 +537,11 @@ export function useGameSetup({
   // Save state to sessionStorage whenever it changes
   useEffect(() => {
     const state: SavedSetupState = {
-      selectedDeckRecipeId: selectedDeckRecipe?.id || null,
+      // Until the repository is ready the deck cannot be restored, so keep the
+      // saved id for the restore effect to read
+      selectedDeckRecipeId:
+        selectedDeckRecipe?.id ||
+        (repository ? null : (loadSetupState()?.selectedDeckRecipeId ?? null)),
       selectedStackRecipeId: selectedStackRecipe?.id || null,
       selectedPlayerIds,
       selectedPlayMode,
@@ -545,6 +549,7 @@ export function useGameSetup({
     };
     saveSetupState(state);
   }, [
+    repository,
     selectedDeckRecipe,
     selectedStackRecipe,
     selectedPlayerIds,

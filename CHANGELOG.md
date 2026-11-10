@@ -13,6 +13,8 @@ and this project adheres to [CalVer](https://calver.org/).
 
 - A deck no longer ends up with 0 cards when it is selected after saving the
   token again. The deck is now fetched for the new repository.
+- The selected deck is restored after reloading the page and saving the token
+  again.
 
 ## [2026.11.09] - 2026-11-09
 
